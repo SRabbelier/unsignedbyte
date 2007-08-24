@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<CodeLite_Project Name="sqlite3">
+  <VirtualDirectory Name="Source Files">
+    <File Name="sqlite3.c"/>
+  </VirtualDirectory>
+  <VirtualDirectory Name="Header Files">
+    <File Name="sqlite3.h"/>
+  </VirtualDirectory>
+  <Settings Type="Static Library">
+    <Configuration Name="ReleaseANSI" CompilerType="gnu gcc">
+      <General OutputFile="../libmysqlite3.a" IntermediateDirectory="./Release" Command="" CommandArguments="" WorkingDirectory="./Release"/>
+      <Compiler Required="yes" Options="-O2">
+        <IncludePath Value="."/>
+      </Compiler>
+      <Linker Required="yes" Options=" "/>
+      <PreBuild/>
+      <PostBuild/>
+    </Configuration>
+    <Configuration Name="ReleaseANSIStaticLibrary" CompilerType="gnu gcc">
+      <General OutputFile="../lib/gcc_lib/libsqlite3.a" IntermediateDirectory="./Release_static" Command="" CommandArguments="" WorkingDirectory=""/>
+      <Compiler Required="yes" Options="-O2">
+        <IncludePath Value="."/>
+      </Compiler>
+      <Linker Required="yes" Options=""/>
+      <PreBuild/>
+      <PostBuild/>
+    </Configuration>
+  </Settings>
+  <Dependencies/>
+</CodeLite_Project>

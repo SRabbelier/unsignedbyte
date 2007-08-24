@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<CodeLite_Project Name="TestCase">
+  <VirtualDirectory Name="Source Files">
+    <File Name="hp.cpp"/>
+  </VirtualDirectory>
+  <VirtualDirectory Name="Header Files">
+    <File Name="hp.h"/>
+  </VirtualDirectory>
+  <Settings Type="Dynamic Library">
+    <Configuration Name="Debug" CompilerType="gnu g++">
+      <General OutputFile="libtestcase.a" IntermediateDirectory="./Debug" Command="" CommandArguments="" WorkingDirectory="./Debug"/>
+      <Compiler Required="yes" Options="-g">
+        <IncludePath Value="."/>
+        <IncludePath Value="./include"/>
+      </Compiler>
+      <Linker Required="yes" Options="-O0">
+        <LibraryPath Value="."/>
+        <LibraryPath Value="Debug"/>
+      </Linker>
+      <ResourceCompiler Required="no" Options=""/>
+      <PreBuild>
+        <Command Enabled="yes">./Initialize</Command>
+      </PreBuild>
+      <PostBuild/>
+      <CustomBuild Enabled="no">
+        <CleanCommand/>
+        <BuildCommand/>
+      </CustomBuild>
+    </Configuration>
+  </Settings>
+  <Dependencies/>
+</CodeLite_Project>

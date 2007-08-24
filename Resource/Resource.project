@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="utf-8"?>
+<CodeLite_Project Name="Resource">
+  <VirtualDirectory Name="Source Files">
+    <File Name="Base64.cpp"/>
+    <File Name="Database.cpp"/>
+    <File Name="Debug.cpp"/>
+    <File Name="Event.cpp"/>
+    <File Name="EventHandler.cpp"/>
+    <File Name="EventTime.cpp"/>
+    <File Name="File.cpp"/>
+    <File Name="HttpClientSocket.cpp"/>
+    <File Name="HttpdCookies.cpp"/>
+    <File Name="HttpDebugSocket.cpp"/>
+    <File Name="HttpdForm.cpp"/>
+    <File Name="HttpdSocket.cpp"/>
+    <File Name="HttpGetSocket.cpp"/>
+    <File Name="HttpPostSocket.cpp"/>
+    <File Name="HttpPutSocket.cpp"/>
+    <File Name="HTTPSocket.cpp"/>
+    <File Name="IEventOwner.cpp"/>
+    <File Name="Ipv4Address.cpp"/>
+    <File Name="Ipv6Address.cpp"/>
+    <File Name="Lock.cpp"/>
+    <File Name="MemFile.cpp"/>
+    <File Name="Mutex.cpp"/>
+    <File Name="Parse.cpp"/>
+    <File Name="Query.cpp"/>
+    <File Name="RandomNumber.cpp"/>
+    <File Name="ResolvServer.cpp"/>
+    <File Name="ResolvSocket.cpp"/>
+    <File Name="SmtpdSocket.cpp"/>
+    <File Name="Socket.cpp"/>
+    <File Name="SocketHandler.cpp"/>
+    <File Name="socket_include.cpp"/>
+    <File Name="SSLInitializer.cpp"/>
+    <File Name="StderrLog.cpp"/>
+    <File Name="StdoutLog.cpp"/>
+    <File Name="StreamSocket.cpp"/>
+    <File Name="TcpSocket.cpp"/>
+    <File Name="Thread.cpp"/>
+    <File Name="UdpSocket.cpp"/>
+    <File Name="Utility.cpp"/>
+    <File Name="Coordinate.cpp"/>
+    <File Name="Path.cpp"/>
+    <File Name="Global.cpp"/>
+    <File Name="sha2.c"/>
+    <File Name="StringUtilities.cpp"/>
+    <File Name="Tables.cpp"/>
+    <File Name="Table.cpp"/>
+    <File Name="Field.cpp"/>
+  </VirtualDirectory>
+  <VirtualDirectory Name="Header Files">
+    <File Name="../include/Base64.h"/>
+    <File Name="../include/Coordinate.h"/>
+    <File Name="../include/Database.h"/>
+    <File Name="../include/Debug.h"/>
+    <File Name="../include/Event.h"/>
+    <File Name="../include/EventHandler.h"/>
+    <File Name="../include/EventTime.h"/>
+    <File Name="../include/File.h"/>
+    <File Name="../include/Global.h"/>
+    <File Name="../include/HttpClientSocket.h"/>
+    <File Name="../include/HttpdCookies.h"/>
+    <File Name="../include/HttpDebugSocket.h"/>
+    <File Name="../include/HttpdForm.h"/>
+    <File Name="../include/HttpdSocket.h"/>
+    <File Name="../include/HttpGetSocket.h"/>
+    <File Name="../include/HttpPostSocket.h"/>
+    <File Name="../include/HttpPutSocket.h"/>
+    <File Name="../include/HTTPSocket.h"/>
+    <File Name="../include/IError.h"/>
+    <File Name="../include/IEventHandler.h"/>
+    <File Name="../include/IEventOwner.h"/>
+    <File Name="../include/IFile.h"/>
+    <File Name="../include/Ipv4Address.h"/>
+    <File Name="../include/Ipv6Address.h"/>
+    <File Name="../include/ISocketHandler.h"/>
+    <File Name="../include/libfuture.h"/>
+    <File Name="../include/libsqlitewrapped.h"/>
+    <File Name="../include/ListenSocket.h"/>
+    <File Name="../include/Lock.h"/>
+    <File Name="../include/MemFile.h"/>
+    <File Name="../include/Mutex.h"/>
+    <File Name="../include/Parse.h"/>
+    <File Name="../include/Path.h"/>
+    <File Name="../include/Query.h"/>
+    <File Name="../include/RandomNumber.h"/>
+    <File Name="../include/ResolvServer.h"/>
+    <File Name="../include/ResolvSocket.h"/>
+    <File Name="../include/SctpSocket.h"/>
+    <File Name="../include/sha2.h"/>
+    <File Name="../include/singleton.h"/>
+    <File Name="../include/SmtpdSocket.h"/>
+    <File Name="../include/Socket.h"/>
+    <File Name="../include/SocketAddress.h"/>
+    <File Name="../include/SocketHandler.h"/>
+    <File Name="../include/socket_include.h"/>
+    <File Name="../include/sockets-config.h"/>
+    <File Name="../include/sqlite3.h"/>
+    <File Name="../include/SSLInitializer.h"/>
+    <File Name="../include/StderrLog.h"/>
+    <File Name="../include/StdLog.h"/>
+    <File Name="../include/StdoutLog.h"/>
+    <File Name="../include/StreamSocket.h"/>
+    <File Name="../include/String.h"/>
+    <File Name="../include/TcpSocket.h"/>
+    <File Name="../include/telnet.h"/>
+    <File Name="../include/Thread.h"/>
+    <File Name="../include/UdpSocket.h"/>
+    <File Name="../include/Utility.h"/>
+    <File Name="../include/Tables.h"/>
+    <File Name="../include/Field.h"/>
+    <File Name="../include/Table.h"/>
+  </VirtualDirectory>
+  <Dependencies/>
+  <Settings Type="Static Library">
+    <Configuration Name="Debug" CompilerType="gnu g++">
+      <General OutputFile="../libmyresource.a" IntermediateDirectory="./Debug" Command="" CommandArguments="" WorkingDirectory="./Debug"/>
+      <Compiler Required="yes" Options="-g -Wall">
+        <IncludePath Value="."/>
+        <IncludePath Value="../include"/>
+      </Compiler>
+      <Linker Required="yes" Options="-O0">
+        <LibraryPath Value="."/>
+        <LibraryPath Value="./Debug"/>
+        <LibraryPath Value="../"/>
+        <Library Value="mysqlite"/>
+      </Linker>
+      <ResourceCompiler Required="no" Options=""/>
+      <PreBuild/>
+      <PostBuild/>
+      <CustomBuild Enabled="no">
+        <CleanCommand></CleanCommand>
+        <BuildCommand></BuildCommand>
+      </CustomBuild>
+    </Configuration>
+    <Configuration Name="Release" CompilerType="GNU g++">
+      <General OutputFile="./Release/libDynamicLibray.a" IntermediateDirectory="./Release" Command="" CommandArguments="" WorkingDirectory="./Release"/>
+      <Compiler Required="yes" Options="-O2">
+        <IncludePath Value="."/>
+      </Compiler>
+      <Linker Required="yes" Options="-O2">
+        <LibraryPath Value="."/>
+        <LibraryPath Value="./Release"/>
+      </Linker>
+      <ResourceCompiler Required="yes" Options=""/>
+      <PreBuild/>
+      <PostBuild/>
+      <CustomBuild Enabled="no">
+        <CleanCommand></CleanCommand>
+        <BuildCommand></BuildCommand>
+      </CustomBuild>
+    </Configuration>
+  </Settings>
+</CodeLite_Project>

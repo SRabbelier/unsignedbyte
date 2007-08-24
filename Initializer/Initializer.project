@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<CodeLite_Project Name="Initializer">
+  <VirtualDirectory Name="Source Files">
+    <File Name="main.cpp"/>
+    <File Name="Initializer.cpp"/>
+    <File Name="Generator.cpp"/>
+    <File Name="ClassHeaderGenerator.cpp"/>
+    <File Name="ClassSourceGenerator.cpp"/>
+  </VirtualDirectory>
+  <VirtualDirectory Name="Header Files">
+    <File Name="Initializer.h"/>
+    <File Name="Generator.h"/>
+    <File Name="ClassHeaderGenerator.h"/>
+    <File Name="ClassSourceGenerator.h"/>
+  </VirtualDirectory>
+  <Settings Type="Executable">
+    <Configuration Name="Debug" CompilerType="gnu g++">
+      <General OutputFile="../Initialize" IntermediateDirectory="Intermediate" Command="Initialize" CommandArguments="" WorkingDirectory="."/>
+      <Compiler Required="yes" Options="-g -Wall">
+        <IncludePath Value="."/>
+        <IncludePath Value="../include"/>
+      </Compiler>
+      <Linker Required="yes" Options="-O0">
+        <LibraryPath Value="."/>
+        <LibraryPath Value=".."/>
+        <Library Value="myresource"/>
+        <Library Value="pthread"/>
+        <Library Value="dl"/>
+        <Library Value="sqlite3"/>
+      </Linker>
+      <ResourceCompiler Required="no" Options=""/>
+      <PreBuild/>
+      <PostBuild/>
+      <CustomBuild Enabled="no">
+        <CleanCommand/>
+        <BuildCommand/>
+      </CustomBuild>
+    </Configuration>
+    <Configuration Name="Release" CompilerType="GNU g++">
+      <General OutputFile="./Release/HelloWorld" IntermediateDirectory="./Release" Command="HelloWorld" CommandArguments="" WorkingDirectory="./Release"/>
+      <Compiler Required="yes" Options="-O2">
+        <IncludePath Value="."/>
+      </Compiler>
+      <Linker Required="yes" Options="-O2">
+        <LibraryPath Value="."/>
+        <LibraryPath Value="./Release"/>
+      </Linker>
+      <ResourceCompiler Required="yes" Options=""/>
+      <PreBuild/>
+      <PostBuild/>
+      <CustomBuild Enabled="no">
+        <CleanCommand/>
+        <BuildCommand/>
+      </CustomBuild>
+    </Configuration>
+  </Settings>
+  <Dependencies>
+    <Project Name="Resource"/>
+  </Dependencies>
+</CodeLite_Project>

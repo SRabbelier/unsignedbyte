@@ -1,0 +1,134 @@
+/***************************************************************************
+ *   Copyright (C) 2007 by Sverre Rabbelier                                *
+ *   sverre@rabbelier.nl                                                   *
+ *                                                                         *
+ *   This program is free software; you can redistribute it and/or modify  *
+ *   it under the terms of the GNU General Public License as published by  *
+ *   the Free Software Foundation; either version 3 of the License, or     *
+ *   (at your option) any later version.                                   *
+ *                                                                         *
+ *   This program is distributed in the hope that it will be useful,       *
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of        *
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the         *
+ *   GNU General Public License for more details.                          *
+ *                                                                         *
+ *   You should have received a copy of the GNU General Public License     *
+ *   along with this program; if not, write to the                         *
+ *   Free Software Foundation, Inc.,                                       *
+ *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
+ ***************************************************************************/
+#pragma once
+
+#include <string>
+#include "OLCEditor.h"
+#include "singleton.h"
+#include "Interpreter.h"
+#include "Action.h"
+
+class UBSocket;
+class Command;
+
+class EditorCommand : public OLCEditor
+{
+public:
+	EditorCommand(UBSocket* sock);
+	~EditorCommand(void);
+
+	std::string name() { return "Command"; };
+	std::string prompt() { return "Command> "; };
+	
+	std::string lookup(const std::string& action);
+	void dispatch(const std::string& action, const std::string& argument);
+	
+	Savable* getEditing();
+	Table* getTable();
+	long addNew();
+	std::vector<std::string> getList();
+	std::vector<std::string> getCommands();
+	void setEditing(long id);
+
+private:
+	Command* m_command;
+	
+	EditorCommand(const EditorCommand& rhs) : OLCEditor(rhs.m_sock) {};
+	EditorCommand operator=(const EditorCommand& rhs) { return *this; };
+
+	typedef EditorAction<UBSocket, Command> CommandAction;
+
+	class CommandInterpreter : public Interpreter<CommandAction>, public Singleton<CommandInterpreter> {
+	private:
+		CommandInterpreter(void);
+		~CommandInterpreter(void);
+		friend class Singleton<CommandInterpreter>;
+	};
+
+	class Name : public CommandAction, public Singleton<Name>{
+	private:
+		Name(void) {};
+		~Name(void) {};
+		friend class Singleton<Name>;
+	public:
+		void Run(UBSocket* sock, const std::string& argument, Command* area);
+		std::string getName() { return "Name"; };
+	};
+
+	class GrantGroups : public CommandAction, public Singleton<GrantGroups>{
+	private:
+		GrantGroups(void) {};
+		~GrantGroups(void) {};
+		friend class Singleton<GrantGroups>;
+	public:
+		void Run(UBSocket* sock, const std::string& argument, Command* area);
+		std::string getName() { return "GrantGroups"; };
+	};
+	
+	class HighForce : public CommandAction, public Singleton<HighForce>{
+	private:
+		HighForce(void) {};
+		~HighForce(void) {};
+		friend class Singleton<HighForce>;
+	public:
+		void Run(UBSocket* sock, const std::string& argument, Command* area);
+		std::string getName() { return "HighForce"; };
+	};
+	
+	class Force : public CommandAction, public Singleton<Force>{
+	private:
+		Force(void) {};
+		~Force(void) {};
+		friend class Singleton<Force>;
+	public:
+		void Run(UBSocket* sock, const std::string& argument, Command* area);
+		std::string getName() { return "Force"; };
+	};
+	
+	class LowForce : public CommandAction, public Singleton<LowForce>{
+	private:
+		LowForce (void) {};
+		~LowForce (void) {};
+		friend class Singleton<LowForce>;
+	public:
+		void Run(UBSocket* sock, const std::string& argument, Command* area);
+		std::string getName() { return "LowForce"; };
+	};
+
+	class Show : public CommandAction, public Singleton<Show> {
+	private:
+		Show(void) {};
+		~Show(void) {};
+		friend class Singleton<Show>;
+	public:
+		void Run(UBSocket* sock, const std::string& argument, Command* area);
+		std::string getName() { return "Show"; };
+	};
+
+	class Save : public CommandAction, public Singleton<Save> {
+	private:
+		Save(void) {};
+		~Save(void) {};
+		friend class Singleton<Save>;
+	public:
+		void Run(UBSocket* sock, const std::string& argument, Command* area);
+		std::string getName() { return "Save"; };
+	};
+};
