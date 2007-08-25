@@ -2,7 +2,7 @@
 ## Auto Generated makefile, please do not edit
 ##
 WorkspaceName=MUD Development
-WorkspacePath=/home/sverre/code/UBSVN/Trunk
+WorkspacePath=/home/sverre/code/ub
 ProjectName=Resource
 
 ## Debug

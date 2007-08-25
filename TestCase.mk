@@ -2,7 +2,7 @@
 ## Auto Generated makefile, please do not edit
 ##
 WorkspaceName=MUD Development
-WorkspacePath=/home/sverre/code/UBSVN/Trunk
+WorkspacePath=/home/sverre/code/ub
 ProjectName=TestCase
 
 ## Debug
@@ -41,16 +41,13 @@ Objects=$(IntermediateDirectory)/hp$(ObjectSuffix)
 ##
 all: $(OutputFile)
 
-$(OutputFile): makeDirStep PreBuild $(Objects)
+$(OutputFile): makeDirStep $(Objects)
 	$(SharedObjectLinkerName) $(OutputSwitch) $(OutputFile) $(LinkOptions) $(Objects) $(LibPath) $(Libs)
 
 makeDirStep:
 	@test -d ./Debug || mkdir ./Debug
 
 PreBuild:
-	@echo Executing Pre Build commands ...
-	./Initialize
-	@echo Done
 
 
 ##

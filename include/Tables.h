@@ -23,8 +23,8 @@
 #include <vector>
 
 #include "singleton.h"
+#include "Table.h"
 
-class Table;
 typedef std::vector<Table*> TableVector;
 
 class Tables : public Singleton<Tables>

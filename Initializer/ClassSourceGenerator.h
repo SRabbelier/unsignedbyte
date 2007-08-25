@@ -37,11 +37,16 @@ private:
 	ClassSourceGenerator operator=(const ClassSourceGenerator& rhs) { return *this; };
 	
 	void AppendHeader();
-	void AppendCtor();
+	void AppendCtor();	
+	void AppendBodyInsert();
+	void AppendBodyUpdate();
+	void AppendBodySave();
+	void AppendBodyErase();
 	void AppendBody();
 	void AppendFooter();
 	
 	std::string m_tabs;
 	Table* m_table;
 	std::ofstream* m_file;
+	std::string m_name;
 };

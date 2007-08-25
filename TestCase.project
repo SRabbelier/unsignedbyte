@@ -7,7 +7,7 @@
     <File Name="hp.h"/>
   </VirtualDirectory>
   <Settings Type="Dynamic Library">
-    <Configuration Name="Debug" CompilerType="gnu g++">
+    <Configuration Name="Debug" CompilerType="gnu g++" DebuggerType="GNU gdb debugger">
       <General OutputFile="libtestcase.a" IntermediateDirectory="./Debug" Command="" CommandArguments="" WorkingDirectory="./Debug"/>
       <Compiler Required="yes" Options="-g">
         <IncludePath Value="."/>
@@ -19,12 +19,12 @@
       </Linker>
       <ResourceCompiler Required="no" Options=""/>
       <PreBuild>
-        <Command Enabled="yes">./Initialize</Command>
+        <Command Enabled="no">./Initialize</Command>
       </PreBuild>
       <PostBuild/>
       <CustomBuild Enabled="no">
-        <CleanCommand/>
-        <BuildCommand/>
+        <CleanCommand></CleanCommand>
+        <BuildCommand></BuildCommand>
       </CustomBuild>
     </Configuration>
   </Settings>

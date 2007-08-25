@@ -112,7 +112,6 @@
     <File Name="../include/Field.h"/>
     <File Name="../include/Table.h"/>
   </VirtualDirectory>
-  <Dependencies/>
   <Settings Type="Static Library">
     <Configuration Name="Debug" CompilerType="gnu g++">
       <General OutputFile="../libmyresource.a" IntermediateDirectory="./Debug" Command="" CommandArguments="" WorkingDirectory="./Debug"/>
@@ -130,8 +129,8 @@
       <PreBuild/>
       <PostBuild/>
       <CustomBuild Enabled="no">
-        <CleanCommand></CleanCommand>
-        <BuildCommand></BuildCommand>
+        <CleanCommand/>
+        <BuildCommand/>
       </CustomBuild>
     </Configuration>
     <Configuration Name="Release" CompilerType="GNU g++">
@@ -147,9 +146,10 @@
       <PreBuild/>
       <PostBuild/>
       <CustomBuild Enabled="no">
-        <CleanCommand></CleanCommand>
-        <BuildCommand></BuildCommand>
+        <CleanCommand/>
+        <BuildCommand/>
       </CustomBuild>
     </Configuration>
   </Settings>
+  <Dependencies/>
 </CodeLite_Project>

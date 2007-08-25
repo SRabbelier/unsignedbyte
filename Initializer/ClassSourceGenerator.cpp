@@ -31,7 +31,8 @@ using std::endl;
 ClassSourceGenerator::ClassSourceGenerator(Table* table, std::ofstream* file) :
 m_tabs("\t"),
 m_table(table),
-m_file(file)
+m_file(file),
+m_name(m_table->tableName())
 {
 
 }
@@ -56,7 +57,7 @@ void ClassSourceGenerator::GenerateClass()
 	catch(std::logic_error& e)
 	{
 		Global::Get()->bug(e.what());
-		Global::Get()->bugf("Could not generate class '%s'.\n", m_table->tableName().c_str());
+		Global::Get()->bugf("Could not generate class '%s'.\n", m_name.c_str());
 	}
 }
 
@@ -68,7 +69,7 @@ void ClassSourceGenerator::AppendHeader()
 	(*m_file) << endl;
 	(*m_file) << "/**" << endl;
 	(*m_file) << " * Begin of implementation" << endl;
-	(*m_file) << " * class " << m_table->tableName() << endl;
+	(*m_file) << " * class " << m_name << endl;
 	(*m_file) << " **/" << endl;
 	(*m_file) << endl;
 	
@@ -80,15 +81,13 @@ void ClassSourceGenerator::AppendCtor()
 	if(!m_file)
 		throw std::logic_error("Source file is not open for writing.\n");
 	
-	std::string name = m_table->tableName();
-	
 	// Empty constructor for creating new entries
 	(*m_file) << "// Ctors" << endl;
-	(*m_file) << name << "::" << name << "(Database* db) :" << endl;
-	if(!m_table->isLookupTable())	
-		(*m_file) << "m_" << m_table->tableID() << "()," << endl;
-		
+	(*m_file) << m_name << "::" << m_name << "(Database* db) :" << endl;
 	(*m_file) << "m_db(db)";
+	if(!m_table->isLookupTable())	
+		(*m_file) << "," << endl << "m_" << m_table->tableID() << "()";
+		
 	for(Fields::const_iterator it = m_table->begin(); it != m_table->end(); it++)
 	{
 		(*m_file) << "," << endl;
@@ -107,13 +106,13 @@ void ClassSourceGenerator::AppendCtor()
 	// Specific constructor
 	if(!m_table->isLookupTable())
 	{
-		(*m_file) << name << "::" << name << "(Database* db, value_type " << m_table->tableID() << ") :" << endl;
+		(*m_file) << m_name << "::" << m_name << "(Database* db, value_type " << m_table->tableID() << ") :" << endl;
 		(*m_file) << "m_db(db)," << endl;
 		(*m_file) << "m_" << m_table->tableID() << "(" << m_table->tableID() << ")" << endl;
 	}
 	else
 	{
-		(*m_file) << name << "::" << name << "(Database* db";
+		(*m_file) << m_name << "::" << m_name << "(Database* db";
 
 		for(Fields::const_iterator it = m_table->begin(); it != m_table->end(); it++)
 			(*m_file) << ", value_type " << (*it)->getName();
@@ -133,7 +132,7 @@ void ClassSourceGenerator::AppendCtor()
 	(*m_file) << endl;
 	
 	// Destructor
-	(*m_file) << name << "::~" << name << "()" << endl;
+	(*m_file) << m_name << "::~" << m_name << "()" << endl;
 	(*m_file) << "{" << endl;
 	(*m_file) << endl;
 	(*m_file) << "}" << endl;
@@ -142,23 +141,25 @@ void ClassSourceGenerator::AppendCtor()
 	return;
 }
 
-void ClassSourceGenerator::AppendBody()
+void ClassSourceGenerator::AppendBodyInsert()
 {
 	if(!m_file)
 		throw std::logic_error("Source file is not open for writing.\n");
-		
-	std::string name = m_table->tableName();
-		
-	(*m_file) << "value_type " << name <<  "::insert()" << endl;
+	
+	(*m_file) << "value_type " << m_name <<  "::insert()" << endl;
 	(*m_file) << "{" << endl;
 	(*m_file) << m_tabs << "sqlite3_stmt* res; // pointer to the result" << endl;
 	(*m_file) << m_tabs << "const char* leftover = NULL; // pointer to a constant char array storing the 'leftovers'" << endl;
 	(*m_file) << endl;
+	
 	(*m_file) << m_tabs << "Database::OPENDB* db = m_db->grabdb();" << endl;
-	(*m_file) << m_tabs << "if(!db)" << endl;
-	(*m_file) << m_tabs << m_tabs << "throw std::runtime_error(\"Could not open database!\\n\");" << endl;
+	(*m_file) << endl;
+	
+	(*m_file) << m_tabs << "if(db == NULL)" << endl;
+	(*m_file) << m_tabs << m_tabs << "throw std::runtime_error(\"insert(), Could not open database!\\n\");" << endl;
 	(*m_file) << m_tabs << endl;
-	(*m_file) << m_tabs << "std::string sql = \"INSERT INTO " << m_table->tableName() << " (";
+	
+	(*m_file) << m_tabs << "std::string sql = \"INSERT INTO " << m_name << " (";
 	if(m_table->isLookupTable())
 	{
 		for(Fields::const_iterator it = m_table->begin(); it != m_table->end(); it++)
@@ -185,20 +186,39 @@ void ClassSourceGenerator::AppendBody()
 	(*m_file) << "\";" << endl;
 	
 	(*m_file) << m_tabs << "int rc = sqlite3_prepare_v2(db->db, sql.c_str(), (int)sql.size(), &res, &leftover);" << endl;
-		
-	
-	
-	(*m_file) << m_tabs << "return 0;" << endl;
-	(*m_file) << "}" << endl;
 	(*m_file) << endl;
 	
-	(*m_file) << "void " << name << "::update()" << endl;
+	(*m_file) << m_tabs << "if(rc != SQLITE_OK)" << endl;
+	(*m_file) << m_tabs << m_tabs << "throw std::runtime_error(\"insert(), Could not prepare query!\");" << endl;
+	(*m_file) << endl;
+	
+	(*m_file) << m_tabs << "if(leftover != NULL && strlen(leftover) > 0)" << endl;
+	(*m_file) << m_tabs << m_tabs << "throw std::runtime_error(\"insert(), Leftover is not NULL!\");" << endl;
+	(*m_file) << endl;
+	
+	(*m_file) << m_tabs << "return sqlite3_last_insert_rowid(db->db);" << endl;
+	(*m_file) << "}" << endl;
+	(*m_file) << endl;
+}
+
+void ClassSourceGenerator::AppendBodyUpdate()
+{
+	if(!m_file)
+		throw std::logic_error("Source file is not open for writing.\n");
+		
+	(*m_file) << "void " << m_name << "::update()" << endl;
 	(*m_file) << "{" << endl;
 	(*m_file) << m_tabs << "return;" << endl;
 	(*m_file) << "}" << endl;
 	(*m_file) << endl;
-	
-	(*m_file) << "void " << name << "::save()" << endl;
+}
+
+void ClassSourceGenerator::AppendBodySave()
+{
+	if(!m_file)
+		throw std::logic_error("Source file is not open for writing.\n");
+		
+	(*m_file) << "void " << m_name << "::save()" << endl;
 	(*m_file) << "{" << endl;
 	(*m_file) << m_tabs << "if(m_newentry)" << endl;
 	(*m_file) << m_tabs << m_tabs << "insert();" << endl;
@@ -208,16 +228,41 @@ void ClassSourceGenerator::AppendBody()
 	(*m_file) << m_tabs << "return;" << endl;
 	(*m_file) << "}" << endl;
 	(*m_file) << endl;
-	
-	(*m_file) << "void " << name << "::erase()" << endl;
+}
+
+void ClassSourceGenerator::AppendBodyErase()
+{
+	if(!m_file)
+		throw std::logic_error("Source file is not open for writing.\n");
+		
+	(*m_file) << "void " << m_name << "::erase()" << endl;
 	(*m_file) << "{" << endl;
+	(*m_file) << m_tabs << "if (new_object)" << endl;
+	(*m_file) << m_tabs << m_tabs << "return;" << endl;
+	(*m_file) << endl;
+	
 	(*m_file) << m_tabs << "return;" << endl;
 	(*m_file) << "}" << endl;
 	(*m_file) << endl;
-	
-	(*m_file) << endl;
+}
 
-	return;
+void ClassSourceGenerator::AppendBody()
+{
+	if(!m_file)
+		throw std::logic_error("Source file is not open for writing.\n");
+
+	try
+	{
+		AppendBodyInsert();
+		AppendBodyUpdate();
+		AppendBodySave();
+		AppendBodyErase();
+	}
+	catch(std::logic_error& e)
+	{
+		Global::Get()->bug(e.what());
+		throw std::logic_error("Could not Append Source Body.");
+	}
 }
 
 void ClassSourceGenerator::AppendFooter()
@@ -228,7 +273,7 @@ void ClassSourceGenerator::AppendFooter()
 	(*m_file) << endl;
 	(*m_file) << "/**" << endl;
 	(*m_file) << " * End of implementation" << endl;
-	(*m_file) << " * class " << m_table->tableName() << endl;
+	(*m_file) << " * class " << m_name << endl;
 	(*m_file) << " **/" << endl;
 	(*m_file) << endl;
 

@@ -14,8 +14,8 @@
     <File Name="ClassSourceGenerator.h"/>
   </VirtualDirectory>
   <Settings Type="Executable">
-    <Configuration Name="Debug" CompilerType="gnu g++">
-      <General OutputFile="../Initialize" IntermediateDirectory="Intermediate" Command="Initialize" CommandArguments="" WorkingDirectory="."/>
+    <Configuration Name="Debug" CompilerType="gnu g++" DebuggerType="GNU gdb debugger">
+      <General OutputFile="../Initialize" IntermediateDirectory="Intermediate" Command="Initialize" CommandArguments="" WorkingDirectory=".."/>
       <Compiler Required="yes" Options="-g -Wall">
         <IncludePath Value="."/>
         <IncludePath Value="../include"/>
@@ -32,11 +32,11 @@
       <PreBuild/>
       <PostBuild/>
       <CustomBuild Enabled="no">
-        <CleanCommand/>
-        <BuildCommand/>
+        <CleanCommand></CleanCommand>
+        <BuildCommand></BuildCommand>
       </CustomBuild>
     </Configuration>
-    <Configuration Name="Release" CompilerType="GNU g++">
+    <Configuration Name="Release" CompilerType="GNU g++" DebuggerType="">
       <General OutputFile="./Release/HelloWorld" IntermediateDirectory="./Release" Command="HelloWorld" CommandArguments="" WorkingDirectory="./Release"/>
       <Compiler Required="yes" Options="-O2">
         <IncludePath Value="."/>
@@ -49,8 +49,8 @@
       <PreBuild/>
       <PostBuild/>
       <CustomBuild Enabled="no">
-        <CleanCommand/>
-        <BuildCommand/>
+        <CleanCommand></CleanCommand>
+        <BuildCommand></BuildCommand>
       </CustomBuild>
     </Configuration>
   </Settings>

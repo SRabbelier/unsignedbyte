@@ -2,10 +2,14 @@
 ## Auto Generated makefile, please do not edit
 ##
 WorkspaceName=MUD Development
-WorkspacePath=/home/sverre/code/UBSVN/Trunk
+WorkspacePath=/home/sverre/code/ub
+ProjectName=UnsignedByte
 
 ## DebugUnicode
-ifeq ($(type), DebugUnicode)
+ifeq ($(type),DebugUnicode)
+ConfigurationName=DebugUnicode
+IntermediateDirectory=Intermediate
+OutDir=$(IntermediateDirectory)
 LinkerName=g++
 ArchiveTool=ar rcu
 SharedObjectLinkerName=g++ -shared 
@@ -20,7 +24,6 @@ SourceSwitch=-c
 CompilerName=g++
 RcCompilerName=
 OutputFile=../UnsignedByte
-IntermediateDirectory=Intermediate
 Preprocessors=
 CmpOptions=-g -Wall $(Preprocessors)
 RcCmpOptions=
@@ -34,17 +37,17 @@ endif
 Objects=$(IntermediateDirectory)/Account$(ObjectSuffix) $(IntermediateDirectory)/Area$(ObjectSuffix) $(IntermediateDirectory)/Cache$(ObjectSuffix) $(IntermediateDirectory)/Character$(ObjectSuffix) $(IntermediateDirectory)/Colour$(ObjectSuffix) $(IntermediateDirectory)/DatabaseMgr$(ObjectSuffix) $(IntermediateDirectory)/EditorAccount$(ObjectSuffix) $(IntermediateDirectory)/EditorArea$(ObjectSuffix) $(IntermediateDirectory)/EditorColour$(ObjectSuffix) $(IntermediateDirectory)/EditorLoginAccount$(ObjectSuffix) \
 	$(IntermediateDirectory)/EditorMobile$(ObjectSuffix) $(IntermediateDirectory)/EditorNewAccount$(ObjectSuffix) $(IntermediateDirectory)/EditorNewCharacter$(ObjectSuffix) $(IntermediateDirectory)/EditorOLC$(ObjectSuffix) $(IntermediateDirectory)/EditorPlaying$(ObjectSuffix) $(IntermediateDirectory)/EditorRoom$(ObjectSuffix) $(IntermediateDirectory)/EditorScript$(ObjectSuffix) $(IntermediateDirectory)/EditorSector$(ObjectSuffix) $(IntermediateDirectory)/main$(ObjectSuffix) $(IntermediateDirectory)/MCharacter$(ObjectSuffix) \
 	$(IntermediateDirectory)/PCharacter$(ObjectSuffix) $(IntermediateDirectory)/Race$(ObjectSuffix) $(IntermediateDirectory)/Room$(ObjectSuffix) $(IntermediateDirectory)/Sector$(ObjectSuffix) $(IntermediateDirectory)/UBHandler$(ObjectSuffix) $(IntermediateDirectory)/UBSocket$(ObjectSuffix) $(IntermediateDirectory)/SQLSocket$(ObjectSuffix) $(IntermediateDirectory)/Command$(ObjectSuffix) $(IntermediateDirectory)/ub$(ObjectSuffix) $(IntermediateDirectory)/EditorCommand$(ObjectSuffix) \
-	$(IntermediateDirectory)/GrantGroup$(ObjectSuffix) $(IntermediateDirectory)/Permission$(ObjectSuffix) $(IntermediateDirectory)/EditorGrantGroup$(ObjectSuffix) $(IntermediateDirectory)/EditorPermission$(ObjectSuffix) $(IntermediateDirectory)/OLCEditor$(ObjectSuffix) $(IntermediateDirectory)/Editor$(ObjectSuffix) $(IntermediateDirectory)/EditorString$(ObjectSuffix) $(IntermediateDirectory)/Tables$(ObjectSuffix) 
+	$(IntermediateDirectory)/GrantGroup$(ObjectSuffix) $(IntermediateDirectory)/Permission$(ObjectSuffix) $(IntermediateDirectory)/EditorGrantGroup$(ObjectSuffix) $(IntermediateDirectory)/EditorPermission$(ObjectSuffix) $(IntermediateDirectory)/OLCEditor$(ObjectSuffix) $(IntermediateDirectory)/Editor$(ObjectSuffix) $(IntermediateDirectory)/EditorString$(ObjectSuffix) 
 
 ##
 ## Main Build Tragets 
 ##
-all: $(IntermediateDirectory) $(OutputFile)
+all: $(OutputFile)
 
-$(OutputFile): $(Objects)
+$(OutputFile): makeDirStep $(Objects)
 	$(LinkerName) $(OutputSwitch) $(OutputFile) $(LinkOptions) $(Objects) $(LibPath) $(Libs)
 
-$(IntermediateDirectory):
+makeDirStep:
 	@test -d Intermediate || mkdir Intermediate
 
 PreBuild:
@@ -238,11 +241,6 @@ $(IntermediateDirectory)/EditorString$(ObjectSuffix): EditorString.cpp $(Interme
 $(IntermediateDirectory)/EditorString$(ObjectSuffix).d:
 	@$(CompilerName) $(CmpOptions) $(IncludePath) -MT$(IntermediateDirectory)/EditorString$(ObjectSuffix) -MF$(IntermediateDirectory)/EditorString$(ObjectSuffix).d -MM EditorString.cpp
 
-$(IntermediateDirectory)/Tables$(ObjectSuffix): ../Resource/Tables.cpp $(IntermediateDirectory)/Tables$(ObjectSuffix).d
-	$(CompilerName) $(SourceSwitch) ../Resource/Tables.cpp $(CmpOptions)   $(OutputSwitch) $(IntermediateDirectory)/Tables$(ObjectSuffix) $(IncludePath)
-$(IntermediateDirectory)/Tables$(ObjectSuffix).d:
-	@$(CompilerName) $(CmpOptions) $(IncludePath) -MT$(IntermediateDirectory)/Tables$(ObjectSuffix) -MF$(IntermediateDirectory)/Tables$(ObjectSuffix).d -MM ../Resource/Tables.cpp
-
 ##
 ## Clean
 ##
@@ -321,8 +319,6 @@ clean:
 	$(RM) $(IntermediateDirectory)/Editor$(ObjectSuffix).d
 	$(RM) $(IntermediateDirectory)/EditorString$(ObjectSuffix)
 	$(RM) $(IntermediateDirectory)/EditorString$(ObjectSuffix).d
-	$(RM) $(IntermediateDirectory)/Tables$(ObjectSuffix)
-	$(RM) $(IntermediateDirectory)/Tables$(ObjectSuffix).d
 	$(RM) $(OutputFile)
 
 -include $(IntermediateDirectory)/*.d
