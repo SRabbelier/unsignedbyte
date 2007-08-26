@@ -126,11 +126,6 @@ value_type Accounts::AccountsMgr::doInsert()
 	return result;
 }
 
-void Accounts::AccountsMgr::doUpdate()
-{
-	
-}
-
 void Accounts::AccountsMgr::doErase(value_type account)
 {
 	sqlite3_bind_int64(m_erase, 1, account);
@@ -140,21 +135,49 @@ void Accounts::AccountsMgr::doErase(value_type account)
 	switch (rc)
 	{
 	default:
-		throw new std::runtime_error("AccountsMgr::doInsert(), Unknown error code!");
+		throw new std::runtime_error("AccountsMgr::doErase(), Unknown error code!");
 	case SQLITE_BUSY:
-		throw new std::runtime_error("AccountsMgr::doInsert(), The database is busy.");
+		throw new std::runtime_error("AccountsMgr::doErase(), The database is busy.");
 	case SQLITE_ERROR:
 		throw new std::runtime_error(sqlite3_errmsg(m_odb->db));
 	case SQLITE_MISUSE:
-		throw new std::runtime_error("AccountsMgr::doInsert(), Database misuse.");
+		throw new std::runtime_error("AccountsMgr::doErase(), Database misuse.");
 		
 	case SQLITE_DONE:
 	case SQLITE_ROW:
 		break;
 	}
 	
-	sqlite3_reset(m_insert);
-	sqlite3_clear_bindings(m_insert);
+	sqlite3_reset(m_erase);
+	sqlite3_clear_bindings(m_erase);
+}
+
+void Accounts::AccountsMgr::doUpdate(const std::string& name, const std::string& password, value_type account)
+{
+	sqlite3_bind_text(m_update, 1, name.c_str(), name.size(), SQLITE_TRANSIENT);
+	sqlite3_bind_text(m_update, 2, password.c_str(), password.size(), SQLITE_TRANSIENT);
+	sqlite3_bind_int64(m_update, 3, account);
+	
+	int rc = sqlite3_step(m_update);
+	
+	switch (rc)
+	{
+	default:
+		throw new std::runtime_error("AccountsMgr::doUpdate(), Unknown error code!");
+	case SQLITE_BUSY:
+		throw new std::runtime_error("AccountsMgr::doUpdate(), The database is busy.");
+	case SQLITE_ERROR:
+		throw new std::runtime_error(sqlite3_errmsg(m_odb->db));
+	case SQLITE_MISUSE:
+		throw new std::runtime_error("AccountsMgr::doUpdate(), Database misuse.");
+		
+	case SQLITE_DONE:
+	case SQLITE_ROW:
+		break;
+	}
+	
+	sqlite3_reset(m_update);
+	sqlite3_clear_bindings(m_update);
 }
 
 Accounts::AccountsMgr::AccountsMgr(Database* db) :
@@ -184,10 +207,24 @@ m_db(db)
 		
 	if(m_leftover != NULL && strlen(m_leftover) > 0)
 		throw std::runtime_error("AccountsMgr::AccountsMgr(), Leftover from erasure is not NULL!");
+			
+	// Update query
+	sql = "Update Accounts set name=?, password=? where accountid=?;";
+	errorcode = sqlite3_prepare_v2(m_odb->db, sql.c_str(), (int)sql.size(), &m_update, &m_leftover);
+
+	if(errorcode != SQLITE_OK)
+		throw std::runtime_error("AccountsMgr::AccountsMgr(), Could not prepare update query!");
+		
+	if(m_leftover != NULL && strlen(m_leftover) > 0)
+		throw std::runtime_error("AccountsMgr::AccountsMgr(), Leftover from update is not NULL!");
 }
 
 Accounts::AccountsMgr::~AccountsMgr()
 {
+	sqlite3_finalize(m_insert);
+	sqlite3_finalize(m_erase);
+	sqlite3_finalize(m_update);
+	
 	m_db->freedb(m_odb);
 }
 

@@ -76,8 +76,8 @@ namespace hp
 				void setDatabase(Database* db) { m_db = db; };
 			
 				value_type doInsert();
-				void doUpdate();
 				void doErase(value_type account);
+				void doUpdate(const std::string& name, const std::string& password, value_type account);
 			
 			private:
 				Database* m_db;
@@ -85,8 +85,8 @@ namespace hp
 				const char* m_leftover;
 				
 				sqlite3_stmt* m_insert;
-				sqlite3_stmt* m_update;
 				sqlite3_stmt* m_erase;
+				sqlite3_stmt* m_update;
 			
 				AccountsMgr(Database* db);
 				~AccountsMgr();
