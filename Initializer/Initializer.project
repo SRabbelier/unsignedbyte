@@ -6,12 +6,14 @@
     <File Name="Generator.cpp"/>
     <File Name="ClassHeaderGenerator.cpp"/>
     <File Name="ClassSourceGenerator.cpp"/>
+    <File Name="ClassSourceManagerGenerator.cpp"/>
   </VirtualDirectory>
   <VirtualDirectory Name="Header Files">
     <File Name="Initializer.h"/>
     <File Name="Generator.h"/>
     <File Name="ClassHeaderGenerator.h"/>
     <File Name="ClassSourceGenerator.h"/>
+    <File Name="ClassSourceManagerGenerator.h"/>
   </VirtualDirectory>
   <Settings Type="Executable">
     <Configuration Name="Debug" CompilerType="gnu g++" DebuggerType="GNU gdb debugger">
@@ -32,8 +34,8 @@
       <PreBuild/>
       <PostBuild/>
       <CustomBuild Enabled="no">
-        <CleanCommand></CleanCommand>
-        <BuildCommand></BuildCommand>
+        <CleanCommand/>
+        <BuildCommand/>
       </CustomBuild>
     </Configuration>
     <Configuration Name="Release" CompilerType="GNU g++" DebuggerType="">
@@ -49,8 +51,8 @@
       <PreBuild/>
       <PostBuild/>
       <CustomBuild Enabled="no">
-        <CleanCommand></CleanCommand>
-        <BuildCommand></BuildCommand>
+        <CleanCommand/>
+        <BuildCommand/>
       </CustomBuild>
     </Configuration>
   </Settings>

@@ -38,10 +38,7 @@ private:
 	
 	void AppendHeader();
 	void AppendCtor();	
-	void AppendBodyInsert();
-	void AppendBodyUpdate();
-	void AppendBodySave();
-	void AppendBodyErase();
+	void AppendBodyFunctions();
 	void AppendBody();
 	void AppendFooter();
 	
