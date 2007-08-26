@@ -201,7 +201,7 @@ void ClassSourceGenerator::AppendBodyFunctions()
 	(*m_file) << m_tabs << "if(!m_newentry)" << endl;	
 	if(!m_table->isLookupTable())
 	{
-		(*m_file) << m_tabs << m_tabs << "Mgr::Get(m_db)->doErase(";
+		(*m_file) << m_tabs << m_tabs << m_name << "Mgr::Get(m_db)->doErase(";
 		(*m_file) << m_table->tableID();
 		(*m_file) << ");" << endl;
 	}

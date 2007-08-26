@@ -41,13 +41,16 @@ Objects=$(IntermediateDirectory)/hp$(ObjectSuffix)
 ##
 all: $(OutputFile)
 
-$(OutputFile): makeDirStep $(Objects)
+$(OutputFile): makeDirStep PreBuild $(Objects)
 	$(SharedObjectLinkerName) $(OutputSwitch) $(OutputFile) $(LinkOptions) $(Objects) $(LibPath) $(Libs)
 
 makeDirStep:
 	@test -d ./Debug || mkdir ./Debug
 
 PreBuild:
+	@echo Executing Pre Build commands ...
+	./Initialize
+	@echo Done
 
 
 ##

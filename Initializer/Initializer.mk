@@ -34,7 +34,7 @@ Libs=$(LibrarySwitch)myresource $(LibrarySwitch)pthread $(LibrarySwitch)dl $(Lib
 LibPath=$(LibraryPathSwitch). $(LibraryPathSwitch).. 
 endif
 
-Objects=$(IntermediateDirectory)/main$(ObjectSuffix) $(IntermediateDirectory)/Initializer$(ObjectSuffix) $(IntermediateDirectory)/Generator$(ObjectSuffix) $(IntermediateDirectory)/ClassHeaderGenerator$(ObjectSuffix) $(IntermediateDirectory)/ClassSourceGenerator$(ObjectSuffix) $(IntermediateDirectory)/ClassSourceManagerGenerator$(ObjectSuffix) 
+Objects=$(IntermediateDirectory)/main$(ObjectSuffix) $(IntermediateDirectory)/Initializer$(ObjectSuffix) $(IntermediateDirectory)/Generator$(ObjectSuffix) $(IntermediateDirectory)/ClassHeaderGenerator$(ObjectSuffix) $(IntermediateDirectory)/ClassSourceManagerGenerator$(ObjectSuffix) $(IntermediateDirectory)/ClassSourceGenerator$(ObjectSuffix) 
 
 ##
 ## Main Build Tragets 
@@ -73,15 +73,15 @@ $(IntermediateDirectory)/ClassHeaderGenerator$(ObjectSuffix): ClassHeaderGenerat
 $(IntermediateDirectory)/ClassHeaderGenerator$(ObjectSuffix).d:
 	@$(CompilerName) $(CmpOptions) $(IncludePath) -MT$(IntermediateDirectory)/ClassHeaderGenerator$(ObjectSuffix) -MF$(IntermediateDirectory)/ClassHeaderGenerator$(ObjectSuffix).d -MM ClassHeaderGenerator.cpp
 
-$(IntermediateDirectory)/ClassSourceGenerator$(ObjectSuffix): ClassSourceGenerator.cpp $(IntermediateDirectory)/ClassSourceGenerator$(ObjectSuffix).d
-	$(CompilerName) $(SourceSwitch) ClassSourceGenerator.cpp $(CmpOptions)   $(OutputSwitch) $(IntermediateDirectory)/ClassSourceGenerator$(ObjectSuffix) $(IncludePath)
-$(IntermediateDirectory)/ClassSourceGenerator$(ObjectSuffix).d:
-	@$(CompilerName) $(CmpOptions) $(IncludePath) -MT$(IntermediateDirectory)/ClassSourceGenerator$(ObjectSuffix) -MF$(IntermediateDirectory)/ClassSourceGenerator$(ObjectSuffix).d -MM ClassSourceGenerator.cpp
-
 $(IntermediateDirectory)/ClassSourceManagerGenerator$(ObjectSuffix): ClassSourceManagerGenerator.cpp $(IntermediateDirectory)/ClassSourceManagerGenerator$(ObjectSuffix).d
 	$(CompilerName) $(SourceSwitch) ClassSourceManagerGenerator.cpp $(CmpOptions)   $(OutputSwitch) $(IntermediateDirectory)/ClassSourceManagerGenerator$(ObjectSuffix) $(IncludePath)
 $(IntermediateDirectory)/ClassSourceManagerGenerator$(ObjectSuffix).d:
 	@$(CompilerName) $(CmpOptions) $(IncludePath) -MT$(IntermediateDirectory)/ClassSourceManagerGenerator$(ObjectSuffix) -MF$(IntermediateDirectory)/ClassSourceManagerGenerator$(ObjectSuffix).d -MM ClassSourceManagerGenerator.cpp
+
+$(IntermediateDirectory)/ClassSourceGenerator$(ObjectSuffix): ClassSourceGenerator.cpp $(IntermediateDirectory)/ClassSourceGenerator$(ObjectSuffix).d
+	$(CompilerName) $(SourceSwitch) ClassSourceGenerator.cpp $(CmpOptions)   $(OutputSwitch) $(IntermediateDirectory)/ClassSourceGenerator$(ObjectSuffix) $(IncludePath)
+$(IntermediateDirectory)/ClassSourceGenerator$(ObjectSuffix).d:
+	@$(CompilerName) $(CmpOptions) $(IncludePath) -MT$(IntermediateDirectory)/ClassSourceGenerator$(ObjectSuffix) -MF$(IntermediateDirectory)/ClassSourceGenerator$(ObjectSuffix).d -MM ClassSourceGenerator.cpp
 
 ##
 ## Clean
@@ -95,10 +95,10 @@ clean:
 	$(RM) $(IntermediateDirectory)/Generator$(ObjectSuffix).d
 	$(RM) $(IntermediateDirectory)/ClassHeaderGenerator$(ObjectSuffix)
 	$(RM) $(IntermediateDirectory)/ClassHeaderGenerator$(ObjectSuffix).d
-	$(RM) $(IntermediateDirectory)/ClassSourceGenerator$(ObjectSuffix)
-	$(RM) $(IntermediateDirectory)/ClassSourceGenerator$(ObjectSuffix).d
 	$(RM) $(IntermediateDirectory)/ClassSourceManagerGenerator$(ObjectSuffix)
 	$(RM) $(IntermediateDirectory)/ClassSourceManagerGenerator$(ObjectSuffix).d
+	$(RM) $(IntermediateDirectory)/ClassSourceGenerator$(ObjectSuffix)
+	$(RM) $(IntermediateDirectory)/ClassSourceGenerator$(ObjectSuffix).d
 	$(RM) $(OutputFile)
 
 -include $(IntermediateDirectory)/*.d

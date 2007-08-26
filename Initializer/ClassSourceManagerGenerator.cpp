@@ -95,7 +95,7 @@ void ClassSourceManagerGenerator::AppendCtor()
 	(*m_file) << m_tabs << "// Insert query" << endl;
 	if(!m_table->isLookupTable())
 	{
-		(*m_file) << m_tabs << "sql = \"INSERT INTO " << m_basename << " (accountid) values(NULL);\"" << endl;
+		(*m_file) << m_tabs << "sql = \"INSERT INTO " << m_basename << " (" << m_table->tableID() << ") values(NULL);\"" << endl;
 	}
 	else
 	{			

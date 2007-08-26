@@ -26,10 +26,10 @@
 
 namespace game
 {
-	const char vname[] = "ub";
-	const char vstring[] = "0.1.0";
+	const char vname[] = "hp";
+	const char vstring[] = "0.2.0";
 	const int major = 0;
-	const int minor = 1;
+	const int minor = 2;
 	const int micro = 0;
 };
 

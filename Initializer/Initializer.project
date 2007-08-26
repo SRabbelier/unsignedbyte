@@ -5,8 +5,8 @@
     <File Name="Initializer.cpp"/>
     <File Name="Generator.cpp"/>
     <File Name="ClassHeaderGenerator.cpp"/>
-    <File Name="ClassSourceGenerator.cpp"/>
     <File Name="ClassSourceManagerGenerator.cpp"/>
+    <File Name="ClassSourceGenerator.cpp"/>
   </VirtualDirectory>
   <VirtualDirectory Name="Header Files">
     <File Name="Initializer.h"/>

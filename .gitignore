@@ -1,1 +1,5 @@
 sqlite3.lib
+Initialize
+*.a
+*.tags
+Debug

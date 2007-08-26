@@ -6,6 +6,7 @@
   <VirtualDirectory Name="Header Files">
     <File Name="hp.h"/>
   </VirtualDirectory>
+  <Dependencies/>
   <Settings Type="Dynamic Library">
     <Configuration Name="Debug" CompilerType="gnu g++" DebuggerType="GNU gdb debugger">
       <General OutputFile="libtestcase.a" IntermediateDirectory="./Debug" Command="" CommandArguments="" WorkingDirectory="./Debug"/>
@@ -23,10 +24,9 @@
       </PreBuild>
       <PostBuild/>
       <CustomBuild Enabled="no">
-        <CleanCommand/>
-        <BuildCommand/>
+        <CleanCommand></CleanCommand>
+        <BuildCommand></BuildCommand>
       </CustomBuild>
     </Configuration>
   </Settings>
-  <Dependencies/>
 </CodeLite_Project>
