@@ -76,8 +76,8 @@ namespace hp
 				void setDatabase(Database* db) { m_db = db; };
 			
 				value_type doInsert();
-				void getUpdate();
-				void getErase();
+				void doUpdate();
+				void doErase(value_type account);
 			
 			private:
 				Database* m_db;

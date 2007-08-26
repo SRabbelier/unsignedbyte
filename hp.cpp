@@ -126,29 +126,64 @@ value_type Accounts::AccountsMgr::doInsert()
 	return result;
 }
 
-void Accounts::AccountsMgr::getUpdate()
+void Accounts::AccountsMgr::doUpdate()
 {
 	
 }
 
-void Accounts::AccountsMgr::getErase()
+void Accounts::AccountsMgr::doErase(value_type account)
 {
+	sqlite3_bind_int64(m_erase, 1, account);
 	
+	int rc = sqlite3_step(m_erase);
+	
+	switch (rc)
+	{
+	default:
+		throw new std::runtime_error("AccountsMgr::doInsert(), Unknown error code!");
+	case SQLITE_BUSY:
+		throw new std::runtime_error("AccountsMgr::doInsert(), The database is busy.");
+	case SQLITE_ERROR:
+		throw new std::runtime_error(sqlite3_errmsg(m_odb->db));
+	case SQLITE_MISUSE:
+		throw new std::runtime_error("AccountsMgr::doInsert(), Database misuse.");
+		
+	case SQLITE_DONE:
+	case SQLITE_ROW:
+		break;
+	}
+	
+	sqlite3_reset(m_insert);
+	sqlite3_clear_bindings(m_insert);
 }
 
 Accounts::AccountsMgr::AccountsMgr(Database* db) :
 m_db(db)
 {	
 	m_odb = m_db->grabdb();
+	std::string sql; 
+	int errorcode;
 	
-	std::string sql = "INSERT INTO Accounts (accountid) values(NULL);";
-	int rc = sqlite3_prepare_v2(m_odb->db, sql.c_str(), (int)sql.size(), &m_insert, &m_leftover);
+	// Insert query
+	sql = "INSERT INTO Accounts (accountid) values(NULL);";
+	errorcode = sqlite3_prepare_v2(m_odb->db, sql.c_str(), (int)sql.size(), &m_insert, &m_leftover);
 
-	if(rc != SQLITE_OK)
+	if(errorcode != SQLITE_OK)
 		throw std::runtime_error("AccountsMgr::AccountsMgr(), Could not prepare insertion query!");
 		
 	if(m_leftover != NULL && strlen(m_leftover) > 0)
 		throw std::runtime_error("AccountsMgr::AccountsMgr(), Leftover from insertion is not NULL!");
+		
+	
+	// Erase query
+	sql = "DELETE Accounts where accountid=?;";
+	errorcode = sqlite3_prepare_v2(m_odb->db, sql.c_str(), (int)sql.size(), &m_erase, &m_leftover);
+
+	if(errorcode != SQLITE_OK)
+		throw std::runtime_error("AccountsMgr::AccountsMgr(), Could not prepare erasure query!");
+		
+	if(m_leftover != NULL && strlen(m_leftover) > 0)
+		throw std::runtime_error("AccountsMgr::AccountsMgr(), Leftover from erasure is not NULL!");
 }
 
 Accounts::AccountsMgr::~AccountsMgr()
