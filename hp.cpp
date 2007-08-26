@@ -59,12 +59,17 @@ Accounts::~Accounts()
 
 value_type Accounts::insert()
 {
-	return 0;
+	value_type result = AccountsMgr::Get(m_db)->doInsert();
 }
 
 void Accounts::update()
 {
-	return;
+	AccountsMgr::Get(m_db)->doUpdate(m_name, m_password, m_accountid);
+}
+
+void Accounts::erase()
+{
+	AccountsMgr::Get(m_db)->doErase(m_accountid);
 }
 
 void Accounts::save()
@@ -73,14 +78,12 @@ void Accounts::save()
 		insert();
 	else
 		update();
-
-	return;
 }
 
-void Accounts::erase()
-{
-	return;
-}
+/**
+ * Begin of implementation
+ * private class AccountsMgr
+ **/
 
 Accounts::AccountsMgr* Accounts::AccountsMgr::Get(Database* db)
 {
@@ -196,7 +199,6 @@ m_db(db)
 		
 	if(m_leftover != NULL && strlen(m_leftover) > 0)
 		throw std::runtime_error("AccountsMgr::AccountsMgr(), Leftover from insertion is not NULL!");
-		
 	
 	// Erase query
 	sql = "DELETE Accounts where accountid=?;";
@@ -227,6 +229,11 @@ Accounts::AccountsMgr::~AccountsMgr()
 	
 	m_db->freedb(m_odb);
 }
+
+/**
+ * End of implementation
+ * private class AccountsMgr
+ **/
 
 /**
  * End of implementation
