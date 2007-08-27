@@ -110,12 +110,13 @@ void Generator::AppendHeaderIncludes()
 	m_headerfile << "#include <string>" << endl;
 	m_headerfile << "#include <sqlite3.h>" << endl;
 	m_headerfile << "#include <Database.h>" << endl;
+	m_headerfile << "#include <Tables.h>" << endl;
+	m_headerfile << "#include <SqliteMgr.h>" << endl;
+	m_headerfile << "#include <Bindable.h>" << endl;
 	m_headerfile << endl;
 	
 	m_headerfile << "namespace " << m_name << endl;
 	m_headerfile << "{" << endl;
-	m_headerfile << m_tabs << "typedef unsigned long value_type;" << endl;
-	m_headerfile << endl;
 	
 	return;
 }

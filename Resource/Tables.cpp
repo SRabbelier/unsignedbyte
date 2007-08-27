@@ -25,7 +25,7 @@ Tables::Tables() :
 	ACCOUNTS( new Table("Accounts","account" )),
 	AREAS( new Table("Areas","area" )),
 	BRANCHES( new Table("Branches", "branch" )),
-	CHARACTERACCOUNT( new Table("AccountCharacter" )),
+	CHARACTERACCOUNT( new Table("CharacterAccount" )),
 	CHARACTERBRANCH( new Table("CharacterBranch" )),
 	CHARACTERCLUSTER( new Table("CharacterCluster" )),
 	CHARACTERS( new Table("Characters","character" )),

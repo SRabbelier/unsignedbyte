@@ -17,36 +17,21 @@
  *   Free Software Foundation, Inc.,                                       *
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
-#pragma once
 
-#include <string>
-#include <fstream>
+#include "Statements.h"
+#include "sqlite3.h"
 
-class Table;
-
-class ClassSourceManagerGenerator
+Statements::Statements() :
+m_insert(NULL),
+m_erase(NULL),
+m_update(NULL)
 {
-public:
-	ClassSourceManagerGenerator(Table* table, std::ofstream* file);
-	~ClassSourceManagerGenerator();
 	
-	void GenerateClass();
+}
 
-private:
-	ClassSourceManagerGenerator(const ClassSourceManagerGenerator& rhs) : m_table(rhs.m_table) { };
-	ClassSourceManagerGenerator operator=(const ClassSourceManagerGenerator& rhs) { return *this; };
-	
-	void AppendHeader();
-	void AppendCtor();	
-	void AppendBodyInsert();
-	void AppendBodyUpdate();
-	void AppendBodyErase();
-	void AppendBody();
-	void AppendFooter();
-	
-	std::string m_tabs;
-	Table* m_table;
-	std::ofstream* m_file;
-	std::string m_basename;
-	std::string m_name;
-};
+Statements::~Statements() 
+{ 
+	sqlite3_finalize(m_insert);
+	sqlite3_finalize(m_erase);
+	sqlite3_finalize(m_update);
+}

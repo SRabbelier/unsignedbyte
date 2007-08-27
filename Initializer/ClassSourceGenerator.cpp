@@ -21,11 +21,11 @@
 #include <stdexcept>
 
 #include "ClassSourceGenerator.h"
-#include "ClassSourceManagerGenerator.h"
 #include "Global.h"
 #include "Tables.h"
 #include "Table.h"
 #include "Field.h"
+#include "StringUtilities.h"
 
 using std::endl;
 
@@ -51,7 +51,9 @@ void ClassSourceGenerator::GenerateClass()
 	try
 	{
 		AppendHeader();
-		AppendCtor();
+		AppendCtorGeneral();
+		AppendCtorSpecific();	
+		AppendCtorDtor();
 		AppendBody();
 		AppendFooter();
 	}
@@ -77,7 +79,7 @@ void ClassSourceGenerator::AppendHeader()
 	return;
 }
 
-void ClassSourceGenerator::AppendCtor()
+void ClassSourceGenerator::AppendCtorGeneral()
 {
 	if(!m_file)
 		throw std::logic_error("Source file is not open for writing.\n");
@@ -103,7 +105,10 @@ void ClassSourceGenerator::AppendCtor()
 	(*m_file) << endl;
 	(*m_file) << "}" << endl;
 	(*m_file) << endl;
-	
+}
+
+void ClassSourceGenerator::AppendCtorSpecific()
+{
 	// Specific constructor
 	if(!m_table->isLookupTable())
 	{
@@ -131,7 +136,10 @@ void ClassSourceGenerator::AppendCtor()
 	(*m_file) << endl;
 	(*m_file) << "}" << endl;
 	(*m_file) << endl;
-	
+}
+
+void ClassSourceGenerator::AppendCtorDtor()
+{
 	// Destructor
 	(*m_file) << m_name << "::~" << m_name << "()" << endl;
 	(*m_file) << "{" << endl;
@@ -149,31 +157,10 @@ void ClassSourceGenerator::AppendBodyFunctions()
 	if(!m_file)
 		throw std::logic_error("Source file is not open for writing.\n");
 		
-	(*m_file) << "value_type " << m_name << "::insert(";
-	if(m_table->isLookupTable())
-	{
-		for(Fields::const_iterator it = m_table->begin(); it != m_table->end(); it++)
-		{
-			if(it != m_table->begin())
-				(*m_file) << ", ";
-			
-			(*m_file) << "value_type " << (*it)->getName();
-		}
-	}
-	(*m_file) << ")" << endl;
-	
+	(*m_file) << "value_type " << m_name << "::insert()" << endl;
 	(*m_file) << "{" << endl;
-	(*m_file) << m_tabs << "value_type result = " << m_name << "Mgr::Get(m_db)->doInsert(";
-	if(m_table->isLookupTable())
-	{
-		for(Fields::const_iterator it = m_table->begin(); it != m_table->end(); it++)
-		{
-			if(it != m_table->begin())
-				(*m_file) << ", ";
-			
-			(*m_file) << (*it)->getName();
-		}
-	}
+	(*m_file) << m_tabs << "value_type result = SqliteMgr::Get()->doInsert(Tables::Get()->";
+	(*m_file) << String::Get()->toupper(m_name);
 	(*m_file) << ");" << endl;
 	(*m_file) << m_tabs << "return result;" << endl;
 	(*m_file) << "}" << endl;
@@ -183,15 +170,7 @@ void ClassSourceGenerator::AppendBodyFunctions()
 	{
 		(*m_file) << "void " << m_name << "::update()" << endl;
 		(*m_file) << "{" << endl;
-		(*m_file) << m_tabs << m_name << "Mgr::Get(m_db)->doUpdate(";
-		for(Fields::const_iterator it = m_table->begin(); it != m_table->end(); it++)
-		{
-			if(it != m_table->begin())
-				(*m_file) << ", ";
-			
-			(*m_file) << (*it)->getName();
-		}
-		(*m_file) << ", " << m_table->tableID() << ");" << endl;
+		(*m_file) << m_tabs << "SqliteMgr::Get()->doUpdate(this);" << endl;
 		(*m_file) << "}" << endl;
 		(*m_file) << endl;
 	}
@@ -199,24 +178,7 @@ void ClassSourceGenerator::AppendBodyFunctions()
 	(*m_file) << "void " << m_name <<  "::erase()" << endl;
 	(*m_file) << "{" << endl;
 	(*m_file) << m_tabs << "if(!m_newentry)" << endl;	
-	if(!m_table->isLookupTable())
-	{
-		(*m_file) << m_tabs << m_tabs << m_name << "Mgr::Get(m_db)->doErase(";
-		(*m_file) << m_table->tableID();
-		(*m_file) << ");" << endl;
-	}
-	else
-	{
-		(*m_file) << m_tabs << m_tabs << "Mgr::Get(m_db)->doErase(";
-		for(Fields::const_iterator it = m_table->begin(); it != m_table->end(); it++)
-		{
-			if(it != m_table->begin())
-				(*m_file) << ", ";
-			
-			(*m_file) << (*it)->getName();
-		}
-		(*m_file) << ");" << endl;
-	}
+	(*m_file) << m_tabs << m_tabs << "SqliteMgr::Get()->doErase(this);" << endl;
 	(*m_file) << "}" << endl;
 	(*m_file) << endl;
 		
@@ -241,8 +203,6 @@ void ClassSourceGenerator::AppendBody()
 	try
 	{
 		AppendBodyFunctions();
-		ClassSourceManagerGenerator generator(m_table, m_file);
-		generator.GenerateClass();
 	}
 	catch(std::logic_error& e)
 	{

@@ -17,35 +17,32 @@
  *   Free Software Foundation, Inc.,                                       *
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
+
 #pragma once
 
 #include <string>
-#include <fstream>
 
-class Table;
+class sqlite3_stmt;
 
-class ClassSourceGenerator
+class Statements
 {
 public:
-	ClassSourceGenerator(Table* table, std::ofstream* file);
-	~ClassSourceGenerator();
+	// Constructors
+	Statements();	
+	~Statements();
 	
-	void GenerateClass();
-
+	// Getters
+	sqlite3_stmt* getErase() const {return m_erase;}
+	sqlite3_stmt* getInsert() const {return m_insert;}
+	sqlite3_stmt* getUpdate() const {return m_update;}
+	
+	// Setters
+	void setErase(sqlite3_stmt* erase) { m_erase = erase; }
+	void setInsert(sqlite3_stmt* insert) { m_insert = insert; }
+	void setUpdate(sqlite3_stmt* update) { m_update = update; }
+	
 private:
-	ClassSourceGenerator(const ClassSourceGenerator& rhs) : m_table(rhs.m_table) { };
-	ClassSourceGenerator operator=(const ClassSourceGenerator& rhs) { return *this; };
-	
-	void AppendHeader();
-	void AppendCtorGeneral();
-	void AppendCtorSpecific();	
-	void AppendCtorDtor();
-	void AppendBodyFunctions();
-	void AppendBody();
-	void AppendFooter();
-	
-	std::string m_tabs;
-	Table* m_table;
-	std::ofstream* m_file;
-	std::string m_name;
+	sqlite3_stmt* m_insert;
+	sqlite3_stmt* m_erase;
+	sqlite3_stmt* m_update;
 };

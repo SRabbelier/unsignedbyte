@@ -5,7 +5,6 @@
     <File Name="Initializer.cpp"/>
     <File Name="Generator.cpp"/>
     <File Name="ClassHeaderGenerator.cpp"/>
-    <File Name="ClassSourceManagerGenerator.cpp"/>
     <File Name="ClassSourceGenerator.cpp"/>
   </VirtualDirectory>
   <VirtualDirectory Name="Header Files">
@@ -13,7 +12,6 @@
     <File Name="Generator.h"/>
     <File Name="ClassHeaderGenerator.h"/>
     <File Name="ClassSourceGenerator.h"/>
-    <File Name="ClassSourceManagerGenerator.h"/>
   </VirtualDirectory>
   <Settings Type="Executable">
     <Configuration Name="Debug" CompilerType="gnu g++" DebuggerType="GNU gdb debugger">

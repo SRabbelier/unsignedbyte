@@ -6,7 +6,6 @@
     <File Name="Cache.cpp"/>
     <File Name="Character.cpp"/>
     <File Name="Colour.cpp"/>
-    <File Name="DatabaseMgr.cpp"/>
     <File Name="EditorAccount.cpp"/>
     <File Name="EditorArea.cpp"/>
     <File Name="EditorColour.cpp"/>
@@ -64,7 +63,6 @@
     <File Name="PCharacter.h"/>
     <File Name="Race.h"/>
     <File Name="Room.h"/>
-    <File Name="Savable.h"/>
     <File Name="Sector.h"/>
     <File Name="ub.h"/>
     <File Name="UBHandler.h"/>
@@ -72,7 +70,6 @@
     <File Name="SQLSocket.h"/>
     <File Name="Command.h"/>
     <File Name="EditorCommand.h"/>
-    <File Name="DatabaseMgr.h"/>
     <File Name="GrantGroup.h"/>
     <File Name="Permission.h"/>
     <File Name="EditorPermission.h"/>

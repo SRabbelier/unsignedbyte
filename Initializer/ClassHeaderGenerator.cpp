@@ -69,7 +69,7 @@ void ClassHeaderGenerator::AppendHeader()
 	if(m_table->isLookupTable())
 		(*m_file) << m_tabs << "// Lookup table" << endl;
 	
-	(*m_file) << m_tabs << "class " << m_table->tableName() << endl;
+	(*m_file) << m_tabs << "class " << m_table->tableName() << " : public Bindable" << endl;
 	(*m_file) << m_tabs << "{" << endl;
 	(*m_file) << m_tabs << "public:" << endl;
 	

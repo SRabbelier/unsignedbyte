@@ -22,26 +22,19 @@
 #include <string>
 #include <vector>
 
-#include "singleton.h"
-#include "Global.h"
+class Table;
 
-typedef std::vector<std::string> Strings;
-
-class String : public Singleton<String>
+class Bindable
 {
-private:
-	String(void) {};
-	~String(void) {};
-
-	friend class Singleton<String>;
-
 public:
-	Strings lines(const std::string& input, const char* separator);
-	std::string unlines(const Strings& input, const char* filler, int newlineat = 1);
+	Bindable(void) { }
+	virtual ~Bindable(void) { }
 	
-	size_t maxlength(const Strings& content);
-	std::string box(const Strings& content, const std::string& header = Global::Get()->EmptyString);
+	void bindErase(sqlite3_stmt* stmt) {}
+	void bindUpdate(sqlite3_stmt* stmt) {}
 	
-	std::string toupper(const std::string& convertToUpper);
-	std::string tolower(const std::string& convertToLower);
+	virtual Table* getTable() const { return NULL; }
+	
+private:
+	Bindable(const Bindable& rhs) {};
 };

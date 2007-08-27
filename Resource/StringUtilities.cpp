@@ -18,6 +18,9 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include <algorithm>
+#include <cctype>
+
 #include "StringUtilities.h"
 #include "Parse.h"
 #include "Global.h"
@@ -110,4 +113,18 @@ std::string String::box(const Strings& content, const std::string& header)
 	result.append(footer);
 
 	return result;
+}
+
+std::string String::toupper(const std::string& input)
+{
+	std::string convertToUpper = input;
+	std::transform(convertToUpper.begin(), convertToUpper.end(), convertToUpper.begin(), (int(*)(int)) std::toupper);
+	return convertToUpper ;
+}
+
+std::string String::tolower(const std::string& input)
+{
+	std::string convertToUpper = input;
+	std::transform(convertToUpper.begin(), convertToUpper.end(), convertToUpper.begin(), (int(*)(int)) std::tolower);
+	return convertToUpper ;
 }

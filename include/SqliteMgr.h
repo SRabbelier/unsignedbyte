@@ -17,35 +17,44 @@
  *   Free Software Foundation, Inc.,                                       *
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
+
 #pragma once
 
-#include <string>
-#include <fstream>
+#include <map>
+
+#include <sqlite3.h>
+#include <Database.h>
 
 class Table;
+class Bindable;
+class Statements;
 
-class ClassSourceGenerator
+typedef std::map<Table*, Statements*>  TableStatements;
+typedef unsigned long value_type;
+
+class SqliteMgr
 {
-public:
-	ClassSourceGenerator(Table* table, std::ofstream* file);
-	~ClassSourceGenerator();
+	public:
+		static SqliteMgr* Get();
+		static void Free();
 	
-	void GenerateClass();
-
-private:
-	ClassSourceGenerator(const ClassSourceGenerator& rhs) : m_table(rhs.m_table) { };
-	ClassSourceGenerator operator=(const ClassSourceGenerator& rhs) { return *this; };
+		value_type doInsert(Table* table);
+		void doErase(Bindable* savable);
+		void doUpdate(Bindable* savable);
 	
-	void AppendHeader();
-	void AppendCtorGeneral();
-	void AppendCtorSpecific();	
-	void AppendCtorDtor();
-	void AppendBodyFunctions();
-	void AppendBody();
-	void AppendFooter();
+	private:
+		Database* m_db;
+		Database::OPENDB* m_odb;
+		const char* m_leftover;
+		
+		TableStatements m_statements;
+		
+		Statements* getStatements(Table* table);
+		sqlite3_stmt* getInsertStmt(Table* table);
+		sqlite3_stmt* getEraseStmt(Table* table);
+		sqlite3_stmt* getUpdateStmt(Table* table);
 	
-	std::string m_tabs;
-	Table* m_table;
-	std::ofstream* m_file;
-	std::string m_name;
+		SqliteMgr();
+		~SqliteMgr();
+		static SqliteMgr* m_instance;
 };

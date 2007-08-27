@@ -27,7 +27,7 @@
 #include "StderrLog.h"
 #include "Query.h"
 #include "Global.h"
-#include "ub.h"
+// #include "ub.h"
 
 std::string DatabaseMgr::m_staticpath = Global::Get()->EmptyString;
 

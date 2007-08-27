@@ -48,6 +48,9 @@
     <File Name="Tables.cpp"/>
     <File Name="Table.cpp"/>
     <File Name="Field.cpp"/>
+    <File Name="DatabaseMgr.cpp"/>
+    <File Name="SqliteMgr.cpp"/>
+    <File Name="Statements.cpp"/>
   </VirtualDirectory>
   <VirtualDirectory Name="Header Files">
     <File Name="../include/Base64.h"/>
@@ -111,6 +114,12 @@
     <File Name="../include/Tables.h"/>
     <File Name="../include/Field.h"/>
     <File Name="../include/Table.h"/>
+    <File Name="../include/DatabaseMgr.h"/>
+    <File Name="../include/Savable.h"/>
+    <File Name="../include/StringUtilities.h"/>
+    <File Name="../include/SqliteMgr.h"/>
+    <File Name="../include/Statements.h"/>
+    <File Name="../include/Bindable.h"/>
   </VirtualDirectory>
   <Settings Type="Static Library">
     <Configuration Name="Debug" CompilerType="gnu g++">
