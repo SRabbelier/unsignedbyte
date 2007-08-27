@@ -3,3 +3,5 @@ Initialize
 *.a
 *.tags
 Debug
+ub.cpp
+ub.h
