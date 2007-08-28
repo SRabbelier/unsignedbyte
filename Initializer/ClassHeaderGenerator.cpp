@@ -120,6 +120,12 @@ void ClassHeaderGenerator::AppendBody()
 	(*m_file) << m_tabs << m_tabs << "void save();" << endl;
 	(*m_file) << m_tabs << m_tabs << "void erase();" << endl;
 	(*m_file) << endl;
+	
+	(*m_file) << m_tabs << m_tabs << "// Bindable interface" << endl;
+	(*m_file) << m_tabs << m_tabs << "void bindErase(sqlite3_stmt* stmt) const;" << endl;
+	(*m_file) << m_tabs << m_tabs << "void bindUpdate(sqlite3_stmt* stmt) const;" << endl;
+	(*m_file) << m_tabs << m_tabs << "Table* getTable() const;" << endl;
+	(*m_file) << endl;
 
 	return;
 }
@@ -148,9 +154,9 @@ void ClassHeaderGenerator::AppendFields()
 		{
 			Field* field = *it;
 			if(field->isText())
-				(*m_file) << m_tabs << m_tabs << "void set" << field->getName() << "(const std::string& value) const;" << endl;
+				(*m_file) << m_tabs << m_tabs << "void set" << field->getName() << "(const std::string& value);" << endl;
 			else
-				(*m_file) << m_tabs << m_tabs << "void set" << field->getName() << "(value_type value) const;" << endl;
+				(*m_file) << m_tabs << m_tabs << "void set" << field->getName() << "(value_type value);" << endl;
 		}
 		(*m_file) << endl;
 	}

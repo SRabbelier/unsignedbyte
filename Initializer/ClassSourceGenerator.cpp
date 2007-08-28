@@ -55,6 +55,8 @@ void ClassSourceGenerator::GenerateClass()
 		AppendCtorSpecific();	
 		AppendCtorDtor();
 		AppendBody();
+		AppendBindable();
+		AppendGetSet();
 		AppendFooter();
 	}
 	catch(std::logic_error& e)
@@ -109,6 +111,9 @@ void ClassSourceGenerator::AppendCtorGeneral()
 
 void ClassSourceGenerator::AppendCtorSpecific()
 {
+	if(!m_file)
+		throw std::logic_error("Source file is not open for writing.\n");
+		
 	// Specific constructor
 	if(!m_table->isLookupTable())
 	{
@@ -140,6 +145,9 @@ void ClassSourceGenerator::AppendCtorSpecific()
 
 void ClassSourceGenerator::AppendCtorDtor()
 {
+	if(!m_file)
+		throw std::logic_error("Source file is not open for writing.\n");
+		
 	// Destructor
 	(*m_file) << m_name << "::~" << m_name << "()" << endl;
 	(*m_file) << "{" << endl;
@@ -150,18 +158,14 @@ void ClassSourceGenerator::AppendCtorDtor()
 	return;
 }
 
-
-
-void ClassSourceGenerator::AppendBodyFunctions()
+void ClassSourceGenerator::AppendBody()
 {
 	if(!m_file)
 		throw std::logic_error("Source file is not open for writing.\n");
 		
 	(*m_file) << "value_type " << m_name << "::insert()" << endl;
 	(*m_file) << "{" << endl;
-	(*m_file) << m_tabs << "value_type result = SqliteMgr::Get()->doInsert(Tables::Get()->";
-	(*m_file) << String::Get()->toupper(m_name);
-	(*m_file) << ");" << endl;
+	(*m_file) << m_tabs << "value_type result = SqliteMgr::Get()->doInsert(getTable());" << endl;
 	(*m_file) << m_tabs << "return result;" << endl;
 	(*m_file) << "}" << endl;
 	(*m_file) << endl;
@@ -192,22 +196,109 @@ void ClassSourceGenerator::AppendBodyFunctions()
 	(*m_file) << m_tabs << "return;" << endl;
 	(*m_file) << "}" << endl;
 	(*m_file) << endl;
-	(*m_file) << endl;
 }
 
-void ClassSourceGenerator::AppendBody()
+void ClassSourceGenerator::AppendBindable()
 {
 	if(!m_file)
 		throw std::logic_error("Source file is not open for writing.\n");
-
-	try
+	
+	
+	(*m_file) << "void " << m_name << "::bindErase(sqlite3_stmt* stmt) const" << endl;
+	(*m_file) << "{" << endl;
+	if(!m_table->isLookupTable())
 	{
-		AppendBodyFunctions();
+		(*m_file) << m_tabs << "sqlite3_bind_int64(stmt, 1, m_" ;
+		(*m_file) << m_table->tableID() << ");" << endl;
 	}
-	catch(std::logic_error& e)
+	else
 	{
-		Global::Get()->bug(e.what());
-		throw std::logic_error("Could not Append Source Body.");
+		int pos = 1;
+		for(Fields::const_iterator it = m_table->begin(); it != m_table->end(); it++)
+		{
+			(*m_file) << m_tabs << "sqlite3_bind_int64(stmt, " << pos; 
+			(*m_file) << ", m_" << (*it)->getName() << ");" << endl;
+			pos++;
+		}
+	}
+
+	(*m_file) << "}" << endl;
+	(*m_file) << endl;
+	
+	(*m_file) << "void " << m_name << "::bindUpdate(sqlite3_stmt* stmt) const" << endl;
+	(*m_file) << "{" << endl;
+	if(m_table->isLookupTable())
+	{
+		(*m_file) << m_tabs << "throw std::logic_error(\"" << m_name << "::bindUpdate(), in a lookup table!\");" << endl;
+	}
+	else
+	{
+		int pos = 1;
+		for(Fields::const_iterator it = m_table->begin(); it != m_table->end(); it++)
+		{
+			if((*it)->isText())
+			{
+				(*m_file) << m_tabs << "sqlite3_bind_text(stmt, " << pos;
+				(*m_file) << ", m_" << (*it)->getName() <<".c_str(), m_" << (*it)->getName() << ".size(), SQLITE_TRANSIENT);";
+				(*m_file) << endl;
+			}
+			else
+			{
+				(*m_file) << m_tabs << "sqlite3_bind_int64(stmt, " << pos << ", m_" << (*it)->getName() << ");" << endl;
+			}
+			pos++;
+		}
+		(*m_file) << m_tabs << "sqlite3_bind_int64(stmt, " << pos << ", m_" << m_table->tableID() << ");" << endl;
+	}
+	(*m_file) << "}" << endl;
+	(*m_file) << endl;
+	
+	(*m_file) << "Table* " << m_name << "::getTable() const" << endl;
+	(*m_file) << "{" << endl;
+	(*m_file) << m_tabs << "return Tables::Get()->";
+	(*m_file) << String::Get()->toupper(m_name);
+	(*m_file) << ";" << endl;
+	(*m_file) << "}" << endl;
+	(*m_file) << endl;
+}
+
+void ClassSourceGenerator::AppendGetSet()
+{
+	if(!m_file)
+		throw std::logic_error("Source file is not open for writing.\n");
+		
+	// Getters
+	for(Fields::const_iterator it = m_table->begin(); it != m_table->end(); it++)
+	{
+		Field* field = *it;
+		if(field->isText())
+			(*m_file) << "const std::string& " << m_name <<"::get" << field->getName() << "() const" << endl;
+		else
+			(*m_file) << "value_type " << m_name << "::get" << field->getName() << "() const" << endl;
+			
+		(*m_file) << "{" << endl;
+		(*m_file) << m_tabs << "return m_" << field->getName() << ";" << endl;
+		(*m_file) << "}" << endl;
+		(*m_file) << endl;
+	}
+
+	// Only add setters if it's not a lookup table
+	if(!m_table->isLookupTable())
+	{
+		for(Fields::const_iterator it = m_table->begin(); it != m_table->end(); it++)
+		{
+			Field* field = *it;
+			if(field->isText())
+				(*m_file) << "void " << m_name << "::set" << field->getName() << "(const std::string& value)" << endl;
+			else
+				(*m_file) << "void " << m_name << "::set" << field->getName() << "(value_type value)" << endl;
+				
+			(*m_file) << "{" << endl;
+			(*m_file) << m_tabs << "m_" << field->getName() << " = value;" << endl;
+			(*m_file) << m_tabs << "m_dirty = true;" << endl;
+			(*m_file) << "}" << endl;
+			(*m_file) << endl;
+		}
 	}
 }
 

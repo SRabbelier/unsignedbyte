@@ -16,19 +16,20 @@
  *   along with this program; if not, write to the                         *
  *   Free Software Foundation, Inc.,                                       *
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
- ****************************** *********************************************/
+ ***************************************************************************/
 
 #pragma once
 
 #include <string>
 #include <sqlite3.h>
 #include <Database.h>
+#include <Tables.h>
+#include <SqliteMgr.h>
+#include <Bindable.h>
 
 namespace hp
 {
-	typedef unsigned long value_type;
-
-	class Accounts
+	class Accounts : public Bindable
 	{
 	public:
 		// Ctors
@@ -42,13 +43,18 @@ namespace hp
 		void save();
 		void erase();
 
+		// Bindable interface
+		void bindErase(sqlite3_stmt* stmt) const;
+		void bindUpdate(sqlite3_stmt* stmt) const;
+		Table* getTable() const;
+
 		// Getters
 		const std::string& getname() const;
 		const std::string& getpassword() const;
 
 		// Setters
-		void setname(const std::string& value) const;
-		void setpassword(const std::string& value) const;
+		void setname(const std::string& value);
+		void setpassword(const std::string& value);
 
 	private:
 		// Database pointer
@@ -66,35 +72,9 @@ namespace hp
 		// Hide copy constructor and assignment operator
 		Accounts(const Accounts& rhs);
 		Accounts operator=(const Accounts& rhs);
-		
-		class AccountsMgr
-		{
-			public:
-				static AccountsMgr* Get(Database* db);
-				static void Free();
-			
-				void setDatabase(Database* db) { m_db = db; };
-			
-				value_type doInsert();
-				void doErase(value_type account);
-				void doUpdate(const std::string& name, const std::string& password, value_type account);
-			
-			private:
-				Database* m_db;
-				Database::OPENDB* m_odb;
-				const char* m_leftover;
-				
-				sqlite3_stmt* m_insert;
-				sqlite3_stmt* m_erase;
-				sqlite3_stmt* m_update;
-			
-				AccountsMgr(Database* db);
-				~AccountsMgr();
-				static AccountsMgr* m_instance;
-		};
 	};
 
-	class Areas
+	class Areas : public Bindable
 	{
 	public:
 		// Ctors
@@ -108,6 +88,11 @@ namespace hp
 		void save();
 		void erase();
 
+		// Bindable interface
+		void bindErase(sqlite3_stmt* stmt) const;
+		void bindUpdate(sqlite3_stmt* stmt) const;
+		Table* getTable() const;
+
 		// Getters
 		const std::string& getname() const;
 		const std::string& getdescription() const;
@@ -115,10 +100,10 @@ namespace hp
 		value_type getwidth() const;
 
 		// Setters
-		void setname(const std::string& value) const;
-		void setdescription(const std::string& value) const;
-		void setheight(value_type value) const;
-		void setwidth(value_type value) const;
+		void setname(const std::string& value);
+		void setdescription(const std::string& value);
+		void setheight(value_type value);
+		void setwidth(value_type value);
 
 	private:
 		// Database pointer
@@ -140,7 +125,7 @@ namespace hp
 		Areas operator=(const Areas& rhs);
 	};
 
-	class Branches
+	class Branches : public Bindable
 	{
 	public:
 		// Ctors
@@ -154,6 +139,11 @@ namespace hp
 		void save();
 		void erase();
 
+		// Bindable interface
+		void bindErase(sqlite3_stmt* stmt) const;
+		void bindUpdate(sqlite3_stmt* stmt) const;
+		Table* getTable() const;
+
 		// Getters
 		const std::string& getname() const;
 		value_type getfkTrees() const;
@@ -161,10 +151,10 @@ namespace hp
 		value_type getfkStatsSecondary() const;
 
 		// Setters
-		void setname(const std::string& value) const;
-		void setfkTrees(value_type value) const;
-		void setfkStatsPrimary(value_type value) const;
-		void setfkStatsSecondary(value_type value) const;
+		void setname(const std::string& value);
+		void setfkTrees(value_type value);
+		void setfkStatsPrimary(value_type value);
+		void setfkStatsSecondary(value_type value);
 
 	private:
 		// Database pointer
@@ -187,19 +177,24 @@ namespace hp
 	};
 
 	// Lookup table
-	class AccountCharacter
+	class CharacterAccount : public Bindable
 	{
 	public:
 		// Ctors
-		AccountCharacter(Database* db);
-		AccountCharacter(Database* db, value_type fkCharacters, value_type fkAccounts);
-		~AccountCharacter();
+		CharacterAccount(Database* db);
+		CharacterAccount(Database* db, value_type fkCharacters, value_type fkAccounts);
+		~CharacterAccount();
 
 		// Database interaction
 		value_type insert();
 		void update();
 		void save();
 		void erase();
+
+		// Bindable interface
+		void bindErase(sqlite3_stmt* stmt) const;
+		void bindUpdate(sqlite3_stmt* stmt) const;
+		Table* getTable() const;
 
 		// Getters
 		value_type getfkCharacters() const;
@@ -218,12 +213,12 @@ namespace hp
 		bool m_dirty;
 
 		// Hide copy constructor and assignment operator
-		AccountCharacter(const AccountCharacter& rhs);
-		AccountCharacter operator=(const AccountCharacter& rhs);
+		CharacterAccount(const CharacterAccount& rhs);
+		CharacterAccount operator=(const CharacterAccount& rhs);
 	};
 
 	// Lookup table
-	class CharacterBranch
+	class CharacterBranch : public Bindable
 	{
 	public:
 		// Ctors
@@ -236,6 +231,11 @@ namespace hp
 		void update();
 		void save();
 		void erase();
+
+		// Bindable interface
+		void bindErase(sqlite3_stmt* stmt) const;
+		void bindUpdate(sqlite3_stmt* stmt) const;
+		Table* getTable() const;
 
 		// Getters
 		value_type getfkCharacters() const;
@@ -259,7 +259,7 @@ namespace hp
 	};
 
 	// Lookup table
-	class CharacterCluster
+	class CharacterCluster : public Bindable
 	{
 	public:
 		// Ctors
@@ -272,6 +272,11 @@ namespace hp
 		void update();
 		void save();
 		void erase();
+
+		// Bindable interface
+		void bindErase(sqlite3_stmt* stmt) const;
+		void bindUpdate(sqlite3_stmt* stmt) const;
+		Table* getTable() const;
 
 		// Getters
 		value_type getfkCharacters() const;
@@ -294,7 +299,7 @@ namespace hp
 		CharacterCluster operator=(const CharacterCluster& rhs);
 	};
 
-	class Characters
+	class Characters : public Bindable
 	{
 	public:
 		// Ctors
@@ -308,6 +313,11 @@ namespace hp
 		void save();
 		void erase();
 
+		// Bindable interface
+		void bindErase(sqlite3_stmt* stmt) const;
+		void bindUpdate(sqlite3_stmt* stmt) const;
+		Table* getTable() const;
+
 		// Getters
 		value_type getfkRaces() const;
 		value_type getfkRooms() const;
@@ -315,10 +325,10 @@ namespace hp
 		const std::string& getdescription() const;
 
 		// Setters
-		void setfkRaces(value_type value) const;
-		void setfkRooms(value_type value) const;
-		void setname(const std::string& value) const;
-		void setdescription(const std::string& value) const;
+		void setfkRaces(value_type value);
+		void setfkRooms(value_type value);
+		void setname(const std::string& value);
+		void setdescription(const std::string& value);
 
 	private:
 		// Database pointer
@@ -341,7 +351,7 @@ namespace hp
 	};
 
 	// Lookup table
-	class CharacterSkill
+	class CharacterSkill : public Bindable
 	{
 	public:
 		// Ctors
@@ -354,6 +364,11 @@ namespace hp
 		void update();
 		void save();
 		void erase();
+
+		// Bindable interface
+		void bindErase(sqlite3_stmt* stmt) const;
+		void bindUpdate(sqlite3_stmt* stmt) const;
+		Table* getTable() const;
 
 		// Getters
 		value_type getfkCharacters() const;
@@ -377,7 +392,7 @@ namespace hp
 	};
 
 	// Lookup table
-	class CharacterStat
+	class CharacterStat : public Bindable
 	{
 	public:
 		// Ctors
@@ -390,6 +405,11 @@ namespace hp
 		void update();
 		void save();
 		void erase();
+
+		// Bindable interface
+		void bindErase(sqlite3_stmt* stmt) const;
+		void bindUpdate(sqlite3_stmt* stmt) const;
+		Table* getTable() const;
 
 		// Getters
 		value_type getfkCharacters() const;
@@ -413,7 +433,7 @@ namespace hp
 	};
 
 	// Lookup table
-	class CharacterTree
+	class CharacterTree : public Bindable
 	{
 	public:
 		// Ctors
@@ -426,6 +446,11 @@ namespace hp
 		void update();
 		void save();
 		void erase();
+
+		// Bindable interface
+		void bindErase(sqlite3_stmt* stmt) const;
+		void bindUpdate(sqlite3_stmt* stmt) const;
+		Table* getTable() const;
 
 		// Getters
 		value_type getfkCharacters() const;
@@ -448,7 +473,7 @@ namespace hp
 		CharacterTree operator=(const CharacterTree& rhs);
 	};
 
-	class Clusters
+	class Clusters : public Bindable
 	{
 	public:
 		// Ctors
@@ -462,11 +487,16 @@ namespace hp
 		void save();
 		void erase();
 
+		// Bindable interface
+		void bindErase(sqlite3_stmt* stmt) const;
+		void bindUpdate(sqlite3_stmt* stmt) const;
+		Table* getTable() const;
+
 		// Getters
 		const std::string& getname() const;
 
 		// Setters
-		void setname(const std::string& value) const;
+		void setname(const std::string& value);
 
 	private:
 		// Database pointer
@@ -485,7 +515,7 @@ namespace hp
 		Clusters operator=(const Clusters& rhs);
 	};
 
-	class Colours
+	class Colours : public Bindable
 	{
 	public:
 		// Ctors
@@ -499,6 +529,11 @@ namespace hp
 		void save();
 		void erase();
 
+		// Bindable interface
+		void bindErase(sqlite3_stmt* stmt) const;
+		void bindUpdate(sqlite3_stmt* stmt) const;
+		Table* getTable() const;
+
 		// Getters
 		const std::string& getname() const;
 		const std::string& getcode() const;
@@ -506,10 +541,10 @@ namespace hp
 		value_type getansi() const;
 
 		// Setters
-		void setname(const std::string& value) const;
-		void setcode(const std::string& value) const;
-		void setcolourstring(const std::string& value) const;
-		void setansi(value_type value) const;
+		void setname(const std::string& value);
+		void setcode(const std::string& value);
+		void setcolourstring(const std::string& value);
+		void setansi(value_type value);
 
 	private:
 		// Database pointer
@@ -531,7 +566,7 @@ namespace hp
 		Colours operator=(const Colours& rhs);
 	};
 
-	class Commands
+	class Commands : public Bindable
 	{
 	public:
 		// Ctors
@@ -545,6 +580,11 @@ namespace hp
 		void save();
 		void erase();
 
+		// Bindable interface
+		void bindErase(sqlite3_stmt* stmt) const;
+		void bindUpdate(sqlite3_stmt* stmt) const;
+		Table* getTable() const;
+
 		// Getters
 		const std::string& getname() const;
 		const std::string& getgrantgroup() const;
@@ -553,11 +593,11 @@ namespace hp
 		value_type getlowforce() const;
 
 		// Setters
-		void setname(const std::string& value) const;
-		void setgrantgroup(const std::string& value) const;
-		void sethighforce(const std::string& value) const;
-		void setforce(const std::string& value) const;
-		void setlowforce(value_type value) const;
+		void setname(const std::string& value);
+		void setgrantgroup(const std::string& value);
+		void sethighforce(const std::string& value);
+		void setforce(const std::string& value);
+		void setlowforce(value_type value);
 
 	private:
 		// Database pointer
@@ -580,7 +620,7 @@ namespace hp
 		Commands operator=(const Commands& rhs);
 	};
 
-	class Exits
+	class Exits : public Bindable
 	{
 	public:
 		// Ctors
@@ -594,11 +634,16 @@ namespace hp
 		void save();
 		void erase();
 
+		// Bindable interface
+		void bindErase(sqlite3_stmt* stmt) const;
+		void bindUpdate(sqlite3_stmt* stmt) const;
+		Table* getTable() const;
+
 		// Getters
 		value_type getdir() const;
 
 		// Setters
-		void setdir(value_type value) const;
+		void setdir(value_type value);
 
 	private:
 		// Database pointer
@@ -617,7 +662,7 @@ namespace hp
 		Exits operator=(const Exits& rhs);
 	};
 
-	class GrantGroups
+	class GrantGroups : public Bindable
 	{
 	public:
 		// Ctors
@@ -631,15 +676,20 @@ namespace hp
 		void save();
 		void erase();
 
+		// Bindable interface
+		void bindErase(sqlite3_stmt* stmt) const;
+		void bindUpdate(sqlite3_stmt* stmt) const;
+		Table* getTable() const;
+
 		// Getters
 		const std::string& getname() const;
 		value_type getdefaultgrant() const;
 		value_type getimplies() const;
 
 		// Setters
-		void setname(const std::string& value) const;
-		void setdefaultgrant(value_type value) const;
-		void setimplies(value_type value) const;
+		void setname(const std::string& value);
+		void setdefaultgrant(value_type value);
+		void setimplies(value_type value);
 
 	private:
 		// Database pointer
@@ -660,7 +710,7 @@ namespace hp
 		GrantGroups operator=(const GrantGroups& rhs);
 	};
 
-	class Permissions
+	class Permissions : public Bindable
 	{
 	public:
 		// Ctors
@@ -674,6 +724,11 @@ namespace hp
 		void save();
 		void erase();
 
+		// Bindable interface
+		void bindErase(sqlite3_stmt* stmt) const;
+		void bindUpdate(sqlite3_stmt* stmt) const;
+		Table* getTable() const;
+
 		// Getters
 		value_type getfkAccounts() const;
 		value_type getfkCommands() const;
@@ -681,10 +736,10 @@ namespace hp
 		value_type getgrant() const;
 
 		// Setters
-		void setfkAccounts(value_type value) const;
-		void setfkCommands(value_type value) const;
-		void setfkGrantGroups(value_type value) const;
-		void setgrant(value_type value) const;
+		void setfkAccounts(value_type value);
+		void setfkCommands(value_type value);
+		void setfkGrantGroups(value_type value);
+		void setgrant(value_type value);
 
 	private:
 		// Database pointer
@@ -706,7 +761,7 @@ namespace hp
 		Permissions operator=(const Permissions& rhs);
 	};
 
-	class Races
+	class Races : public Bindable
 	{
 	public:
 		// Ctors
@@ -720,11 +775,16 @@ namespace hp
 		void save();
 		void erase();
 
+		// Bindable interface
+		void bindErase(sqlite3_stmt* stmt) const;
+		void bindUpdate(sqlite3_stmt* stmt) const;
+		Table* getTable() const;
+
 		// Getters
 		const std::string& getname() const;
 
 		// Setters
-		void setname(const std::string& value) const;
+		void setname(const std::string& value);
 
 	private:
 		// Database pointer
@@ -743,7 +803,7 @@ namespace hp
 		Races operator=(const Races& rhs);
 	};
 
-	class Rooms
+	class Rooms : public Bindable
 	{
 	public:
 		// Ctors
@@ -757,6 +817,11 @@ namespace hp
 		void save();
 		void erase();
 
+		// Bindable interface
+		void bindErase(sqlite3_stmt* stmt) const;
+		void bindUpdate(sqlite3_stmt* stmt) const;
+		Table* getTable() const;
+
 		// Getters
 		const std::string& getname() const;
 		const std::string& getdescription() const;
@@ -767,13 +832,13 @@ namespace hp
 		value_type getheight() const;
 
 		// Setters
-		void setname(const std::string& value) const;
-		void setdescription(const std::string& value) const;
-		void setfkAreas(value_type value) const;
-		void setfkSectors(value_type value) const;
-		void setwidth(value_type value) const;
-		void setlength(value_type value) const;
-		void setheight(value_type value) const;
+		void setname(const std::string& value);
+		void setdescription(const std::string& value);
+		void setfkAreas(value_type value);
+		void setfkSectors(value_type value);
+		void setwidth(value_type value);
+		void setlength(value_type value);
+		void setheight(value_type value);
 
 	private:
 		// Database pointer
@@ -798,7 +863,7 @@ namespace hp
 		Rooms operator=(const Rooms& rhs);
 	};
 
-	class Sectors
+	class Sectors : public Bindable
 	{
 	public:
 		// Ctors
@@ -812,6 +877,11 @@ namespace hp
 		void save();
 		void erase();
 
+		// Bindable interface
+		void bindErase(sqlite3_stmt* stmt) const;
+		void bindUpdate(sqlite3_stmt* stmt) const;
+		Table* getTable() const;
+
 		// Getters
 		const std::string& getname() const;
 		const std::string& getsymbol() const;
@@ -819,10 +889,10 @@ namespace hp
 		value_type getwater() const;
 
 		// Setters
-		void setname(const std::string& value) const;
-		void setsymbol(const std::string& value) const;
-		void setmovecost(value_type value) const;
-		void setwater(value_type value) const;
+		void setname(const std::string& value);
+		void setsymbol(const std::string& value);
+		void setmovecost(value_type value);
+		void setwater(value_type value);
 
 	private:
 		// Database pointer
@@ -844,7 +914,7 @@ namespace hp
 		Sectors operator=(const Sectors& rhs);
 	};
 
-	class Skills
+	class Skills : public Bindable
 	{
 	public:
 		// Ctors
@@ -858,13 +928,18 @@ namespace hp
 		void save();
 		void erase();
 
+		// Bindable interface
+		void bindErase(sqlite3_stmt* stmt) const;
+		void bindUpdate(sqlite3_stmt* stmt) const;
+		Table* getTable() const;
+
 		// Getters
 		const std::string& getname() const;
 		value_type getfkBranches() const;
 
 		// Setters
-		void setname(const std::string& value) const;
-		void setfkBranches(value_type value) const;
+		void setname(const std::string& value);
+		void setfkBranches(value_type value);
 
 	private:
 		// Database pointer
@@ -884,7 +959,7 @@ namespace hp
 		Skills operator=(const Skills& rhs);
 	};
 
-	class Stats
+	class Stats : public Bindable
 	{
 	public:
 		// Ctors
@@ -898,13 +973,18 @@ namespace hp
 		void save();
 		void erase();
 
+		// Bindable interface
+		void bindErase(sqlite3_stmt* stmt) const;
+		void bindUpdate(sqlite3_stmt* stmt) const;
+		Table* getTable() const;
+
 		// Getters
 		const std::string& getname() const;
 		const std::string& getshortname() const;
 
 		// Setters
-		void setname(const std::string& value) const;
-		void setshortname(const std::string& value) const;
+		void setname(const std::string& value);
+		void setshortname(const std::string& value);
 
 	private:
 		// Database pointer
@@ -924,7 +1004,7 @@ namespace hp
 		Stats operator=(const Stats& rhs);
 	};
 
-	class Trees
+	class Trees : public Bindable
 	{
 	public:
 		// Ctors
@@ -938,6 +1018,11 @@ namespace hp
 		void save();
 		void erase();
 
+		// Bindable interface
+		void bindErase(sqlite3_stmt* stmt) const;
+		void bindUpdate(sqlite3_stmt* stmt) const;
+		Table* getTable() const;
+
 		// Getters
 		const std::string& getname() const;
 		value_type getfkClusters() const;
@@ -945,10 +1030,10 @@ namespace hp
 		value_type getfkStatsSecondary() const;
 
 		// Setters
-		void setname(const std::string& value) const;
-		void setfkClusters(value_type value) const;
-		void setfkStatsPrimary(value_type value) const;
-		void setfkStatsSecondary(value_type value) const;
+		void setname(const std::string& value);
+		void setfkClusters(value_type value);
+		void setfkStatsPrimary(value_type value);
+		void setfkStatsSecondary(value_type value);
 
 	private:
 		// Database pointer
@@ -970,7 +1055,7 @@ namespace hp
 		Trees operator=(const Trees& rhs);
 	};
 
-	class Version
+	class Version : public Bindable
 	{
 	public:
 		// Ctors
@@ -984,6 +1069,11 @@ namespace hp
 		void save();
 		void erase();
 
+		// Bindable interface
+		void bindErase(sqlite3_stmt* stmt) const;
+		void bindUpdate(sqlite3_stmt* stmt) const;
+		Table* getTable() const;
+
 		// Getters
 		const std::string& getversiontext() const;
 		value_type getmajor() const;
@@ -991,10 +1081,10 @@ namespace hp
 		value_type getmicro() const;
 
 		// Setters
-		void setversiontext(const std::string& value) const;
-		void setmajor(value_type value) const;
-		void setminor(value_type value) const;
-		void setmicro(value_type value) const;
+		void setversiontext(const std::string& value);
+		void setmajor(value_type value);
+		void setminor(value_type value);
+		void setmicro(value_type value);
 
 	private:
 		// Database pointer

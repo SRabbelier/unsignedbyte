@@ -30,10 +30,10 @@ public:
 	Bindable(void) { }
 	virtual ~Bindable(void) { }
 	
-	void bindErase(sqlite3_stmt* stmt) {}
-	void bindUpdate(sqlite3_stmt* stmt) {}
+	virtual void bindErase(sqlite3_stmt* stmt) const = 0;
+	virtual void bindUpdate(sqlite3_stmt* stmt) const = 0;
 	
-	virtual Table* getTable() const { return NULL; }
+	virtual Table* getTable() const = 0;
 	
 private:
 	Bindable(const Bindable& rhs) {};

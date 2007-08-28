@@ -40,8 +40,9 @@ private:
 	void AppendCtorGeneral();
 	void AppendCtorSpecific();	
 	void AppendCtorDtor();
-	void AppendBodyFunctions();
 	void AppendBody();
+	void AppendBindable();
+	void AppendGetSet();
 	void AppendFooter();
 	
 	std::string m_tabs;
