@@ -5,3 +5,8 @@ Initialize
 Debug
 ub.cpp
 ub.h
+*.o
+*.d
+bin
+lib
+*.mk

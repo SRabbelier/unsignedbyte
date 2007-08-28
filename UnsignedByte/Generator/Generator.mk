@@ -1,7 +1,7 @@
 ##
 ## Auto Generated makefile, please do not edit
 ##
-WorkspaceName=MUD Development
+WorkspaceName=UnsignedByte
 WorkspacePath=/home/sverre/code/ub
 ProjectName=Generator
 
@@ -23,15 +23,15 @@ PreprocessorSwitch=-D
 SourceSwitch=-c
 CompilerName=g++
 RcCompilerName=
-OutputFile=../DAL/Generate
+OutputFile=../bin/Generator
 Preprocessors=
 CmpOptions=-g $(Preprocessors)
 RcCmpOptions=
 LinkOptions=-O0
 IncludePath=$(IncludeSwitch). $(IncludeSwitch)../include 
 RcIncludePath=
-Libs=$(LibrarySwitch)myresource $(LibrarySwitch)pthread $(LibrarySwitch)dl $(LibrarySwitch)sqlite3 
-LibPath=$(LibraryPathSwitch). $(LibraryPathSwitch).. 
+Libs=$(LibrarySwitch)ubresource $(LibrarySwitch)pthread $(LibrarySwitch)dl $(LibrarySwitch)sqlite3 
+LibPath=$(LibraryPathSwitch). $(LibraryPathSwitch)../lib 
 endif
 
 Objects=$(IntermediateDirectory)/main$(ObjectSuffix) $(IntermediateDirectory)/ClassHeaderGenerator$(ObjectSuffix) $(IntermediateDirectory)/ClassSourceGenerator$(ObjectSuffix) $(IntermediateDirectory)/Generator$(ObjectSuffix) 
@@ -43,6 +43,11 @@ all: $(OutputFile)
 
 $(OutputFile): makeDirStep $(Objects)
 	$(LinkerName) $(OutputSwitch) $(OutputFile) $(LinkOptions) $(Objects) $(LibPath) $(Libs)
+	@echo Executing Post Build commands ...
+	../bin/Generator
+	mv hp.cpp ../DAL
+	mv hp.h ../include
+	@echo Done
 
 makeDirStep:
 	@test -d ./Debug || mkdir ./Debug

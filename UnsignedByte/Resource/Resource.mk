@@ -1,7 +1,7 @@
 ##
 ## Auto Generated makefile, please do not edit
 ##
-WorkspaceName=MUD Development
+WorkspaceName=UnsignedByte
 WorkspacePath=/home/sverre/code/ub
 ProjectName=Resource
 
@@ -23,15 +23,15 @@ PreprocessorSwitch=-D
 SourceSwitch=-c
 CompilerName=g++
 RcCompilerName=
-OutputFile=../libmyresource.a
+OutputFile=../lib/libubresource.a
 Preprocessors=
 CmpOptions=-g -Wall $(Preprocessors)
 RcCmpOptions=
 LinkOptions=-O0
 IncludePath=$(IncludeSwitch). $(IncludeSwitch)../include 
 RcIncludePath=
-Libs=$(LibrarySwitch)mysqlite 
-LibPath=$(LibraryPathSwitch). $(LibraryPathSwitch)./Debug $(LibraryPathSwitch)../ 
+Libs=
+LibPath=$(LibraryPathSwitch). 
 endif
 
 Objects=$(IntermediateDirectory)/Base64$(ObjectSuffix) $(IntermediateDirectory)/Database$(ObjectSuffix) $(IntermediateDirectory)/Debug$(ObjectSuffix) $(IntermediateDirectory)/Event$(ObjectSuffix) $(IntermediateDirectory)/EventHandler$(ObjectSuffix) $(IntermediateDirectory)/EventTime$(ObjectSuffix) $(IntermediateDirectory)/File$(ObjectSuffix) $(IntermediateDirectory)/HttpClientSocket$(ObjectSuffix) $(IntermediateDirectory)/HttpdCookies$(ObjectSuffix) $(IntermediateDirectory)/HttpDebugSocket$(ObjectSuffix) \

@@ -123,17 +123,14 @@
   </VirtualDirectory>
   <Dependencies/>
   <Settings Type="Static Library">
-    <Configuration Name="Debug" CompilerType="gnu g++" DebuggerType="">
-      <General OutputFile="../libmyresource.a" IntermediateDirectory="./Debug" Command="" CommandArguments="" WorkingDirectory="./Debug"/>
+    <Configuration Name="Debug" CompilerType="gnu g++" DebuggerType="GNU gdb debugger">
+      <General OutputFile="../lib/libubresource.a" IntermediateDirectory="./Debug" Command="" CommandArguments="" WorkingDirectory=""/>
       <Compiler Required="yes" Options="-g -Wall">
         <IncludePath Value="."/>
         <IncludePath Value="../include"/>
       </Compiler>
       <Linker Required="yes" Options="-O0">
         <LibraryPath Value="."/>
-        <LibraryPath Value="./Debug"/>
-        <LibraryPath Value="../"/>
-        <Library Value="mysqlite"/>
       </Linker>
       <ResourceCompiler Required="no" Options=""/>
       <PreBuild/>

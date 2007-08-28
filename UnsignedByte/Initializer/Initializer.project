@@ -9,21 +9,19 @@
   </VirtualDirectory>
   <Settings Type="Executable">
     <Configuration Name="Debug" CompilerType="gnu g++" DebuggerType="GNU gdb debugger">
-      <General OutputFile="../Initialize" IntermediateDirectory="Intermediate" Command="Initialize" CommandArguments="" WorkingDirectory=".."/>
+      <General OutputFile="../bin/Initialize" IntermediateDirectory="Intermediate" Command="Initialize" CommandArguments="" WorkingDirectory="../bin"/>
       <Compiler Required="yes" Options="-g -Wall">
         <IncludePath Value="."/>
         <IncludePath Value="../include"/>
-        <IncludePath Value=".."/>
       </Compiler>
       <Linker Required="yes" Options="-O0">
         <LibraryPath Value="."/>
-        <LibraryPath Value=".."/>
-        <Library Value="myresource"/>
+        <LibraryPath Value="../lib"/>
         <Library Value="pthread"/>
         <Library Value="dl"/>
         <Library Value="sqlite3"/>
         <Library Value="ubdal"/>
-        <Library Value="myresource"/>
+        <Library Value="ubresource"/>
       </Linker>
       <ResourceCompiler Required="no" Options=""/>
       <PreBuild/>
@@ -54,5 +52,6 @@
   <Dependencies>
     <Project Name="Resource"/>
     <Project Name="Generator"/>
+    <Project Name="DAL"/>
   </Dependencies>
 </CodeLite_Project>

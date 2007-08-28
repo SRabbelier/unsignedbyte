@@ -8,14 +8,13 @@
   </VirtualDirectory>
   <Settings Type="Static Library">
     <Configuration Name="Debug" CompilerType="gnu g++" DebuggerType="GNU gdb debugger">
-      <General OutputFile="../libdal.a" IntermediateDirectory="./Debug" Command="" CommandArguments="" WorkingDirectory="./Debug"/>
+      <General OutputFile="../lib/libubdal.a" IntermediateDirectory="./Debug" Command="" CommandArguments="" WorkingDirectory="./Debug"/>
       <Compiler Required="yes" Options="-g">
         <IncludePath Value="."/>
         <IncludePath Value="../include"/>
       </Compiler>
       <Linker Required="yes" Options="-O0">
         <LibraryPath Value="."/>
-        <LibraryPath Value="Debug"/>
       </Linker>
       <ResourceCompiler Required="no" Options=""/>
       <PreBuild/>
@@ -26,5 +25,7 @@
       </CustomBuild>
     </Configuration>
   </Settings>
-  <Dependencies/>
+  <Dependencies>
+    <Project Name="Generator"/>
+  </Dependencies>
 </CodeLite_Project>

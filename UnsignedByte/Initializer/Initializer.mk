@@ -1,7 +1,7 @@
 ##
 ## Auto Generated makefile, please do not edit
 ##
-WorkspaceName=MUD Development
+WorkspaceName=UnsignedByte
 WorkspacePath=/home/sverre/code/ub
 ProjectName=Initializer
 
@@ -23,15 +23,15 @@ PreprocessorSwitch=-D
 SourceSwitch=-c
 CompilerName=g++
 RcCompilerName=
-OutputFile=../Initialize
+OutputFile=../bin/Initialize
 Preprocessors=
 CmpOptions=-g -Wall $(Preprocessors)
 RcCmpOptions=
 LinkOptions=-O0
-IncludePath=$(IncludeSwitch). $(IncludeSwitch)../include $(IncludeSwitch).. 
+IncludePath=$(IncludeSwitch). $(IncludeSwitch)../include 
 RcIncludePath=
-Libs=$(LibrarySwitch)myresource $(LibrarySwitch)pthread $(LibrarySwitch)dl $(LibrarySwitch)sqlite3 $(LibrarySwitch)ubdal $(LibrarySwitch)myresource 
-LibPath=$(LibraryPathSwitch). $(LibraryPathSwitch).. 
+Libs=$(LibrarySwitch)pthread $(LibrarySwitch)dl $(LibrarySwitch)sqlite3 $(LibrarySwitch)ubdal $(LibrarySwitch)ubresource 
+LibPath=$(LibraryPathSwitch). $(LibraryPathSwitch)../lib 
 endif
 
 Objects=$(IntermediateDirectory)/main$(ObjectSuffix) $(IntermediateDirectory)/Initializer$(ObjectSuffix) 

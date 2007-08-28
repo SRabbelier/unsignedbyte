@@ -1,7 +1,7 @@
 ##
 ## Auto Generated makefile, please do not edit
 ##
-WorkspaceName=MUD Development
+WorkspaceName=UnsignedByte
 WorkspacePath=/home/sverre/code/ub
 ProjectName=DAL
 
@@ -23,7 +23,7 @@ PreprocessorSwitch=-D
 SourceSwitch=-c
 CompilerName=g++
 RcCompilerName=
-OutputFile=../libdal.a
+OutputFile=../lib/libubdal.a
 Preprocessors=
 CmpOptions=-g $(Preprocessors)
 RcCmpOptions=
@@ -31,7 +31,7 @@ LinkOptions=-O0
 IncludePath=$(IncludeSwitch). $(IncludeSwitch)../include 
 RcIncludePath=
 Libs=
-LibPath=$(LibraryPathSwitch). $(LibraryPathSwitch)Debug 
+LibPath=$(LibraryPathSwitch). 
 endif
 
 Objects=$(IntermediateDirectory)/hp$(ObjectSuffix) 
