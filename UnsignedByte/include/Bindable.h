@@ -30,8 +30,9 @@ public:
 	Bindable(void) { }
 	virtual ~Bindable(void) { }
 	
-	virtual void bindErase(sqlite3_stmt* stmt) const = 0;
+	virtual void bindKeys(sqlite3_stmt* stmt) const = 0;
 	virtual void bindUpdate(sqlite3_stmt* stmt) const = 0;
+	virtual void parseSelect(sqlite3_stmt* stmt) = 0;
 	
 	virtual Table* getTable() const = 0;
 	

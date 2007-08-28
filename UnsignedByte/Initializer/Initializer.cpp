@@ -20,6 +20,7 @@
 
 #include <string>
 #include <vector>
+#include <stdexcept>
 
 #include "Initializer.h"
 #include "sqlite3.h"
@@ -28,6 +29,7 @@
 #include "Global.h"
 #include "Tables.h"
 #include "Table.h"
+#include "hp.h"
 
 bool Initializer::DatabasePopulated()
 {
@@ -43,85 +45,19 @@ bool Initializer::DatabasePopulated()
 	return populated;
 }
 
-std::string Initializer::RetreiveOldVersion()
-{
-	Query q(*m_db);
-	q.get_result("SELECT version FROM Characters WHERE characterid=1;");
-	
-	std::string version;
-	
-	if(q.fetch_row())
-		version = q.getstr(0);
-	
-	q.free_result();
-	return version;
-}
-
 bool Initializer::VerifyDatabaseVersion()
 {
-	Query q(*m_db);
-	q.get_result(Global::Get()->sprintf(
-		"SELECT versiontext, major, minor, micro FROM %s WHERE %s=1;",
-		Tables::Get()->VERSION->tableName().c_str(),
-		Tables::Get()->VERSION->tableID().c_str()
-		));
-		
-	bool same = true;
-		
-	if(q.fetch_row())
+	try
 	{
-		std::string versiontext = q.getstr(0);
-		long dbmajor = q.getval(1);
-		long dbminor = q.getval(2);
-		long dbmicro = q.getval(3);
+		// hp::Version ver(m_db, 1);
 		
-		if(versiontext.compare(game::vstring))
-		{
-			Global::Get()->logf("Versiontext mismatch! Our '%s' != database's '%s'.\n", game::vstring, versiontext.c_str());
-			same = false;
-		}
-		
-		if(dbmajor != game::major)
-		{
-			Global::Get()->logf("Major mismatch! Our '%d' != database's '%d'.\n", game::major, dbmajor);
-			same = false;
-		}
-		
-		if(dbminor != game::minor)
-		{
-			Global::Get()->logf("Minor mismatch! Our '%d' != database's '%d'.\n", game::minor, dbminor);
-			same = false;
-		}
-		
-		if(dbmicro != game::micro)
-		{
-			Global::Get()->logf("Micro mismatch! Our '%d' != database's '%d'.\n", game::micro, dbmicro);
-			same = false;
-		}
+		return true;
 	}
-	else
+	catch(std::runtime_error& e)
 	{
-		Global::Get()->log("Could not retreive version information!\n");
-		Global::Get()->log("Perhaps the database version is <0.0.11?\n");
-		Global::Get()->log("Checking...\n");
-		
-		std::string version = RetreiveOldVersion();
-		if(version.size() == 0)
-		{
-			Global::Get()->log("Could not retreive legacy version info either.\n");
-			Global::Get()->logf("Are you sure this is a %s type database?\n", game::vname);
-		}
-		else
-		{
-			Global::Get()->logf("Found legacy main character version %s!\n", version.c_str());
-			Global::Get()->logf("DB versions prior to 0.0.11 cannot be imported.\n");
-		}
-		
-		same = false;
+		Global::Get()->bug(e.what());
+		return false;
 	}
-	
-	q.free_result();
-	return same;
 }
 
 void Initializer::InitTables()

@@ -170,14 +170,14 @@ void ClassSourceGenerator::AppendBody()
 	(*m_file) << "}" << endl;
 	(*m_file) << endl;
 
+	(*m_file) << "void " << m_name << "::update()" << endl;
+	(*m_file) << "{" << endl;
 	if(!m_table->isLookupTable())
-	{
-		(*m_file) << "void " << m_name << "::update()" << endl;
-		(*m_file) << "{" << endl;
 		(*m_file) << m_tabs << "SqliteMgr::Get()->doUpdate(this);" << endl;
-		(*m_file) << "}" << endl;
-		(*m_file) << endl;
-	}
+	else
+		(*m_file) << m_tabs << "throw new std::logic_error(\"" << m_name << "::update(), in a lookup table!\");" << endl;
+	(*m_file) << "}" << endl;
+	(*m_file) << endl;
 
 	(*m_file) << "void " << m_name <<  "::erase()" << endl;
 	(*m_file) << "{" << endl;
@@ -204,7 +204,7 @@ void ClassSourceGenerator::AppendBindable()
 		throw std::logic_error("Source file is not open for writing.\n");
 	
 	
-	(*m_file) << "void " << m_name << "::bindErase(sqlite3_stmt* stmt) const" << endl;
+	(*m_file) << "void " << m_name << "::bindKeys(sqlite3_stmt* stmt) const" << endl;
 	(*m_file) << "{" << endl;
 	if(!m_table->isLookupTable())
 	{
@@ -250,6 +250,25 @@ void ClassSourceGenerator::AppendBindable()
 		}
 		(*m_file) << m_tabs << "sqlite3_bind_int64(stmt, " << pos << ", m_" << m_table->tableID() << ");" << endl;
 	}
+	(*m_file) << "}" << endl;
+	(*m_file) << endl;
+	
+	(*m_file) << "void " << m_name << "::parseSelect(sqlite3_stmt* stmt)" << endl;
+	(*m_file) << "{" << endl;
+	int count = 0;
+	for(Fields::const_iterator it = m_table->begin(); it != m_table->end(); it++)
+	{
+		(*m_file) << m_tabs << "m_" << (*it)->getName() << " = ";
+		if((*it)->isText())
+			(*m_file) << "std::string((const char *)sqlite3_column_text(stmt, " << count << "));" << endl;
+		else
+			(*m_file) << "sqlite3_column_int64(stmt, " << count << ");" << endl;
+
+		count++;
+	}
+	if(!m_table->isLookupTable())
+		(*m_file) << m_tabs << "m_" << m_table->tableID() << " = sqlite3_column_int64(stmt, " << count << ");" << endl;
+		
 	(*m_file) << "}" << endl;
 	(*m_file) << endl;
 	

@@ -44,8 +44,9 @@ namespace hp
 		void erase();
 
 		// Bindable interface
-		void bindErase(sqlite3_stmt* stmt) const;
+		void bindKeys(sqlite3_stmt* stmt) const;
 		void bindUpdate(sqlite3_stmt* stmt) const;
+		void parseSelect(sqlite3_stmt* stmt);
 		Table* getTable() const;
 
 		// Getters
@@ -89,8 +90,9 @@ namespace hp
 		void erase();
 
 		// Bindable interface
-		void bindErase(sqlite3_stmt* stmt) const;
+		void bindKeys(sqlite3_stmt* stmt) const;
 		void bindUpdate(sqlite3_stmt* stmt) const;
+		void parseSelect(sqlite3_stmt* stmt);
 		Table* getTable() const;
 
 		// Getters
@@ -140,8 +142,9 @@ namespace hp
 		void erase();
 
 		// Bindable interface
-		void bindErase(sqlite3_stmt* stmt) const;
+		void bindKeys(sqlite3_stmt* stmt) const;
 		void bindUpdate(sqlite3_stmt* stmt) const;
+		void parseSelect(sqlite3_stmt* stmt);
 		Table* getTable() const;
 
 		// Getters
@@ -192,8 +195,9 @@ namespace hp
 		void erase();
 
 		// Bindable interface
-		void bindErase(sqlite3_stmt* stmt) const;
+		void bindKeys(sqlite3_stmt* stmt) const;
 		void bindUpdate(sqlite3_stmt* stmt) const;
+		void parseSelect(sqlite3_stmt* stmt);
 		Table* getTable() const;
 
 		// Getters
@@ -233,8 +237,9 @@ namespace hp
 		void erase();
 
 		// Bindable interface
-		void bindErase(sqlite3_stmt* stmt) const;
+		void bindKeys(sqlite3_stmt* stmt) const;
 		void bindUpdate(sqlite3_stmt* stmt) const;
+		void parseSelect(sqlite3_stmt* stmt);
 		Table* getTable() const;
 
 		// Getters
@@ -274,8 +279,9 @@ namespace hp
 		void erase();
 
 		// Bindable interface
-		void bindErase(sqlite3_stmt* stmt) const;
+		void bindKeys(sqlite3_stmt* stmt) const;
 		void bindUpdate(sqlite3_stmt* stmt) const;
+		void parseSelect(sqlite3_stmt* stmt);
 		Table* getTable() const;
 
 		// Getters
@@ -314,8 +320,9 @@ namespace hp
 		void erase();
 
 		// Bindable interface
-		void bindErase(sqlite3_stmt* stmt) const;
+		void bindKeys(sqlite3_stmt* stmt) const;
 		void bindUpdate(sqlite3_stmt* stmt) const;
+		void parseSelect(sqlite3_stmt* stmt);
 		Table* getTable() const;
 
 		// Getters
@@ -366,8 +373,9 @@ namespace hp
 		void erase();
 
 		// Bindable interface
-		void bindErase(sqlite3_stmt* stmt) const;
+		void bindKeys(sqlite3_stmt* stmt) const;
 		void bindUpdate(sqlite3_stmt* stmt) const;
+		void parseSelect(sqlite3_stmt* stmt);
 		Table* getTable() const;
 
 		// Getters
@@ -407,8 +415,9 @@ namespace hp
 		void erase();
 
 		// Bindable interface
-		void bindErase(sqlite3_stmt* stmt) const;
+		void bindKeys(sqlite3_stmt* stmt) const;
 		void bindUpdate(sqlite3_stmt* stmt) const;
+		void parseSelect(sqlite3_stmt* stmt);
 		Table* getTable() const;
 
 		// Getters
@@ -448,8 +457,9 @@ namespace hp
 		void erase();
 
 		// Bindable interface
-		void bindErase(sqlite3_stmt* stmt) const;
+		void bindKeys(sqlite3_stmt* stmt) const;
 		void bindUpdate(sqlite3_stmt* stmt) const;
+		void parseSelect(sqlite3_stmt* stmt);
 		Table* getTable() const;
 
 		// Getters
@@ -488,8 +498,9 @@ namespace hp
 		void erase();
 
 		// Bindable interface
-		void bindErase(sqlite3_stmt* stmt) const;
+		void bindKeys(sqlite3_stmt* stmt) const;
 		void bindUpdate(sqlite3_stmt* stmt) const;
+		void parseSelect(sqlite3_stmt* stmt);
 		Table* getTable() const;
 
 		// Getters
@@ -530,8 +541,9 @@ namespace hp
 		void erase();
 
 		// Bindable interface
-		void bindErase(sqlite3_stmt* stmt) const;
+		void bindKeys(sqlite3_stmt* stmt) const;
 		void bindUpdate(sqlite3_stmt* stmt) const;
+		void parseSelect(sqlite3_stmt* stmt);
 		Table* getTable() const;
 
 		// Getters
@@ -581,8 +593,9 @@ namespace hp
 		void erase();
 
 		// Bindable interface
-		void bindErase(sqlite3_stmt* stmt) const;
+		void bindKeys(sqlite3_stmt* stmt) const;
 		void bindUpdate(sqlite3_stmt* stmt) const;
+		void parseSelect(sqlite3_stmt* stmt);
 		Table* getTable() const;
 
 		// Getters
@@ -635,8 +648,9 @@ namespace hp
 		void erase();
 
 		// Bindable interface
-		void bindErase(sqlite3_stmt* stmt) const;
+		void bindKeys(sqlite3_stmt* stmt) const;
 		void bindUpdate(sqlite3_stmt* stmt) const;
+		void parseSelect(sqlite3_stmt* stmt);
 		Table* getTable() const;
 
 		// Getters
@@ -677,8 +691,9 @@ namespace hp
 		void erase();
 
 		// Bindable interface
-		void bindErase(sqlite3_stmt* stmt) const;
+		void bindKeys(sqlite3_stmt* stmt) const;
 		void bindUpdate(sqlite3_stmt* stmt) const;
+		void parseSelect(sqlite3_stmt* stmt);
 		Table* getTable() const;
 
 		// Getters
@@ -725,8 +740,9 @@ namespace hp
 		void erase();
 
 		// Bindable interface
-		void bindErase(sqlite3_stmt* stmt) const;
+		void bindKeys(sqlite3_stmt* stmt) const;
 		void bindUpdate(sqlite3_stmt* stmt) const;
+		void parseSelect(sqlite3_stmt* stmt);
 		Table* getTable() const;
 
 		// Getters
@@ -776,8 +792,9 @@ namespace hp
 		void erase();
 
 		// Bindable interface
-		void bindErase(sqlite3_stmt* stmt) const;
+		void bindKeys(sqlite3_stmt* stmt) const;
 		void bindUpdate(sqlite3_stmt* stmt) const;
+		void parseSelect(sqlite3_stmt* stmt);
 		Table* getTable() const;
 
 		// Getters
@@ -818,8 +835,9 @@ namespace hp
 		void erase();
 
 		// Bindable interface
-		void bindErase(sqlite3_stmt* stmt) const;
+		void bindKeys(sqlite3_stmt* stmt) const;
 		void bindUpdate(sqlite3_stmt* stmt) const;
+		void parseSelect(sqlite3_stmt* stmt);
 		Table* getTable() const;
 
 		// Getters
@@ -878,8 +896,9 @@ namespace hp
 		void erase();
 
 		// Bindable interface
-		void bindErase(sqlite3_stmt* stmt) const;
+		void bindKeys(sqlite3_stmt* stmt) const;
 		void bindUpdate(sqlite3_stmt* stmt) const;
+		void parseSelect(sqlite3_stmt* stmt);
 		Table* getTable() const;
 
 		// Getters
@@ -929,8 +948,9 @@ namespace hp
 		void erase();
 
 		// Bindable interface
-		void bindErase(sqlite3_stmt* stmt) const;
+		void bindKeys(sqlite3_stmt* stmt) const;
 		void bindUpdate(sqlite3_stmt* stmt) const;
+		void parseSelect(sqlite3_stmt* stmt);
 		Table* getTable() const;
 
 		// Getters
@@ -974,8 +994,9 @@ namespace hp
 		void erase();
 
 		// Bindable interface
-		void bindErase(sqlite3_stmt* stmt) const;
+		void bindKeys(sqlite3_stmt* stmt) const;
 		void bindUpdate(sqlite3_stmt* stmt) const;
+		void parseSelect(sqlite3_stmt* stmt);
 		Table* getTable() const;
 
 		// Getters
@@ -1019,8 +1040,9 @@ namespace hp
 		void erase();
 
 		// Bindable interface
-		void bindErase(sqlite3_stmt* stmt) const;
+		void bindKeys(sqlite3_stmt* stmt) const;
 		void bindUpdate(sqlite3_stmt* stmt) const;
+		void parseSelect(sqlite3_stmt* stmt);
 		Table* getTable() const;
 
 		// Getters
@@ -1070,8 +1092,9 @@ namespace hp
 		void erase();
 
 		// Bindable interface
-		void bindErase(sqlite3_stmt* stmt) const;
+		void bindKeys(sqlite3_stmt* stmt) const;
 		void bindUpdate(sqlite3_stmt* stmt) const;
+		void parseSelect(sqlite3_stmt* stmt);
 		Table* getTable() const;
 
 		// Getters

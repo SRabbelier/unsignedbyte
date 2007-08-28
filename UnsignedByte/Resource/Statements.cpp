@@ -17,37 +17,23 @@
  *   Free Software Foundation, Inc.,                                       *
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
-#pragma once
 
-#include <string>
-class Database;
+#include "Statements.h"
+#include "sqlite3.h"
 
-class Initializer
+Statements::Statements() :
+m_insert(NULL),
+m_erase(NULL),
+m_update(NULL),
+m_select(NULL)
 {
-public:
-	Initializer(Database* db) : m_db(db) {};
-	~Initializer() {};
 	
-	bool DatabasePopulated();
-	bool VerifyDatabaseVersion();
-	bool VerifyTables();
-	
-	void InitTables();
-	void InitDatabase();
-	void InitColours();
+}
 
-private:
-	Initializer(const Initializer& rhs) : m_db(rhs.m_db) { };
-	Initializer operator=(const Initializer& rhs) { return *this; };
-
-	std::string RetreiveOldVersion();
-
-	Database* m_db;
-	
-	struct colour
-	{
-		std::string name;
-		std::string code;
-		std::string cstr;
-	};
-};
+Statements::~Statements() 
+{ 
+	sqlite3_finalize(m_insert);
+	sqlite3_finalize(m_erase);
+	sqlite3_finalize(m_update);
+	sqlite3_finalize(m_select);
+}

@@ -1,3 +1,23 @@
+/***************************************************************************
+ *   Copyright (C) 2007 by Sverre Rabbelier                                *
+ *   sverre@rabbelier.nl                                                   *
+ *                                                                         *
+ *   This program is free software; you can redistribute it and/or modify  *
+ *   it under the terms of the GNU General Public License as published by  *
+ *   the Free Software Foundation; either version 3 of the License, or     *
+ *   (at your option) any later version.                                   *
+ *                                                                         *
+ *   This program is distributed in the hope that it will be useful,       *
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of        *
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the         *
+ *   GNU General Public License for more details.                          *
+ *                                                                         *
+ *   You should have received a copy of the GNU General Public License     *
+ *   along with this program; if not, write to the                         *
+ *   Free Software Foundation, Inc.,                                       *
+ *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
+ ***************************************************************************/
+
 #include <string>
 #include <vector>
 #include <iostream>
@@ -11,7 +31,6 @@
 #include "Tables.h"
 
 #include "Initializer.h"
-#include "Generator.h"
 
 const int MAXSIZE = (1<<16);
 char m_workspace[MAXSIZE];
@@ -27,25 +46,10 @@ void exitfunc()
 	return;
 }
 
-int maingenerator()
-{
-	printf("Generating DAL...\n");
-	Generator gen(game::vname);
-	
-	bool succes;
-	succes = gen.GenerateDAL();
-	if(!succes)
-	{
-		printf("Could not generate DAL!\n");
-		std::cin.get();
-		return 0;
-	}
-	
-	return 0;
-}
-	
-int maininitializer()
+int main()
 {	
+	atexit(exitfunc);
+	
 	printf("%s database initializer for db v%s.\n", game::vname, game::vstring);
 	std::string dbname = game::vname;
 	dbname.append(".db");
@@ -73,7 +77,7 @@ int maininitializer()
 		printf("Database version does not match!\n");
 		printf("(Move the existing database if you wish to create a fresh copy)\n");
 		std::cin.get();
-		return 0;
+		return 1;
 	}
 
 	printf("Database is of most recent version!\n");	
@@ -85,7 +89,7 @@ int maininitializer()
 		printf("Database tables are not up to date!\n");
 		printf("(Move the existing database if you wish to create a fresh copy)\n");
 		std::cin.get();
-		return 0;
+		return 1;
 	}
 
 	printf("Initializing database...\n");
@@ -95,10 +99,4 @@ int maininitializer()
 	init.InitColours();
 
 	return 0;
-}
-
-int main()
-{
-	atexit(exitfunc);
-	return maingenerator();
 }

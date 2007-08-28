@@ -3,15 +3,9 @@
   <VirtualDirectory Name="Source Files">
     <File Name="main.cpp"/>
     <File Name="Initializer.cpp"/>
-    <File Name="Generator.cpp"/>
-    <File Name="ClassHeaderGenerator.cpp"/>
-    <File Name="ClassSourceGenerator.cpp"/>
   </VirtualDirectory>
   <VirtualDirectory Name="Header Files">
     <File Name="Initializer.h"/>
-    <File Name="Generator.h"/>
-    <File Name="ClassHeaderGenerator.h"/>
-    <File Name="ClassSourceGenerator.h"/>
   </VirtualDirectory>
   <Settings Type="Executable">
     <Configuration Name="Debug" CompilerType="gnu g++" DebuggerType="GNU gdb debugger">
@@ -19,6 +13,7 @@
       <Compiler Required="yes" Options="-g -Wall">
         <IncludePath Value="."/>
         <IncludePath Value="../include"/>
+        <IncludePath Value=".."/>
       </Compiler>
       <Linker Required="yes" Options="-O0">
         <LibraryPath Value="."/>
@@ -27,13 +22,15 @@
         <Library Value="pthread"/>
         <Library Value="dl"/>
         <Library Value="sqlite3"/>
+        <Library Value="ubdal"/>
+        <Library Value="myresource"/>
       </Linker>
       <ResourceCompiler Required="no" Options=""/>
       <PreBuild/>
       <PostBuild/>
       <CustomBuild Enabled="no">
-        <CleanCommand/>
-        <BuildCommand/>
+        <CleanCommand></CleanCommand>
+        <BuildCommand></BuildCommand>
       </CustomBuild>
     </Configuration>
     <Configuration Name="Release" CompilerType="GNU g++" DebuggerType="">
@@ -49,12 +46,13 @@
       <PreBuild/>
       <PostBuild/>
       <CustomBuild Enabled="no">
-        <CleanCommand/>
-        <BuildCommand/>
+        <CleanCommand></CleanCommand>
+        <BuildCommand></BuildCommand>
       </CustomBuild>
     </Configuration>
   </Settings>
   <Dependencies>
     <Project Name="Resource"/>
+    <Project Name="Generator"/>
   </Dependencies>
 </CodeLite_Project>

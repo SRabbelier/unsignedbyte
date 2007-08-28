@@ -20,41 +20,32 @@
 
 #pragma once
 
-#include <map>
+#include <string>
 
-#include <sqlite3.h>
-#include <Database.h>
+class sqlite3_stmt;
 
-class Table;
-class Bindable;
-class Statements;
-
-typedef std::map<Table*, Statements*>  TableStatements;
-typedef unsigned long value_type;
-
-class SqliteMgr
+class Statements
 {
-	public:
-		static SqliteMgr* Get();
-		static void Free();
+public:
+	// Constructors
+	Statements();	
+	~Statements();
 	
-		value_type doInsert(Table* table);
-		void doErase(Bindable* savable);
-		void doUpdate(Bindable* savable);
+	// Getters
+	sqlite3_stmt* getErase() const {return m_erase;}
+	sqlite3_stmt* getInsert() const {return m_insert;}
+	sqlite3_stmt* getUpdate() const {return m_update;}
+	sqlite3_stmt* getSelect() const {return m_select;}
 	
-	private:
-		Database* m_db;
-		Database::OPENDB* m_odb;
-		const char* m_leftover;
-		
-		TableStatements m_statements;
-		
-		Statements* getStatements(Table* table);
-		sqlite3_stmt* getInsertStmt(Table* table);
-		sqlite3_stmt* getEraseStmt(Table* table);
-		sqlite3_stmt* getUpdateStmt(Table* table);
+	// Setters
+	void setErase(sqlite3_stmt* erase) { m_erase = erase; }
+	void setInsert(sqlite3_stmt* insert) { m_insert = insert; }
+	void setUpdate(sqlite3_stmt* update) { m_update = update; }
+	void setSelect(sqlite3_stmt* select) { m_select = select; }
 	
-		SqliteMgr();
-		~SqliteMgr();
-		static SqliteMgr* m_instance;
+private:
+	sqlite3_stmt* m_insert;
+	sqlite3_stmt* m_erase;
+	sqlite3_stmt* m_update;
+	sqlite3_stmt* m_select;
 };

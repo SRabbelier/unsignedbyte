@@ -3,7 +3,7 @@
 ##
 WorkspaceName=MUD Development
 WorkspacePath=/home/sverre/code/ub
-ProjectName=TestCase
+ProjectName=DAL
 
 ## Debug
 ifeq ($(type),Debug)
@@ -23,12 +23,12 @@ PreprocessorSwitch=-D
 SourceSwitch=-c
 CompilerName=g++
 RcCompilerName=
-OutputFile=libtestcase.a
+OutputFile=../libdal.a
 Preprocessors=
 CmpOptions=-g $(Preprocessors)
 RcCmpOptions=
 LinkOptions=-O0
-IncludePath=$(IncludeSwitch). $(IncludeSwitch)./include 
+IncludePath=$(IncludeSwitch). $(IncludeSwitch)../include 
 RcIncludePath=
 Libs=
 LibPath=$(LibraryPathSwitch). $(LibraryPathSwitch)Debug 
@@ -39,18 +39,15 @@ Objects=$(IntermediateDirectory)/hp$(ObjectSuffix)
 ##
 ## Main Build Tragets 
 ##
-all: $(OutputFile)
+all: $(IntermediateDirectory) $(OutputFile)
 
-$(OutputFile): makeDirStep PreBuild $(Objects)
-	$(SharedObjectLinkerName) $(OutputSwitch) $(OutputFile) $(LinkOptions) $(Objects) $(LibPath) $(Libs)
+$(OutputFile): $(Objects)
+	$(ArchiveTool) $(OutputFile) $(Objects)
 
-makeDirStep:
+./Debug:
 	@test -d ./Debug || mkdir ./Debug
 
 PreBuild:
-	@echo Executing Pre Build commands ...
-	./Initialize
-	@echo Done
 
 
 ##

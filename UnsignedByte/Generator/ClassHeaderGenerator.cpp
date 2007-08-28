@@ -122,8 +122,9 @@ void ClassHeaderGenerator::AppendBody()
 	(*m_file) << endl;
 	
 	(*m_file) << m_tabs << m_tabs << "// Bindable interface" << endl;
-	(*m_file) << m_tabs << m_tabs << "void bindErase(sqlite3_stmt* stmt) const;" << endl;
+	(*m_file) << m_tabs << m_tabs << "void bindKeys(sqlite3_stmt* stmt) const;" << endl;
 	(*m_file) << m_tabs << m_tabs << "void bindUpdate(sqlite3_stmt* stmt) const;" << endl;
+	(*m_file) << m_tabs << m_tabs << "void parseSelect(sqlite3_stmt* stmt);" << endl;
 	(*m_file) << m_tabs << m_tabs << "Table* getTable() const;" << endl;
 	(*m_file) << endl;
 

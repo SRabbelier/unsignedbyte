@@ -78,7 +78,7 @@
     <File Name="EditorString.h"/>
   </VirtualDirectory>
   <Settings Type="Executable">
-    <Configuration Name="DebugUnicode" CompilerType="gnu g++">
+    <Configuration Name="DebugUnicode" CompilerType="gnu g++" DebuggerType="GNU gdb debugger">
       <General OutputFile="../UnsignedByte" IntermediateDirectory="Intermediate" Command="./UnsignedByte" CommandArguments="" WorkingDirectory="."/>
       <Compiler Required="yes" Options="-g -Wall">
         <IncludePath Value="."/>
@@ -87,16 +87,20 @@
       <Linker Required="yes" Options="">
         <LibraryPath Value="."/>
         <LibraryPath Value=".."/>
-        <Library Value="mysqlite3"/>
         <Library Value="myresource"/>
         <Library Value="pthread"/>
         <Library Value="dl"/>
-        <Library Value="mysqlite3"/>
+        <Library Value="sqlite3"/>
       </Linker>
+      <ResourceCompiler Required="no" Options=""/>
       <PreBuild/>
       <PostBuild/>
+      <CustomBuild Enabled="no">
+        <CleanCommand></CleanCommand>
+        <BuildCommand></BuildCommand>
+      </CustomBuild>
     </Configuration>
-    <Configuration Name="ReleaseUnicode" CompilerType="gnu g++">
+    <Configuration Name="ReleaseUnicode" CompilerType="gnu g++" DebuggerType="">
       <General OutputFile="$(IntermediateDirectory)/libDynamicDllu.so" IntermediateDirectory="./Release_unicode_gcc" Command="" CommandArguments="" WorkingDirectory=""/>
       <Compiler Required="yes" Options="-O2 $(shell wx-config --cxxflags --unicode=yes --debug=yes)">
         <IncludePath Value="."/>
@@ -107,8 +111,13 @@
         <LibraryPath Value="."/>
         <LibraryPath Value="$(IntermediateDirectory)"/>
       </Linker>
+      <ResourceCompiler Required="no" Options=""/>
       <PreBuild/>
       <PostBuild/>
+      <CustomBuild Enabled="no">
+        <CleanCommand></CleanCommand>
+        <BuildCommand></BuildCommand>
+      </CustomBuild>
     </Configuration>
   </Settings>
   <Dependencies>

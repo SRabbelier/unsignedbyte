@@ -1,34 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
-<CodeLite_Project Name="TestCase">
+<CodeLite_Project Name="DAL">
   <VirtualDirectory Name="Source Files">
     <File Name="hp.cpp"/>
   </VirtualDirectory>
   <VirtualDirectory Name="Header Files">
     <File Name="hp.h"/>
   </VirtualDirectory>
-  <Settings Type="Dynamic Library">
+  <Settings Type="Static Library">
     <Configuration Name="Debug" CompilerType="gnu g++" DebuggerType="GNU gdb debugger">
-      <General OutputFile="libtestcase.a" IntermediateDirectory="./Debug" Command="" CommandArguments="" WorkingDirectory="./Debug"/>
+      <General OutputFile="../libdal.a" IntermediateDirectory="./Debug" Command="" CommandArguments="" WorkingDirectory="./Debug"/>
       <Compiler Required="yes" Options="-g">
         <IncludePath Value="."/>
-        <IncludePath Value="./include"/>
+        <IncludePath Value="../include"/>
       </Compiler>
       <Linker Required="yes" Options="-O0">
         <LibraryPath Value="."/>
         <LibraryPath Value="Debug"/>
       </Linker>
       <ResourceCompiler Required="no" Options=""/>
-      <PreBuild>
-        <Command Enabled="yes">./Initialize</Command>
-      </PreBuild>
+      <PreBuild/>
       <PostBuild/>
       <CustomBuild Enabled="no">
-        <CleanCommand/>
-        <BuildCommand/>
+        <CleanCommand></CleanCommand>
+        <BuildCommand></BuildCommand>
       </CustomBuild>
     </Configuration>
   </Settings>
-  <Dependencies>
-    <Project Name="Initializer"/>
-  </Dependencies>
+  <Dependencies/>
 </CodeLite_Project>

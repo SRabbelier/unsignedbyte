@@ -121,8 +121,9 @@
     <File Name="../include/Statements.h"/>
     <File Name="../include/Bindable.h"/>
   </VirtualDirectory>
+  <Dependencies/>
   <Settings Type="Static Library">
-    <Configuration Name="Debug" CompilerType="gnu g++">
+    <Configuration Name="Debug" CompilerType="gnu g++" DebuggerType="">
       <General OutputFile="../libmyresource.a" IntermediateDirectory="./Debug" Command="" CommandArguments="" WorkingDirectory="./Debug"/>
       <Compiler Required="yes" Options="-g -Wall">
         <IncludePath Value="."/>
@@ -138,27 +139,9 @@
       <PreBuild/>
       <PostBuild/>
       <CustomBuild Enabled="no">
-        <CleanCommand/>
-        <BuildCommand/>
-      </CustomBuild>
-    </Configuration>
-    <Configuration Name="Release" CompilerType="GNU g++">
-      <General OutputFile="./Release/libDynamicLibray.a" IntermediateDirectory="./Release" Command="" CommandArguments="" WorkingDirectory="./Release"/>
-      <Compiler Required="yes" Options="-O2">
-        <IncludePath Value="."/>
-      </Compiler>
-      <Linker Required="yes" Options="-O2">
-        <LibraryPath Value="."/>
-        <LibraryPath Value="./Release"/>
-      </Linker>
-      <ResourceCompiler Required="yes" Options=""/>
-      <PreBuild/>
-      <PostBuild/>
-      <CustomBuild Enabled="no">
-        <CleanCommand/>
-        <BuildCommand/>
+        <CleanCommand></CleanCommand>
+        <BuildCommand></BuildCommand>
       </CustomBuild>
     </Configuration>
   </Settings>
-  <Dependencies/>
 </CodeLite_Project>

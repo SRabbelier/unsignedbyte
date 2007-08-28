@@ -3,12 +3,12 @@
 ##
 WorkspaceName=MUD Development
 WorkspacePath=/home/sverre/code/ub
-ProjectName=Initializer
+ProjectName=Generator
 
 ## Debug
 ifeq ($(type),Debug)
 ConfigurationName=Debug
-IntermediateDirectory=Intermediate
+IntermediateDirectory=./Debug
 OutDir=$(IntermediateDirectory)
 LinkerName=g++
 ArchiveTool=ar rcu
@@ -23,9 +23,9 @@ PreprocessorSwitch=-D
 SourceSwitch=-c
 CompilerName=g++
 RcCompilerName=
-OutputFile=../Initialize
+OutputFile=../DAL/Generate
 Preprocessors=
-CmpOptions=-g -Wall $(Preprocessors)
+CmpOptions=-g $(Preprocessors)
 RcCmpOptions=
 LinkOptions=-O0
 IncludePath=$(IncludeSwitch). $(IncludeSwitch)../include 
@@ -34,7 +34,7 @@ Libs=$(LibrarySwitch)myresource $(LibrarySwitch)pthread $(LibrarySwitch)dl $(Lib
 LibPath=$(LibraryPathSwitch). $(LibraryPathSwitch).. 
 endif
 
-Objects=$(IntermediateDirectory)/main$(ObjectSuffix) $(IntermediateDirectory)/Initializer$(ObjectSuffix) $(IntermediateDirectory)/Generator$(ObjectSuffix) $(IntermediateDirectory)/ClassHeaderGenerator$(ObjectSuffix) $(IntermediateDirectory)/ClassSourceGenerator$(ObjectSuffix) 
+Objects=$(IntermediateDirectory)/main$(ObjectSuffix) $(IntermediateDirectory)/ClassHeaderGenerator$(ObjectSuffix) $(IntermediateDirectory)/ClassSourceGenerator$(ObjectSuffix) $(IntermediateDirectory)/Generator$(ObjectSuffix) 
 
 ##
 ## Main Build Tragets 
@@ -45,7 +45,7 @@ $(OutputFile): makeDirStep $(Objects)
 	$(LinkerName) $(OutputSwitch) $(OutputFile) $(LinkOptions) $(Objects) $(LibPath) $(Libs)
 
 makeDirStep:
-	@test -d Intermediate || mkdir Intermediate
+	@test -d ./Debug || mkdir ./Debug
 
 PreBuild:
 
@@ -58,16 +58,6 @@ $(IntermediateDirectory)/main$(ObjectSuffix): main.cpp $(IntermediateDirectory)/
 $(IntermediateDirectory)/main$(ObjectSuffix).d:
 	@$(CompilerName) $(CmpOptions) $(IncludePath) -MT$(IntermediateDirectory)/main$(ObjectSuffix) -MF$(IntermediateDirectory)/main$(ObjectSuffix).d -MM main.cpp
 
-$(IntermediateDirectory)/Initializer$(ObjectSuffix): Initializer.cpp $(IntermediateDirectory)/Initializer$(ObjectSuffix).d
-	$(CompilerName) $(SourceSwitch) Initializer.cpp $(CmpOptions)   $(OutputSwitch) $(IntermediateDirectory)/Initializer$(ObjectSuffix) $(IncludePath)
-$(IntermediateDirectory)/Initializer$(ObjectSuffix).d:
-	@$(CompilerName) $(CmpOptions) $(IncludePath) -MT$(IntermediateDirectory)/Initializer$(ObjectSuffix) -MF$(IntermediateDirectory)/Initializer$(ObjectSuffix).d -MM Initializer.cpp
-
-$(IntermediateDirectory)/Generator$(ObjectSuffix): Generator.cpp $(IntermediateDirectory)/Generator$(ObjectSuffix).d
-	$(CompilerName) $(SourceSwitch) Generator.cpp $(CmpOptions)   $(OutputSwitch) $(IntermediateDirectory)/Generator$(ObjectSuffix) $(IncludePath)
-$(IntermediateDirectory)/Generator$(ObjectSuffix).d:
-	@$(CompilerName) $(CmpOptions) $(IncludePath) -MT$(IntermediateDirectory)/Generator$(ObjectSuffix) -MF$(IntermediateDirectory)/Generator$(ObjectSuffix).d -MM Generator.cpp
-
 $(IntermediateDirectory)/ClassHeaderGenerator$(ObjectSuffix): ClassHeaderGenerator.cpp $(IntermediateDirectory)/ClassHeaderGenerator$(ObjectSuffix).d
 	$(CompilerName) $(SourceSwitch) ClassHeaderGenerator.cpp $(CmpOptions)   $(OutputSwitch) $(IntermediateDirectory)/ClassHeaderGenerator$(ObjectSuffix) $(IncludePath)
 $(IntermediateDirectory)/ClassHeaderGenerator$(ObjectSuffix).d:
@@ -78,20 +68,23 @@ $(IntermediateDirectory)/ClassSourceGenerator$(ObjectSuffix): ClassSourceGenerat
 $(IntermediateDirectory)/ClassSourceGenerator$(ObjectSuffix).d:
 	@$(CompilerName) $(CmpOptions) $(IncludePath) -MT$(IntermediateDirectory)/ClassSourceGenerator$(ObjectSuffix) -MF$(IntermediateDirectory)/ClassSourceGenerator$(ObjectSuffix).d -MM ClassSourceGenerator.cpp
 
+$(IntermediateDirectory)/Generator$(ObjectSuffix): Generator.cpp $(IntermediateDirectory)/Generator$(ObjectSuffix).d
+	$(CompilerName) $(SourceSwitch) Generator.cpp $(CmpOptions)   $(OutputSwitch) $(IntermediateDirectory)/Generator$(ObjectSuffix) $(IncludePath)
+$(IntermediateDirectory)/Generator$(ObjectSuffix).d:
+	@$(CompilerName) $(CmpOptions) $(IncludePath) -MT$(IntermediateDirectory)/Generator$(ObjectSuffix) -MF$(IntermediateDirectory)/Generator$(ObjectSuffix).d -MM Generator.cpp
+
 ##
 ## Clean
 ##
 clean:
 	$(RM) $(IntermediateDirectory)/main$(ObjectSuffix)
 	$(RM) $(IntermediateDirectory)/main$(ObjectSuffix).d
-	$(RM) $(IntermediateDirectory)/Initializer$(ObjectSuffix)
-	$(RM) $(IntermediateDirectory)/Initializer$(ObjectSuffix).d
-	$(RM) $(IntermediateDirectory)/Generator$(ObjectSuffix)
-	$(RM) $(IntermediateDirectory)/Generator$(ObjectSuffix).d
 	$(RM) $(IntermediateDirectory)/ClassHeaderGenerator$(ObjectSuffix)
 	$(RM) $(IntermediateDirectory)/ClassHeaderGenerator$(ObjectSuffix).d
 	$(RM) $(IntermediateDirectory)/ClassSourceGenerator$(ObjectSuffix)
 	$(RM) $(IntermediateDirectory)/ClassSourceGenerator$(ObjectSuffix).d
+	$(RM) $(IntermediateDirectory)/Generator$(ObjectSuffix)
+	$(RM) $(IntermediateDirectory)/Generator$(ObjectSuffix).d
 	$(RM) $(OutputFile)
 
 -include $(IntermediateDirectory)/*.d
