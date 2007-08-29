@@ -254,7 +254,7 @@ void ClassSourceGenerator::AppendParseInsert()
 	if(m_table->hasSinglularPrimaryKey())
 		(*m_file) << m_tabs << "m_" << m_table->firstKey() << " = sqlite3_last_insert_rowid(db);" << endl;
 	else
-		(*m_file) << "// Do nothing" << endl;
+		(*m_file) << m_tabs << "// Do nothing" << endl;
 		
 	(*m_file) << "}" << endl;
 	(*m_file) << endl;
@@ -278,6 +278,9 @@ void ClassSourceGenerator::AppendParseSelect()
 
 		count++;
 	}
+	
+	if(!count)
+		(*m_file) << m_tabs << "// Do nothing" << endl;
 		
 	(*m_file) << "}" << endl;
 	(*m_file) << endl;

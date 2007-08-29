@@ -58,6 +58,8 @@ void Table::addPK(const std::string& name)
 	
 	if(m_primarykeys.size() == 1)
 		m_spkey = true;
+	else
+		m_spkey = false;
 }
 
 void Table::addFPK(Table* table)
@@ -69,6 +71,8 @@ void Table::addFPK(Table* table)
 	
 	if(m_primarykeys.size() == 1)
 		m_spkey = true;
+	else
+		m_spkey = false;
 }
 
 void Table::addValue(const std::string& name)

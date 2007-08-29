@@ -151,8 +151,8 @@ void ClassHeaderGenerator::AppendFields()
 			else
 				(*m_file) << m_tabs << m_tabs << "void set" << field->getName() << "(value_type value);" << endl;
 		}
-		(*m_file) << endl;
 	}
+	(*m_file) << endl;
 	
 	(*m_file) << m_tabs << "private:" << endl;
 	(*m_file) << m_tabs << m_tabs << "// Database pointer" << endl;
