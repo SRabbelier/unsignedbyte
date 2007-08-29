@@ -180,7 +180,6 @@ namespace hp
 	{
 	public:
 		// Ctors
-		CharacterAccount(Database* db);
 		CharacterAccount(Database* db, value_type fkAccounts, value_type fkCharacters);
 		~CharacterAccount();
 
@@ -218,7 +217,6 @@ namespace hp
 	{
 	public:
 		// Ctors
-		CharacterBranch(Database* db);
 		CharacterBranch(Database* db, value_type fkBranches, value_type fkCharacters);
 		~CharacterBranch();
 
@@ -263,7 +261,6 @@ namespace hp
 	{
 	public:
 		// Ctors
-		CharacterCluster(Database* db);
 		CharacterCluster(Database* db, value_type fkCharacters, value_type fkClusters);
 		~CharacterCluster();
 
@@ -357,7 +354,6 @@ namespace hp
 	{
 	public:
 		// Ctors
-		CharacterSkill(Database* db);
 		CharacterSkill(Database* db, value_type fkBranches, value_type fkCharacters);
 		~CharacterSkill();
 
@@ -402,7 +398,6 @@ namespace hp
 	{
 	public:
 		// Ctors
-		CharacterStat(Database* db);
 		CharacterStat(Database* db, value_type fkCharacters, value_type fkStats);
 		~CharacterStat();
 
@@ -447,7 +442,6 @@ namespace hp
 	{
 	public:
 		// Ctors
-		CharacterTree(Database* db);
 		CharacterTree(Database* db, value_type fkCharacters, value_type fkTrees);
 		~CharacterTree();
 

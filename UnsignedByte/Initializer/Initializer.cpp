@@ -108,7 +108,7 @@ bool Initializer::VerifyTables()
 		std::string result = q.get_string(sql);
 		if(result.compare("table"))
 		{
-			Global::Get()->bugf("Table %s's creation query does not match the one from the input database!\n", sql.c_str());
+			Global::Get()->bugf("Table %s's creation query does not match the one from the input database!\n", (*it)->tableName().c_str());
 			good = false;
 		}
 	}

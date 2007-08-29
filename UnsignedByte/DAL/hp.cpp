@@ -355,14 +355,6 @@ void Branches::setname(const std::string& value)
  * class CharacterAccount
  **/
 
-// Ctors
-CharacterAccount::CharacterAccount(Database* db) :
-m_db(db),
-m_fkAccounts()
-{
-
-}
-
 CharacterAccount::CharacterAccount(Database* db, value_type fkAccounts, value_type fkCharacters) :
 m_db(db), m_fkAccounts(fkAccounts), m_fkCharacters(fkCharacters)
 {
@@ -405,7 +397,7 @@ void CharacterAccount::bindUpdate(sqlite3_stmt* stmt) const
 
 void CharacterAccount::parseInsert(sqlite3* db)
 {
-	m_fkAccounts = sqlite3_last_insert_rowid(db);
+// Do nothing
 }
 
 void CharacterAccount::parseSelect(sqlite3_stmt* stmt)
@@ -428,15 +420,6 @@ Table* CharacterAccount::getTable() const
  * Begin of implementation
  * class CharacterBranch
  **/
-
-// Ctors
-CharacterBranch::CharacterBranch(Database* db) :
-m_db(db),
-m_fkBranches(),
-m_xp(0)
-{
-
-}
 
 CharacterBranch::CharacterBranch(Database* db, value_type fkBranches, value_type fkCharacters) :
 m_db(db), m_fkBranches(fkBranches), m_fkCharacters(fkCharacters)
@@ -481,7 +464,7 @@ void CharacterBranch::bindUpdate(sqlite3_stmt* stmt) const
 
 void CharacterBranch::parseInsert(sqlite3* db)
 {
-	m_fkBranches = sqlite3_last_insert_rowid(db);
+// Do nothing
 }
 
 void CharacterBranch::parseSelect(sqlite3_stmt* stmt)
@@ -516,15 +499,6 @@ void CharacterBranch::setxp(value_type value)
  * Begin of implementation
  * class CharacterCluster
  **/
-
-// Ctors
-CharacterCluster::CharacterCluster(Database* db) :
-m_db(db),
-m_fkCharacters(),
-m_xp(0)
-{
-
-}
 
 CharacterCluster::CharacterCluster(Database* db, value_type fkCharacters, value_type fkClusters) :
 m_db(db), m_fkCharacters(fkCharacters), m_fkClusters(fkClusters)
@@ -569,7 +543,7 @@ void CharacterCluster::bindUpdate(sqlite3_stmt* stmt) const
 
 void CharacterCluster::parseInsert(sqlite3* db)
 {
-	m_fkCharacters = sqlite3_last_insert_rowid(db);
+// Do nothing
 }
 
 void CharacterCluster::parseSelect(sqlite3_stmt* stmt)
@@ -709,15 +683,6 @@ void Characters::setdescription(const std::string& value)
  * class CharacterSkill
  **/
 
-// Ctors
-CharacterSkill::CharacterSkill(Database* db) :
-m_db(db),
-m_fkBranches(),
-m_xp(0)
-{
-
-}
-
 CharacterSkill::CharacterSkill(Database* db, value_type fkBranches, value_type fkCharacters) :
 m_db(db), m_fkBranches(fkBranches), m_fkCharacters(fkCharacters)
 {
@@ -761,7 +726,7 @@ void CharacterSkill::bindUpdate(sqlite3_stmt* stmt) const
 
 void CharacterSkill::parseInsert(sqlite3* db)
 {
-	m_fkBranches = sqlite3_last_insert_rowid(db);
+// Do nothing
 }
 
 void CharacterSkill::parseSelect(sqlite3_stmt* stmt)
@@ -796,15 +761,6 @@ void CharacterSkill::setxp(value_type value)
  * Begin of implementation
  * class CharacterStat
  **/
-
-// Ctors
-CharacterStat::CharacterStat(Database* db) :
-m_db(db),
-m_fkCharacters(),
-m_xp(0)
-{
-
-}
 
 CharacterStat::CharacterStat(Database* db, value_type fkCharacters, value_type fkStats) :
 m_db(db), m_fkCharacters(fkCharacters), m_fkStats(fkStats)
@@ -849,7 +805,7 @@ void CharacterStat::bindUpdate(sqlite3_stmt* stmt) const
 
 void CharacterStat::parseInsert(sqlite3* db)
 {
-	m_fkCharacters = sqlite3_last_insert_rowid(db);
+// Do nothing
 }
 
 void CharacterStat::parseSelect(sqlite3_stmt* stmt)
@@ -884,15 +840,6 @@ void CharacterStat::setxp(value_type value)
  * Begin of implementation
  * class CharacterTree
  **/
-
-// Ctors
-CharacterTree::CharacterTree(Database* db) :
-m_db(db),
-m_fkCharacters(),
-m_xp(0)
-{
-
-}
 
 CharacterTree::CharacterTree(Database* db, value_type fkCharacters, value_type fkTrees) :
 m_db(db), m_fkCharacters(fkCharacters), m_fkTrees(fkTrees)
@@ -937,7 +884,7 @@ void CharacterTree::bindUpdate(sqlite3_stmt* stmt) const
 
 void CharacterTree::parseInsert(sqlite3* db)
 {
-	m_fkCharacters = sqlite3_last_insert_rowid(db);
+// Do nothing
 }
 
 void CharacterTree::parseSelect(sqlite3_stmt* stmt)

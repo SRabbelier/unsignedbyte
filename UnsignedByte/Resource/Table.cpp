@@ -29,7 +29,7 @@
 
 Table::Table(std::string name) :
 m_name(name),
-m_spkey(true)
+m_spkey(false)
 {
 	
 }
@@ -44,10 +44,10 @@ Table::~Table()
 
 void Table::addPK(const std::string& name)
 {
-	if(m_spkey && m_keys.size() > 1)
-		m_spkey = false;
-		
 	m_keys[name] = this;
+	
+	if(m_keys.size() == 1)
+		m_spkey = true;
 }
 
 void Table::addValue(const std::string& name)
@@ -83,7 +83,7 @@ void Table::addFK(Table* table)
 }
 
 void Table::addFK(Table* table, const std::string& suffix)
-{
+{	
 	std::string name;
 	name.append("fk");
 	
@@ -138,18 +138,45 @@ std::string Table::creationQuery(bool verify) const
 	result.append(m_name);
 	result.append("(");
 	
-	if(m_spkey)
+	bool comma = false;
+	
+	for(TableMap::const_iterator it = m_keys.begin(); it != m_keys.end(); it++)
 	{
-		result.append(firstKey());
-		result.append(" INTEGER PRIMARY KEY AUTOINCREMENT, ");
+		if(m_spkey && it == m_keys.begin())
+		{
+			result.append(it->first);
+			result.append(" INTEGER PRIMARY KEY AUTOINCREMENT, ");
+			continue;
+		}
+		
+		if(comma)
+			result.append(", ");
+			
+		result.append(it->first);
+		result.append(" INTEGER");
+		comma = true;
 	}
 	
 	for(Fields::const_iterator it = m_fields.begin(); it != m_fields.end(); it++)
 	{
-		if(it != m_fields.begin())
+		if(comma)
 			result.append(", ");
 			
 		result.append((*it)->creationString());
+		comma = true;
+	}
+	
+	if(!m_spkey)
+	{
+		result.append(", PRIMARY KEY(");
+		for(TableMap::const_iterator it = m_keys.begin(); it != m_keys.end(); it++)
+		{
+			if(it != m_keys.begin())
+				result.append(", ");
+				
+			result.append(it->first);
+		}
+		result.append(")");
 	}
 	
 	if(verify)
