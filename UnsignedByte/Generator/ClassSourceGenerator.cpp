@@ -130,9 +130,9 @@ void ClassSourceGenerator::AppendCtorSpecific()
 	(*m_file) << "m_db(db)";
 	
 	for(TableMap::const_iterator it = m_table->keybegin(); it != m_table->keyend(); it++)
-		(*m_file) << ", m_" << it->first << "(" << it->first<< ")";
-	
+		(*m_file) << ", " << endl << "m_" << it->first << "(" << it->first<< ")";
 	(*m_file) << endl;
+	
 	(*m_file) << "{" << endl;
 	(*m_file) << m_tabs << "SqliteMgr::Get()->doSelect(this);" << endl;
 	(*m_file) << "}" << endl;
@@ -302,11 +302,11 @@ void ClassSourceGenerator::AppendGetSet()
 	if(!m_file)
 		throw std::logic_error("Source file is not open for writing.\n");
 		
-	if(m_table->hasSinglularPrimaryKey())
+	for(TableMap::const_iterator it = m_table->keybegin(); it != m_table->keyend(); it++)
 	{
-		(*m_file) << "value_type " << m_name <<"::get" << m_table->firstKey() << "() const" << endl;
+		(*m_file) << "value_type " << m_name <<"::get" << it->first << "() const" << endl;
 		(*m_file) << "{" << endl;
-		(*m_file) << m_tabs << "return m_" << m_table->firstKey() << ";" << endl;
+		(*m_file) << m_tabs << "return m_" << it->first << ";" << endl;
 		(*m_file) << "}" << endl;
 		(*m_file) << endl;
 	}

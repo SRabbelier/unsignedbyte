@@ -125,11 +125,10 @@ void ClassHeaderGenerator::AppendFields()
 	if(!m_file)
 		throw std::logic_error("Header file is not open for writing.\n");
 	
-	if(m_table->hasSinglularPrimaryKey() || m_table->size() != 0)
-		(*m_file) << m_tabs << m_tabs << "// Getters" << endl;
-	
-	if(m_table->hasSinglularPrimaryKey())
-		(*m_file) << m_tabs << m_tabs << "value_type get" << m_table->firstKey() << "() const;" << endl;
+	(*m_file) << m_tabs << m_tabs << "// Getters" << endl;
+
+	for(TableMap::const_iterator it = m_table->keybegin(); it != m_table->keyend(); it++)
+		(*m_file) << m_tabs << m_tabs << "value_type get" << it->first << "() const;" << endl;
 		
 	if(m_table->size() != 0)
 	{

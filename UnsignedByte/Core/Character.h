@@ -23,7 +23,7 @@
 #include <map>
 #include <vector>
 #include "Savable.h"
-#include "ub.h"
+#include "db.h"
 
 class Race;
 class Class;
@@ -55,10 +55,10 @@ public:
 	/**
 	 * \brief Getters
 	 */ 
-	long& getID() { return m_character->characterid; };
-	std::string& getName() { return m_character->name; };
-	std::string& getDescription() { return m_character->description; };
-	long getRace() { return m_character->fkrace; };
+	long getID() { return m_character->getcharacterid(); }
+	const std::string& getName() { return m_character->getname(); };
+	const std::string& getDescription() { return m_character->getdescription(); };
+	long getRace() { return m_character->getfkrace; };
 	long getRoom() { return m_character->fkroom; };
 
 	/**

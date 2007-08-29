@@ -22,7 +22,7 @@
 #include <string>
 #include <vector>
 #include "Savable.h"
-#include "ub.h"
+#include "db.h"
 
 class Area;
 class Character;

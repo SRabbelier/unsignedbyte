@@ -44,7 +44,7 @@ Table::~Table()
 
 void Table::addPK(const std::string& name)
 {
-	m_keys[name] = this;
+	m_keys[name] = NULL;
 	
 	if(m_keys.size() == 1)
 		m_spkey = true;

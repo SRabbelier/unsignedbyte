@@ -22,7 +22,7 @@
 #include "UBSocket.h"
 #include "DatabaseMgr.h"
 #include "Global.h"
-#include "ub.h"
+#include "db.h"
 
 #include "Account.h"
 #include "PCharacter.h"

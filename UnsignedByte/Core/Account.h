@@ -26,53 +26,56 @@
 class UBSocket;
 class Cache;
 
-class Account : public Savable
+namespace mud
 {
-public:
-	/**
-	 * \brief Getters
-	 */
-	long getID() const { return m_account->accountid; };
-	std::string& getName() const { return m_account->name; };
-	std::string& getPassword() const { return m_account->password; };
+	class Account : public Savable
+	{
+	public:
+		/**
+		 * \brief Getters
+		 */
+		long getID() const { return m_account->getaccountid() ; }
+		const std::string& getName() const { return m_account->getname(); }
+		const std::string& getPassword() const { return m_account->getpassword(); }
 
-	/**
-	 * \brief Setters
-	 */
-	void setName(const std::string& name) { m_account->name = name; };
-	void setPassword(const std::string& password) { m_account->password = password; };
+		/**
+		 * \brief Setters
+		 */
+		void setName(const std::string& name) { m_account->setname(name); };
+		void setPassword(const std::string& password) { m_account->setpassword(password); };
 
-	/**
-	 * \brief Utilities
-	 */
-	std::vector<std::string> Show();
-	std::string ShowShort();
-	Table* getTable() const;
-	
-	/**
-	 * \brief Static operations
-	 */
-	static std::vector<std::string> List();
-	static void Close(Account* account);
-	static bool IllegalName(const std::string& name);
-	
-	/**
-	 * \brief Database operations
-	 */
-	void Delete();
-	void Save();
-	bool Exists();
+		/**
+		 * \brief Utilities
+		 */
+		std::vector<std::string> Show();
+		std::string ShowShort();
+		Table* getTable() const;
+		
+		/**
+		 * \brief Static operations
+		 */
+		static std::vector<std::string> List();
+		static void Close(Account* account);
+		static bool IllegalName(const std::string& name);
+		
+		/**
+		 * \brief Database operations
+		 */
+		void Delete();
+		void Save();
+		bool Exists();
 
-private:
-	db::Accounts* m_account;
+	private:
+		db::Accounts* m_account;
 
-	/**
-	 * \brief Ctors
-	 */
-	Account(db::Accounts* account);	
-	Account(const Account& rhs) {};
-	Account operator=(const Account& rhs) { return *this; };
-	~Account(void);
-	
-	friend class Cache; // for constructor
-};
+		/**
+		 * \brief Ctors
+		 */
+		Account(db::Accounts* account);	
+		Account(const Account& rhs);
+		Account operator=(const Account& rhs);
+		~Account(void);
+		
+		friend class Cache; // for constructor
+	};
+}

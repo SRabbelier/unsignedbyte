@@ -21,66 +21,66 @@
 
 #include <string>
 #include "Savable.h"
-#include "ub.h"
+#include "db.h"
 
-namespace db { class Areas; };
-class Room;
-
-class Area : public Savable
+namespace mud
 {
-public:
-	/**
-	 * \brief Getters
-	 */
-	std::string& getName() const { return m_area->name; };
-	std::string& getDescription() const { return m_area->description; };
-	long getHeight() const { return m_area->height; };
-	long getWidth() const { return m_area->width; };
+	class Area : public Savable
+	{
+	public:
+		/**
+		 * \brief Getters
+		 */
+		const std::string& getName() const { return m_area->getname(); }
+		const std::string& getDescription() const { return m_area->getdescription(); }
+		long getHeight() const { return m_area->getheight(); }
+		long getWidth() const { return m_area->getwidth(); }
 
-	/**
-	 * \brief Setters
-	 */
-	void setName(const std::string& name) { m_area->name = name; };
-	void setDescription(const std::string& description) { m_area->description = description; };
-	void setHeight(long height) { m_area->height = height; };
-	void setWidth(long width) { m_area->width = width; };
+		/**
+		 * \brief Setters
+		 */
+		void setName(const std::string& name) { m_area->setname(name); }
+		void setDescription(const std::string& description) { m_area->setdescription(description); }
+		void setHeight(long height) { m_area->setheight(height); }
+		void setWidth(long width) { m_area->setwidth(width); }
 
-	/**
-	 * \brief Utilities
-	 */
-	std::vector<std::string> Show();
-	std::string ShowShort();
-	Table* getTable() const;
-	
-	/**
-	 * \brief Static utilities
-	 */
-	static std::vector<std::string> List();
-	static void Close(Area* area);
-	
-	/**
-	 * \brief Database operations
-	 */
-	void Delete();
-	void Save();
-	bool Exists();
-
-private:
-	friend class Cache; // For constructor
-	db::Areas* m_area;
-
-	/**
-	 * \brief Constructor
-	 * \param area The DB object
-	 * \return 
-	 */
-	Area(db::Areas* area);
-	
-	Area(const Area& rhs);
-	Area operator=(const Area& rhs) { return *this; };
+		/**
+		 * \brief Utilities
+		 */
+		std::vector<std::string> Show();
+		std::string ShowShort();
+		Table* getTable() const;
 		
-	/**
-	 * \brief Default destructor
-	 */
-	~Area(void);
-};
+		/**
+		 * \brief Static utilities
+		 */
+		static std::vector<std::string> List();
+		static void Close(Area* area);
+		
+		/**
+		 * \brief Database operations
+		 */
+		void Delete();
+		void Save();
+		bool Exists();
+
+	private:
+		friend class Cache; // For constructor
+		db::Areas* m_area;
+
+		/**
+		 * \brief Constructor
+		 * \param area The DB object
+		 * \return 
+		 */
+		Area(db::Areas* area);
+		
+		Area(const Area& rhs);
+		Area operator=(const Area& rhs) { return *this; };
+			
+		/**
+		 * \brief Default destructor
+		 */
+		~Area(void);
+	};
+}

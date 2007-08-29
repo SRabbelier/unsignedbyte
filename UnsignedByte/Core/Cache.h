@@ -26,13 +26,17 @@
 #include "Exit.h"
 #include "Coordinate.h"
 
+namespace mud
+{
+	class Account;
+	class Area;
+}
+
 class UBSocket;
-class Account;
 class Character;
 class PCharacter;
 class MCharacter;
 class Race;
-class Area;
 class Room;
 class Sector;
 class Object;
@@ -53,12 +57,12 @@ typedef rlookup_m::iterator rlookup_mi;
 typedef plookup_m::iterator plookup_mi;
 typedef lookup_m::iterator lookup_mi;
 
-typedef std::map<long,Account*> accounts_m;
+typedef std::map<long,mud::Account*> accounts_m;
+typedef std::map<long,mud::Area*> areas_m;
 typedef std::map<long,PCharacter*> players_m;
 typedef std::map<long,MCharacter*> mobiles_m;
 typedef std::map<long,Character*> characters_m;
 typedef std::map<long,Race*> races_m;
-typedef std::map<long,Area*> areas_m;
 typedef std::map<long,Room*> rooms_m;
 // typedef std::map<long,Exit*> exits_m;
 typedef std::map<long,Sector*> sectors_m;
@@ -88,8 +92,12 @@ public:
 	bool isActive(long id);
 	bool isActive(cstring name);
 
-	Account* GetAccount(long id);
+	mud::Account* GetAccount(long id);
 	long GetAccountID(cstring name);
+	
+	mud::Area* GetArea(long id);
+	
+	
 
 	PCharacter* GetPCharacter(UBSocket* sock, long id);
 	long GetPCharacterID(cstring name);
@@ -105,8 +113,6 @@ public:
 
 	Sector* GetSector(long id);
 	long GetSectorID(cstring name);
-
-	Area* GetArea(long id);
 
 	Room* GetRoom(long id);
 	// long GetRoomID(long area, long x, long y);

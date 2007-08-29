@@ -25,7 +25,7 @@
 #include "Global.h"
 #include "DatabaseMgr.h"
 #include "Cache.h"
-#include "ub.h"
+#include "db.h"
 
 Sector::Sector(db::Sectors* Sector) :
 m_sector(Sector)

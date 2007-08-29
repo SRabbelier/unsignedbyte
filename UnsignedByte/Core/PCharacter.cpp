@@ -25,7 +25,7 @@
 #include "UBSocket.h"
 #include "DatabaseMgr.h"
 #include "Cache.h"
-#include "ub.h"
+#include "db.h"
 #include "Account.h"
 #include "EditorAccount.h"
 

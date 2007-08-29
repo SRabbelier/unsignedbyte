@@ -25,7 +25,7 @@
 #include "Global.h"
 #include "DatabaseMgr.h"
 #include "Cache.h"
-#include "ub.h"
+#include "db.h"
 #include <sqlite3.h>
 
 Colour::Colour(db::Colours* object) :

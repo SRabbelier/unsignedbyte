@@ -28,7 +28,7 @@
 #include "StringUtilities.h"
 #include "Cache.h"
 #include "Account.h"
-#include "ub.h"
+#include "db.h"
 
 EditorNewCharacter::EditorNewCharacter(UBSocket* sock) :
 Editor(sock),

@@ -29,7 +29,7 @@
 
 #include "Character.h"
 #include "DatabaseMgr.h"
-#include "ub.h"
+#include "db.h"
 #include "Global.h"
 #include "Cache.h"
 

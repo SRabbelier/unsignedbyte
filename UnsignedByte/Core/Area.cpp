@@ -26,6 +26,8 @@
 #include "DatabaseMgr.h"
 #include "Cache.h"
 
+using namespace mud;
+
 Area::Area(db::Areas* area) :
 m_area(area)
 {
@@ -51,7 +53,7 @@ void Area::Save()
 
 bool Area::Exists()
 {
-	return m_area->areaid;
+	return m_area->exists();
 }
 
 std::vector<std::string> Area::Show()

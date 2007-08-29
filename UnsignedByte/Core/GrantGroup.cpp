@@ -25,7 +25,7 @@
 #include "Global.h"
 #include "DatabaseMgr.h"
 #include "Cache.h"
-#include "ub.h"
+#include "db.h"
 #include "Permission.h"
 
 GrantGroup::GrantGroup(db::GrantGroups* area) :

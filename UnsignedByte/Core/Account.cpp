@@ -25,10 +25,12 @@ class UBSocket;
 #include "Cache.h"
 #include "Account.h"
 #include "DatabaseMgr.h"
-#include "ub.h"
+#include "db.h"
 
-Account::Account(db::Accounts* account) :
-m_account(account)
+using namespace mud;
+
+Account::Account(db::Accounts* dbaccount) :
+m_account(dbaccount)
 {
 	if(m_account == NULL)
 		throw std::invalid_argument("Account::Account(), m_account == NULL!");
@@ -52,7 +54,7 @@ void Account::Save()
 
 bool Account::Exists()
 {
-	return m_account->accountid;
+	return m_account->exists();
 }
 
 
@@ -93,7 +95,7 @@ void Account::Close(Account* account)
 		return;	
 	}
 		
-	Cache::Get()->CloseAccount(account->m_account->accountid);
+	Cache::Get()->CloseAccount(account->getID());
 	delete account;
 }
 
