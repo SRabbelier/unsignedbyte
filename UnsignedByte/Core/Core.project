@@ -102,6 +102,8 @@
   </Settings>
   <Dependencies>
     <Project Name="Resource"/>
+    <Project Name="DAL"/>
+    <Project Name="Generator"/>
     <Project Name="Initializer"/>
   </Dependencies>
 </CodeLite_Project>

@@ -293,6 +293,15 @@ void ClassSourceGenerator::AppendGetSet()
 	if(!m_file)
 		throw std::logic_error("Source file is not open for writing.\n");
 		
+	if(m_table->hasSinglularPrimaryKey())
+	{
+		(*m_file) << "value_type " << m_name <<"::get" << m_table->firstKey() << "() const" << endl;
+		(*m_file) << "{" << endl;
+		(*m_file) << m_tabs << "return m_" << m_table->firstKey() << ";" << endl;
+		(*m_file) << "}" << endl;
+		(*m_file) << endl;
+	}
+		
 	// Getters
 	for(Fields::const_iterator it = m_table->begin(); it != m_table->end(); it++)
 	{

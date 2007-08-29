@@ -36,8 +36,8 @@ endif
 
 Objects=$(IntermediateDirectory)/Account$(ObjectSuffix) $(IntermediateDirectory)/Area$(ObjectSuffix) $(IntermediateDirectory)/Cache$(ObjectSuffix) $(IntermediateDirectory)/Character$(ObjectSuffix) $(IntermediateDirectory)/Colour$(ObjectSuffix) $(IntermediateDirectory)/EditorAccount$(ObjectSuffix) $(IntermediateDirectory)/EditorArea$(ObjectSuffix) $(IntermediateDirectory)/EditorColour$(ObjectSuffix) $(IntermediateDirectory)/EditorLoginAccount$(ObjectSuffix) $(IntermediateDirectory)/EditorMobile$(ObjectSuffix) \
 	$(IntermediateDirectory)/EditorNewAccount$(ObjectSuffix) $(IntermediateDirectory)/EditorNewCharacter$(ObjectSuffix) $(IntermediateDirectory)/EditorOLC$(ObjectSuffix) $(IntermediateDirectory)/EditorPlaying$(ObjectSuffix) $(IntermediateDirectory)/EditorRoom$(ObjectSuffix) $(IntermediateDirectory)/EditorScript$(ObjectSuffix) $(IntermediateDirectory)/EditorSector$(ObjectSuffix) $(IntermediateDirectory)/main$(ObjectSuffix) $(IntermediateDirectory)/MCharacter$(ObjectSuffix) $(IntermediateDirectory)/PCharacter$(ObjectSuffix) \
-	$(IntermediateDirectory)/Race$(ObjectSuffix) $(IntermediateDirectory)/Room$(ObjectSuffix) $(IntermediateDirectory)/Sector$(ObjectSuffix) $(IntermediateDirectory)/UBHandler$(ObjectSuffix) $(IntermediateDirectory)/UBSocket$(ObjectSuffix) $(IntermediateDirectory)/SQLSocket$(ObjectSuffix) $(IntermediateDirectory)/Command$(ObjectSuffix) $(IntermediateDirectory)/ub$(ObjectSuffix) $(IntermediateDirectory)/EditorCommand$(ObjectSuffix) $(IntermediateDirectory)/GrantGroup$(ObjectSuffix) \
-	$(IntermediateDirectory)/Permission$(ObjectSuffix) $(IntermediateDirectory)/EditorGrantGroup$(ObjectSuffix) $(IntermediateDirectory)/EditorPermission$(ObjectSuffix) $(IntermediateDirectory)/OLCEditor$(ObjectSuffix) $(IntermediateDirectory)/Editor$(ObjectSuffix) $(IntermediateDirectory)/EditorString$(ObjectSuffix) 
+	$(IntermediateDirectory)/Race$(ObjectSuffix) $(IntermediateDirectory)/Room$(ObjectSuffix) $(IntermediateDirectory)/Sector$(ObjectSuffix) $(IntermediateDirectory)/UBHandler$(ObjectSuffix) $(IntermediateDirectory)/UBSocket$(ObjectSuffix) $(IntermediateDirectory)/SQLSocket$(ObjectSuffix) $(IntermediateDirectory)/Command$(ObjectSuffix) $(IntermediateDirectory)/EditorCommand$(ObjectSuffix) $(IntermediateDirectory)/GrantGroup$(ObjectSuffix) $(IntermediateDirectory)/Permission$(ObjectSuffix) \
+	$(IntermediateDirectory)/EditorGrantGroup$(ObjectSuffix) $(IntermediateDirectory)/EditorPermission$(ObjectSuffix) $(IntermediateDirectory)/OLCEditor$(ObjectSuffix) $(IntermediateDirectory)/Editor$(ObjectSuffix) $(IntermediateDirectory)/EditorString$(ObjectSuffix) 
 
 ##
 ## Main Build Tragets 
@@ -191,11 +191,6 @@ $(IntermediateDirectory)/Command$(ObjectSuffix): Command.cpp $(IntermediateDirec
 $(IntermediateDirectory)/Command$(ObjectSuffix).d:
 	@$(CompilerName) $(CmpOptions) $(IncludePath) -MT$(IntermediateDirectory)/Command$(ObjectSuffix) -MF$(IntermediateDirectory)/Command$(ObjectSuffix).d -MM Command.cpp
 
-$(IntermediateDirectory)/ub$(ObjectSuffix): ub.cpp $(IntermediateDirectory)/ub$(ObjectSuffix).d
-	$(CompilerName) $(SourceSwitch) ub.cpp $(CmpOptions)   $(OutputSwitch) $(IntermediateDirectory)/ub$(ObjectSuffix) $(IncludePath)
-$(IntermediateDirectory)/ub$(ObjectSuffix).d:
-	@$(CompilerName) $(CmpOptions) $(IncludePath) -MT$(IntermediateDirectory)/ub$(ObjectSuffix) -MF$(IntermediateDirectory)/ub$(ObjectSuffix).d -MM ub.cpp
-
 $(IntermediateDirectory)/EditorCommand$(ObjectSuffix): EditorCommand.cpp $(IntermediateDirectory)/EditorCommand$(ObjectSuffix).d
 	$(CompilerName) $(SourceSwitch) EditorCommand.cpp $(CmpOptions)   $(OutputSwitch) $(IntermediateDirectory)/EditorCommand$(ObjectSuffix) $(IncludePath)
 $(IntermediateDirectory)/EditorCommand$(ObjectSuffix).d:
@@ -294,8 +289,6 @@ clean:
 	$(RM) $(IntermediateDirectory)/SQLSocket$(ObjectSuffix).d
 	$(RM) $(IntermediateDirectory)/Command$(ObjectSuffix)
 	$(RM) $(IntermediateDirectory)/Command$(ObjectSuffix).d
-	$(RM) $(IntermediateDirectory)/ub$(ObjectSuffix)
-	$(RM) $(IntermediateDirectory)/ub$(ObjectSuffix).d
 	$(RM) $(IntermediateDirectory)/EditorCommand$(ObjectSuffix)
 	$(RM) $(IntermediateDirectory)/EditorCommand$(ObjectSuffix).d
 	$(RM) $(IntermediateDirectory)/GrantGroup$(ObjectSuffix)
