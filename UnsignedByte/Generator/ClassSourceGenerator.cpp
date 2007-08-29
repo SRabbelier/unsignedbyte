@@ -177,6 +177,15 @@ void ClassSourceGenerator::AppendBody()
 	(*m_file) << m_tabs << "SqliteMgr::Get()->doUpdate(this);" << endl;
 	(*m_file) << "}" << endl;
 	(*m_file) << endl;
+	
+	(*m_file) << "bool " << m_name <<  "::exists()" << endl;
+	(*m_file) << "{" << endl;
+	(*m_file) << m_tabs << "if(m_newentry)" << endl;	
+	(*m_file) << m_tabs << m_tabs << "return false;" << endl;
+	(*m_file) << endl;
+	(*m_file) << m_tabs << "return true;" << endl;
+	(*m_file) << "}" << endl;
+	(*m_file) << endl;
 }
 
 void ClassSourceGenerator::AppendBindKeys()

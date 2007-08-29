@@ -104,9 +104,9 @@ void ClassHeaderGenerator::AppendBody()
 		throw std::logic_error("Header file is not open for writing.\n");
 
 	(*m_file) << m_tabs << m_tabs << "// Database interaction" << endl;
-	(*m_file) << m_tabs << m_tabs << "void save();" << endl;
 	(*m_file) << m_tabs << m_tabs << "void erase();" << endl;
-	(*m_file) << m_tabs << m_tabs << "void exists();" << endl;
+	(*m_file) << m_tabs << m_tabs << "void save();" << endl;
+	(*m_file) << m_tabs << m_tabs << "bool exists();" << endl;
 	(*m_file) << endl;
 	
 	(*m_file) << m_tabs << m_tabs << "// Bindable interface" << endl;
