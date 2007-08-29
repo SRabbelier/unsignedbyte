@@ -29,7 +29,7 @@
 #include "Global.h"
 #include "Tables.h"
 #include "Table.h"
-#include "hp.h"
+#include "db.h"
 
 bool Initializer::DatabasePopulated()
 {
@@ -49,7 +49,7 @@ bool Initializer::VerifyDatabaseVersion()
 {
 	try
 	{
-		hp::Version ver(m_db, 1);
+		db::Version ver(m_db, 1);
 
 		if(ver.getmajor() != game::major)
 		{
@@ -124,7 +124,7 @@ void Initializer::InitDatabase()
 	oldver.erase();
 	*/
 	
-	hp::Version ver(m_db);
+	db::Version ver(m_db);
 	ver.setmajor(game::major);
 	ver.setminor(game::minor);
 	ver.setmicro(game::micro);
@@ -136,7 +136,7 @@ void Initializer::InitDatabase()
 	oldacc.erase();
 	*/
 
-	hp::Accounts acc(m_db);
+	db::Accounts acc(m_db);
 	acc.setname(game::vname);
 	acc.setpassword("qq");
 	acc.save();

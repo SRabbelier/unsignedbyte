@@ -45,8 +45,8 @@ $(OutputFile): makeDirStep $(Objects)
 	$(LinkerName) $(OutputSwitch) $(OutputFile) $(LinkOptions) $(Objects) $(LibPath) $(Libs)
 	@echo Executing Post Build commands ...
 	../bin/Generator
-	mv hp.cpp ../DAL
-	mv hp.h ../include
+	mv db.cpp ../DAL
+	mv db.h ../include
 	@echo Done
 
 makeDirStep:

@@ -48,7 +48,7 @@ int main()
 	atexit(exitfunc);
 		
 	printf("Generating DAL...\n");
-	Generator gen(game::vname);
+	Generator gen("db");
 	
 	bool succes;
 	succes = gen.GenerateDAL();

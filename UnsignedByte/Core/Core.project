@@ -28,7 +28,6 @@
     <File Name="UBSocket.cpp"/>
     <File Name="SQLSocket.cpp"/>
     <File Name="Command.cpp"/>
-    <File Name="ub.cpp"/>
     <File Name="EditorCommand.cpp"/>
     <File Name="GrantGroup.cpp"/>
     <File Name="Permission.cpp"/>
@@ -64,7 +63,6 @@
     <File Name="Race.h"/>
     <File Name="Room.h"/>
     <File Name="Sector.h"/>
-    <File Name="ub.h"/>
     <File Name="UBHandler.h"/>
     <File Name="UBSocket.h"/>
     <File Name="SQLSocket.h"/>

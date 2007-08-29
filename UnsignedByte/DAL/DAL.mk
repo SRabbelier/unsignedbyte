@@ -34,7 +34,7 @@ Libs=
 LibPath=$(LibraryPathSwitch). 
 endif
 
-Objects=$(IntermediateDirectory)/hp$(ObjectSuffix) 
+Objects=$(IntermediateDirectory)/db$(ObjectSuffix) 
 
 ##
 ## Main Build Tragets 
@@ -53,17 +53,17 @@ PreBuild:
 ##
 ## Objects
 ##
-$(IntermediateDirectory)/hp$(ObjectSuffix): hp.cpp $(IntermediateDirectory)/hp$(ObjectSuffix).d
-	$(CompilerName) $(SourceSwitch) hp.cpp $(CmpOptions)   $(OutputSwitch) $(IntermediateDirectory)/hp$(ObjectSuffix) $(IncludePath)
-$(IntermediateDirectory)/hp$(ObjectSuffix).d:
-	@$(CompilerName) $(CmpOptions) $(IncludePath) -MT$(IntermediateDirectory)/hp$(ObjectSuffix) -MF$(IntermediateDirectory)/hp$(ObjectSuffix).d -MM hp.cpp
+$(IntermediateDirectory)/db$(ObjectSuffix): db.cpp $(IntermediateDirectory)/db$(ObjectSuffix).d
+	$(CompilerName) $(SourceSwitch) db.cpp $(CmpOptions)   $(OutputSwitch) $(IntermediateDirectory)/db$(ObjectSuffix) $(IncludePath)
+$(IntermediateDirectory)/db$(ObjectSuffix).d:
+	@$(CompilerName) $(CmpOptions) $(IncludePath) -MT$(IntermediateDirectory)/db$(ObjectSuffix) -MF$(IntermediateDirectory)/db$(ObjectSuffix).d -MM db.cpp
 
 ##
 ## Clean
 ##
 clean:
-	$(RM) $(IntermediateDirectory)/hp$(ObjectSuffix)
-	$(RM) $(IntermediateDirectory)/hp$(ObjectSuffix).d
+	$(RM) $(IntermediateDirectory)/db$(ObjectSuffix)
+	$(RM) $(IntermediateDirectory)/db$(ObjectSuffix).d
 	$(RM) $(OutputFile)
 
 -include $(IntermediateDirectory)/*.d

@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <CodeLite_Project Name="DAL">
   <VirtualDirectory Name="Source Files">
-    <File Name="hp.cpp"/>
+    <File Name="db.cpp"/>
   </VirtualDirectory>
   <VirtualDirectory Name="Header Files">
-    <File Name="../include/hp.h"/>
+    <File Name="../include/db.h"/>
   </VirtualDirectory>
   <Settings Type="Static Library">
     <Configuration Name="Debug" CompilerType="gnu g++" DebuggerType="GNU gdb debugger">
