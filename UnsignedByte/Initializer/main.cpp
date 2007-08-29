@@ -30,6 +30,7 @@
 #include "Global.h"
 #include "Tables.h"
 #include "DatabaseMgr.h"
+#include "SqliteMgr.h"
 
 #include "Initializer.h"
 
@@ -42,6 +43,8 @@ void exitfunc()
 	Global::Free();
 	printf("Freeing tables...\n");
 	Tables::Free();
+	printf("Freeing sqlitemgr...\n");
+	SqliteMgr::Free();
 	printf("Exiting...\n");
 	// std::cin.get();
 	return;

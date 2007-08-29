@@ -50,6 +50,7 @@ bool Initializer::VerifyDatabaseVersion()
 	try
 	{
 		hp::Version ver(m_db, 1);
+
 		if(ver.getmajor() != game::major)
 		{
 			Global::Get()->logf("Major / Major mismatch.");

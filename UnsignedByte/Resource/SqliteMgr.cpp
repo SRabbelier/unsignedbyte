@@ -237,7 +237,8 @@ sqlite3_stmt* SqliteMgr::getUpdateStmt(Table* table)
 
 		sql.append(it->first);
 		sql.append("=?");
-	}
+	}	
+	sql.append(";");
 	
 	Global::Get()->logf("SQL is: %s\n", sql.c_str());
 
@@ -283,6 +284,7 @@ sqlite3_stmt* SqliteMgr::getSelectStmt(Table* table)
 		sql.append(it->first);
 		sql.append("=?");
 	}
+	sql.append(";");
 	
 	Global::Get()->logf("SQL is: %s\n", sql.c_str());
 		
