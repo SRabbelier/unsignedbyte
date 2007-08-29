@@ -31,7 +31,17 @@ Table::Table(std::string name) :
 m_name(name),
 m_spkey(false)
 {
+	std::string foreignname;
+	foreignname.append("fk");
 	
+	std::string tablename = name;
+	char first = tablename[0];
+	first = toupper(first);
+	
+	tablename[0] = first;
+	foreignname.append(tablename);
+	
+	m_foreignname = foreignname;
 }
 
 Table::~Table()
@@ -44,7 +54,20 @@ Table::~Table()
 
 void Table::addPK(const std::string& name)
 {
-	m_keys[name] = NULL;
+	m_keys[name] = this;
+	m_primarykeys[name] = this;
+	
+	if(m_keys.size() == 1)
+		m_spkey = true;
+}
+
+void Table::addFPK(Table* table)
+{
+	std::string name;
+	name.append(table->tableForeignName());
+	
+	m_keys[name] = table;
+	m_primarykeys[name] = table;
 	
 	if(m_keys.size() == 1)
 		m_spkey = true;
@@ -85,24 +108,22 @@ void Table::addFK(Table* table)
 void Table::addFK(Table* table, const std::string& suffix)
 {	
 	std::string name;
-	name.append("fk");
-	
-	std::string tablename = table->tableName();
-	char first = tablename[0];
-	first = toupper(first);
-	
-	tablename[0] = first;
-	name.append(tablename);
-	
+	name.append(table->tableForeignName());
 	name.append(suffix);
-	
+
 	m_keys[name] = table;
+	m_nonprimarykeys[name] = table;
 	// TODO, add SQLite triggers
 }
 
 const std::string& Table::tableName() const
 {
 	return m_name;
+}
+
+const std::string& Table::tableForeignName() const
+{	
+	return m_foreignname;
 }
 
 std::string Table::tableQuery() const

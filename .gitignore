@@ -2,4 +2,6 @@
 *.tags
 *.o
 *.d
-UnsignedByte_wsp.*
+db.cpp
+db.h
+UnsignedByte_wsp.mk

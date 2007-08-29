@@ -38,6 +38,7 @@ public:
 	
 	// Add Primary Key
 	void addPK(const std::string& name);
+	void addFPK(Table* table);
 
 	// Add Field
 	void addValue(const std::string& name);
@@ -50,6 +51,7 @@ public:
 	void addFK(Table* table, const std::string& suffix);
 
 	const std::string& tableName() const;
+	const std::string& tableForeignName() const;
 	
 	std::string tableQuery() const;
 	std::string creationQuery(bool verify = false) const;
@@ -68,9 +70,13 @@ public:
 private:
 	void addField(const std::string& name, bool text, const std::string& defaulttext);
 
-	std::string m_name;
+	const std::string m_name;
+	std::string m_foreignname;
 	bool m_spkey; // singular primary key
 
 	Fields m_fields;
-	TableMap m_keys;
+	TableMap m_keys; // All foreign keys, either added with addFK() or addFPK()
+	
+	TableMap m_nonprimarykeys; // All keys added with addFK()
+	TableMap m_primarykeys; // All keys added with addFPK()
 };
