@@ -4,7 +4,7 @@
     <File Name="hp.cpp"/>
   </VirtualDirectory>
   <VirtualDirectory Name="Header Files">
-    <File Name="hp.h"/>
+    <File Name="../include/hp.h"/>
   </VirtualDirectory>
   <Settings Type="Static Library">
     <Configuration Name="Debug" CompilerType="gnu g++" DebuggerType="GNU gdb debugger">
@@ -20,8 +20,8 @@
       <PreBuild/>
       <PostBuild/>
       <CustomBuild Enabled="no">
-        <CleanCommand></CleanCommand>
-        <BuildCommand></BuildCommand>
+        <CleanCommand/>
+        <BuildCommand/>
       </CustomBuild>
     </Configuration>
   </Settings>

@@ -25,13 +25,13 @@ Tables::Tables() :
 	ACCOUNTS( new Table("Accounts","account" )),
 	AREAS( new Table("Areas","area" )),
 	BRANCHES( new Table("Branches", "branch" )),
-	CHARACTERACCOUNT( new Table("CharacterAccount" )),
-	CHARACTERBRANCH( new Table("CharacterBranch" )),
-	CHARACTERCLUSTER( new Table("CharacterCluster" )),
+	CHARACTERACCOUNT( new Table("CharacterAccount" )), // Lookup Table, our only one for now...
+	CHARACTERBRANCH( new Table("CharacterBranch", "characterbranch" )),
+	CHARACTERCLUSTER( new Table("CharacterCluster", "charactercluster" )),
 	CHARACTERS( new Table("Characters","character" )),
-	CHARACTERSKILL( new Table("CharacterSkill" )),
-	CHARACTERSTAT( new Table("CharacterStat" )),
-	CHARACTERTREE( new Table("CharacterTree" )),
+	CHARACTERSKILL( new Table("CharacterSkill", "characterskill" )),
+	CHARACTERSTAT( new Table("CharacterStat", "characterstat" )),
+	CHARACTERTREE( new Table("CharacterTree", "charactertree" )),
 	CLUSTERS( new Table("Clusters", "cluster" )),
 	COLOURS( new Table("Colours","colour" )),
 	COMMANDS( new Table("Commands","command" )),
@@ -64,9 +64,11 @@ Tables::Tables() :
 	
 	CHARACTERBRANCH->addFK(CHARACTERS);
 	CHARACTERBRANCH->addFK(BRANCHES);
+	CHARACTERBRANCH->addField("xp");
 	
 	CHARACTERCLUSTER->addFK(CHARACTERS);
 	CHARACTERCLUSTER->addFK(CLUSTERS);
+	CHARACTERCLUSTER->addField("xp");
 	
 	CHARACTERS->addFK(RACES);
 	CHARACTERS->addFK(ROOMS);
@@ -75,12 +77,16 @@ Tables::Tables() :
 	
 	CHARACTERSKILL->addFK(CHARACTERS);
 	CHARACTERSKILL->addFK(BRANCHES);
+	CHARACTERSKILL->addField("xp");
 	
 	CHARACTERSTAT->addFK(CHARACTERS);
 	CHARACTERSTAT->addFK(STATS);
+	CHARACTERSTAT->addField("current");
+	CHARACTERSTAT->addField("potential");
 	
 	CHARACTERTREE->addFK(CHARACTERS);
 	CHARACTERTREE->addFK(TREES);
+	CHARACTERTREE->addField("xp");
 	
 	CLUSTERS->addField("name", true);
 		

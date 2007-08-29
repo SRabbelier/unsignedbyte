@@ -37,7 +37,6 @@ std::string Field::creationString() const
 {
 	std::string result;
 	
-	result.append(", ");
 	result.append(m_name);
 	
 	if(m_text)

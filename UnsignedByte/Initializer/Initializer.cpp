@@ -49,7 +49,30 @@ bool Initializer::VerifyDatabaseVersion()
 {
 	try
 	{
-		// hp::Version ver(m_db, 1);
+		hp::Version ver(m_db, 1);
+		if(ver.getmajor() != game::major)
+		{
+			Global::Get()->logf("Major / Major mismatch.");
+			return false;
+		}
+		
+		if(ver.getminor() != game::minor)
+		{
+			Global::Get()->logf("Minor / Minor mismatch.");
+			return false;
+		}
+		
+		if(ver.getmicro() != game::micro)
+		{
+			Global::Get()->logf("Micro / Micro mismatch.");
+			return false;
+		}
+		
+		if(ver.getversiontext().compare(game::vstring))
+		{
+			Global::Get()->logf("Versiontext / Vstring mismatch.");
+			return false;
+		}
 		
 		return true;
 	}
@@ -95,60 +118,31 @@ bool Initializer::VerifyTables()
 
 void Initializer::InitDatabase()
 {
-	Query q(*m_db);
-	q.execute(Global::Get()->sprintf(
-		"INSERT OR REPLACE INTO %s(%s, versiontext, major, minor, micro)"
-		" values(1"
-		",'%s'"
-		", %d"
-		", %d"
-		", %d"
-		");",
-		Tables::Get()->VERSION->tableName().c_str(),
-		Tables::Get()->VERSION->tableID().c_str(),
-		game::vstring,
-		game::major,
-		game::minor,
-		game::micro
-		));
+	/*
+	hp::Version oldver(m_db, 1);
+	oldver.erase();
+	*/
+	
+	hp::Version ver(m_db);
+	ver.setmajor(game::major);
+	ver.setminor(game::minor);
+	ver.setmicro(game::micro);
+	ver.setversiontext(game::vstring);
+	ver.save();
+	
+	/*
+	hp::Accounts oldacc(m_db, 1);
+	oldacc.erase();
+	*/
 
-	q.execute(Global::Get()->sprintf(
-		"INSERT OR REPLACE INTO %s(%s, name, password)"
-		" values(1"
-		", '%s'"
-		", 'qq'"
-		");",
-		Tables::Get()->ACCOUNTS->tableName().c_str(),
-		Tables::Get()->ACCOUNTS->tableID().c_str(),
-		game::vname
-		));
+	hp::Accounts acc(m_db);
+	acc.setname(game::vname);
+	acc.setpassword("qq");
+	acc.save();
 }
 
 void Initializer::InitColours()
 {
-	std::string sql = Global::Get()->sprintf(
-		"INSERT OR IGNORE INTO %s(%s, name, code, colourstring, ansi)"
-		" values(?, ?, ?, ?, 1);",
-		Tables::Get()->COLOURS->tableName().c_str(),
-		Tables::Get()->COLOURS->tableID().c_str());
-
-	sqlite3_stmt* res; // pointer to the result
-	const char* tailer = NULL; // pointer to a constant char array
-
-	Database::OPENDB* db = m_db->grabdb();
-	if(!db)
-	{
-		printf("Could not open database!\n");
-		return;
-	}
-
-	int rc = sqlite3_prepare_v2(db->db, sql.c_str(), (int)sql.size(), &res, &tailer);
-	if (rc != SQLITE_OK)
-	{
-		printf("Prepare Query Failed: '%s'", sql.c_str());
-		return;
-	}
-	
 	const struct colour colours[] = 
 	{
 		{ "Restore", "^", "0;0m" },
@@ -170,25 +164,19 @@ void Initializer::InitColours()
 		{ "White", "W", "1;37m" },
 		{ "Gray", "L", "1;30m" },
 	};
-	
-	int size = sizeof(colours) / sizeof(colours[0]);
 
+	int size = sizeof(colours) / sizeof(colours[0]);
+	printf("Colours: %d.\n", size);
+
+	/*
 	for(int i = 0; i < size; i++)
 	{
-		rc = sqlite3_bind_int(res, 1, i+2);
-		if(rc != SQLITE_OK) printf("sqlite3_bind_int returned %d at iteration %d.\n", rc, i);
-		rc = sqlite3_bind_text(res, 2, colours[i].name.c_str(), -1 , SQLITE_TRANSIENT);
-		if(rc != SQLITE_OK) Global::Get()->bugf("DatabaseMgr::InitColours(), sqlite3_bind_text(2) returned %d at iteration %d.\n", rc, i);
-		rc = sqlite3_bind_text(res, 3, colours[i].code.c_str(), -1, SQLITE_TRANSIENT);
-		if(rc != SQLITE_OK) Global::Get()->bugf("DatabaseMgr::InitColours(), sqlite3_bind_text(3) returned %d at iteration %d.\n", rc, i);
-		rc = sqlite3_bind_text(res, 4, colours[i].cstr.c_str(), -1, SQLITE_TRANSIENT);
-		if(rc != SQLITE_OK) Global::Get()->bugf("DatabaseMgr::InitColours(), sqlite3_bind_text(4) returned %d at iteration %d.\n", rc, i);
-		rc = sqlite3_step(res);
-		if(rc != SQLITE_DONE) Global::Get()->bugf("DatabaseMgr::InitColours(), sqlite3_step returned %d at iteration %d.\n", rc, i);
-		rc = sqlite3_reset(res);
-		if(rc != SQLITE_OK) Global::Get()->bugf("DatabaseMgr::InitColours(), sqlite3_reset returned %d at iteration %d.\n", rc, i);
+		hp::Colours col(m_db);
+		col.setname(colours[i].name);
+		col.setcode(colours[i].code);
+		col.setcolourstring(colours[i].cstr);
+		col.setansi(1);
+		col.save();
 	}
-
-	sqlite3_finalize(res); // deallocate statement
-	m_db->freedb(db);
+	*/
 }

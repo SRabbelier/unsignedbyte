@@ -120,20 +120,9 @@ std::string Table::tableQuery() const
 	result.append(m_name);
 	result.append("' and sql='");
 	
-	result.append("CREATE TABLE ");
-	result.append(m_name);
-	result.append("(");
+	result.append(creationQuery(true));
 	
-	if(!m_lookuptable)
-	{
-		result.append(tableID());
-		result.append(" INTEGER PRIMARY KEY AUTOINCREMENT");
-	}
-	
-	for(Fields::const_iterator it = m_fields.begin(); it != m_fields.end(); it++)
-		result.append((*it)->creationString());
-
-	result.append(")';");
+	result.append("';");
 	
 	return result;
 }
@@ -145,24 +134,36 @@ std::string Table::tableQuery() const
 	",grantgroup INTEGER RESTRAINT grantgroup DEFAULT 1"
 	");",
 */
-std::string Table::creationQuery() const
+std::string Table::creationQuery(bool verify) const
 {
 	std::string result;
 	
-	result.append("CREATE TABLE IF NOT EXISTS ");
+	if(verify)
+		result.append("CREATE TABLE ");
+	else
+		result.append("CREATE TABLE IF NOT EXISTS ");
+		
 	result.append(m_name);
 	result.append("(");
 	
 	if(!m_lookuptable)
 	{
 		result.append(tableID());
-		result.append(" INTEGER PRIMARY KEY AUTOINCREMENT");
+		result.append(" INTEGER PRIMARY KEY AUTOINCREMENT, ");
 	}
 	
 	for(Fields::const_iterator it = m_fields.begin(); it != m_fields.end(); it++)
+	{
+		if(it != m_fields.begin())
+			result.append(", ");
+			
 		result.append((*it)->creationString());
+	}
 	
-	result.append(");");
+	if(verify)
+		result.append(")");
+	else
+		result.append(");");
 	
 	return result;
 }

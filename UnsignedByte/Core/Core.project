@@ -97,8 +97,8 @@
       <PreBuild/>
       <PostBuild/>
       <CustomBuild Enabled="no">
-        <CleanCommand></CleanCommand>
-        <BuildCommand></BuildCommand>
+        <CleanCommand/>
+        <BuildCommand/>
       </CustomBuild>
     </Configuration>
   </Settings>

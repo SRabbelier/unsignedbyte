@@ -29,6 +29,7 @@
 #include "StderrLog.h"
 #include "Global.h"
 #include "Tables.h"
+#include "DatabaseMgr.h"
 
 #include "Initializer.h"
 
@@ -55,14 +56,14 @@ int main()
 	dbname.append(".db");
 
 	printf("Opening or creating '%s'...\n", dbname.c_str());
-	Database db(dbname, new StderrLog());
-	Initializer init(&db);
+	DatabaseMgr::Initialize(dbname);
+	Initializer init(DatabaseMgr::Get()->DB());
 	
 	printf("Checking if database exists...\n");
 	bool initialized = false;
 	bool succes;
 	succes = init.DatabasePopulated();
-	if(succes)
+	if(!succes)
 	{
 		printf("Database does not exist...\n");
 		printf("Creating tables...\n");
@@ -76,7 +77,6 @@ int main()
 	{
 		printf("Database version does not match!\n");
 		printf("(Move the existing database if you wish to create a fresh copy)\n");
-		std::cin.get();
 		return 1;
 	}
 
@@ -88,7 +88,6 @@ int main()
 	{
 		printf("Database tables are not up to date!\n");
 		printf("(Move the existing database if you wish to create a fresh copy)\n");
-		std::cin.get();
 		return 1;
 	}
 

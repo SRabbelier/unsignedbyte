@@ -38,7 +38,7 @@ class SqliteMgr
 		static SqliteMgr* Get();
 		static void Free();
 	
-		value_type doInsert(Table* table);
+		void doInsert(Bindable* bindable);
 		void doErase(Bindable* bindable);
 		void doUpdate(Bindable* bindable);
 		void doSelect(Bindable* bindable);
@@ -58,5 +58,6 @@ class SqliteMgr
 	
 		SqliteMgr();
 		~SqliteMgr();
+		void doStatement(sqlite3_stmt* stmt);
 		static SqliteMgr* m_instance;
 };

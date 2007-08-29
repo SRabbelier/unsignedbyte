@@ -43,7 +43,8 @@ DatabaseMgr::DatabaseMgr() :
 m_path(m_staticpath == Global::Get()->EmptyString ? "new.db" : m_staticpath),
 m_db(new Database(m_path, new StderrLog()))
 {
-	
+	if(m_staticpath == Global::Get()->EmptyString)
+		abort();
 }
 
 DatabaseMgr::~DatabaseMgr()

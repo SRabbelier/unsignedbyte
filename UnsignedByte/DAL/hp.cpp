@@ -49,23 +49,12 @@ Accounts::Accounts(Database* db, value_type accountid) :
 m_db(db),
 m_accountid(accountid)
 {
-
+	SqliteMgr::Get()->doSelect(this);
 }
 
 Accounts::~Accounts()
 {
 
-}
-
-value_type Accounts::insert()
-{
-	value_type result = SqliteMgr::Get()->doInsert(getTable());
-	return result;
-}
-
-void Accounts::update()
-{
-	SqliteMgr::Get()->doUpdate(this);
 }
 
 void Accounts::erase()
@@ -77,11 +66,12 @@ void Accounts::erase()
 void Accounts::save()
 {
 	if(m_newentry)
-		insert();
-	else
-		update();
+	{
+		SqliteMgr::Get()->doInsert(this);
+		m_newentry = false;
+	}
 
-	return;
+	SqliteMgr::Get()->doUpdate(this);
 }
 
 void Accounts::bindKeys(sqlite3_stmt* stmt) const
@@ -94,6 +84,13 @@ void Accounts::bindUpdate(sqlite3_stmt* stmt) const
 	sqlite3_bind_text(stmt, 1, m_name.c_str(), m_name.size(), SQLITE_TRANSIENT);
 	sqlite3_bind_text(stmt, 2, m_password.c_str(), m_password.size(), SQLITE_TRANSIENT);
 	sqlite3_bind_int64(stmt, 3, m_accountid);
+}
+
+void Accounts::parseInsert(sqlite3_stmt* stmt)
+{
+	m_name = std::string((const char *)sqlite3_column_text(stmt, 0));
+	m_password = std::string((const char *)sqlite3_column_text(stmt, 1));
+	m_accountid = sqlite3_column_int64(stmt, 2);
 }
 
 void Accounts::parseSelect(sqlite3_stmt* stmt)
@@ -158,23 +155,12 @@ Areas::Areas(Database* db, value_type areaid) :
 m_db(db),
 m_areaid(areaid)
 {
-
+	SqliteMgr::Get()->doSelect(this);
 }
 
 Areas::~Areas()
 {
 
-}
-
-value_type Areas::insert()
-{
-	value_type result = SqliteMgr::Get()->doInsert(getTable());
-	return result;
-}
-
-void Areas::update()
-{
-	SqliteMgr::Get()->doUpdate(this);
 }
 
 void Areas::erase()
@@ -186,11 +172,12 @@ void Areas::erase()
 void Areas::save()
 {
 	if(m_newentry)
-		insert();
-	else
-		update();
+	{
+		SqliteMgr::Get()->doInsert(this);
+		m_newentry = false;
+	}
 
-	return;
+	SqliteMgr::Get()->doUpdate(this);
 }
 
 void Areas::bindKeys(sqlite3_stmt* stmt) const
@@ -205,6 +192,15 @@ void Areas::bindUpdate(sqlite3_stmt* stmt) const
 	sqlite3_bind_int64(stmt, 3, m_height);
 	sqlite3_bind_int64(stmt, 4, m_width);
 	sqlite3_bind_int64(stmt, 5, m_areaid);
+}
+
+void Areas::parseInsert(sqlite3_stmt* stmt)
+{
+	m_name = std::string((const char *)sqlite3_column_text(stmt, 0));
+	m_description = std::string((const char *)sqlite3_column_text(stmt, 1));
+	m_height = sqlite3_column_int64(stmt, 2);
+	m_width = sqlite3_column_int64(stmt, 3);
+	m_areaid = sqlite3_column_int64(stmt, 4);
 }
 
 void Areas::parseSelect(sqlite3_stmt* stmt)
@@ -293,23 +289,12 @@ Branches::Branches(Database* db, value_type branchid) :
 m_db(db),
 m_branchid(branchid)
 {
-
+	SqliteMgr::Get()->doSelect(this);
 }
 
 Branches::~Branches()
 {
 
-}
-
-value_type Branches::insert()
-{
-	value_type result = SqliteMgr::Get()->doInsert(getTable());
-	return result;
-}
-
-void Branches::update()
-{
-	SqliteMgr::Get()->doUpdate(this);
 }
 
 void Branches::erase()
@@ -321,11 +306,12 @@ void Branches::erase()
 void Branches::save()
 {
 	if(m_newentry)
-		insert();
-	else
-		update();
+	{
+		SqliteMgr::Get()->doInsert(this);
+		m_newentry = false;
+	}
 
-	return;
+	SqliteMgr::Get()->doUpdate(this);
 }
 
 void Branches::bindKeys(sqlite3_stmt* stmt) const
@@ -340,6 +326,15 @@ void Branches::bindUpdate(sqlite3_stmt* stmt) const
 	sqlite3_bind_int64(stmt, 3, m_fkStatsPrimary);
 	sqlite3_bind_int64(stmt, 4, m_fkStatsSecondary);
 	sqlite3_bind_int64(stmt, 5, m_branchid);
+}
+
+void Branches::parseInsert(sqlite3_stmt* stmt)
+{
+	m_name = std::string((const char *)sqlite3_column_text(stmt, 0));
+	m_fkTrees = sqlite3_column_int64(stmt, 1);
+	m_fkStatsPrimary = sqlite3_column_int64(stmt, 2);
+	m_fkStatsSecondary = sqlite3_column_int64(stmt, 3);
+	m_branchid = sqlite3_column_int64(stmt, 4);
 }
 
 void Branches::parseSelect(sqlite3_stmt* stmt)
@@ -425,23 +420,12 @@ CharacterAccount::CharacterAccount(Database* db, value_type fkCharacters, value_
 m_db(db),
 m_fkCharacters(fkCharacters),
 m_fkAccounts(fkAccounts){
-
+	SqliteMgr::Get()->doSelect(this);
 }
 
 CharacterAccount::~CharacterAccount()
 {
 
-}
-
-value_type CharacterAccount::insert()
-{
-	value_type result = SqliteMgr::Get()->doInsert(getTable());
-	return result;
-}
-
-void CharacterAccount::update()
-{
-	throw new std::logic_error("CharacterAccount::update(), in a lookup table!");
 }
 
 void CharacterAccount::erase()
@@ -453,11 +437,12 @@ void CharacterAccount::erase()
 void CharacterAccount::save()
 {
 	if(m_newentry)
-		insert();
-	else
-		update();
+	{
+		SqliteMgr::Get()->doInsert(this);
+		m_newentry = false;
+	}
 
-	return;
+	SqliteMgr::Get()->doUpdate(this);
 }
 
 void CharacterAccount::bindKeys(sqlite3_stmt* stmt) const
@@ -469,6 +454,12 @@ void CharacterAccount::bindKeys(sqlite3_stmt* stmt) const
 void CharacterAccount::bindUpdate(sqlite3_stmt* stmt) const
 {
 	throw std::logic_error("CharacterAccount::bindUpdate(), in a lookup table!");
+}
+
+void CharacterAccount::parseInsert(sqlite3_stmt* stmt)
+{
+	m_fkCharacters = sqlite3_column_int64(stmt, 0);
+	m_fkAccounts = sqlite3_column_int64(stmt, 1);
 }
 
 void CharacterAccount::parseSelect(sqlite3_stmt* stmt)
@@ -507,33 +498,24 @@ value_type CharacterAccount::getfkAccounts() const
 // Ctors
 CharacterBranch::CharacterBranch(Database* db) :
 m_db(db),
+m_characterbranchid(),
 m_fkCharacters(0),
-m_fkBranches(0)
+m_fkBranches(0),
+m_xp(0)
 {
 
 }
 
-CharacterBranch::CharacterBranch(Database* db, value_type fkCharacters, value_type fkBranches) :
+CharacterBranch::CharacterBranch(Database* db, value_type characterbranchid) :
 m_db(db),
-m_fkCharacters(fkCharacters),
-m_fkBranches(fkBranches){
-
+m_characterbranchid(characterbranchid)
+{
+	SqliteMgr::Get()->doSelect(this);
 }
 
 CharacterBranch::~CharacterBranch()
 {
 
-}
-
-value_type CharacterBranch::insert()
-{
-	value_type result = SqliteMgr::Get()->doInsert(getTable());
-	return result;
-}
-
-void CharacterBranch::update()
-{
-	throw new std::logic_error("CharacterBranch::update(), in a lookup table!");
 }
 
 void CharacterBranch::erase()
@@ -545,28 +527,41 @@ void CharacterBranch::erase()
 void CharacterBranch::save()
 {
 	if(m_newentry)
-		insert();
-	else
-		update();
+	{
+		SqliteMgr::Get()->doInsert(this);
+		m_newentry = false;
+	}
 
-	return;
+	SqliteMgr::Get()->doUpdate(this);
 }
 
 void CharacterBranch::bindKeys(sqlite3_stmt* stmt) const
 {
-	sqlite3_bind_int64(stmt, 1, m_fkCharacters);
-	sqlite3_bind_int64(stmt, 2, m_fkBranches);
+	sqlite3_bind_int64(stmt, 1, m_characterbranchid);
 }
 
 void CharacterBranch::bindUpdate(sqlite3_stmt* stmt) const
 {
-	throw std::logic_error("CharacterBranch::bindUpdate(), in a lookup table!");
+	sqlite3_bind_int64(stmt, 1, m_fkCharacters);
+	sqlite3_bind_int64(stmt, 2, m_fkBranches);
+	sqlite3_bind_int64(stmt, 3, m_xp);
+	sqlite3_bind_int64(stmt, 4, m_characterbranchid);
+}
+
+void CharacterBranch::parseInsert(sqlite3_stmt* stmt)
+{
+	m_fkCharacters = sqlite3_column_int64(stmt, 0);
+	m_fkBranches = sqlite3_column_int64(stmt, 1);
+	m_xp = sqlite3_column_int64(stmt, 2);
+	m_characterbranchid = sqlite3_column_int64(stmt, 3);
 }
 
 void CharacterBranch::parseSelect(sqlite3_stmt* stmt)
 {
 	m_fkCharacters = sqlite3_column_int64(stmt, 0);
 	m_fkBranches = sqlite3_column_int64(stmt, 1);
+	m_xp = sqlite3_column_int64(stmt, 2);
+	m_characterbranchid = sqlite3_column_int64(stmt, 3);
 }
 
 Table* CharacterBranch::getTable() const
@@ -584,6 +579,29 @@ value_type CharacterBranch::getfkBranches() const
 	return m_fkBranches;
 }
 
+value_type CharacterBranch::getxp() const
+{
+	return m_xp;
+}
+
+void CharacterBranch::setfkCharacters(value_type value)
+{
+	m_fkCharacters = value;
+	m_dirty = true;
+}
+
+void CharacterBranch::setfkBranches(value_type value)
+{
+	m_fkBranches = value;
+	m_dirty = true;
+}
+
+void CharacterBranch::setxp(value_type value)
+{
+	m_xp = value;
+	m_dirty = true;
+}
+
 
 /**
  * End of implementation
@@ -599,33 +617,24 @@ value_type CharacterBranch::getfkBranches() const
 // Ctors
 CharacterCluster::CharacterCluster(Database* db) :
 m_db(db),
+m_characterclusterid(),
 m_fkCharacters(0),
-m_fkClusters(0)
+m_fkClusters(0),
+m_xp(0)
 {
 
 }
 
-CharacterCluster::CharacterCluster(Database* db, value_type fkCharacters, value_type fkClusters) :
+CharacterCluster::CharacterCluster(Database* db, value_type characterclusterid) :
 m_db(db),
-m_fkCharacters(fkCharacters),
-m_fkClusters(fkClusters){
-
+m_characterclusterid(characterclusterid)
+{
+	SqliteMgr::Get()->doSelect(this);
 }
 
 CharacterCluster::~CharacterCluster()
 {
 
-}
-
-value_type CharacterCluster::insert()
-{
-	value_type result = SqliteMgr::Get()->doInsert(getTable());
-	return result;
-}
-
-void CharacterCluster::update()
-{
-	throw new std::logic_error("CharacterCluster::update(), in a lookup table!");
 }
 
 void CharacterCluster::erase()
@@ -637,28 +646,41 @@ void CharacterCluster::erase()
 void CharacterCluster::save()
 {
 	if(m_newentry)
-		insert();
-	else
-		update();
+	{
+		SqliteMgr::Get()->doInsert(this);
+		m_newentry = false;
+	}
 
-	return;
+	SqliteMgr::Get()->doUpdate(this);
 }
 
 void CharacterCluster::bindKeys(sqlite3_stmt* stmt) const
 {
-	sqlite3_bind_int64(stmt, 1, m_fkCharacters);
-	sqlite3_bind_int64(stmt, 2, m_fkClusters);
+	sqlite3_bind_int64(stmt, 1, m_characterclusterid);
 }
 
 void CharacterCluster::bindUpdate(sqlite3_stmt* stmt) const
 {
-	throw std::logic_error("CharacterCluster::bindUpdate(), in a lookup table!");
+	sqlite3_bind_int64(stmt, 1, m_fkCharacters);
+	sqlite3_bind_int64(stmt, 2, m_fkClusters);
+	sqlite3_bind_int64(stmt, 3, m_xp);
+	sqlite3_bind_int64(stmt, 4, m_characterclusterid);
+}
+
+void CharacterCluster::parseInsert(sqlite3_stmt* stmt)
+{
+	m_fkCharacters = sqlite3_column_int64(stmt, 0);
+	m_fkClusters = sqlite3_column_int64(stmt, 1);
+	m_xp = sqlite3_column_int64(stmt, 2);
+	m_characterclusterid = sqlite3_column_int64(stmt, 3);
 }
 
 void CharacterCluster::parseSelect(sqlite3_stmt* stmt)
 {
 	m_fkCharacters = sqlite3_column_int64(stmt, 0);
 	m_fkClusters = sqlite3_column_int64(stmt, 1);
+	m_xp = sqlite3_column_int64(stmt, 2);
+	m_characterclusterid = sqlite3_column_int64(stmt, 3);
 }
 
 Table* CharacterCluster::getTable() const
@@ -674,6 +696,29 @@ value_type CharacterCluster::getfkCharacters() const
 value_type CharacterCluster::getfkClusters() const
 {
 	return m_fkClusters;
+}
+
+value_type CharacterCluster::getxp() const
+{
+	return m_xp;
+}
+
+void CharacterCluster::setfkCharacters(value_type value)
+{
+	m_fkCharacters = value;
+	m_dirty = true;
+}
+
+void CharacterCluster::setfkClusters(value_type value)
+{
+	m_fkClusters = value;
+	m_dirty = true;
+}
+
+void CharacterCluster::setxp(value_type value)
+{
+	m_xp = value;
+	m_dirty = true;
 }
 
 
@@ -704,23 +749,12 @@ Characters::Characters(Database* db, value_type characterid) :
 m_db(db),
 m_characterid(characterid)
 {
-
+	SqliteMgr::Get()->doSelect(this);
 }
 
 Characters::~Characters()
 {
 
-}
-
-value_type Characters::insert()
-{
-	value_type result = SqliteMgr::Get()->doInsert(getTable());
-	return result;
-}
-
-void Characters::update()
-{
-	SqliteMgr::Get()->doUpdate(this);
 }
 
 void Characters::erase()
@@ -732,11 +766,12 @@ void Characters::erase()
 void Characters::save()
 {
 	if(m_newentry)
-		insert();
-	else
-		update();
+	{
+		SqliteMgr::Get()->doInsert(this);
+		m_newentry = false;
+	}
 
-	return;
+	SqliteMgr::Get()->doUpdate(this);
 }
 
 void Characters::bindKeys(sqlite3_stmt* stmt) const
@@ -751,6 +786,15 @@ void Characters::bindUpdate(sqlite3_stmt* stmt) const
 	sqlite3_bind_text(stmt, 3, m_name.c_str(), m_name.size(), SQLITE_TRANSIENT);
 	sqlite3_bind_text(stmt, 4, m_description.c_str(), m_description.size(), SQLITE_TRANSIENT);
 	sqlite3_bind_int64(stmt, 5, m_characterid);
+}
+
+void Characters::parseInsert(sqlite3_stmt* stmt)
+{
+	m_fkRaces = sqlite3_column_int64(stmt, 0);
+	m_fkRooms = sqlite3_column_int64(stmt, 1);
+	m_name = std::string((const char *)sqlite3_column_text(stmt, 2));
+	m_description = std::string((const char *)sqlite3_column_text(stmt, 3));
+	m_characterid = sqlite3_column_int64(stmt, 4);
 }
 
 void Characters::parseSelect(sqlite3_stmt* stmt)
@@ -826,33 +870,24 @@ void Characters::setdescription(const std::string& value)
 // Ctors
 CharacterSkill::CharacterSkill(Database* db) :
 m_db(db),
+m_characterskillid(),
 m_fkCharacters(0),
-m_fkBranches(0)
+m_fkBranches(0),
+m_xp(0)
 {
 
 }
 
-CharacterSkill::CharacterSkill(Database* db, value_type fkCharacters, value_type fkBranches) :
+CharacterSkill::CharacterSkill(Database* db, value_type characterskillid) :
 m_db(db),
-m_fkCharacters(fkCharacters),
-m_fkBranches(fkBranches){
-
+m_characterskillid(characterskillid)
+{
+	SqliteMgr::Get()->doSelect(this);
 }
 
 CharacterSkill::~CharacterSkill()
 {
 
-}
-
-value_type CharacterSkill::insert()
-{
-	value_type result = SqliteMgr::Get()->doInsert(getTable());
-	return result;
-}
-
-void CharacterSkill::update()
-{
-	throw new std::logic_error("CharacterSkill::update(), in a lookup table!");
 }
 
 void CharacterSkill::erase()
@@ -864,28 +899,41 @@ void CharacterSkill::erase()
 void CharacterSkill::save()
 {
 	if(m_newentry)
-		insert();
-	else
-		update();
+	{
+		SqliteMgr::Get()->doInsert(this);
+		m_newentry = false;
+	}
 
-	return;
+	SqliteMgr::Get()->doUpdate(this);
 }
 
 void CharacterSkill::bindKeys(sqlite3_stmt* stmt) const
 {
-	sqlite3_bind_int64(stmt, 1, m_fkCharacters);
-	sqlite3_bind_int64(stmt, 2, m_fkBranches);
+	sqlite3_bind_int64(stmt, 1, m_characterskillid);
 }
 
 void CharacterSkill::bindUpdate(sqlite3_stmt* stmt) const
 {
-	throw std::logic_error("CharacterSkill::bindUpdate(), in a lookup table!");
+	sqlite3_bind_int64(stmt, 1, m_fkCharacters);
+	sqlite3_bind_int64(stmt, 2, m_fkBranches);
+	sqlite3_bind_int64(stmt, 3, m_xp);
+	sqlite3_bind_int64(stmt, 4, m_characterskillid);
+}
+
+void CharacterSkill::parseInsert(sqlite3_stmt* stmt)
+{
+	m_fkCharacters = sqlite3_column_int64(stmt, 0);
+	m_fkBranches = sqlite3_column_int64(stmt, 1);
+	m_xp = sqlite3_column_int64(stmt, 2);
+	m_characterskillid = sqlite3_column_int64(stmt, 3);
 }
 
 void CharacterSkill::parseSelect(sqlite3_stmt* stmt)
 {
 	m_fkCharacters = sqlite3_column_int64(stmt, 0);
 	m_fkBranches = sqlite3_column_int64(stmt, 1);
+	m_xp = sqlite3_column_int64(stmt, 2);
+	m_characterskillid = sqlite3_column_int64(stmt, 3);
 }
 
 Table* CharacterSkill::getTable() const
@@ -903,6 +951,29 @@ value_type CharacterSkill::getfkBranches() const
 	return m_fkBranches;
 }
 
+value_type CharacterSkill::getxp() const
+{
+	return m_xp;
+}
+
+void CharacterSkill::setfkCharacters(value_type value)
+{
+	m_fkCharacters = value;
+	m_dirty = true;
+}
+
+void CharacterSkill::setfkBranches(value_type value)
+{
+	m_fkBranches = value;
+	m_dirty = true;
+}
+
+void CharacterSkill::setxp(value_type value)
+{
+	m_xp = value;
+	m_dirty = true;
+}
+
 
 /**
  * End of implementation
@@ -918,33 +989,25 @@ value_type CharacterSkill::getfkBranches() const
 // Ctors
 CharacterStat::CharacterStat(Database* db) :
 m_db(db),
+m_characterstatid(),
 m_fkCharacters(0),
-m_fkStats(0)
+m_fkStats(0),
+m_current(0),
+m_potential(0)
 {
 
 }
 
-CharacterStat::CharacterStat(Database* db, value_type fkCharacters, value_type fkStats) :
+CharacterStat::CharacterStat(Database* db, value_type characterstatid) :
 m_db(db),
-m_fkCharacters(fkCharacters),
-m_fkStats(fkStats){
-
+m_characterstatid(characterstatid)
+{
+	SqliteMgr::Get()->doSelect(this);
 }
 
 CharacterStat::~CharacterStat()
 {
 
-}
-
-value_type CharacterStat::insert()
-{
-	value_type result = SqliteMgr::Get()->doInsert(getTable());
-	return result;
-}
-
-void CharacterStat::update()
-{
-	throw new std::logic_error("CharacterStat::update(), in a lookup table!");
 }
 
 void CharacterStat::erase()
@@ -956,28 +1019,44 @@ void CharacterStat::erase()
 void CharacterStat::save()
 {
 	if(m_newentry)
-		insert();
-	else
-		update();
+	{
+		SqliteMgr::Get()->doInsert(this);
+		m_newentry = false;
+	}
 
-	return;
+	SqliteMgr::Get()->doUpdate(this);
 }
 
 void CharacterStat::bindKeys(sqlite3_stmt* stmt) const
 {
-	sqlite3_bind_int64(stmt, 1, m_fkCharacters);
-	sqlite3_bind_int64(stmt, 2, m_fkStats);
+	sqlite3_bind_int64(stmt, 1, m_characterstatid);
 }
 
 void CharacterStat::bindUpdate(sqlite3_stmt* stmt) const
 {
-	throw std::logic_error("CharacterStat::bindUpdate(), in a lookup table!");
+	sqlite3_bind_int64(stmt, 1, m_fkCharacters);
+	sqlite3_bind_int64(stmt, 2, m_fkStats);
+	sqlite3_bind_int64(stmt, 3, m_current);
+	sqlite3_bind_int64(stmt, 4, m_potential);
+	sqlite3_bind_int64(stmt, 5, m_characterstatid);
+}
+
+void CharacterStat::parseInsert(sqlite3_stmt* stmt)
+{
+	m_fkCharacters = sqlite3_column_int64(stmt, 0);
+	m_fkStats = sqlite3_column_int64(stmt, 1);
+	m_current = sqlite3_column_int64(stmt, 2);
+	m_potential = sqlite3_column_int64(stmt, 3);
+	m_characterstatid = sqlite3_column_int64(stmt, 4);
 }
 
 void CharacterStat::parseSelect(sqlite3_stmt* stmt)
 {
 	m_fkCharacters = sqlite3_column_int64(stmt, 0);
 	m_fkStats = sqlite3_column_int64(stmt, 1);
+	m_current = sqlite3_column_int64(stmt, 2);
+	m_potential = sqlite3_column_int64(stmt, 3);
+	m_characterstatid = sqlite3_column_int64(stmt, 4);
 }
 
 Table* CharacterStat::getTable() const
@@ -995,6 +1074,40 @@ value_type CharacterStat::getfkStats() const
 	return m_fkStats;
 }
 
+value_type CharacterStat::getcurrent() const
+{
+	return m_current;
+}
+
+value_type CharacterStat::getpotential() const
+{
+	return m_potential;
+}
+
+void CharacterStat::setfkCharacters(value_type value)
+{
+	m_fkCharacters = value;
+	m_dirty = true;
+}
+
+void CharacterStat::setfkStats(value_type value)
+{
+	m_fkStats = value;
+	m_dirty = true;
+}
+
+void CharacterStat::setcurrent(value_type value)
+{
+	m_current = value;
+	m_dirty = true;
+}
+
+void CharacterStat::setpotential(value_type value)
+{
+	m_potential = value;
+	m_dirty = true;
+}
+
 
 /**
  * End of implementation
@@ -1010,33 +1123,24 @@ value_type CharacterStat::getfkStats() const
 // Ctors
 CharacterTree::CharacterTree(Database* db) :
 m_db(db),
+m_charactertreeid(),
 m_fkCharacters(0),
-m_fkTrees(0)
+m_fkTrees(0),
+m_xp(0)
 {
 
 }
 
-CharacterTree::CharacterTree(Database* db, value_type fkCharacters, value_type fkTrees) :
+CharacterTree::CharacterTree(Database* db, value_type charactertreeid) :
 m_db(db),
-m_fkCharacters(fkCharacters),
-m_fkTrees(fkTrees){
-
+m_charactertreeid(charactertreeid)
+{
+	SqliteMgr::Get()->doSelect(this);
 }
 
 CharacterTree::~CharacterTree()
 {
 
-}
-
-value_type CharacterTree::insert()
-{
-	value_type result = SqliteMgr::Get()->doInsert(getTable());
-	return result;
-}
-
-void CharacterTree::update()
-{
-	throw new std::logic_error("CharacterTree::update(), in a lookup table!");
 }
 
 void CharacterTree::erase()
@@ -1048,28 +1152,41 @@ void CharacterTree::erase()
 void CharacterTree::save()
 {
 	if(m_newentry)
-		insert();
-	else
-		update();
+	{
+		SqliteMgr::Get()->doInsert(this);
+		m_newentry = false;
+	}
 
-	return;
+	SqliteMgr::Get()->doUpdate(this);
 }
 
 void CharacterTree::bindKeys(sqlite3_stmt* stmt) const
 {
-	sqlite3_bind_int64(stmt, 1, m_fkCharacters);
-	sqlite3_bind_int64(stmt, 2, m_fkTrees);
+	sqlite3_bind_int64(stmt, 1, m_charactertreeid);
 }
 
 void CharacterTree::bindUpdate(sqlite3_stmt* stmt) const
 {
-	throw std::logic_error("CharacterTree::bindUpdate(), in a lookup table!");
+	sqlite3_bind_int64(stmt, 1, m_fkCharacters);
+	sqlite3_bind_int64(stmt, 2, m_fkTrees);
+	sqlite3_bind_int64(stmt, 3, m_xp);
+	sqlite3_bind_int64(stmt, 4, m_charactertreeid);
+}
+
+void CharacterTree::parseInsert(sqlite3_stmt* stmt)
+{
+	m_fkCharacters = sqlite3_column_int64(stmt, 0);
+	m_fkTrees = sqlite3_column_int64(stmt, 1);
+	m_xp = sqlite3_column_int64(stmt, 2);
+	m_charactertreeid = sqlite3_column_int64(stmt, 3);
 }
 
 void CharacterTree::parseSelect(sqlite3_stmt* stmt)
 {
 	m_fkCharacters = sqlite3_column_int64(stmt, 0);
 	m_fkTrees = sqlite3_column_int64(stmt, 1);
+	m_xp = sqlite3_column_int64(stmt, 2);
+	m_charactertreeid = sqlite3_column_int64(stmt, 3);
 }
 
 Table* CharacterTree::getTable() const
@@ -1085,6 +1202,29 @@ value_type CharacterTree::getfkCharacters() const
 value_type CharacterTree::getfkTrees() const
 {
 	return m_fkTrees;
+}
+
+value_type CharacterTree::getxp() const
+{
+	return m_xp;
+}
+
+void CharacterTree::setfkCharacters(value_type value)
+{
+	m_fkCharacters = value;
+	m_dirty = true;
+}
+
+void CharacterTree::setfkTrees(value_type value)
+{
+	m_fkTrees = value;
+	m_dirty = true;
+}
+
+void CharacterTree::setxp(value_type value)
+{
+	m_xp = value;
+	m_dirty = true;
 }
 
 
@@ -1112,23 +1252,12 @@ Clusters::Clusters(Database* db, value_type clusterid) :
 m_db(db),
 m_clusterid(clusterid)
 {
-
+	SqliteMgr::Get()->doSelect(this);
 }
 
 Clusters::~Clusters()
 {
 
-}
-
-value_type Clusters::insert()
-{
-	value_type result = SqliteMgr::Get()->doInsert(getTable());
-	return result;
-}
-
-void Clusters::update()
-{
-	SqliteMgr::Get()->doUpdate(this);
 }
 
 void Clusters::erase()
@@ -1140,11 +1269,12 @@ void Clusters::erase()
 void Clusters::save()
 {
 	if(m_newentry)
-		insert();
-	else
-		update();
+	{
+		SqliteMgr::Get()->doInsert(this);
+		m_newentry = false;
+	}
 
-	return;
+	SqliteMgr::Get()->doUpdate(this);
 }
 
 void Clusters::bindKeys(sqlite3_stmt* stmt) const
@@ -1156,6 +1286,12 @@ void Clusters::bindUpdate(sqlite3_stmt* stmt) const
 {
 	sqlite3_bind_text(stmt, 1, m_name.c_str(), m_name.size(), SQLITE_TRANSIENT);
 	sqlite3_bind_int64(stmt, 2, m_clusterid);
+}
+
+void Clusters::parseInsert(sqlite3_stmt* stmt)
+{
+	m_name = std::string((const char *)sqlite3_column_text(stmt, 0));
+	m_clusterid = sqlite3_column_int64(stmt, 1);
 }
 
 void Clusters::parseSelect(sqlite3_stmt* stmt)
@@ -1208,23 +1344,12 @@ Colours::Colours(Database* db, value_type colourid) :
 m_db(db),
 m_colourid(colourid)
 {
-
+	SqliteMgr::Get()->doSelect(this);
 }
 
 Colours::~Colours()
 {
 
-}
-
-value_type Colours::insert()
-{
-	value_type result = SqliteMgr::Get()->doInsert(getTable());
-	return result;
-}
-
-void Colours::update()
-{
-	SqliteMgr::Get()->doUpdate(this);
 }
 
 void Colours::erase()
@@ -1236,11 +1361,12 @@ void Colours::erase()
 void Colours::save()
 {
 	if(m_newentry)
-		insert();
-	else
-		update();
+	{
+		SqliteMgr::Get()->doInsert(this);
+		m_newentry = false;
+	}
 
-	return;
+	SqliteMgr::Get()->doUpdate(this);
 }
 
 void Colours::bindKeys(sqlite3_stmt* stmt) const
@@ -1255,6 +1381,15 @@ void Colours::bindUpdate(sqlite3_stmt* stmt) const
 	sqlite3_bind_text(stmt, 3, m_colourstring.c_str(), m_colourstring.size(), SQLITE_TRANSIENT);
 	sqlite3_bind_int64(stmt, 4, m_ansi);
 	sqlite3_bind_int64(stmt, 5, m_colourid);
+}
+
+void Colours::parseInsert(sqlite3_stmt* stmt)
+{
+	m_name = std::string((const char *)sqlite3_column_text(stmt, 0));
+	m_code = std::string((const char *)sqlite3_column_text(stmt, 1));
+	m_colourstring = std::string((const char *)sqlite3_column_text(stmt, 2));
+	m_ansi = sqlite3_column_int64(stmt, 3);
+	m_colourid = sqlite3_column_int64(stmt, 4);
 }
 
 void Colours::parseSelect(sqlite3_stmt* stmt)
@@ -1344,23 +1479,12 @@ Commands::Commands(Database* db, value_type commandid) :
 m_db(db),
 m_commandid(commandid)
 {
-
+	SqliteMgr::Get()->doSelect(this);
 }
 
 Commands::~Commands()
 {
 
-}
-
-value_type Commands::insert()
-{
-	value_type result = SqliteMgr::Get()->doInsert(getTable());
-	return result;
-}
-
-void Commands::update()
-{
-	SqliteMgr::Get()->doUpdate(this);
 }
 
 void Commands::erase()
@@ -1372,11 +1496,12 @@ void Commands::erase()
 void Commands::save()
 {
 	if(m_newentry)
-		insert();
-	else
-		update();
+	{
+		SqliteMgr::Get()->doInsert(this);
+		m_newentry = false;
+	}
 
-	return;
+	SqliteMgr::Get()->doUpdate(this);
 }
 
 void Commands::bindKeys(sqlite3_stmt* stmt) const
@@ -1392,6 +1517,16 @@ void Commands::bindUpdate(sqlite3_stmt* stmt) const
 	sqlite3_bind_text(stmt, 4, m_force.c_str(), m_force.size(), SQLITE_TRANSIENT);
 	sqlite3_bind_int64(stmt, 5, m_lowforce);
 	sqlite3_bind_int64(stmt, 6, m_commandid);
+}
+
+void Commands::parseInsert(sqlite3_stmt* stmt)
+{
+	m_name = std::string((const char *)sqlite3_column_text(stmt, 0));
+	m_grantgroup = std::string((const char *)sqlite3_column_text(stmt, 1));
+	m_highforce = std::string((const char *)sqlite3_column_text(stmt, 2));
+	m_force = std::string((const char *)sqlite3_column_text(stmt, 3));
+	m_lowforce = sqlite3_column_int64(stmt, 4);
+	m_commandid = sqlite3_column_int64(stmt, 5);
 }
 
 void Commands::parseSelect(sqlite3_stmt* stmt)
@@ -1489,23 +1624,12 @@ Exits::Exits(Database* db, value_type exitid) :
 m_db(db),
 m_exitid(exitid)
 {
-
+	SqliteMgr::Get()->doSelect(this);
 }
 
 Exits::~Exits()
 {
 
-}
-
-value_type Exits::insert()
-{
-	value_type result = SqliteMgr::Get()->doInsert(getTable());
-	return result;
-}
-
-void Exits::update()
-{
-	SqliteMgr::Get()->doUpdate(this);
 }
 
 void Exits::erase()
@@ -1517,11 +1641,12 @@ void Exits::erase()
 void Exits::save()
 {
 	if(m_newentry)
-		insert();
-	else
-		update();
+	{
+		SqliteMgr::Get()->doInsert(this);
+		m_newentry = false;
+	}
 
-	return;
+	SqliteMgr::Get()->doUpdate(this);
 }
 
 void Exits::bindKeys(sqlite3_stmt* stmt) const
@@ -1533,6 +1658,12 @@ void Exits::bindUpdate(sqlite3_stmt* stmt) const
 {
 	sqlite3_bind_int64(stmt, 1, m_dir);
 	sqlite3_bind_int64(stmt, 2, m_exitid);
+}
+
+void Exits::parseInsert(sqlite3_stmt* stmt)
+{
+	m_dir = sqlite3_column_int64(stmt, 0);
+	m_exitid = sqlite3_column_int64(stmt, 1);
 }
 
 void Exits::parseSelect(sqlite3_stmt* stmt)
@@ -1584,23 +1715,12 @@ GrantGroups::GrantGroups(Database* db, value_type grantgroupid) :
 m_db(db),
 m_grantgroupid(grantgroupid)
 {
-
+	SqliteMgr::Get()->doSelect(this);
 }
 
 GrantGroups::~GrantGroups()
 {
 
-}
-
-value_type GrantGroups::insert()
-{
-	value_type result = SqliteMgr::Get()->doInsert(getTable());
-	return result;
-}
-
-void GrantGroups::update()
-{
-	SqliteMgr::Get()->doUpdate(this);
 }
 
 void GrantGroups::erase()
@@ -1612,11 +1732,12 @@ void GrantGroups::erase()
 void GrantGroups::save()
 {
 	if(m_newentry)
-		insert();
-	else
-		update();
+	{
+		SqliteMgr::Get()->doInsert(this);
+		m_newentry = false;
+	}
 
-	return;
+	SqliteMgr::Get()->doUpdate(this);
 }
 
 void GrantGroups::bindKeys(sqlite3_stmt* stmt) const
@@ -1630,6 +1751,14 @@ void GrantGroups::bindUpdate(sqlite3_stmt* stmt) const
 	sqlite3_bind_int64(stmt, 2, m_defaultgrant);
 	sqlite3_bind_int64(stmt, 3, m_implies);
 	sqlite3_bind_int64(stmt, 4, m_grantgroupid);
+}
+
+void GrantGroups::parseInsert(sqlite3_stmt* stmt)
+{
+	m_name = std::string((const char *)sqlite3_column_text(stmt, 0));
+	m_defaultgrant = sqlite3_column_int64(stmt, 1);
+	m_implies = sqlite3_column_int64(stmt, 2);
+	m_grantgroupid = sqlite3_column_int64(stmt, 3);
 }
 
 void GrantGroups::parseSelect(sqlite3_stmt* stmt)
@@ -1706,23 +1835,12 @@ Permissions::Permissions(Database* db, value_type permissionid) :
 m_db(db),
 m_permissionid(permissionid)
 {
-
+	SqliteMgr::Get()->doSelect(this);
 }
 
 Permissions::~Permissions()
 {
 
-}
-
-value_type Permissions::insert()
-{
-	value_type result = SqliteMgr::Get()->doInsert(getTable());
-	return result;
-}
-
-void Permissions::update()
-{
-	SqliteMgr::Get()->doUpdate(this);
 }
 
 void Permissions::erase()
@@ -1734,11 +1852,12 @@ void Permissions::erase()
 void Permissions::save()
 {
 	if(m_newentry)
-		insert();
-	else
-		update();
+	{
+		SqliteMgr::Get()->doInsert(this);
+		m_newentry = false;
+	}
 
-	return;
+	SqliteMgr::Get()->doUpdate(this);
 }
 
 void Permissions::bindKeys(sqlite3_stmt* stmt) const
@@ -1753,6 +1872,15 @@ void Permissions::bindUpdate(sqlite3_stmt* stmt) const
 	sqlite3_bind_int64(stmt, 3, m_fkGrantGroups);
 	sqlite3_bind_int64(stmt, 4, m_grant);
 	sqlite3_bind_int64(stmt, 5, m_permissionid);
+}
+
+void Permissions::parseInsert(sqlite3_stmt* stmt)
+{
+	m_fkAccounts = sqlite3_column_int64(stmt, 0);
+	m_fkCommands = sqlite3_column_int64(stmt, 1);
+	m_fkGrantGroups = sqlite3_column_int64(stmt, 2);
+	m_grant = sqlite3_column_int64(stmt, 3);
+	m_permissionid = sqlite3_column_int64(stmt, 4);
 }
 
 void Permissions::parseSelect(sqlite3_stmt* stmt)
@@ -1838,23 +1966,12 @@ Races::Races(Database* db, value_type raceid) :
 m_db(db),
 m_raceid(raceid)
 {
-
+	SqliteMgr::Get()->doSelect(this);
 }
 
 Races::~Races()
 {
 
-}
-
-value_type Races::insert()
-{
-	value_type result = SqliteMgr::Get()->doInsert(getTable());
-	return result;
-}
-
-void Races::update()
-{
-	SqliteMgr::Get()->doUpdate(this);
 }
 
 void Races::erase()
@@ -1866,11 +1983,12 @@ void Races::erase()
 void Races::save()
 {
 	if(m_newentry)
-		insert();
-	else
-		update();
+	{
+		SqliteMgr::Get()->doInsert(this);
+		m_newentry = false;
+	}
 
-	return;
+	SqliteMgr::Get()->doUpdate(this);
 }
 
 void Races::bindKeys(sqlite3_stmt* stmt) const
@@ -1882,6 +2000,12 @@ void Races::bindUpdate(sqlite3_stmt* stmt) const
 {
 	sqlite3_bind_text(stmt, 1, m_name.c_str(), m_name.size(), SQLITE_TRANSIENT);
 	sqlite3_bind_int64(stmt, 2, m_raceid);
+}
+
+void Races::parseInsert(sqlite3_stmt* stmt)
+{
+	m_name = std::string((const char *)sqlite3_column_text(stmt, 0));
+	m_raceid = sqlite3_column_int64(stmt, 1);
 }
 
 void Races::parseSelect(sqlite3_stmt* stmt)
@@ -1937,23 +2061,12 @@ Rooms::Rooms(Database* db, value_type roomid) :
 m_db(db),
 m_roomid(roomid)
 {
-
+	SqliteMgr::Get()->doSelect(this);
 }
 
 Rooms::~Rooms()
 {
 
-}
-
-value_type Rooms::insert()
-{
-	value_type result = SqliteMgr::Get()->doInsert(getTable());
-	return result;
-}
-
-void Rooms::update()
-{
-	SqliteMgr::Get()->doUpdate(this);
 }
 
 void Rooms::erase()
@@ -1965,11 +2078,12 @@ void Rooms::erase()
 void Rooms::save()
 {
 	if(m_newentry)
-		insert();
-	else
-		update();
+	{
+		SqliteMgr::Get()->doInsert(this);
+		m_newentry = false;
+	}
 
-	return;
+	SqliteMgr::Get()->doUpdate(this);
 }
 
 void Rooms::bindKeys(sqlite3_stmt* stmt) const
@@ -1987,6 +2101,18 @@ void Rooms::bindUpdate(sqlite3_stmt* stmt) const
 	sqlite3_bind_int64(stmt, 6, m_length);
 	sqlite3_bind_int64(stmt, 7, m_height);
 	sqlite3_bind_int64(stmt, 8, m_roomid);
+}
+
+void Rooms::parseInsert(sqlite3_stmt* stmt)
+{
+	m_name = std::string((const char *)sqlite3_column_text(stmt, 0));
+	m_description = std::string((const char *)sqlite3_column_text(stmt, 1));
+	m_fkAreas = sqlite3_column_int64(stmt, 2);
+	m_fkSectors = sqlite3_column_int64(stmt, 3);
+	m_width = sqlite3_column_int64(stmt, 4);
+	m_length = sqlite3_column_int64(stmt, 5);
+	m_height = sqlite3_column_int64(stmt, 6);
+	m_roomid = sqlite3_column_int64(stmt, 7);
 }
 
 void Rooms::parseSelect(sqlite3_stmt* stmt)
@@ -2111,23 +2237,12 @@ Sectors::Sectors(Database* db, value_type sectorid) :
 m_db(db),
 m_sectorid(sectorid)
 {
-
+	SqliteMgr::Get()->doSelect(this);
 }
 
 Sectors::~Sectors()
 {
 
-}
-
-value_type Sectors::insert()
-{
-	value_type result = SqliteMgr::Get()->doInsert(getTable());
-	return result;
-}
-
-void Sectors::update()
-{
-	SqliteMgr::Get()->doUpdate(this);
 }
 
 void Sectors::erase()
@@ -2139,11 +2254,12 @@ void Sectors::erase()
 void Sectors::save()
 {
 	if(m_newentry)
-		insert();
-	else
-		update();
+	{
+		SqliteMgr::Get()->doInsert(this);
+		m_newentry = false;
+	}
 
-	return;
+	SqliteMgr::Get()->doUpdate(this);
 }
 
 void Sectors::bindKeys(sqlite3_stmt* stmt) const
@@ -2158,6 +2274,15 @@ void Sectors::bindUpdate(sqlite3_stmt* stmt) const
 	sqlite3_bind_int64(stmt, 3, m_movecost);
 	sqlite3_bind_int64(stmt, 4, m_water);
 	sqlite3_bind_int64(stmt, 5, m_sectorid);
+}
+
+void Sectors::parseInsert(sqlite3_stmt* stmt)
+{
+	m_name = std::string((const char *)sqlite3_column_text(stmt, 0));
+	m_symbol = std::string((const char *)sqlite3_column_text(stmt, 1));
+	m_movecost = sqlite3_column_int64(stmt, 2);
+	m_water = sqlite3_column_int64(stmt, 3);
+	m_sectorid = sqlite3_column_int64(stmt, 4);
 }
 
 void Sectors::parseSelect(sqlite3_stmt* stmt)
@@ -2244,23 +2369,12 @@ Skills::Skills(Database* db, value_type skillid) :
 m_db(db),
 m_skillid(skillid)
 {
-
+	SqliteMgr::Get()->doSelect(this);
 }
 
 Skills::~Skills()
 {
 
-}
-
-value_type Skills::insert()
-{
-	value_type result = SqliteMgr::Get()->doInsert(getTable());
-	return result;
-}
-
-void Skills::update()
-{
-	SqliteMgr::Get()->doUpdate(this);
 }
 
 void Skills::erase()
@@ -2272,11 +2386,12 @@ void Skills::erase()
 void Skills::save()
 {
 	if(m_newentry)
-		insert();
-	else
-		update();
+	{
+		SqliteMgr::Get()->doInsert(this);
+		m_newentry = false;
+	}
 
-	return;
+	SqliteMgr::Get()->doUpdate(this);
 }
 
 void Skills::bindKeys(sqlite3_stmt* stmt) const
@@ -2289,6 +2404,13 @@ void Skills::bindUpdate(sqlite3_stmt* stmt) const
 	sqlite3_bind_text(stmt, 1, m_name.c_str(), m_name.size(), SQLITE_TRANSIENT);
 	sqlite3_bind_int64(stmt, 2, m_fkBranches);
 	sqlite3_bind_int64(stmt, 3, m_skillid);
+}
+
+void Skills::parseInsert(sqlite3_stmt* stmt)
+{
+	m_name = std::string((const char *)sqlite3_column_text(stmt, 0));
+	m_fkBranches = sqlite3_column_int64(stmt, 1);
+	m_skillid = sqlite3_column_int64(stmt, 2);
 }
 
 void Skills::parseSelect(sqlite3_stmt* stmt)
@@ -2351,23 +2473,12 @@ Stats::Stats(Database* db, value_type statid) :
 m_db(db),
 m_statid(statid)
 {
-
+	SqliteMgr::Get()->doSelect(this);
 }
 
 Stats::~Stats()
 {
 
-}
-
-value_type Stats::insert()
-{
-	value_type result = SqliteMgr::Get()->doInsert(getTable());
-	return result;
-}
-
-void Stats::update()
-{
-	SqliteMgr::Get()->doUpdate(this);
 }
 
 void Stats::erase()
@@ -2379,11 +2490,12 @@ void Stats::erase()
 void Stats::save()
 {
 	if(m_newentry)
-		insert();
-	else
-		update();
+	{
+		SqliteMgr::Get()->doInsert(this);
+		m_newentry = false;
+	}
 
-	return;
+	SqliteMgr::Get()->doUpdate(this);
 }
 
 void Stats::bindKeys(sqlite3_stmt* stmt) const
@@ -2396,6 +2508,13 @@ void Stats::bindUpdate(sqlite3_stmt* stmt) const
 	sqlite3_bind_text(stmt, 1, m_name.c_str(), m_name.size(), SQLITE_TRANSIENT);
 	sqlite3_bind_text(stmt, 2, m_shortname.c_str(), m_shortname.size(), SQLITE_TRANSIENT);
 	sqlite3_bind_int64(stmt, 3, m_statid);
+}
+
+void Stats::parseInsert(sqlite3_stmt* stmt)
+{
+	m_name = std::string((const char *)sqlite3_column_text(stmt, 0));
+	m_shortname = std::string((const char *)sqlite3_column_text(stmt, 1));
+	m_statid = sqlite3_column_int64(stmt, 2);
 }
 
 void Stats::parseSelect(sqlite3_stmt* stmt)
@@ -2460,23 +2579,12 @@ Trees::Trees(Database* db, value_type treeid) :
 m_db(db),
 m_treeid(treeid)
 {
-
+	SqliteMgr::Get()->doSelect(this);
 }
 
 Trees::~Trees()
 {
 
-}
-
-value_type Trees::insert()
-{
-	value_type result = SqliteMgr::Get()->doInsert(getTable());
-	return result;
-}
-
-void Trees::update()
-{
-	SqliteMgr::Get()->doUpdate(this);
 }
 
 void Trees::erase()
@@ -2488,11 +2596,12 @@ void Trees::erase()
 void Trees::save()
 {
 	if(m_newentry)
-		insert();
-	else
-		update();
+	{
+		SqliteMgr::Get()->doInsert(this);
+		m_newentry = false;
+	}
 
-	return;
+	SqliteMgr::Get()->doUpdate(this);
 }
 
 void Trees::bindKeys(sqlite3_stmt* stmt) const
@@ -2507,6 +2616,15 @@ void Trees::bindUpdate(sqlite3_stmt* stmt) const
 	sqlite3_bind_int64(stmt, 3, m_fkStatsPrimary);
 	sqlite3_bind_int64(stmt, 4, m_fkStatsSecondary);
 	sqlite3_bind_int64(stmt, 5, m_treeid);
+}
+
+void Trees::parseInsert(sqlite3_stmt* stmt)
+{
+	m_name = std::string((const char *)sqlite3_column_text(stmt, 0));
+	m_fkClusters = sqlite3_column_int64(stmt, 1);
+	m_fkStatsPrimary = sqlite3_column_int64(stmt, 2);
+	m_fkStatsSecondary = sqlite3_column_int64(stmt, 3);
+	m_treeid = sqlite3_column_int64(stmt, 4);
 }
 
 void Trees::parseSelect(sqlite3_stmt* stmt)
@@ -2595,23 +2713,12 @@ Version::Version(Database* db, value_type versionid) :
 m_db(db),
 m_versionid(versionid)
 {
-
+	SqliteMgr::Get()->doSelect(this);
 }
 
 Version::~Version()
 {
 
-}
-
-value_type Version::insert()
-{
-	value_type result = SqliteMgr::Get()->doInsert(getTable());
-	return result;
-}
-
-void Version::update()
-{
-	SqliteMgr::Get()->doUpdate(this);
 }
 
 void Version::erase()
@@ -2623,11 +2730,12 @@ void Version::erase()
 void Version::save()
 {
 	if(m_newentry)
-		insert();
-	else
-		update();
+	{
+		SqliteMgr::Get()->doInsert(this);
+		m_newentry = false;
+	}
 
-	return;
+	SqliteMgr::Get()->doUpdate(this);
 }
 
 void Version::bindKeys(sqlite3_stmt* stmt) const
@@ -2642,6 +2750,15 @@ void Version::bindUpdate(sqlite3_stmt* stmt) const
 	sqlite3_bind_int64(stmt, 3, m_minor);
 	sqlite3_bind_int64(stmt, 4, m_micro);
 	sqlite3_bind_int64(stmt, 5, m_versionid);
+}
+
+void Version::parseInsert(sqlite3_stmt* stmt)
+{
+	m_versiontext = std::string((const char *)sqlite3_column_text(stmt, 0));
+	m_major = sqlite3_column_int64(stmt, 1);
+	m_minor = sqlite3_column_int64(stmt, 2);
+	m_micro = sqlite3_column_int64(stmt, 3);
+	m_versionid = sqlite3_column_int64(stmt, 4);
 }
 
 void Version::parseSelect(sqlite3_stmt* stmt)

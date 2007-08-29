@@ -121,7 +121,6 @@
     <File Name="../include/Statements.h"/>
     <File Name="../include/Bindable.h"/>
   </VirtualDirectory>
-  <Dependencies/>
   <Settings Type="Static Library">
     <Configuration Name="Debug" CompilerType="gnu g++" DebuggerType="GNU gdb debugger">
       <General OutputFile="../lib/libubresource.a" IntermediateDirectory="./Debug" Command="" CommandArguments="" WorkingDirectory=""/>
@@ -136,9 +135,10 @@
       <PreBuild/>
       <PostBuild/>
       <CustomBuild Enabled="no">
-        <CleanCommand></CleanCommand>
-        <BuildCommand></BuildCommand>
+        <CleanCommand/>
+        <BuildCommand/>
       </CustomBuild>
     </Configuration>
   </Settings>
+  <Dependencies/>
 </CodeLite_Project>

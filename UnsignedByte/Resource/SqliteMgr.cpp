@@ -61,94 +61,52 @@ void SqliteMgr::Free()
 	}
 }
 
-value_type SqliteMgr::doInsert(Table* table)
+void SqliteMgr::doInsert(Bindable* bindable)
 {
+	Table* table = bindable->getTable();
 	sqlite3_stmt* insert = getInsertStmt(table);
-	int rc = sqlite3_step(insert);
 	
-	switch (rc)
-	{
-	default:
-		throw new std::runtime_error("SqliteMgr::doInsert(), Unknown error code!");
-	case SQLITE_BUSY:
-		throw new std::runtime_error("SqliteMgr::doInsert(), The database is busy.");
-	case SQLITE_ERROR:
-		throw new std::runtime_error(sqlite3_errmsg(m_odb->db));
-	case SQLITE_MISUSE:
-		throw new std::runtime_error("SqliteMgr::doInsert(), Database misuse.");
+	if(table->isLookupTable())
+		bindable->bindKeys(insert);
 		
-	case SQLITE_DONE:
-	case SQLITE_ROW:
-		break;
-	}
+	doStatement(insert);
 	
-	value_type result = sqlite3_last_insert_rowid(m_odb->db);
-	
-	return result;
+	bindable->parseInsert(insert);
 }
 
 void SqliteMgr::doErase(Bindable* bindable)
 {
 	Table* table = bindable->getTable();
-	
 	sqlite3_stmt* erase = getEraseStmt(table);
+	
 	bindable->bindKeys(erase);
-	
-	int rc = sqlite3_step(erase);
-	
-	switch (rc)
-	{
-	default:
-		throw new std::runtime_error("SqliteMgr::doErase(), Unknown error code!");
-	case SQLITE_BUSY:
-		throw new std::runtime_error("SqliteMgr::doErase(), The database is busy.");
-	case SQLITE_ERROR:
-		throw new std::runtime_error(sqlite3_errmsg(m_odb->db));
-	case SQLITE_MISUSE:
-		throw new std::runtime_error("SqliteMgr::doErase(), Database misuse.");
-		
-	case SQLITE_DONE:
-	case SQLITE_ROW:
-		break;
-	}
+	doStatement(erase);
 	
 }
 
 void SqliteMgr::doUpdate(Bindable* bindable)
 {
 	Table* table = bindable->getTable();
-	
 	sqlite3_stmt* update = getUpdateStmt(table);
+	
 	bindable->bindUpdate(update);
-	
-	int rc = sqlite3_step(update);
-	
-	switch (rc)
-	{
-	default:
-		throw new std::runtime_error("SqliteMgr::doUpdate(), Unknown error code!");
-	case SQLITE_BUSY:
-		throw new std::runtime_error("SqliteMgr::doUpdate(), The database is busy.");
-	case SQLITE_ERROR:
-		throw new std::runtime_error(sqlite3_errmsg(m_odb->db));
-	case SQLITE_MISUSE:
-		throw new std::runtime_error("SqliteMgr::doUpdate(), Database misuse.");
-		
-	case SQLITE_DONE:
-	case SQLITE_ROW:
-		break;
-	}
+	doStatement(update);
 	
 }
 
 void SqliteMgr::doSelect(Bindable* bindable)
 {
 	Table* table = bindable->getTable();
+	sqlite3_stmt* select = getSelectStmt(table);
 	
-	sqlite3_stmt* update = getSelectStmt(table);
-	bindable->bindKeys(update);
-	
-	int rc = sqlite3_step(update);
+	bindable->bindKeys(select);
+	doStatement(select);
+	bindable->parseSelect(select);
+}
+
+void SqliteMgr::doStatement(sqlite3_stmt* stmt)
+{
+	int rc = sqlite3_step(stmt);
 	
 	switch (rc)
 	{
@@ -165,8 +123,6 @@ void SqliteMgr::doSelect(Bindable* bindable)
 	case SQLITE_ROW:
 		break;
 	}
-	
-	bindable->parseSelect(update);
 }
 
 Statements* SqliteMgr::getStatements(Table* table)
@@ -336,7 +292,6 @@ sqlite3_stmt* SqliteMgr::getSelectStmt(Table* table)
 		sql.append((*it)->getName());
 	}
 	 
-	
 	sql.append(" from ");
 	sql.append(table->tableName());
 		sql.append(" where ");
@@ -357,14 +312,16 @@ sqlite3_stmt* SqliteMgr::getSelectStmt(Table* table)
 			sql.append("=?");
 		}
 	}
+	
+	Global::Get()->logf("SQL is: %s\n", sql.c_str());
 		
 	int errorcode = sqlite3_prepare_v2(m_odb->db, sql.c_str(), (int)sql.size(), &statement, &m_leftover);
 
 	if(errorcode != SQLITE_OK)
-		throw std::runtime_error("SqliteMgr::getSelectStmt(), Could not prepare insertion query!");
+		throw std::runtime_error("SqliteMgr::getSelectStmt(), Could not prepare selection query!");
 		
 	if(m_leftover != NULL && strlen(m_leftover) > 0)
-		throw std::runtime_error("SqliteMgr::getSelectStmt(), Leftover from insertion is not NULL!");
+		throw std::runtime_error("SqliteMgr::getSelectStmt(), Leftover from selection is not NULL!");
 		
 	statements->setSelect(statement);
 	return statement;

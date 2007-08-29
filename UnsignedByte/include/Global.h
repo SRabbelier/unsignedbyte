@@ -24,13 +24,15 @@
 #include "singleton.h"
 #include <stdarg.h>
 
+typedef unsigned long value_type;
+
 namespace game
 {
 	const char vname[] = "hp";
 	const char vstring[] = "0.2.0";
-	const int major = 0;
-	const int minor = 2;
-	const int micro = 0;
+	const value_type major = 0;
+	const value_type minor = 2;
+	const value_type micro = 0;
 };
 
 class Global : public Singleton<Global>

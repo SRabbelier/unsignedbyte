@@ -43,7 +43,7 @@ public:
 	const std::string& tableName() const;
 	std::string tableID() const;
 	std::string tableQuery() const;
-	std::string creationQuery() const;
+	std::string creationQuery(bool verify = false) const;
 	
 	bool isLookupTable() const;
 	

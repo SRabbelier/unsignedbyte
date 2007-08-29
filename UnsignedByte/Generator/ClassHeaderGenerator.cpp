@@ -115,15 +115,15 @@ void ClassHeaderGenerator::AppendBody()
 		throw std::logic_error("Header file is not open for writing.\n");
 
 	(*m_file) << m_tabs << m_tabs << "// Database interaction" << endl;
-	(*m_file) << m_tabs << m_tabs << "value_type insert();" << endl;
-	(*m_file) << m_tabs << m_tabs << "void update();" << endl;
 	(*m_file) << m_tabs << m_tabs << "void save();" << endl;
 	(*m_file) << m_tabs << m_tabs << "void erase();" << endl;
+	(*m_file) << m_tabs << m_tabs << "void exists();" << endl;
 	(*m_file) << endl;
 	
 	(*m_file) << m_tabs << m_tabs << "// Bindable interface" << endl;
 	(*m_file) << m_tabs << m_tabs << "void bindKeys(sqlite3_stmt* stmt) const;" << endl;
 	(*m_file) << m_tabs << m_tabs << "void bindUpdate(sqlite3_stmt* stmt) const;" << endl;
+	(*m_file) << m_tabs << m_tabs << "void parseInsert(sqlite3_stmt* stmt);" << endl;
 	(*m_file) << m_tabs << m_tabs << "void parseSelect(sqlite3_stmt* stmt);" << endl;
 	(*m_file) << m_tabs << m_tabs << "Table* getTable() const;" << endl;
 	(*m_file) << endl;
