@@ -45,8 +45,8 @@ ClassSourceGenerator::~ClassSourceGenerator()
 
 void ClassSourceGenerator::GenerateClass()
 {
-	if(m_table->size() == 0 && !m_table->isLookupTable())
-		throw std::logic_error("ClassSourceGenerator::GenerateClass(), class has no fields!");
+	if(m_table->keysize() == 0)
+		throw std::logic_error("ClassSourceGenerator::GenerateClass(), class has no keys!");
 		
 	try
 	{
@@ -57,8 +57,8 @@ void ClassSourceGenerator::GenerateClass()
 		AppendBody();
 		AppendBindKeys();
 		AppendBindUpdate();
-		AppendBindInsert();
-		AppendBindSelect();
+		AppendParseInsert();
+		AppendParseSelect();
 		AppendGetTable();
 		AppendGetSet();
 		AppendFooter();
@@ -90,14 +90,14 @@ void ClassSourceGenerator::AppendCtorGeneral()
 	if(!m_file)
 		throw std::logic_error("Source file is not open for writing.\n");
 		
-	if(m_table->isLookupTable())
+	if(!m_table->hasSinglularPrimaryKey())
 		return;
 	
 	// Empty constructor for creating new entries
 	(*m_file) << "// Ctors" << endl;
 	(*m_file) << m_name << "::" << m_name << "(Database* db) :" << endl;
 	(*m_file) << "m_db(db)," << endl;
-	(*m_file) << "m_" << m_table->tableID() << "()";
+	(*m_file) << "m_" << m_table->firstKey() << "()";
 		
 	for(Fields::const_iterator it = m_table->begin(); it != m_table->end(); it++)
 	{
@@ -121,29 +121,18 @@ void ClassSourceGenerator::AppendCtorSpecific()
 		throw std::logic_error("Source file is not open for writing.\n");
 		
 	// Specific constructor
-	if(!m_table->isLookupTable())
-	{
-		(*m_file) << m_name << "::" << m_name << "(Database* db, value_type " << m_table->tableID() << ") :" << endl;
-		(*m_file) << "m_db(db)," << endl;
-		(*m_file) << "m_" << m_table->tableID() << "(" << m_table->tableID() << ")" << endl;
-	}
-	else
-	{
-		(*m_file) << m_name << "::" << m_name << "(Database* db";
+	(*m_file) << m_name << "::" << m_name << "(Database* db";
 
-		for(TableMap::const_iterator it = m_table->fkbegin(); it != m_table->fkend(); it++)
-			(*m_file) << ", value_type " << it->first;
+	for(TableMap::const_iterator it = m_table->keybegin(); it != m_table->keyend(); it++)
+		(*m_file) << ", value_type " << it->first;
 
-		(*m_file) << ") :" << endl;
-		(*m_file) << "m_db(db)";
-		
-		for(TableMap::const_iterator it = m_table->fkbegin(); it != m_table->fkend(); it++)
-		{
-			(*m_file) << "," << endl;
-			(*m_file) << "m_" << it->first << "(" << it->first<< ")";
-		}
-		(*m_file) << endl;
-	}
+	(*m_file) << ") :" << endl;
+	(*m_file) << "m_db(db)";
+	
+	for(TableMap::const_iterator it = m_table->keybegin(); it != m_table->keyend(); it++)
+		(*m_file) << ", m_" << it->first << "(" << it->first<< ")";
+	
+	(*m_file) << endl;
 	(*m_file) << "{" << endl;
 	(*m_file) << m_tabs << "SqliteMgr::Get()->doSelect(this);" << endl;
 	(*m_file) << "}" << endl;
@@ -198,20 +187,12 @@ void ClassSourceGenerator::AppendBindKeys()
 	
 	(*m_file) << "void " << m_name << "::bindKeys(sqlite3_stmt* stmt) const" << endl;
 	(*m_file) << "{" << endl;
-	if(!m_table->isLookupTable())
+	int pos = 1;
+	for(TableMap::const_iterator it = m_table->keybegin(); it != m_table->keyend(); it++)
 	{
-		(*m_file) << m_tabs << "sqlite3_bind_int64(stmt, 1, m_" ;
-		(*m_file) << m_table->tableID() << ");" << endl;
-	}
-	else
-	{
-		int pos = 1;
-		for(TableMap::const_iterator it = m_table->fkbegin(); it != m_table->fkend(); it++)
-		{
-			(*m_file) << m_tabs << "sqlite3_bind_int64(stmt, " << pos; 
-			(*m_file) << ", m_" << it->first << ");" << endl;
-			pos++;
-		}
+		(*m_file) << m_tabs << "sqlite3_bind_int64(stmt, " << pos; 
+		(*m_file) << ", m_" << it->first << ");" << endl;
+		pos++;
 	}
 
 	(*m_file) << "}" << endl;
@@ -225,6 +206,7 @@ void ClassSourceGenerator::AppendBindUpdate()
 	
 	(*m_file) << "void " << m_name << "::bindUpdate(sqlite3_stmt* stmt) const" << endl;
 	(*m_file) << "{" << endl;
+	
 	int pos = 1;
 	for(Fields::const_iterator it = m_table->begin(); it != m_table->end(); it++)
 	{
@@ -240,50 +222,36 @@ void ClassSourceGenerator::AppendBindUpdate()
 		}
 		pos++;
 	}
-	if(!m_table->isLookupTable())
+
+	for(TableMap::const_iterator it = m_table->keybegin(); it != m_table->keyend(); it++)
 	{
-		(*m_file) << m_tabs << "sqlite3_bind_int64(stmt, " << pos << ", m_" << m_table->tableID() << ");" << endl;
+		(*m_file) << m_tabs << "sqlite3_bind_int64(stmt, " << pos; 
+		(*m_file) << ", m_" << it->first << ");" << endl;
+		pos++;
 	}
-	else
-	{
-		int pos = 1;
-		for(TableMap::const_iterator it = m_table->fkbegin(); it != m_table->fkend(); it++)
-		{
-			(*m_file) << m_tabs << "sqlite3_bind_int64(stmt, " << pos; 
-			(*m_file) << ", m_" << it->first << ");" << endl;
-			pos++;
-		}
-	}
+
 	(*m_file) << "}" << endl;
 	(*m_file) << endl;
 }
 
-void ClassSourceGenerator::AppendBindInsert()
+void ClassSourceGenerator::AppendParseInsert()
 {
 	if(!m_file)
 		throw std::logic_error("Source file is not open for writing.\n");
 	
-	(*m_file) << "void " << m_name << "::parseInsert(sqlite3_stmt* stmt)" << endl;
+	(*m_file) << "void " << m_name << "::parseInsert(sqlite3* db)" << endl;
 	(*m_file) << "{" << endl;
-	int count = 0;
-	for(Fields::const_iterator it = m_table->begin(); it != m_table->end(); it++)
-	{
-		(*m_file) << m_tabs << "m_" << (*it)->getName() << " = ";
-		if((*it)->isText())
-			(*m_file) << "std::string((const char *)sqlite3_column_text(stmt, " << count << "));" << endl;
-		else
-			(*m_file) << "sqlite3_column_int64(stmt, " << count << ");" << endl;
 
-		count++;
-	}
-	if(!m_table->isLookupTable())
-		(*m_file) << m_tabs << "m_" << m_table->tableID() << " = sqlite3_column_int64(stmt, " << count << ");" << endl;
+	if(m_table->hasSinglularPrimaryKey())
+		(*m_file) << m_tabs << "m_" << m_table->firstKey() << " = sqlite3_last_insert_rowid(db);" << endl;
+	else
+		(*m_file) << "// Do nothing" << endl;
 		
 	(*m_file) << "}" << endl;
 	(*m_file) << endl;
 }
 
-void ClassSourceGenerator::AppendBindSelect()
+void ClassSourceGenerator::AppendParseSelect()
 {
 	if(!m_file)
 		throw std::logic_error("Source file is not open for writing.\n");
@@ -301,8 +269,6 @@ void ClassSourceGenerator::AppendBindSelect()
 
 		count++;
 	}
-	if(!m_table->isLookupTable())
-		(*m_file) << m_tabs << "m_" << m_table->tableID() << " = sqlite3_column_int64(stmt, " << count << ");" << endl;
 		
 	(*m_file) << "}" << endl;
 	(*m_file) << endl;
@@ -342,23 +308,20 @@ void ClassSourceGenerator::AppendGetSet()
 		(*m_file) << endl;
 	}
 
-	// Only add setters if it's not a lookup table
-	if(!m_table->isLookupTable())
+	// Setters
+	for(Fields::const_iterator it = m_table->begin(); it != m_table->end(); it++)
 	{
-		for(Fields::const_iterator it = m_table->begin(); it != m_table->end(); it++)
-		{
-			Field* field = *it;
-			if(field->isText())
-				(*m_file) << "void " << m_name << "::set" << field->getName() << "(const std::string& value)" << endl;
-			else
-				(*m_file) << "void " << m_name << "::set" << field->getName() << "(value_type value)" << endl;
-				
-			(*m_file) << "{" << endl;
-			(*m_file) << m_tabs << "m_" << field->getName() << " = value;" << endl;
-			(*m_file) << m_tabs << "m_dirty = true;" << endl;
-			(*m_file) << "}" << endl;
-			(*m_file) << endl;
-		}
+		Field* field = *it;
+		if(field->isText())
+			(*m_file) << "void " << m_name << "::set" << field->getName() << "(const std::string& value)" << endl;
+		else
+			(*m_file) << "void " << m_name << "::set" << field->getName() << "(value_type value)" << endl;
+			
+		(*m_file) << "{" << endl;
+		(*m_file) << m_tabs << "m_" << field->getName() << " = value;" << endl;
+		(*m_file) << m_tabs << "m_dirty = true;" << endl;
+		(*m_file) << "}" << endl;
+		(*m_file) << endl;
 	}
 }
 

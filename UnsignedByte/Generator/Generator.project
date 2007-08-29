@@ -34,8 +34,8 @@
         <Command Enabled="yes">mv hp.h ../include</Command>
       </PostBuild>
       <CustomBuild Enabled="no">
-        <CleanCommand/>
-        <BuildCommand/>
+        <CleanCommand></CleanCommand>
+        <BuildCommand></BuildCommand>
       </CustomBuild>
     </Configuration>
   </Settings>

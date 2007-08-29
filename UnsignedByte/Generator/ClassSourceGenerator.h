@@ -43,8 +43,8 @@ private:
 	void AppendBody();
 	void AppendBindKeys();
 	void AppendBindUpdate();
-	void AppendBindInsert();
-	void AppendBindSelect();
+	void AppendParseInsert();
+	void AppendParseSelect();
 	void AppendGetTable();
 	void AppendGetSet();
 	void AppendFooter();

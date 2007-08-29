@@ -45,7 +45,7 @@ namespace hp
 		// Bindable interface
 		void bindKeys(sqlite3_stmt* stmt) const;
 		void bindUpdate(sqlite3_stmt* stmt) const;
-		void parseInsert(sqlite3_stmt* stmt);
+		void parseInsert(sqlite3* db);
 		void parseSelect(sqlite3_stmt* stmt);
 		Table* getTable() const;
 
@@ -61,8 +61,9 @@ namespace hp
 		// Database pointer
 		Database* m_db;
 
-		// Fields
+		// Keys
 		value_type m_accountid;
+		// Fields
 		std::string m_name;
 		std::string m_password;
 
@@ -91,7 +92,7 @@ namespace hp
 		// Bindable interface
 		void bindKeys(sqlite3_stmt* stmt) const;
 		void bindUpdate(sqlite3_stmt* stmt) const;
-		void parseInsert(sqlite3_stmt* stmt);
+		void parseInsert(sqlite3* db);
 		void parseSelect(sqlite3_stmt* stmt);
 		Table* getTable() const;
 
@@ -111,8 +112,9 @@ namespace hp
 		// Database pointer
 		Database* m_db;
 
-		// Fields
+		// Keys
 		value_type m_areaid;
+		// Fields
 		std::string m_name;
 		std::string m_description;
 		value_type m_height;
@@ -132,7 +134,7 @@ namespace hp
 	public:
 		// Ctors
 		Branches(Database* db);
-		Branches(Database* db, value_type branchid);
+		Branches(Database* db, value_type branchid, value_type fkStatsPrimary, value_type fkStatsSecondary, value_type fkTrees);
 		~Branches();
 
 		// Database interaction
@@ -143,7 +145,7 @@ namespace hp
 		// Bindable interface
 		void bindKeys(sqlite3_stmt* stmt) const;
 		void bindUpdate(sqlite3_stmt* stmt) const;
-		void parseInsert(sqlite3_stmt* stmt);
+		void parseInsert(sqlite3* db);
 		void parseSelect(sqlite3_stmt* stmt);
 		Table* getTable() const;
 
@@ -157,8 +159,12 @@ namespace hp
 		// Database pointer
 		Database* m_db;
 
-		// Fields
+		// Keys
 		value_type m_branchid;
+		value_type m_fkStatsPrimary;
+		value_type m_fkStatsSecondary;
+		value_type m_fkTrees;
+		// Fields
 		std::string m_name;
 
 		// State flags
@@ -170,12 +176,12 @@ namespace hp
 		Branches operator=(const Branches& rhs);
 	};
 
-	// Lookup table
 	class CharacterAccount : public Bindable
 	{
 	public:
 		// Ctors
 		CharacterAccount(Database* db);
+		CharacterAccount(Database* db, value_type fkAccounts, value_type fkCharacters);
 		~CharacterAccount();
 
 		// Database interaction
@@ -186,9 +192,22 @@ namespace hp
 		// Bindable interface
 		void bindKeys(sqlite3_stmt* stmt) const;
 		void bindUpdate(sqlite3_stmt* stmt) const;
-		void parseInsert(sqlite3_stmt* stmt);
+		void parseInsert(sqlite3* db);
 		void parseSelect(sqlite3_stmt* stmt);
 		Table* getTable() const;
+
+	private:
+		// Database pointer
+		Database* m_db;
+
+		// Keys
+		value_type m_fkAccounts;
+		value_type m_fkCharacters;
+		// Fields
+
+		// State flags
+		bool m_newentry;
+		bool m_dirty;
 
 		// Hide copy constructor and assignment operator
 		CharacterAccount(const CharacterAccount& rhs);
@@ -200,7 +219,7 @@ namespace hp
 	public:
 		// Ctors
 		CharacterBranch(Database* db);
-		CharacterBranch(Database* db, value_type characterbranchid);
+		CharacterBranch(Database* db, value_type fkBranches, value_type fkCharacters);
 		~CharacterBranch();
 
 		// Database interaction
@@ -211,7 +230,7 @@ namespace hp
 		// Bindable interface
 		void bindKeys(sqlite3_stmt* stmt) const;
 		void bindUpdate(sqlite3_stmt* stmt) const;
-		void parseInsert(sqlite3_stmt* stmt);
+		void parseInsert(sqlite3* db);
 		void parseSelect(sqlite3_stmt* stmt);
 		Table* getTable() const;
 
@@ -225,8 +244,10 @@ namespace hp
 		// Database pointer
 		Database* m_db;
 
+		// Keys
+		value_type m_fkBranches;
+		value_type m_fkCharacters;
 		// Fields
-		value_type m_characterbranchid;
 		value_type m_xp;
 
 		// State flags
@@ -243,7 +264,7 @@ namespace hp
 	public:
 		// Ctors
 		CharacterCluster(Database* db);
-		CharacterCluster(Database* db, value_type characterclusterid);
+		CharacterCluster(Database* db, value_type fkCharacters, value_type fkClusters);
 		~CharacterCluster();
 
 		// Database interaction
@@ -254,7 +275,7 @@ namespace hp
 		// Bindable interface
 		void bindKeys(sqlite3_stmt* stmt) const;
 		void bindUpdate(sqlite3_stmt* stmt) const;
-		void parseInsert(sqlite3_stmt* stmt);
+		void parseInsert(sqlite3* db);
 		void parseSelect(sqlite3_stmt* stmt);
 		Table* getTable() const;
 
@@ -268,8 +289,10 @@ namespace hp
 		// Database pointer
 		Database* m_db;
 
+		// Keys
+		value_type m_fkCharacters;
+		value_type m_fkClusters;
 		// Fields
-		value_type m_characterclusterid;
 		value_type m_xp;
 
 		// State flags
@@ -286,7 +309,7 @@ namespace hp
 	public:
 		// Ctors
 		Characters(Database* db);
-		Characters(Database* db, value_type characterid);
+		Characters(Database* db, value_type characterid, value_type fkRaces, value_type fkRooms);
 		~Characters();
 
 		// Database interaction
@@ -297,7 +320,7 @@ namespace hp
 		// Bindable interface
 		void bindKeys(sqlite3_stmt* stmt) const;
 		void bindUpdate(sqlite3_stmt* stmt) const;
-		void parseInsert(sqlite3_stmt* stmt);
+		void parseInsert(sqlite3* db);
 		void parseSelect(sqlite3_stmt* stmt);
 		Table* getTable() const;
 
@@ -313,8 +336,11 @@ namespace hp
 		// Database pointer
 		Database* m_db;
 
-		// Fields
+		// Keys
 		value_type m_characterid;
+		value_type m_fkRaces;
+		value_type m_fkRooms;
+		// Fields
 		std::string m_name;
 		std::string m_description;
 
@@ -332,7 +358,7 @@ namespace hp
 	public:
 		// Ctors
 		CharacterSkill(Database* db);
-		CharacterSkill(Database* db, value_type characterskillid);
+		CharacterSkill(Database* db, value_type fkBranches, value_type fkCharacters);
 		~CharacterSkill();
 
 		// Database interaction
@@ -343,7 +369,7 @@ namespace hp
 		// Bindable interface
 		void bindKeys(sqlite3_stmt* stmt) const;
 		void bindUpdate(sqlite3_stmt* stmt) const;
-		void parseInsert(sqlite3_stmt* stmt);
+		void parseInsert(sqlite3* db);
 		void parseSelect(sqlite3_stmt* stmt);
 		Table* getTable() const;
 
@@ -357,8 +383,10 @@ namespace hp
 		// Database pointer
 		Database* m_db;
 
+		// Keys
+		value_type m_fkBranches;
+		value_type m_fkCharacters;
 		// Fields
-		value_type m_characterskillid;
 		value_type m_xp;
 
 		// State flags
@@ -375,7 +403,7 @@ namespace hp
 	public:
 		// Ctors
 		CharacterStat(Database* db);
-		CharacterStat(Database* db, value_type characterstatid);
+		CharacterStat(Database* db, value_type fkCharacters, value_type fkStats);
 		~CharacterStat();
 
 		// Database interaction
@@ -386,26 +414,25 @@ namespace hp
 		// Bindable interface
 		void bindKeys(sqlite3_stmt* stmt) const;
 		void bindUpdate(sqlite3_stmt* stmt) const;
-		void parseInsert(sqlite3_stmt* stmt);
+		void parseInsert(sqlite3* db);
 		void parseSelect(sqlite3_stmt* stmt);
 		Table* getTable() const;
 
 		// Getters
-		value_type getcurrent() const;
-		value_type getpotential() const;
+		value_type getxp() const;
 
 		// Setters
-		void setcurrent(value_type value);
-		void setpotential(value_type value);
+		void setxp(value_type value);
 
 	private:
 		// Database pointer
 		Database* m_db;
 
+		// Keys
+		value_type m_fkCharacters;
+		value_type m_fkStats;
 		// Fields
-		value_type m_characterstatid;
-		value_type m_current;
-		value_type m_potential;
+		value_type m_xp;
 
 		// State flags
 		bool m_newentry;
@@ -421,7 +448,7 @@ namespace hp
 	public:
 		// Ctors
 		CharacterTree(Database* db);
-		CharacterTree(Database* db, value_type charactertreeid);
+		CharacterTree(Database* db, value_type fkCharacters, value_type fkTrees);
 		~CharacterTree();
 
 		// Database interaction
@@ -432,7 +459,7 @@ namespace hp
 		// Bindable interface
 		void bindKeys(sqlite3_stmt* stmt) const;
 		void bindUpdate(sqlite3_stmt* stmt) const;
-		void parseInsert(sqlite3_stmt* stmt);
+		void parseInsert(sqlite3* db);
 		void parseSelect(sqlite3_stmt* stmt);
 		Table* getTable() const;
 
@@ -446,8 +473,10 @@ namespace hp
 		// Database pointer
 		Database* m_db;
 
+		// Keys
+		value_type m_fkCharacters;
+		value_type m_fkTrees;
 		// Fields
-		value_type m_charactertreeid;
 		value_type m_xp;
 
 		// State flags
@@ -475,7 +504,7 @@ namespace hp
 		// Bindable interface
 		void bindKeys(sqlite3_stmt* stmt) const;
 		void bindUpdate(sqlite3_stmt* stmt) const;
-		void parseInsert(sqlite3_stmt* stmt);
+		void parseInsert(sqlite3* db);
 		void parseSelect(sqlite3_stmt* stmt);
 		Table* getTable() const;
 
@@ -489,8 +518,9 @@ namespace hp
 		// Database pointer
 		Database* m_db;
 
-		// Fields
+		// Keys
 		value_type m_clusterid;
+		// Fields
 		std::string m_name;
 
 		// State flags
@@ -518,7 +548,7 @@ namespace hp
 		// Bindable interface
 		void bindKeys(sqlite3_stmt* stmt) const;
 		void bindUpdate(sqlite3_stmt* stmt) const;
-		void parseInsert(sqlite3_stmt* stmt);
+		void parseInsert(sqlite3* db);
 		void parseSelect(sqlite3_stmt* stmt);
 		Table* getTable() const;
 
@@ -538,8 +568,9 @@ namespace hp
 		// Database pointer
 		Database* m_db;
 
-		// Fields
+		// Keys
 		value_type m_colourid;
+		// Fields
 		std::string m_name;
 		std::string m_code;
 		std::string m_colourstring;
@@ -570,34 +601,35 @@ namespace hp
 		// Bindable interface
 		void bindKeys(sqlite3_stmt* stmt) const;
 		void bindUpdate(sqlite3_stmt* stmt) const;
-		void parseInsert(sqlite3_stmt* stmt);
+		void parseInsert(sqlite3* db);
 		void parseSelect(sqlite3_stmt* stmt);
 		Table* getTable() const;
 
 		// Getters
 		const std::string& getname() const;
-		const std::string& getgrantgroup() const;
-		const std::string& gethighforce() const;
-		const std::string& getforce() const;
+		value_type getgrantgroup() const;
+		value_type gethighforce() const;
+		value_type getforce() const;
 		value_type getlowforce() const;
 
 		// Setters
 		void setname(const std::string& value);
-		void setgrantgroup(const std::string& value);
-		void sethighforce(const std::string& value);
-		void setforce(const std::string& value);
+		void setgrantgroup(value_type value);
+		void sethighforce(value_type value);
+		void setforce(value_type value);
 		void setlowforce(value_type value);
 
 	private:
 		// Database pointer
 		Database* m_db;
 
-		// Fields
+		// Keys
 		value_type m_commandid;
+		// Fields
 		std::string m_name;
-		std::string m_grantgroup;
-		std::string m_highforce;
-		std::string m_force;
+		value_type m_grantgroup;
+		value_type m_highforce;
+		value_type m_force;
 		value_type m_lowforce;
 
 		// State flags
@@ -625,7 +657,7 @@ namespace hp
 		// Bindable interface
 		void bindKeys(sqlite3_stmt* stmt) const;
 		void bindUpdate(sqlite3_stmt* stmt) const;
-		void parseInsert(sqlite3_stmt* stmt);
+		void parseInsert(sqlite3* db);
 		void parseSelect(sqlite3_stmt* stmt);
 		Table* getTable() const;
 
@@ -639,8 +671,9 @@ namespace hp
 		// Database pointer
 		Database* m_db;
 
-		// Fields
+		// Keys
 		value_type m_exitid;
+		// Fields
 		value_type m_dir;
 
 		// State flags
@@ -668,7 +701,7 @@ namespace hp
 		// Bindable interface
 		void bindKeys(sqlite3_stmt* stmt) const;
 		void bindUpdate(sqlite3_stmt* stmt) const;
-		void parseInsert(sqlite3_stmt* stmt);
+		void parseInsert(sqlite3* db);
 		void parseSelect(sqlite3_stmt* stmt);
 		Table* getTable() const;
 
@@ -686,8 +719,9 @@ namespace hp
 		// Database pointer
 		Database* m_db;
 
-		// Fields
+		// Keys
 		value_type m_grantgroupid;
+		// Fields
 		std::string m_name;
 		value_type m_defaultgrant;
 		value_type m_implies;
@@ -706,7 +740,7 @@ namespace hp
 	public:
 		// Ctors
 		Permissions(Database* db);
-		Permissions(Database* db, value_type permissionid);
+		Permissions(Database* db, value_type fkAccounts, value_type fkCommands, value_type fkGrantGroups, value_type permissionid);
 		~Permissions();
 
 		// Database interaction
@@ -717,7 +751,7 @@ namespace hp
 		// Bindable interface
 		void bindKeys(sqlite3_stmt* stmt) const;
 		void bindUpdate(sqlite3_stmt* stmt) const;
-		void parseInsert(sqlite3_stmt* stmt);
+		void parseInsert(sqlite3* db);
 		void parseSelect(sqlite3_stmt* stmt);
 		Table* getTable() const;
 
@@ -731,8 +765,12 @@ namespace hp
 		// Database pointer
 		Database* m_db;
 
-		// Fields
+		// Keys
+		value_type m_fkAccounts;
+		value_type m_fkCommands;
+		value_type m_fkGrantGroups;
 		value_type m_permissionid;
+		// Fields
 		value_type m_grant;
 
 		// State flags
@@ -749,7 +787,7 @@ namespace hp
 	public:
 		// Ctors
 		Races(Database* db);
-		Races(Database* db, value_type raceid);
+		Races(Database* db, value_type areaid);
 		~Races();
 
 		// Database interaction
@@ -760,7 +798,7 @@ namespace hp
 		// Bindable interface
 		void bindKeys(sqlite3_stmt* stmt) const;
 		void bindUpdate(sqlite3_stmt* stmt) const;
-		void parseInsert(sqlite3_stmt* stmt);
+		void parseInsert(sqlite3* db);
 		void parseSelect(sqlite3_stmt* stmt);
 		Table* getTable() const;
 
@@ -774,8 +812,9 @@ namespace hp
 		// Database pointer
 		Database* m_db;
 
+		// Keys
+		value_type m_areaid;
 		// Fields
-		value_type m_raceid;
 		std::string m_name;
 
 		// State flags
@@ -792,7 +831,7 @@ namespace hp
 	public:
 		// Ctors
 		Rooms(Database* db);
-		Rooms(Database* db, value_type roomid);
+		Rooms(Database* db, value_type fkAreas, value_type fkSectors, value_type roomid);
 		~Rooms();
 
 		// Database interaction
@@ -803,7 +842,7 @@ namespace hp
 		// Bindable interface
 		void bindKeys(sqlite3_stmt* stmt) const;
 		void bindUpdate(sqlite3_stmt* stmt) const;
-		void parseInsert(sqlite3_stmt* stmt);
+		void parseInsert(sqlite3* db);
 		void parseSelect(sqlite3_stmt* stmt);
 		Table* getTable() const;
 
@@ -825,8 +864,11 @@ namespace hp
 		// Database pointer
 		Database* m_db;
 
-		// Fields
+		// Keys
+		value_type m_fkAreas;
+		value_type m_fkSectors;
 		value_type m_roomid;
+		// Fields
 		std::string m_name;
 		std::string m_description;
 		value_type m_width;
@@ -858,7 +900,7 @@ namespace hp
 		// Bindable interface
 		void bindKeys(sqlite3_stmt* stmt) const;
 		void bindUpdate(sqlite3_stmt* stmt) const;
-		void parseInsert(sqlite3_stmt* stmt);
+		void parseInsert(sqlite3* db);
 		void parseSelect(sqlite3_stmt* stmt);
 		Table* getTable() const;
 
@@ -878,8 +920,9 @@ namespace hp
 		// Database pointer
 		Database* m_db;
 
-		// Fields
+		// Keys
 		value_type m_sectorid;
+		// Fields
 		std::string m_name;
 		std::string m_symbol;
 		value_type m_movecost;
@@ -899,7 +942,7 @@ namespace hp
 	public:
 		// Ctors
 		Skills(Database* db);
-		Skills(Database* db, value_type skillid);
+		Skills(Database* db, value_type fkBranches, value_type skillid);
 		~Skills();
 
 		// Database interaction
@@ -910,7 +953,7 @@ namespace hp
 		// Bindable interface
 		void bindKeys(sqlite3_stmt* stmt) const;
 		void bindUpdate(sqlite3_stmt* stmt) const;
-		void parseInsert(sqlite3_stmt* stmt);
+		void parseInsert(sqlite3* db);
 		void parseSelect(sqlite3_stmt* stmt);
 		Table* getTable() const;
 
@@ -924,8 +967,10 @@ namespace hp
 		// Database pointer
 		Database* m_db;
 
-		// Fields
+		// Keys
+		value_type m_fkBranches;
 		value_type m_skillid;
+		// Fields
 		std::string m_name;
 
 		// State flags
@@ -953,7 +998,7 @@ namespace hp
 		// Bindable interface
 		void bindKeys(sqlite3_stmt* stmt) const;
 		void bindUpdate(sqlite3_stmt* stmt) const;
-		void parseInsert(sqlite3_stmt* stmt);
+		void parseInsert(sqlite3* db);
 		void parseSelect(sqlite3_stmt* stmt);
 		Table* getTable() const;
 
@@ -969,8 +1014,9 @@ namespace hp
 		// Database pointer
 		Database* m_db;
 
-		// Fields
+		// Keys
 		value_type m_statid;
+		// Fields
 		std::string m_name;
 		std::string m_shortname;
 
@@ -988,7 +1034,7 @@ namespace hp
 	public:
 		// Ctors
 		Trees(Database* db);
-		Trees(Database* db, value_type treeid);
+		Trees(Database* db, value_type fkClusters, value_type fkStatsPrimary, value_type fkStatsSecondary, value_type treeid);
 		~Trees();
 
 		// Database interaction
@@ -999,7 +1045,7 @@ namespace hp
 		// Bindable interface
 		void bindKeys(sqlite3_stmt* stmt) const;
 		void bindUpdate(sqlite3_stmt* stmt) const;
-		void parseInsert(sqlite3_stmt* stmt);
+		void parseInsert(sqlite3* db);
 		void parseSelect(sqlite3_stmt* stmt);
 		Table* getTable() const;
 
@@ -1013,8 +1059,12 @@ namespace hp
 		// Database pointer
 		Database* m_db;
 
-		// Fields
+		// Keys
+		value_type m_fkClusters;
+		value_type m_fkStatsPrimary;
+		value_type m_fkStatsSecondary;
 		value_type m_treeid;
+		// Fields
 		std::string m_name;
 
 		// State flags
@@ -1042,7 +1092,7 @@ namespace hp
 		// Bindable interface
 		void bindKeys(sqlite3_stmt* stmt) const;
 		void bindUpdate(sqlite3_stmt* stmt) const;
-		void parseInsert(sqlite3_stmt* stmt);
+		void parseInsert(sqlite3* db);
 		void parseSelect(sqlite3_stmt* stmt);
 		Table* getTable() const;
 
@@ -1062,8 +1112,9 @@ namespace hp
 		// Database pointer
 		Database* m_db;
 
-		// Fields
+		// Keys
 		value_type m_versionid;
+		// Fields
 		std::string m_versiontext;
 		value_type m_major;
 		value_type m_minor;

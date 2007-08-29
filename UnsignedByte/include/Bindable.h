@@ -33,7 +33,7 @@ public:
 	virtual void bindKeys(sqlite3_stmt* stmt) const = 0;
 	virtual void bindUpdate(sqlite3_stmt* stmt) const = 0;
 	
-	virtual void parseInsert(sqlite3_stmt* stmt) = 0;
+	virtual void parseInsert(sqlite3* db) = 0;
 	virtual void parseSelect(sqlite3_stmt* stmt) = 0;
 	
 	virtual Table* getTable() const = 0;

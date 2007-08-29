@@ -28,41 +28,49 @@ class Table;
 
 typedef std::vector<Field*> Fields;
 typedef std::map<std::string, Table*> TableMap;
+typedef unsigned long value_type;
 
 class Table
 {
 public:
-	Table(std::string name, std::string id);
 	Table(std::string name);
 	~Table();
-
-	void addField(const std::string& name, bool text = false);
-	void addField(const std::string& name, bool text, const std::string& defaulttext);
 	
+	// Add Primary Key
+	void addPK(const std::string& name);
+
+	// Add Field
+	void addValue(const std::string& name);
+	void addValue(const std::string& name, value_type defaultvalue);
+	void addTextField(const std::string& name);
+	void addTextField(const std::string& name, const std::string& defaulttext);
+	
+	// Add Foreign Key
 	void addFK(Table* table);
 	void addFK(Table* table, const std::string& suffix);
 
 	const std::string& tableName() const;
-	std::string tableID() const;
+	
 	std::string tableQuery() const;
 	std::string creationQuery(bool verify = false) const;
-	
-	bool isLookupTable() const;
 	
 	Fields::const_iterator begin() { return m_fields.begin(); }
 	Fields::const_iterator end() { return m_fields.end(); }
 	size_t size() { return m_fields.size(); }
 	
-	TableMap::const_iterator fkbegin() { return m_fks.begin(); }
-	TableMap::const_iterator fkend() { return m_fks.end(); }
-	size_t fksize() { return m_fks.size(); }
+	std::string firstKey() const { return m_keys.begin()->first; }
+	TableMap::const_iterator keybegin() { return m_keys.begin(); }
+	TableMap::const_iterator keyend() { return m_keys.end(); }
+	size_t keysize() { return m_keys.size(); }
+	
+	bool hasSinglularPrimaryKey() { return m_spkey; }
 	
 private:
+	void addField(const std::string& name, bool text, const std::string& defaulttext);
+
 	std::string m_name;
-	std::string m_id;
-	
-	const bool m_lookuptable;
+	bool m_spkey; // singular primary key
 
 	Fields m_fields;
-	TableMap m_fks;
+	TableMap m_keys;
 };

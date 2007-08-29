@@ -18,6 +18,8 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include <iostream>
+#include <sstream>
 #include <stdexcept>
 
 #include "Global.h"
@@ -25,17 +27,9 @@
 #include "Tables.h"
 #include "Field.h"
 
-Table::Table(std::string name, std::string id) :
-m_name(name),
-m_id(id),
-m_lookuptable(false)
-{
-	
-}
-
 Table::Table(std::string name) :
 m_name(name),
-m_lookuptable(true)
+m_spkey(true)
 {
 	
 }
@@ -48,22 +42,38 @@ Table::~Table()
 	}
 }
 
-void Table::addField(const std::string& name, bool text)
+void Table::addPK(const std::string& name)
 {
-	addField(name, text, Global::Get()->EmptyString);
+	if(m_spkey && m_keys.size() > 1)
+		m_spkey = false;
+		
+	m_keys[name] = this;
+}
+
+void Table::addValue(const std::string& name)
+{
+	addField(name, false, Global::Get()->EmptyString);
+}
+
+void Table::addValue(const std::string& name, value_type defaultvalue)
+{
+	std::ostringstream str;
+	str << defaultvalue;
+	addField(name, false, str.str());
+}
+
+void Table::addTextField(const std::string& name)
+{
+	addField(name, true, Global::Get()->EmptyString);
+}
+
+void Table::addTextField(const std::string& name, const std::string& defaulttext)
+{
+	addField(name, true, defaulttext);
 }
 
 void Table::addField(const std::string& name, bool text, const std::string& defaulttext)
 {
-	if(m_lookuptable)
-	{
-		std::string errormsg;
-		errormsg.append("Table::tableID() in a lookup table: '");
-		errormsg.append(m_name);
-		errormsg.append("'.");
-		throw std::logic_error(errormsg);
-	}
-		
 	m_fields.push_back(new Field(name, text, defaulttext));
 }
 
@@ -86,31 +96,13 @@ void Table::addFK(Table* table, const std::string& suffix)
 	
 	name.append(suffix);
 	
-	m_fks[name] = table;
+	m_keys[name] = table;
 	// TODO, add SQLite triggers
 }
 
 const std::string& Table::tableName() const
 {
 	return m_name;
-}
-
-std::string Table::tableID() const
-{
-	if(m_lookuptable)
-	{
-		std::string errormsg;
-		errormsg.append("Table::tableID() in a lookup table: '");
-		errormsg.append(m_name);
-		errormsg.append("'.");
-		throw std::logic_error(errormsg);
-	}
-		
-	std::string name;
-	name.append(m_id);
-	name.append("id");
-	
-	return name;
 }
 
 std::string Table::tableQuery() const
@@ -146,9 +138,9 @@ std::string Table::creationQuery(bool verify) const
 	result.append(m_name);
 	result.append("(");
 	
-	if(!m_lookuptable)
+	if(m_spkey)
 	{
-		result.append(tableID());
+		result.append(firstKey());
 		result.append(" INTEGER PRIMARY KEY AUTOINCREMENT, ");
 	}
 	
@@ -168,7 +160,3 @@ std::string Table::creationQuery(bool verify) const
 	return result;
 }
 
-bool Table::isLookupTable() const
-{
-	return m_lookuptable;
-}

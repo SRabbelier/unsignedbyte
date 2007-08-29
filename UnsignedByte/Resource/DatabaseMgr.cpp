@@ -75,6 +75,7 @@ Longs DatabaseMgr::GetSavableIDS(const Table* table, const long& value, const st
 	}
 
 	Query q(DBref());
+	/*
 	q.get_result(Global::Get()->sprintf(
 		"SELECT %s FROM %s %s ORDER BY %s ASC;",
 		table->tableID().c_str(),
@@ -82,6 +83,8 @@ Longs DatabaseMgr::GetSavableIDS(const Table* table, const long& value, const st
 		condition.c_str(),
 		table->tableID().c_str()
 		));
+	*/
+	// TODO - BLOCKER
 
 	while(q.fetch_row())
 	{
@@ -120,12 +123,16 @@ Strings DatabaseMgr::GetSavable(const Table* table, const long& value, const std
 long DatabaseMgr::GetSavableID(const Table* table, const std::string& value, const std::string& field)
 {
 	Query q(DBref());
-	double num = q.get_num(Global::Get()->sprintf(
+	double num = 0;
+	/*
+	num = q.get_num(Global::Get()->sprintf(
 		"select %s from %s where %s='%s';", 
 		table->tableID().c_str(), 
 		table->tableName().c_str(), 
 		field.c_str(),
 		value.c_str()));
+	*/
+	// TODO - BLOCKER
 
 	return (long)num;
 }
@@ -147,13 +154,16 @@ long DatabaseMgr::CountSavable(const Table* table, const std::string& value, con
 long DatabaseMgr::CountSavable(const Table* table, const long id)
 {
 	Query q(DBref());
-	long count = 
-	q.get_count(Global::Get()->sprintf(
+	long count = 0;
+	/*
+	count = q.get_count(Global::Get()->sprintf(
 		"SELECT COUNT(*) FROM %s WHERE %s='%d';",
 		table->tableName().c_str(),
 		table->tableID().c_str(), 
 		id
 		));
+	*/
+	// TODO - Blocker
 
 	return count;
 }

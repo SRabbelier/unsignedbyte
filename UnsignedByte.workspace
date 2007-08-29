@@ -2,10 +2,10 @@
 <CodeLite_Workspace Name="UnsignedByte" Database="./UnsignedByte.tags">
   <Project Name="DAL" Path="UnsignedByte/DAL/DAL.project" Active="No"/>
   <Project Name="Resource" Path="UnsignedByte/Resource/Resource.project" Active="No"/>
-  <Project Name="Generator" Path="UnsignedByte/Generator/Generator.project" Active="Yes"/>
+  <Project Name="Generator" Path="UnsignedByte/Generator/Generator.project" Active="No"/>
   <Project Name="Core" Path="UnsignedByte/Core/Core.project" Active="No"/>
   <Project Name="Core" Path="UnsignedByte/Core/Core.project" Active="No"/>
-  <Project Name="Initializer" Path="UnsignedByte/Initializer/Initializer.project" Active="No"/>
+  <Project Name="Initializer" Path="UnsignedByte/Initializer/Initializer.project" Active="Yes"/>
   <BuildMatrix>
     <WorkspaceConfiguration Name="Debug" Selected="yes">
       <Project Name="Resource" ConfigName="Debug"/>

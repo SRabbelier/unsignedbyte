@@ -22,39 +22,42 @@
 #include "Table.h"
 
 Tables::Tables() :
-	ACCOUNTS( new Table("Accounts","account" )),
-	AREAS( new Table("Areas","area" )),
-	BRANCHES( new Table("Branches", "branch" )),
-	CHARACTERACCOUNT( new Table("CharacterAccount" )), // Lookup Table, our only one for now...
-	CHARACTERBRANCH( new Table("CharacterBranch", "characterbranch" )),
-	CHARACTERCLUSTER( new Table("CharacterCluster", "charactercluster" )),
-	CHARACTERS( new Table("Characters","character" )),
-	CHARACTERSKILL( new Table("CharacterSkill", "characterskill" )),
-	CHARACTERSTAT( new Table("CharacterStat", "characterstat" )),
-	CHARACTERTREE( new Table("CharacterTree", "charactertree" )),
-	CLUSTERS( new Table("Clusters", "cluster" )),
-	COLOURS( new Table("Colours","colour" )),
-	COMMANDS( new Table("Commands","command" )),
-	EXITS( new Table("Exits","exit" )),
-	GRANTGROUPS( new Table("GrantGroups","grantgroup" )),
-	PERMISSIONS( new Table("Permissions","permission" )),
-	RACES( new Table("Races","race" )),
-	ROOMS( new Table("Rooms","room" )),
-	SECTORS( new Table("Sectors","sector" )),
-	SKILLS( new Table("Skills", "skill" )),
-	STATS( new Table("Stats", "stat" )),
-	TREES( new Table("Trees", "tree" )),
-	VERSION( new Table("Version", "version" ))
+	ACCOUNTS( new Table("Accounts") ),
+	AREAS( new Table("Areas") ),
+	BRANCHES( new Table("Branches") ),
+	CHARACTERACCOUNT( new Table("CharacterAccount") ),
+	CHARACTERBRANCH( new Table("CharacterBranch") ),
+	CHARACTERCLUSTER( new Table("CharacterCluster") ),
+	CHARACTERS( new Table("Characters") ),
+	CHARACTERSKILL( new Table("CharacterSkill") ),
+	CHARACTERSTAT( new Table("CharacterStat") ),
+	CHARACTERTREE( new Table("CharacterTree") ),
+	CLUSTERS( new Table("Clusters") ),
+	COLOURS( new Table("Colours") ),
+	COMMANDS( new Table("Commands") ),
+	EXITS( new Table("Exits") ),
+	GRANTGROUPS( new Table("GrantGroups") ),
+	PERMISSIONS( new Table("Permissions") ),
+	RACES( new Table("Races") ),
+	ROOMS( new Table("Rooms") ),
+	SECTORS( new Table("Sectors") ),
+	SKILLS( new Table("Skills") ),
+	STATS( new Table("Stats") ),
+	TREES( new Table("Trees") ),
+	VERSION( new Table("Version") )
 {	
-	ACCOUNTS->addField("name", true);
-	ACCOUNTS->addField("password", true);
+	ACCOUNTS->addPK("accountid");
+	ACCOUNTS->addTextField("name");
+	ACCOUNTS->addTextField("password");
 	
-	AREAS->addField("name", true);
-	AREAS->addField("description", true);
-	AREAS->addField("height");
-	AREAS->addField("width");
+	AREAS->addPK("areaid");
+	AREAS->addTextField("name");
+	AREAS->addTextField("description");
+	AREAS->addValue("height");
+	AREAS->addValue("width");
 	
-	BRANCHES->addField("name", true);
+	BRANCHES->addPK("branchid");
+	BRANCHES->addTextField("name");
 	BRANCHES->addFK(TREES);
 	BRANCHES->addFK(STATS, "Primary");
 	BRANCHES->addFK(STATS, "Secondary");
@@ -64,84 +67,97 @@ Tables::Tables() :
 	
 	CHARACTERBRANCH->addFK(CHARACTERS);
 	CHARACTERBRANCH->addFK(BRANCHES);
-	CHARACTERBRANCH->addField("xp");
+	CHARACTERBRANCH->addValue("xp");
 	
 	CHARACTERCLUSTER->addFK(CHARACTERS);
 	CHARACTERCLUSTER->addFK(CLUSTERS);
-	CHARACTERCLUSTER->addField("xp");
+	CHARACTERCLUSTER->addValue("xp");
 	
+	CHARACTERS->addPK("characterid");
 	CHARACTERS->addFK(RACES);
 	CHARACTERS->addFK(ROOMS);
-	CHARACTERS->addField("name", true);
-	CHARACTERS->addField("description", true);
+	CHARACTERS->addTextField("name");
+	CHARACTERS->addTextField("description");
 	
 	CHARACTERSKILL->addFK(CHARACTERS);
 	CHARACTERSKILL->addFK(BRANCHES);
-	CHARACTERSKILL->addField("xp");
+	CHARACTERSKILL->addValue("xp");
 	
 	CHARACTERSTAT->addFK(CHARACTERS);
 	CHARACTERSTAT->addFK(STATS);
-	CHARACTERSTAT->addField("current");
-	CHARACTERSTAT->addField("potential");
+	CHARACTERSTAT->addValue("xp");
 	
 	CHARACTERTREE->addFK(CHARACTERS);
 	CHARACTERTREE->addFK(TREES);
-	CHARACTERTREE->addField("xp");
+	CHARACTERTREE->addValue("xp");
 	
-	CLUSTERS->addField("name", true);
+	CLUSTERS->addPK("clusterid");
+	CLUSTERS->addTextField("name");
 		
-	COLOURS->addField("name", true);
-	COLOURS->addField("code", true);
-	COLOURS->addField("colourstring", true);
-	COLOURS->addField("ansi");
+	COLOURS->addPK("colourid");
+	COLOURS->addTextField("name");
+	COLOURS->addTextField("code");
+	COLOURS->addTextField("colourstring");
+	COLOURS->addValue("ansi");
 	
-	COMMANDS->addField("name", true);
-	COMMANDS->addField("grantgroup", 1);
-	COMMANDS->addField("highforce", 1);
-	COMMANDS->addField("force", 1);
-	COMMANDS->addField("lowforce", 0);
+	COMMANDS->addPK("commandid");
+	COMMANDS->addTextField("name");
+	COMMANDS->addValue("grantgroup", 1);
+	COMMANDS->addValue("highforce", 1);
+	COMMANDS->addValue("force", 1);
+	COMMANDS->addValue("lowforce", 0);
 	
-	EXITS->addField("dir");
+	EXITS->addPK("exitid");
+	EXITS->addValue("dir");
 		
-	GRANTGROUPS->addField("name", true);
-	GRANTGROUPS->addField("defaultgrant");
-	GRANTGROUPS->addField("implies");
+	GRANTGROUPS->addPK("grantgroupid");
+	GRANTGROUPS->addTextField("name");
+	GRANTGROUPS->addValue("defaultgrant");
+	GRANTGROUPS->addValue("implies");
 	
+	PERMISSIONS->addPK("permissionid");
 	PERMISSIONS->addFK(ACCOUNTS);
 	PERMISSIONS->addFK(COMMANDS);
 	PERMISSIONS->addFK(GRANTGROUPS);
-	PERMISSIONS->addField("grant");
+	PERMISSIONS->addValue("grant");
 	
-	RACES->addField("name", true);
+	RACES->addPK("areaid");
+	RACES->addTextField("name");
 	
-	ROOMS->addField("name", true);
-	ROOMS->addField("description", true);
+	ROOMS->addPK("roomid");
+	ROOMS->addTextField("name");
+	ROOMS->addTextField("description");
 	ROOMS->addFK(AREAS);
 	ROOMS->addFK(SECTORS);
-	ROOMS->addField("width");
-	ROOMS->addField("length");
-	ROOMS->addField("height");
+	ROOMS->addValue("width");
+	ROOMS->addValue("length");
+	ROOMS->addValue("height");
 	
-	SECTORS->addField("name", true);
-	SECTORS->addField("symbol", true);
-	SECTORS->addField("movecost");
-	SECTORS->addField("water");
+	SECTORS->addPK("sectorid");
+	SECTORS->addTextField("name");
+	SECTORS->addTextField("symbol");
+	SECTORS->addValue("movecost");
+	SECTORS->addValue("water");
 	
-	SKILLS->addField("name", true);
+	SKILLS->addPK("skillid");
+	SKILLS->addTextField("name");
 	SKILLS->addFK(BRANCHES);
 	
-	STATS->addField("name", true);
-	STATS->addField("shortname", true);
+	STATS->addPK("statid");
+	STATS->addTextField("name");
+	STATS->addTextField("shortname");
 	
-	TREES->addField("name", true);
+	TREES->addPK("treeid");
+	TREES->addTextField("name");
 	TREES->addFK(CLUSTERS);
 	TREES->addFK(STATS, "Primary");
 	TREES->addFK(STATS, "Secondary");
 	
-	VERSION->addField("versiontext", true);
-	VERSION->addField("major");
-	VERSION->addField("minor");
-	VERSION->addField("micro");
+	VERSION->addPK("versionid");
+	VERSION->addTextField("versiontext");
+	VERSION->addValue("major");
+	VERSION->addValue("minor");
+	VERSION->addValue("micro");
 	
 	m_tables.push_back(ACCOUNTS);
 	m_tables.push_back(AREAS);

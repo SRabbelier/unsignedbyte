@@ -43,8 +43,8 @@ ClassHeaderGenerator::~ClassHeaderGenerator()
 
 void ClassHeaderGenerator::GenerateClass()
 {
-	if(m_table->size() == 0 && !m_table->isLookupTable())
-		throw std::logic_error("ClassHeaderGenerator::GenerateClass(), class has no fields!");
+	if(m_table->keysize() == 0)
+		throw std::logic_error("ClassHeaderGenerator::GenerateClass(), class has no keys!");
 		
 	try
 	{
@@ -66,9 +66,6 @@ void ClassHeaderGenerator::AppendHeader()
 	if(!m_file)
 		throw std::logic_error("Header file is not open for writing.\n");
 	
-	if(m_table->isLookupTable())
-		(*m_file) << m_tabs << "// Lookup table" << endl;
-	
 	(*m_file) << m_tabs << "class " << m_table->tableName() << " : public Bindable" << endl;
 	(*m_file) << m_tabs << "{" << endl;
 	(*m_file) << m_tabs << "public:" << endl;
@@ -85,23 +82,14 @@ void ClassHeaderGenerator::AppendCtor()
 	
 	(*m_file) << m_tabs << m_tabs << "// Ctors" << endl;
 	
-	if(!m_table->isLookupTable())
-	{
-		// Empty ctor for creating new objects
+	// Empty ctor for creating new objects
+	if(m_table->hasSinglularPrimaryKey())
 		(*m_file) << m_tabs << m_tabs << name << "(Database* db);" << endl;
-		(*m_file) << m_tabs << m_tabs << name << "(Database* db, value_type ";
-		(*m_file) << m_table->tableID();
-		(*m_file) << ");" << endl;
-	}
-	else
-	{
-		(*m_file) << m_tabs << m_tabs << name << "(Database* db";
-		
-		for(Fields::const_iterator it = m_table->begin(); it != m_table->end(); it++)
-			(*m_file) << ", value_type " << (*it)->getName();
 
-		(*m_file) << ");" << endl;
-	}
+	(*m_file) << m_tabs << m_tabs << name << "(Database* db";
+	for(TableMap::const_iterator it = m_table->keybegin(); it != m_table->keyend(); it++)
+		(*m_file) << ", value_type " << it->first;
+	(*m_file) << ");" << endl;
 	
 	// Destructor
 	(*m_file) << m_tabs << m_tabs << "~" << name << "();" << endl;
@@ -124,7 +112,7 @@ void ClassHeaderGenerator::AppendBody()
 	(*m_file) << m_tabs << m_tabs << "// Bindable interface" << endl;
 	(*m_file) << m_tabs << m_tabs << "void bindKeys(sqlite3_stmt* stmt) const;" << endl;
 	(*m_file) << m_tabs << m_tabs << "void bindUpdate(sqlite3_stmt* stmt) const;" << endl;
-	(*m_file) << m_tabs << m_tabs << "void parseInsert(sqlite3_stmt* stmt);" << endl;
+	(*m_file) << m_tabs << m_tabs << "void parseInsert(sqlite3* db);" << endl;
 	(*m_file) << m_tabs << m_tabs << "void parseSelect(sqlite3_stmt* stmt);" << endl;
 	(*m_file) << m_tabs << m_tabs << "Table* getTable() const;" << endl;
 	(*m_file) << endl;
@@ -137,48 +125,41 @@ void ClassHeaderGenerator::AppendFields()
 	if(!m_file)
 		throw std::logic_error("Header file is not open for writing.\n");
 		
-	if(m_table->size() == 0)
-		return;
-		
-	(*m_file) << m_tabs << m_tabs << "// Getters" << endl;
-	for(Fields::const_iterator it = m_table->begin(); it != m_table->end(); it++)
+	if(m_table->size() != 0)
 	{
-		Field* field = *it;
-		if(field->isText())
-			(*m_file) << m_tabs << m_tabs << "const std::string& get" << field->getName() << "() const;" << endl;
-		else
-			(*m_file) << m_tabs << m_tabs << "value_type get" << field->getName() << "() const;" << endl;
-	}
-	(*m_file) << endl;
+		(*m_file) << m_tabs << m_tabs << "// Getters" << endl;
+		for(Fields::const_iterator it = m_table->begin(); it != m_table->end(); it++)
+		{
+			Field* field = *it;
+			if(field->isText())
+				(*m_file) << m_tabs << m_tabs << "const std::string& get" << field->getName() << "() const;" << endl;
+			else
+				(*m_file) << m_tabs << m_tabs << "value_type get" << field->getName() << "() const;" << endl;
+		}
+		(*m_file) << endl;
 
-	(*m_file) << m_tabs << m_tabs << "// Setters" << endl;
-	for(Fields::const_iterator it = m_table->begin(); it != m_table->end(); it++)
-	{
-		Field* field = *it;
-		if(field->isText())
-			(*m_file) << m_tabs << m_tabs << "void set" << field->getName() << "(const std::string& value);" << endl;
-		else
-			(*m_file) << m_tabs << m_tabs << "void set" << field->getName() << "(value_type value);" << endl;
+		(*m_file) << m_tabs << m_tabs << "// Setters" << endl;
+		for(Fields::const_iterator it = m_table->begin(); it != m_table->end(); it++)
+		{
+			Field* field = *it;
+			if(field->isText())
+				(*m_file) << m_tabs << m_tabs << "void set" << field->getName() << "(const std::string& value);" << endl;
+			else
+				(*m_file) << m_tabs << m_tabs << "void set" << field->getName() << "(value_type value);" << endl;
+		}
+		(*m_file) << endl;
 	}
-	(*m_file) << endl;
 	
 	(*m_file) << m_tabs << "private:" << endl;
 	(*m_file) << m_tabs << m_tabs << "// Database pointer" << endl;
 	(*m_file) << m_tabs << m_tabs << "Database* m_db;" << endl;
 	(*m_file) << endl;
 	
-	(*m_file) << m_tabs << m_tabs << "// Fields" << endl;
-		
-	if(!m_table->isLookupTable())
-	{
-		(*m_file) << m_tabs << m_tabs << "value_type m_" << m_table->tableID() << ";" << endl;
-	}
-	else
-	{
-		for(TableMap::const_iterator it = m_table->fkbegin(); it != m_table->fkend(); it++)
-			(*m_file) << m_tabs << m_tabs << "value_type m_" << it->first << ";" << endl;
-	}
+	(*m_file) << m_tabs << m_tabs << "// Keys" << endl;
+	for(TableMap::const_iterator it = m_table->keybegin(); it != m_table->keyend(); it++)
+		(*m_file) << m_tabs << m_tabs << "value_type m_" << it->first << ";" << endl;
 	
+	(*m_file) << m_tabs << m_tabs << "// Fields" << endl;
 	for(Fields::const_iterator it = m_table->begin(); it != m_table->end(); it++)
 	{
 		Field* field = *it;

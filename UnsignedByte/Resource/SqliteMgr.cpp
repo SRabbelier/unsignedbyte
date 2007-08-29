@@ -66,12 +66,9 @@ void SqliteMgr::doInsert(Bindable* bindable)
 	Table* table = bindable->getTable();
 	sqlite3_stmt* insert = getInsertStmt(table);
 	
-	if(table->isLookupTable())
-		bindable->bindKeys(insert);
-		
+	bindable->bindKeys(insert);	
 	doStatement(insert);
-	
-	bindable->parseInsert(insert);
+	bindable->parseInsert(m_odb->db);
 }
 
 void SqliteMgr::doErase(Bindable* bindable)
@@ -80,8 +77,7 @@ void SqliteMgr::doErase(Bindable* bindable)
 	sqlite3_stmt* erase = getEraseStmt(table);
 	
 	bindable->bindKeys(erase);
-	doStatement(erase);
-	
+	doStatement(erase);	
 }
 
 void SqliteMgr::doUpdate(Bindable* bindable)
@@ -91,7 +87,6 @@ void SqliteMgr::doUpdate(Bindable* bindable)
 	
 	bindable->bindUpdate(update);
 	doStatement(update);
-	
 }
 
 void SqliteMgr::doSelect(Bindable* bindable)
@@ -145,36 +140,25 @@ sqlite3_stmt* SqliteMgr::getInsertStmt(Table* table)
 		return statement;
 		
 	std::string sql;
-	if(!table->isLookupTable())
+	sql.append("INSERT INTO ");
+	sql.append(table->tableName());
+	sql.append(" (");
+	for(TableMap::const_iterator it = table->keybegin(); it != table->keyend(); it++)
 	{
-		sql.append("INSERT INTO ");
-		sql.append(table->tableName());
-		sql.append(" (");
-		sql.append(table->tableID());
-		sql.append(") values(NULL);");
+		   if(it != table->keybegin())
+				   sql.append(", ");
+
+		   sql.append(it->first);
 	}
-	else
+	sql.append(") values(");
+	for(Fields::const_iterator it = table->begin(); it != table->end(); it++)
 	{
-		sql.append("INSERT INTO ");
-		sql.append(table->tableName());
-		sql.append(" (");
-		for(Fields::const_iterator it = table->begin(); it != table->end(); it++)
-		{
-			   if(it != table->begin())
-					   sql.append(", ");
+		   if(it != table->begin())
+				   sql.append(", ");
 
-			   sql.append((*it)->getName());
-		}
-		sql.append(") values(");
-		for(Fields::const_iterator it = table->begin(); it != table->end(); it++)
-		{
-			   if(it != table->begin())
-					   sql.append(", ");
-
-			   sql.append("NULL");
-		}
-		sql.append(");");
+		   sql.append("NULL");
 	}
+	sql.append(");");
 	
 	Global::Get()->logf("SQL is: %s\n", sql.c_str());
 	
@@ -198,29 +182,18 @@ sqlite3_stmt* SqliteMgr::getEraseStmt(Table* table)
 		return statement;
 		
 	std::string sql;
-	if(!table->isLookupTable())
+	sql.append("DELETE ");
+	sql.append(table->tableName());
+	sql.append(" where ");
+	for(TableMap::const_iterator it = table->keybegin(); it != table->keyend(); it++)
 	{
-		sql.append("DELETE ");
-		sql.append(table->tableName());
-		sql.append(" where ");
-		sql.append(table->tableID());
-		sql.append("=?;");
-	}
-	else
-	{
-		sql.append("DELETE ");
-		sql.append(table->tableName());
-		sql.append(" where ");
-		for(Fields::const_iterator it = table->begin(); it != table->end(); it++)
-		{
-			if(it != table->begin())
-				sql.append(", ");
+		if(it != table->keybegin())
+			sql.append(", ");
 
-			sql.append((*it)->getName());
-			sql.append("=?");
-		}
-		sql.append(";");
+		sql.append(it->first);
+		sql.append("=?");
 	}
+	sql.append(";");
 	
 	Global::Get()->logf("SQL is: %s\n", sql.c_str());
 	
@@ -257,8 +230,14 @@ sqlite3_stmt* SqliteMgr::getUpdateStmt(Table* table)
 		sql.append("=?");
 	}
 	sql.append(" where ");
-	sql.append(table->tableID());
-	sql.append("=?;");
+	for(TableMap::const_iterator it = table->keybegin(); it != table->keyend(); it++)
+	{
+		if(it != table->keybegin())
+			sql.append(", ");
+
+		sql.append(it->first);
+		sql.append("=?");
+	}
 	
 	Global::Get()->logf("SQL is: %s\n", sql.c_str());
 
@@ -294,23 +273,15 @@ sqlite3_stmt* SqliteMgr::getSelectStmt(Table* table)
 	 
 	sql.append(" from ");
 	sql.append(table->tableName());
-		sql.append(" where ");
+	sql.append(" where ");
 	
-	if(!table->isLookupTable())
+	for(TableMap::const_iterator it = table->keybegin(); it != table->keyend(); it++)
 	{
-		sql.append(table->tableID());
-		sql.append("=?;");
-	}
-	else
-	{
-		for(Fields::const_iterator it = table->begin(); it != table->end(); it++)
-		{
-			if(it != table->begin())
-				sql.append(", ");
+		if(it != table->keybegin())
+			sql.append(", ");
 
-			sql.append((*it)->getName());
-			sql.append("=?");
-		}
+		sql.append(it->first);
+		sql.append("=?");
 	}
 	
 	Global::Get()->logf("SQL is: %s\n", sql.c_str());
