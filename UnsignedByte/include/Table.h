@@ -56,15 +56,15 @@ public:
 	std::string tableQuery() const;
 	std::string creationQuery(bool verify = false) const;
 	
-	Fields::const_iterator begin() { return m_fields.begin(); }
-	Fields::const_iterator end() { return m_fields.end(); }
-	size_t size() { return m_fields.size(); }
+	Fields::const_iterator begin() const { return m_fields.begin(); }
+	Fields::const_iterator end() const { return m_fields.end(); }
+	size_t size() const { return m_fields.size(); }
 	
-	std::string firstKey() const { return m_keys.begin()->first; }
-	TableMap::const_iterator keybegin() { return m_keys.begin(); }
-	TableMap::const_iterator keyend() { return m_keys.end(); }
-	size_t keysize() { return m_keys.size(); }
-	
+	std::string firstKey() const { return m_primarykeys.begin()->first; }
+	TableMap::const_iterator keybegin() const { return m_primarykeys.begin(); }
+	TableMap::const_iterator keyend() const { return m_primarykeys.end(); }
+	size_t keysize() const { return m_primarykeys.size(); }
+		
 	bool hasSinglularPrimaryKey() { return m_spkey; }
 	
 private:
@@ -75,8 +75,5 @@ private:
 	bool m_spkey; // singular primary key
 
 	Fields m_fields;
-	TableMap m_keys; // All foreign keys, either added with addFK() or addFPK()
-	
-	TableMap m_nonprimarykeys; // All keys added with addFK()
 	TableMap m_primarykeys; // All keys added with addFPK()
 };

@@ -46,7 +46,7 @@ ClassSourceGenerator::~ClassSourceGenerator()
 void ClassSourceGenerator::GenerateClass()
 {
 	if(m_table->keysize() == 0)
-		throw std::logic_error("ClassSourceGenerator::GenerateClass(), class has no keys!");
+		throw std::logic_error("ClassSourceGenerator::GenerateClass(), class has no primary keys!");
 		
 	try
 	{
@@ -66,7 +66,7 @@ void ClassSourceGenerator::GenerateClass()
 	catch(std::logic_error& e)
 	{
 		Global::Get()->bug(e.what());
-		Global::Get()->bugf("Could not generate class '%s'.\n", m_name.c_str());
+		Global::Get()->bugf("Could not generate class '%s'.", m_name.c_str());
 	}
 }
 

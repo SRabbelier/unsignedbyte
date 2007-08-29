@@ -54,10 +54,9 @@ Table::~Table()
 
 void Table::addPK(const std::string& name)
 {
-	m_keys[name] = this;
 	m_primarykeys[name] = this;
 	
-	if(m_keys.size() == 1)
+	if(m_primarykeys.size() == 1)
 		m_spkey = true;
 }
 
@@ -66,10 +65,9 @@ void Table::addFPK(Table* table)
 	std::string name;
 	name.append(table->tableForeignName());
 	
-	m_keys[name] = table;
 	m_primarykeys[name] = table;
 	
-	if(m_keys.size() == 1)
+	if(m_primarykeys.size() == 1)
 		m_spkey = true;
 }
 
@@ -111,8 +109,7 @@ void Table::addFK(Table* table, const std::string& suffix)
 	name.append(table->tableForeignName());
 	name.append(suffix);
 
-	m_keys[name] = table;
-	m_nonprimarykeys[name] = table;
+	addValue(name);
 	// TODO, add SQLite triggers
 }
 
@@ -161,9 +158,9 @@ std::string Table::creationQuery(bool verify) const
 	
 	bool comma = false;
 	
-	for(TableMap::const_iterator it = m_keys.begin(); it != m_keys.end(); it++)
+	for(TableMap::const_iterator it = keybegin(); it != keyend(); it++)
 	{
-		if(m_spkey && it == m_keys.begin())
+		if(m_spkey && it == keybegin())
 		{
 			result.append(it->first);
 			result.append(" INTEGER PRIMARY KEY AUTOINCREMENT, ");
@@ -178,7 +175,7 @@ std::string Table::creationQuery(bool verify) const
 		comma = true;
 	}
 	
-	for(Fields::const_iterator it = m_fields.begin(); it != m_fields.end(); it++)
+	for(Fields::const_iterator it = begin(); it != end(); it++)
 	{
 		if(comma)
 			result.append(", ");
@@ -190,9 +187,9 @@ std::string Table::creationQuery(bool verify) const
 	if(!m_spkey)
 	{
 		result.append(", PRIMARY KEY(");
-		for(TableMap::const_iterator it = m_keys.begin(); it != m_keys.end(); it++)
+		for(TableMap::const_iterator it = keybegin(); it != keyend(); it++)
 		{
-			if(it != m_keys.begin())
+			if(it != keybegin())
 				result.append(", ");
 				
 			result.append(it->first);
