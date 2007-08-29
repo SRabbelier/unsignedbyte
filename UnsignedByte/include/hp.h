@@ -40,6 +40,7 @@ namespace hp
 		// Database interaction
 		void save();
 		void erase();
+		void exists();
 
 		// Bindable interface
 		void bindKeys(sqlite3_stmt* stmt) const;
@@ -85,6 +86,7 @@ namespace hp
 		// Database interaction
 		void save();
 		void erase();
+		void exists();
 
 		// Bindable interface
 		void bindKeys(sqlite3_stmt* stmt) const;
@@ -136,6 +138,7 @@ namespace hp
 		// Database interaction
 		void save();
 		void erase();
+		void exists();
 
 		// Bindable interface
 		void bindKeys(sqlite3_stmt* stmt) const;
@@ -146,15 +149,9 @@ namespace hp
 
 		// Getters
 		const std::string& getname() const;
-		value_type getfkTrees() const;
-		value_type getfkStatsPrimary() const;
-		value_type getfkStatsSecondary() const;
 
 		// Setters
 		void setname(const std::string& value);
-		void setfkTrees(value_type value);
-		void setfkStatsPrimary(value_type value);
-		void setfkStatsSecondary(value_type value);
 
 	private:
 		// Database pointer
@@ -163,9 +160,6 @@ namespace hp
 		// Fields
 		value_type m_branchid;
 		std::string m_name;
-		value_type m_fkTrees;
-		value_type m_fkStatsPrimary;
-		value_type m_fkStatsSecondary;
 
 		// State flags
 		bool m_newentry;
@@ -182,12 +176,12 @@ namespace hp
 	public:
 		// Ctors
 		CharacterAccount(Database* db);
-		CharacterAccount(Database* db, value_type fkCharacters, value_type fkAccounts);
 		~CharacterAccount();
 
 		// Database interaction
 		void save();
 		void erase();
+		void exists();
 
 		// Bindable interface
 		void bindKeys(sqlite3_stmt* stmt) const;
@@ -195,22 +189,6 @@ namespace hp
 		void parseInsert(sqlite3_stmt* stmt);
 		void parseSelect(sqlite3_stmt* stmt);
 		Table* getTable() const;
-
-		// Getters
-		value_type getfkCharacters() const;
-		value_type getfkAccounts() const;
-
-	private:
-		// Database pointer
-		Database* m_db;
-
-		// Fields
-		value_type m_fkCharacters;
-		value_type m_fkAccounts;
-
-		// State flags
-		bool m_newentry;
-		bool m_dirty;
 
 		// Hide copy constructor and assignment operator
 		CharacterAccount(const CharacterAccount& rhs);
@@ -228,6 +206,7 @@ namespace hp
 		// Database interaction
 		void save();
 		void erase();
+		void exists();
 
 		// Bindable interface
 		void bindKeys(sqlite3_stmt* stmt) const;
@@ -237,13 +216,9 @@ namespace hp
 		Table* getTable() const;
 
 		// Getters
-		value_type getfkCharacters() const;
-		value_type getfkBranches() const;
 		value_type getxp() const;
 
 		// Setters
-		void setfkCharacters(value_type value);
-		void setfkBranches(value_type value);
 		void setxp(value_type value);
 
 	private:
@@ -252,8 +227,6 @@ namespace hp
 
 		// Fields
 		value_type m_characterbranchid;
-		value_type m_fkCharacters;
-		value_type m_fkBranches;
 		value_type m_xp;
 
 		// State flags
@@ -276,6 +249,7 @@ namespace hp
 		// Database interaction
 		void save();
 		void erase();
+		void exists();
 
 		// Bindable interface
 		void bindKeys(sqlite3_stmt* stmt) const;
@@ -285,13 +259,9 @@ namespace hp
 		Table* getTable() const;
 
 		// Getters
-		value_type getfkCharacters() const;
-		value_type getfkClusters() const;
 		value_type getxp() const;
 
 		// Setters
-		void setfkCharacters(value_type value);
-		void setfkClusters(value_type value);
 		void setxp(value_type value);
 
 	private:
@@ -300,8 +270,6 @@ namespace hp
 
 		// Fields
 		value_type m_characterclusterid;
-		value_type m_fkCharacters;
-		value_type m_fkClusters;
 		value_type m_xp;
 
 		// State flags
@@ -324,6 +292,7 @@ namespace hp
 		// Database interaction
 		void save();
 		void erase();
+		void exists();
 
 		// Bindable interface
 		void bindKeys(sqlite3_stmt* stmt) const;
@@ -333,14 +302,10 @@ namespace hp
 		Table* getTable() const;
 
 		// Getters
-		value_type getfkRaces() const;
-		value_type getfkRooms() const;
 		const std::string& getname() const;
 		const std::string& getdescription() const;
 
 		// Setters
-		void setfkRaces(value_type value);
-		void setfkRooms(value_type value);
 		void setname(const std::string& value);
 		void setdescription(const std::string& value);
 
@@ -350,8 +315,6 @@ namespace hp
 
 		// Fields
 		value_type m_characterid;
-		value_type m_fkRaces;
-		value_type m_fkRooms;
 		std::string m_name;
 		std::string m_description;
 
@@ -375,6 +338,7 @@ namespace hp
 		// Database interaction
 		void save();
 		void erase();
+		void exists();
 
 		// Bindable interface
 		void bindKeys(sqlite3_stmt* stmt) const;
@@ -384,13 +348,9 @@ namespace hp
 		Table* getTable() const;
 
 		// Getters
-		value_type getfkCharacters() const;
-		value_type getfkBranches() const;
 		value_type getxp() const;
 
 		// Setters
-		void setfkCharacters(value_type value);
-		void setfkBranches(value_type value);
 		void setxp(value_type value);
 
 	private:
@@ -399,8 +359,6 @@ namespace hp
 
 		// Fields
 		value_type m_characterskillid;
-		value_type m_fkCharacters;
-		value_type m_fkBranches;
 		value_type m_xp;
 
 		// State flags
@@ -423,6 +381,7 @@ namespace hp
 		// Database interaction
 		void save();
 		void erase();
+		void exists();
 
 		// Bindable interface
 		void bindKeys(sqlite3_stmt* stmt) const;
@@ -432,14 +391,10 @@ namespace hp
 		Table* getTable() const;
 
 		// Getters
-		value_type getfkCharacters() const;
-		value_type getfkStats() const;
 		value_type getcurrent() const;
 		value_type getpotential() const;
 
 		// Setters
-		void setfkCharacters(value_type value);
-		void setfkStats(value_type value);
 		void setcurrent(value_type value);
 		void setpotential(value_type value);
 
@@ -449,8 +404,6 @@ namespace hp
 
 		// Fields
 		value_type m_characterstatid;
-		value_type m_fkCharacters;
-		value_type m_fkStats;
 		value_type m_current;
 		value_type m_potential;
 
@@ -474,6 +427,7 @@ namespace hp
 		// Database interaction
 		void save();
 		void erase();
+		void exists();
 
 		// Bindable interface
 		void bindKeys(sqlite3_stmt* stmt) const;
@@ -483,13 +437,9 @@ namespace hp
 		Table* getTable() const;
 
 		// Getters
-		value_type getfkCharacters() const;
-		value_type getfkTrees() const;
 		value_type getxp() const;
 
 		// Setters
-		void setfkCharacters(value_type value);
-		void setfkTrees(value_type value);
 		void setxp(value_type value);
 
 	private:
@@ -498,8 +448,6 @@ namespace hp
 
 		// Fields
 		value_type m_charactertreeid;
-		value_type m_fkCharacters;
-		value_type m_fkTrees;
 		value_type m_xp;
 
 		// State flags
@@ -522,6 +470,7 @@ namespace hp
 		// Database interaction
 		void save();
 		void erase();
+		void exists();
 
 		// Bindable interface
 		void bindKeys(sqlite3_stmt* stmt) const;
@@ -564,6 +513,7 @@ namespace hp
 		// Database interaction
 		void save();
 		void erase();
+		void exists();
 
 		// Bindable interface
 		void bindKeys(sqlite3_stmt* stmt) const;
@@ -615,6 +565,7 @@ namespace hp
 		// Database interaction
 		void save();
 		void erase();
+		void exists();
 
 		// Bindable interface
 		void bindKeys(sqlite3_stmt* stmt) const;
@@ -669,6 +620,7 @@ namespace hp
 		// Database interaction
 		void save();
 		void erase();
+		void exists();
 
 		// Bindable interface
 		void bindKeys(sqlite3_stmt* stmt) const;
@@ -711,6 +663,7 @@ namespace hp
 		// Database interaction
 		void save();
 		void erase();
+		void exists();
 
 		// Bindable interface
 		void bindKeys(sqlite3_stmt* stmt) const;
@@ -759,6 +712,7 @@ namespace hp
 		// Database interaction
 		void save();
 		void erase();
+		void exists();
 
 		// Bindable interface
 		void bindKeys(sqlite3_stmt* stmt) const;
@@ -768,15 +722,9 @@ namespace hp
 		Table* getTable() const;
 
 		// Getters
-		value_type getfkAccounts() const;
-		value_type getfkCommands() const;
-		value_type getfkGrantGroups() const;
 		value_type getgrant() const;
 
 		// Setters
-		void setfkAccounts(value_type value);
-		void setfkCommands(value_type value);
-		void setfkGrantGroups(value_type value);
 		void setgrant(value_type value);
 
 	private:
@@ -785,9 +733,6 @@ namespace hp
 
 		// Fields
 		value_type m_permissionid;
-		value_type m_fkAccounts;
-		value_type m_fkCommands;
-		value_type m_fkGrantGroups;
 		value_type m_grant;
 
 		// State flags
@@ -810,6 +755,7 @@ namespace hp
 		// Database interaction
 		void save();
 		void erase();
+		void exists();
 
 		// Bindable interface
 		void bindKeys(sqlite3_stmt* stmt) const;
@@ -852,6 +798,7 @@ namespace hp
 		// Database interaction
 		void save();
 		void erase();
+		void exists();
 
 		// Bindable interface
 		void bindKeys(sqlite3_stmt* stmt) const;
@@ -863,8 +810,6 @@ namespace hp
 		// Getters
 		const std::string& getname() const;
 		const std::string& getdescription() const;
-		value_type getfkAreas() const;
-		value_type getfkSectors() const;
 		value_type getwidth() const;
 		value_type getlength() const;
 		value_type getheight() const;
@@ -872,8 +817,6 @@ namespace hp
 		// Setters
 		void setname(const std::string& value);
 		void setdescription(const std::string& value);
-		void setfkAreas(value_type value);
-		void setfkSectors(value_type value);
 		void setwidth(value_type value);
 		void setlength(value_type value);
 		void setheight(value_type value);
@@ -886,8 +829,6 @@ namespace hp
 		value_type m_roomid;
 		std::string m_name;
 		std::string m_description;
-		value_type m_fkAreas;
-		value_type m_fkSectors;
 		value_type m_width;
 		value_type m_length;
 		value_type m_height;
@@ -912,6 +853,7 @@ namespace hp
 		// Database interaction
 		void save();
 		void erase();
+		void exists();
 
 		// Bindable interface
 		void bindKeys(sqlite3_stmt* stmt) const;
@@ -963,6 +905,7 @@ namespace hp
 		// Database interaction
 		void save();
 		void erase();
+		void exists();
 
 		// Bindable interface
 		void bindKeys(sqlite3_stmt* stmt) const;
@@ -973,11 +916,9 @@ namespace hp
 
 		// Getters
 		const std::string& getname() const;
-		value_type getfkBranches() const;
 
 		// Setters
 		void setname(const std::string& value);
-		void setfkBranches(value_type value);
 
 	private:
 		// Database pointer
@@ -986,7 +927,6 @@ namespace hp
 		// Fields
 		value_type m_skillid;
 		std::string m_name;
-		value_type m_fkBranches;
 
 		// State flags
 		bool m_newentry;
@@ -1008,6 +948,7 @@ namespace hp
 		// Database interaction
 		void save();
 		void erase();
+		void exists();
 
 		// Bindable interface
 		void bindKeys(sqlite3_stmt* stmt) const;
@@ -1053,6 +994,7 @@ namespace hp
 		// Database interaction
 		void save();
 		void erase();
+		void exists();
 
 		// Bindable interface
 		void bindKeys(sqlite3_stmt* stmt) const;
@@ -1063,15 +1005,9 @@ namespace hp
 
 		// Getters
 		const std::string& getname() const;
-		value_type getfkClusters() const;
-		value_type getfkStatsPrimary() const;
-		value_type getfkStatsSecondary() const;
 
 		// Setters
 		void setname(const std::string& value);
-		void setfkClusters(value_type value);
-		void setfkStatsPrimary(value_type value);
-		void setfkStatsSecondary(value_type value);
 
 	private:
 		// Database pointer
@@ -1080,9 +1016,6 @@ namespace hp
 		// Fields
 		value_type m_treeid;
 		std::string m_name;
-		value_type m_fkClusters;
-		value_type m_fkStatsPrimary;
-		value_type m_fkStatsSecondary;
 
 		// State flags
 		bool m_newentry;
@@ -1104,6 +1037,7 @@ namespace hp
 		// Database interaction
 		void save();
 		void erase();
+		void exists();
 
 		// Bindable interface
 		void bindKeys(sqlite3_stmt* stmt) const;

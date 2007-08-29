@@ -1,12 +1,5 @@
-sqlite3.lib
-Initialize
 *.a
 *.tags
-Debug
-ub.cpp
-ub.h
 *.o
 *.d
-bin
-lib
-*.mk
+UnsignedByte_wsp.*

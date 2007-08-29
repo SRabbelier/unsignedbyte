@@ -86,7 +86,7 @@ void Table::addFK(Table* table, const std::string& suffix)
 	
 	name.append(suffix);
 	
-	m_fields.push_back(new Field(name, false, Global::Get()->EmptyString));
+	m_fks[name] = table;
 	// TODO, add SQLite triggers
 }
 

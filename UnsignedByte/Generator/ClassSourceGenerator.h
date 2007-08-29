@@ -41,7 +41,11 @@ private:
 	void AppendCtorSpecific();	
 	void AppendCtorDtor();
 	void AppendBody();
-	void AppendBindable();
+	void AppendBindKeys();
+	void AppendBindUpdate();
+	void AppendBindInsert();
+	void AppendBindSelect();
+	void AppendGetTable();
 	void AppendGetSet();
 	void AppendFooter();
 	

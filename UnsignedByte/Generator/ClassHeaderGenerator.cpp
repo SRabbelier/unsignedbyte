@@ -43,7 +43,7 @@ ClassHeaderGenerator::~ClassHeaderGenerator()
 
 void ClassHeaderGenerator::GenerateClass()
 {
-	if(m_table->size() == 0)
+	if(m_table->size() == 0 && !m_table->isLookupTable())
 		throw std::logic_error("ClassHeaderGenerator::GenerateClass(), class has no fields!");
 		
 	try
@@ -84,10 +84,11 @@ void ClassHeaderGenerator::AppendCtor()
 	std::string name = m_table->tableName();
 	
 	(*m_file) << m_tabs << m_tabs << "// Ctors" << endl;
-	(*m_file) << m_tabs << m_tabs << name << "(Database* db);" << endl;
 	
 	if(!m_table->isLookupTable())
 	{
+		// Empty ctor for creating new objects
+		(*m_file) << m_tabs << m_tabs << name << "(Database* db);" << endl;
 		(*m_file) << m_tabs << m_tabs << name << "(Database* db, value_type ";
 		(*m_file) << m_table->tableID();
 		(*m_file) << ");" << endl;
@@ -102,7 +103,7 @@ void ClassHeaderGenerator::AppendCtor()
 		(*m_file) << ");" << endl;
 	}
 	
-	
+	// Destructor
 	(*m_file) << m_tabs << m_tabs << "~" << name << "();" << endl;
 	(*m_file) << endl;
 	
@@ -136,6 +137,9 @@ void ClassHeaderGenerator::AppendFields()
 	if(!m_file)
 		throw std::logic_error("Header file is not open for writing.\n");
 		
+	if(m_table->size() == 0)
+		return;
+		
 	(*m_file) << m_tabs << m_tabs << "// Getters" << endl;
 	for(Fields::const_iterator it = m_table->begin(); it != m_table->end(); it++)
 	{
@@ -147,20 +151,16 @@ void ClassHeaderGenerator::AppendFields()
 	}
 	(*m_file) << endl;
 
-	// Only add setters if it's not a lookup table
-	if(!m_table->isLookupTable())
+	(*m_file) << m_tabs << m_tabs << "// Setters" << endl;
+	for(Fields::const_iterator it = m_table->begin(); it != m_table->end(); it++)
 	{
-		(*m_file) << m_tabs << m_tabs << "// Setters" << endl;
-		for(Fields::const_iterator it = m_table->begin(); it != m_table->end(); it++)
-		{
-			Field* field = *it;
-			if(field->isText())
-				(*m_file) << m_tabs << m_tabs << "void set" << field->getName() << "(const std::string& value);" << endl;
-			else
-				(*m_file) << m_tabs << m_tabs << "void set" << field->getName() << "(value_type value);" << endl;
-		}
-		(*m_file) << endl;
+		Field* field = *it;
+		if(field->isText())
+			(*m_file) << m_tabs << m_tabs << "void set" << field->getName() << "(const std::string& value);" << endl;
+		else
+			(*m_file) << m_tabs << m_tabs << "void set" << field->getName() << "(value_type value);" << endl;
 	}
+	(*m_file) << endl;
 	
 	(*m_file) << m_tabs << "private:" << endl;
 	(*m_file) << m_tabs << m_tabs << "// Database pointer" << endl;
@@ -172,6 +172,11 @@ void ClassHeaderGenerator::AppendFields()
 	if(!m_table->isLookupTable())
 	{
 		(*m_file) << m_tabs << m_tabs << "value_type m_" << m_table->tableID() << ";" << endl;
+	}
+	else
+	{
+		for(TableMap::const_iterator it = m_table->fkbegin(); it != m_table->fkend(); it++)
+			(*m_file) << m_tabs << m_tabs << "value_type m_" << it->first << ";" << endl;
 	}
 	
 	for(Fields::const_iterator it = m_table->begin(); it != m_table->end(); it++)

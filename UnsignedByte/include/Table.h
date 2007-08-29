@@ -24,8 +24,10 @@
 #include <map>
 
 class Field;
+class Table;
 
 typedef std::vector<Field*> Fields;
+typedef std::map<std::string, Table*> TableMap;
 
 class Table
 {
@@ -47,9 +49,13 @@ public:
 	
 	bool isLookupTable() const;
 	
-	Fields::const_iterator begin() { return m_fields.begin(); };
-	Fields::const_iterator end() { return m_fields.end(); };
-	size_t size() { return m_fields.size(); };
+	Fields::const_iterator begin() { return m_fields.begin(); }
+	Fields::const_iterator end() { return m_fields.end(); }
+	size_t size() { return m_fields.size(); }
+	
+	TableMap::const_iterator fkbegin() { return m_fks.begin(); }
+	TableMap::const_iterator fkend() { return m_fks.end(); }
+	size_t fksize() { return m_fks.size(); }
 	
 private:
 	std::string m_name;
@@ -58,4 +64,5 @@ private:
 	const bool m_lookuptable;
 
 	Fields m_fields;
+	TableMap m_fks;
 };

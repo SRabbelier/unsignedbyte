@@ -55,7 +55,6 @@ int main()
 	if(!succes)
 	{
 		printf("Could not generate DAL!\n");
-		std::cin.get();
 		return 1;
 	}
 	

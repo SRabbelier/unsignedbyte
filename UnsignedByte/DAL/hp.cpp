@@ -277,10 +277,7 @@ void Areas::setwidth(value_type value)
 Branches::Branches(Database* db) :
 m_db(db),
 m_branchid(),
-m_name(),
-m_fkTrees(0),
-m_fkStatsPrimary(0),
-m_fkStatsSecondary(0)
+m_name()
 {
 
 }
@@ -322,28 +319,19 @@ void Branches::bindKeys(sqlite3_stmt* stmt) const
 void Branches::bindUpdate(sqlite3_stmt* stmt) const
 {
 	sqlite3_bind_text(stmt, 1, m_name.c_str(), m_name.size(), SQLITE_TRANSIENT);
-	sqlite3_bind_int64(stmt, 2, m_fkTrees);
-	sqlite3_bind_int64(stmt, 3, m_fkStatsPrimary);
-	sqlite3_bind_int64(stmt, 4, m_fkStatsSecondary);
-	sqlite3_bind_int64(stmt, 5, m_branchid);
+	sqlite3_bind_int64(stmt, 2, m_branchid);
 }
 
 void Branches::parseInsert(sqlite3_stmt* stmt)
 {
 	m_name = std::string((const char *)sqlite3_column_text(stmt, 0));
-	m_fkTrees = sqlite3_column_int64(stmt, 1);
-	m_fkStatsPrimary = sqlite3_column_int64(stmt, 2);
-	m_fkStatsSecondary = sqlite3_column_int64(stmt, 3);
-	m_branchid = sqlite3_column_int64(stmt, 4);
+	m_branchid = sqlite3_column_int64(stmt, 1);
 }
 
 void Branches::parseSelect(sqlite3_stmt* stmt)
 {
 	m_name = std::string((const char *)sqlite3_column_text(stmt, 0));
-	m_fkTrees = sqlite3_column_int64(stmt, 1);
-	m_fkStatsPrimary = sqlite3_column_int64(stmt, 2);
-	m_fkStatsSecondary = sqlite3_column_int64(stmt, 3);
-	m_branchid = sqlite3_column_int64(stmt, 4);
+	m_branchid = sqlite3_column_int64(stmt, 1);
 }
 
 Table* Branches::getTable() const
@@ -356,42 +344,9 @@ const std::string& Branches::getname() const
 	return m_name;
 }
 
-value_type Branches::getfkTrees() const
-{
-	return m_fkTrees;
-}
-
-value_type Branches::getfkStatsPrimary() const
-{
-	return m_fkStatsPrimary;
-}
-
-value_type Branches::getfkStatsSecondary() const
-{
-	return m_fkStatsSecondary;
-}
-
 void Branches::setname(const std::string& value)
 {
 	m_name = value;
-	m_dirty = true;
-}
-
-void Branches::setfkTrees(value_type value)
-{
-	m_fkTrees = value;
-	m_dirty = true;
-}
-
-void Branches::setfkStatsPrimary(value_type value)
-{
-	m_fkStatsPrimary = value;
-	m_dirty = true;
-}
-
-void Branches::setfkStatsSecondary(value_type value)
-{
-	m_fkStatsSecondary = value;
 	m_dirty = true;
 }
 
@@ -407,19 +362,11 @@ void Branches::setfkStatsSecondary(value_type value)
  * class CharacterAccount
  **/
 
-// Ctors
-CharacterAccount::CharacterAccount(Database* db) :
+CharacterAccount::CharacterAccount(Database* db, value_type fkAccounts, value_type fkCharacters) :
 m_db(db),
-m_fkCharacters(0),
-m_fkAccounts(0)
+m_fkAccounts(fkAccounts),
+m_fkCharacters(fkCharacters)
 {
-
-}
-
-CharacterAccount::CharacterAccount(Database* db, value_type fkCharacters, value_type fkAccounts) :
-m_db(db),
-m_fkCharacters(fkCharacters),
-m_fkAccounts(fkAccounts){
 	SqliteMgr::Get()->doSelect(this);
 }
 
@@ -447,40 +394,27 @@ void CharacterAccount::save()
 
 void CharacterAccount::bindKeys(sqlite3_stmt* stmt) const
 {
-	sqlite3_bind_int64(stmt, 1, m_fkCharacters);
-	sqlite3_bind_int64(stmt, 2, m_fkAccounts);
+	sqlite3_bind_int64(stmt, 1, m_fkAccounts);
+	sqlite3_bind_int64(stmt, 2, m_fkCharacters);
 }
 
 void CharacterAccount::bindUpdate(sqlite3_stmt* stmt) const
 {
-	throw std::logic_error("CharacterAccount::bindUpdate(), in a lookup table!");
+	sqlite3_bind_int64(stmt, 1, m_fkAccounts);
+	sqlite3_bind_int64(stmt, 2, m_fkCharacters);
 }
 
 void CharacterAccount::parseInsert(sqlite3_stmt* stmt)
 {
-	m_fkCharacters = sqlite3_column_int64(stmt, 0);
-	m_fkAccounts = sqlite3_column_int64(stmt, 1);
 }
 
 void CharacterAccount::parseSelect(sqlite3_stmt* stmt)
 {
-	m_fkCharacters = sqlite3_column_int64(stmt, 0);
-	m_fkAccounts = sqlite3_column_int64(stmt, 1);
 }
 
 Table* CharacterAccount::getTable() const
 {
 	return Tables::Get()->CHARACTERACCOUNT;
-}
-
-value_type CharacterAccount::getfkCharacters() const
-{
-	return m_fkCharacters;
-}
-
-value_type CharacterAccount::getfkAccounts() const
-{
-	return m_fkAccounts;
 }
 
 
@@ -499,8 +433,6 @@ value_type CharacterAccount::getfkAccounts() const
 CharacterBranch::CharacterBranch(Database* db) :
 m_db(db),
 m_characterbranchid(),
-m_fkCharacters(0),
-m_fkBranches(0),
 m_xp(0)
 {
 
@@ -542,26 +474,20 @@ void CharacterBranch::bindKeys(sqlite3_stmt* stmt) const
 
 void CharacterBranch::bindUpdate(sqlite3_stmt* stmt) const
 {
-	sqlite3_bind_int64(stmt, 1, m_fkCharacters);
-	sqlite3_bind_int64(stmt, 2, m_fkBranches);
-	sqlite3_bind_int64(stmt, 3, m_xp);
-	sqlite3_bind_int64(stmt, 4, m_characterbranchid);
+	sqlite3_bind_int64(stmt, 1, m_xp);
+	sqlite3_bind_int64(stmt, 2, m_characterbranchid);
 }
 
 void CharacterBranch::parseInsert(sqlite3_stmt* stmt)
 {
-	m_fkCharacters = sqlite3_column_int64(stmt, 0);
-	m_fkBranches = sqlite3_column_int64(stmt, 1);
-	m_xp = sqlite3_column_int64(stmt, 2);
-	m_characterbranchid = sqlite3_column_int64(stmt, 3);
+	m_xp = sqlite3_column_int64(stmt, 0);
+	m_characterbranchid = sqlite3_column_int64(stmt, 1);
 }
 
 void CharacterBranch::parseSelect(sqlite3_stmt* stmt)
 {
-	m_fkCharacters = sqlite3_column_int64(stmt, 0);
-	m_fkBranches = sqlite3_column_int64(stmt, 1);
-	m_xp = sqlite3_column_int64(stmt, 2);
-	m_characterbranchid = sqlite3_column_int64(stmt, 3);
+	m_xp = sqlite3_column_int64(stmt, 0);
+	m_characterbranchid = sqlite3_column_int64(stmt, 1);
 }
 
 Table* CharacterBranch::getTable() const
@@ -569,31 +495,9 @@ Table* CharacterBranch::getTable() const
 	return Tables::Get()->CHARACTERBRANCH;
 }
 
-value_type CharacterBranch::getfkCharacters() const
-{
-	return m_fkCharacters;
-}
-
-value_type CharacterBranch::getfkBranches() const
-{
-	return m_fkBranches;
-}
-
 value_type CharacterBranch::getxp() const
 {
 	return m_xp;
-}
-
-void CharacterBranch::setfkCharacters(value_type value)
-{
-	m_fkCharacters = value;
-	m_dirty = true;
-}
-
-void CharacterBranch::setfkBranches(value_type value)
-{
-	m_fkBranches = value;
-	m_dirty = true;
 }
 
 void CharacterBranch::setxp(value_type value)
@@ -618,8 +522,6 @@ void CharacterBranch::setxp(value_type value)
 CharacterCluster::CharacterCluster(Database* db) :
 m_db(db),
 m_characterclusterid(),
-m_fkCharacters(0),
-m_fkClusters(0),
 m_xp(0)
 {
 
@@ -661,26 +563,20 @@ void CharacterCluster::bindKeys(sqlite3_stmt* stmt) const
 
 void CharacterCluster::bindUpdate(sqlite3_stmt* stmt) const
 {
-	sqlite3_bind_int64(stmt, 1, m_fkCharacters);
-	sqlite3_bind_int64(stmt, 2, m_fkClusters);
-	sqlite3_bind_int64(stmt, 3, m_xp);
-	sqlite3_bind_int64(stmt, 4, m_characterclusterid);
+	sqlite3_bind_int64(stmt, 1, m_xp);
+	sqlite3_bind_int64(stmt, 2, m_characterclusterid);
 }
 
 void CharacterCluster::parseInsert(sqlite3_stmt* stmt)
 {
-	m_fkCharacters = sqlite3_column_int64(stmt, 0);
-	m_fkClusters = sqlite3_column_int64(stmt, 1);
-	m_xp = sqlite3_column_int64(stmt, 2);
-	m_characterclusterid = sqlite3_column_int64(stmt, 3);
+	m_xp = sqlite3_column_int64(stmt, 0);
+	m_characterclusterid = sqlite3_column_int64(stmt, 1);
 }
 
 void CharacterCluster::parseSelect(sqlite3_stmt* stmt)
 {
-	m_fkCharacters = sqlite3_column_int64(stmt, 0);
-	m_fkClusters = sqlite3_column_int64(stmt, 1);
-	m_xp = sqlite3_column_int64(stmt, 2);
-	m_characterclusterid = sqlite3_column_int64(stmt, 3);
+	m_xp = sqlite3_column_int64(stmt, 0);
+	m_characterclusterid = sqlite3_column_int64(stmt, 1);
 }
 
 Table* CharacterCluster::getTable() const
@@ -688,31 +584,9 @@ Table* CharacterCluster::getTable() const
 	return Tables::Get()->CHARACTERCLUSTER;
 }
 
-value_type CharacterCluster::getfkCharacters() const
-{
-	return m_fkCharacters;
-}
-
-value_type CharacterCluster::getfkClusters() const
-{
-	return m_fkClusters;
-}
-
 value_type CharacterCluster::getxp() const
 {
 	return m_xp;
-}
-
-void CharacterCluster::setfkCharacters(value_type value)
-{
-	m_fkCharacters = value;
-	m_dirty = true;
-}
-
-void CharacterCluster::setfkClusters(value_type value)
-{
-	m_fkClusters = value;
-	m_dirty = true;
 }
 
 void CharacterCluster::setxp(value_type value)
@@ -737,8 +611,6 @@ void CharacterCluster::setxp(value_type value)
 Characters::Characters(Database* db) :
 m_db(db),
 m_characterid(),
-m_fkRaces(0),
-m_fkRooms(0),
 m_name(),
 m_description()
 {
@@ -781,44 +653,28 @@ void Characters::bindKeys(sqlite3_stmt* stmt) const
 
 void Characters::bindUpdate(sqlite3_stmt* stmt) const
 {
-	sqlite3_bind_int64(stmt, 1, m_fkRaces);
-	sqlite3_bind_int64(stmt, 2, m_fkRooms);
-	sqlite3_bind_text(stmt, 3, m_name.c_str(), m_name.size(), SQLITE_TRANSIENT);
-	sqlite3_bind_text(stmt, 4, m_description.c_str(), m_description.size(), SQLITE_TRANSIENT);
-	sqlite3_bind_int64(stmt, 5, m_characterid);
+	sqlite3_bind_text(stmt, 1, m_name.c_str(), m_name.size(), SQLITE_TRANSIENT);
+	sqlite3_bind_text(stmt, 2, m_description.c_str(), m_description.size(), SQLITE_TRANSIENT);
+	sqlite3_bind_int64(stmt, 3, m_characterid);
 }
 
 void Characters::parseInsert(sqlite3_stmt* stmt)
 {
-	m_fkRaces = sqlite3_column_int64(stmt, 0);
-	m_fkRooms = sqlite3_column_int64(stmt, 1);
-	m_name = std::string((const char *)sqlite3_column_text(stmt, 2));
-	m_description = std::string((const char *)sqlite3_column_text(stmt, 3));
-	m_characterid = sqlite3_column_int64(stmt, 4);
+	m_name = std::string((const char *)sqlite3_column_text(stmt, 0));
+	m_description = std::string((const char *)sqlite3_column_text(stmt, 1));
+	m_characterid = sqlite3_column_int64(stmt, 2);
 }
 
 void Characters::parseSelect(sqlite3_stmt* stmt)
 {
-	m_fkRaces = sqlite3_column_int64(stmt, 0);
-	m_fkRooms = sqlite3_column_int64(stmt, 1);
-	m_name = std::string((const char *)sqlite3_column_text(stmt, 2));
-	m_description = std::string((const char *)sqlite3_column_text(stmt, 3));
-	m_characterid = sqlite3_column_int64(stmt, 4);
+	m_name = std::string((const char *)sqlite3_column_text(stmt, 0));
+	m_description = std::string((const char *)sqlite3_column_text(stmt, 1));
+	m_characterid = sqlite3_column_int64(stmt, 2);
 }
 
 Table* Characters::getTable() const
 {
 	return Tables::Get()->CHARACTERS;
-}
-
-value_type Characters::getfkRaces() const
-{
-	return m_fkRaces;
-}
-
-value_type Characters::getfkRooms() const
-{
-	return m_fkRooms;
 }
 
 const std::string& Characters::getname() const
@@ -829,18 +685,6 @@ const std::string& Characters::getname() const
 const std::string& Characters::getdescription() const
 {
 	return m_description;
-}
-
-void Characters::setfkRaces(value_type value)
-{
-	m_fkRaces = value;
-	m_dirty = true;
-}
-
-void Characters::setfkRooms(value_type value)
-{
-	m_fkRooms = value;
-	m_dirty = true;
 }
 
 void Characters::setname(const std::string& value)
@@ -871,8 +715,6 @@ void Characters::setdescription(const std::string& value)
 CharacterSkill::CharacterSkill(Database* db) :
 m_db(db),
 m_characterskillid(),
-m_fkCharacters(0),
-m_fkBranches(0),
 m_xp(0)
 {
 
@@ -914,26 +756,20 @@ void CharacterSkill::bindKeys(sqlite3_stmt* stmt) const
 
 void CharacterSkill::bindUpdate(sqlite3_stmt* stmt) const
 {
-	sqlite3_bind_int64(stmt, 1, m_fkCharacters);
-	sqlite3_bind_int64(stmt, 2, m_fkBranches);
-	sqlite3_bind_int64(stmt, 3, m_xp);
-	sqlite3_bind_int64(stmt, 4, m_characterskillid);
+	sqlite3_bind_int64(stmt, 1, m_xp);
+	sqlite3_bind_int64(stmt, 2, m_characterskillid);
 }
 
 void CharacterSkill::parseInsert(sqlite3_stmt* stmt)
 {
-	m_fkCharacters = sqlite3_column_int64(stmt, 0);
-	m_fkBranches = sqlite3_column_int64(stmt, 1);
-	m_xp = sqlite3_column_int64(stmt, 2);
-	m_characterskillid = sqlite3_column_int64(stmt, 3);
+	m_xp = sqlite3_column_int64(stmt, 0);
+	m_characterskillid = sqlite3_column_int64(stmt, 1);
 }
 
 void CharacterSkill::parseSelect(sqlite3_stmt* stmt)
 {
-	m_fkCharacters = sqlite3_column_int64(stmt, 0);
-	m_fkBranches = sqlite3_column_int64(stmt, 1);
-	m_xp = sqlite3_column_int64(stmt, 2);
-	m_characterskillid = sqlite3_column_int64(stmt, 3);
+	m_xp = sqlite3_column_int64(stmt, 0);
+	m_characterskillid = sqlite3_column_int64(stmt, 1);
 }
 
 Table* CharacterSkill::getTable() const
@@ -941,31 +777,9 @@ Table* CharacterSkill::getTable() const
 	return Tables::Get()->CHARACTERSKILL;
 }
 
-value_type CharacterSkill::getfkCharacters() const
-{
-	return m_fkCharacters;
-}
-
-value_type CharacterSkill::getfkBranches() const
-{
-	return m_fkBranches;
-}
-
 value_type CharacterSkill::getxp() const
 {
 	return m_xp;
-}
-
-void CharacterSkill::setfkCharacters(value_type value)
-{
-	m_fkCharacters = value;
-	m_dirty = true;
-}
-
-void CharacterSkill::setfkBranches(value_type value)
-{
-	m_fkBranches = value;
-	m_dirty = true;
 }
 
 void CharacterSkill::setxp(value_type value)
@@ -990,8 +804,6 @@ void CharacterSkill::setxp(value_type value)
 CharacterStat::CharacterStat(Database* db) :
 m_db(db),
 m_characterstatid(),
-m_fkCharacters(0),
-m_fkStats(0),
 m_current(0),
 m_potential(0)
 {
@@ -1034,44 +846,28 @@ void CharacterStat::bindKeys(sqlite3_stmt* stmt) const
 
 void CharacterStat::bindUpdate(sqlite3_stmt* stmt) const
 {
-	sqlite3_bind_int64(stmt, 1, m_fkCharacters);
-	sqlite3_bind_int64(stmt, 2, m_fkStats);
-	sqlite3_bind_int64(stmt, 3, m_current);
-	sqlite3_bind_int64(stmt, 4, m_potential);
-	sqlite3_bind_int64(stmt, 5, m_characterstatid);
+	sqlite3_bind_int64(stmt, 1, m_current);
+	sqlite3_bind_int64(stmt, 2, m_potential);
+	sqlite3_bind_int64(stmt, 3, m_characterstatid);
 }
 
 void CharacterStat::parseInsert(sqlite3_stmt* stmt)
 {
-	m_fkCharacters = sqlite3_column_int64(stmt, 0);
-	m_fkStats = sqlite3_column_int64(stmt, 1);
-	m_current = sqlite3_column_int64(stmt, 2);
-	m_potential = sqlite3_column_int64(stmt, 3);
-	m_characterstatid = sqlite3_column_int64(stmt, 4);
+	m_current = sqlite3_column_int64(stmt, 0);
+	m_potential = sqlite3_column_int64(stmt, 1);
+	m_characterstatid = sqlite3_column_int64(stmt, 2);
 }
 
 void CharacterStat::parseSelect(sqlite3_stmt* stmt)
 {
-	m_fkCharacters = sqlite3_column_int64(stmt, 0);
-	m_fkStats = sqlite3_column_int64(stmt, 1);
-	m_current = sqlite3_column_int64(stmt, 2);
-	m_potential = sqlite3_column_int64(stmt, 3);
-	m_characterstatid = sqlite3_column_int64(stmt, 4);
+	m_current = sqlite3_column_int64(stmt, 0);
+	m_potential = sqlite3_column_int64(stmt, 1);
+	m_characterstatid = sqlite3_column_int64(stmt, 2);
 }
 
 Table* CharacterStat::getTable() const
 {
 	return Tables::Get()->CHARACTERSTAT;
-}
-
-value_type CharacterStat::getfkCharacters() const
-{
-	return m_fkCharacters;
-}
-
-value_type CharacterStat::getfkStats() const
-{
-	return m_fkStats;
 }
 
 value_type CharacterStat::getcurrent() const
@@ -1082,18 +878,6 @@ value_type CharacterStat::getcurrent() const
 value_type CharacterStat::getpotential() const
 {
 	return m_potential;
-}
-
-void CharacterStat::setfkCharacters(value_type value)
-{
-	m_fkCharacters = value;
-	m_dirty = true;
-}
-
-void CharacterStat::setfkStats(value_type value)
-{
-	m_fkStats = value;
-	m_dirty = true;
 }
 
 void CharacterStat::setcurrent(value_type value)
@@ -1124,8 +908,6 @@ void CharacterStat::setpotential(value_type value)
 CharacterTree::CharacterTree(Database* db) :
 m_db(db),
 m_charactertreeid(),
-m_fkCharacters(0),
-m_fkTrees(0),
 m_xp(0)
 {
 
@@ -1167,26 +949,20 @@ void CharacterTree::bindKeys(sqlite3_stmt* stmt) const
 
 void CharacterTree::bindUpdate(sqlite3_stmt* stmt) const
 {
-	sqlite3_bind_int64(stmt, 1, m_fkCharacters);
-	sqlite3_bind_int64(stmt, 2, m_fkTrees);
-	sqlite3_bind_int64(stmt, 3, m_xp);
-	sqlite3_bind_int64(stmt, 4, m_charactertreeid);
+	sqlite3_bind_int64(stmt, 1, m_xp);
+	sqlite3_bind_int64(stmt, 2, m_charactertreeid);
 }
 
 void CharacterTree::parseInsert(sqlite3_stmt* stmt)
 {
-	m_fkCharacters = sqlite3_column_int64(stmt, 0);
-	m_fkTrees = sqlite3_column_int64(stmt, 1);
-	m_xp = sqlite3_column_int64(stmt, 2);
-	m_charactertreeid = sqlite3_column_int64(stmt, 3);
+	m_xp = sqlite3_column_int64(stmt, 0);
+	m_charactertreeid = sqlite3_column_int64(stmt, 1);
 }
 
 void CharacterTree::parseSelect(sqlite3_stmt* stmt)
 {
-	m_fkCharacters = sqlite3_column_int64(stmt, 0);
-	m_fkTrees = sqlite3_column_int64(stmt, 1);
-	m_xp = sqlite3_column_int64(stmt, 2);
-	m_charactertreeid = sqlite3_column_int64(stmt, 3);
+	m_xp = sqlite3_column_int64(stmt, 0);
+	m_charactertreeid = sqlite3_column_int64(stmt, 1);
 }
 
 Table* CharacterTree::getTable() const
@@ -1194,31 +970,9 @@ Table* CharacterTree::getTable() const
 	return Tables::Get()->CHARACTERTREE;
 }
 
-value_type CharacterTree::getfkCharacters() const
-{
-	return m_fkCharacters;
-}
-
-value_type CharacterTree::getfkTrees() const
-{
-	return m_fkTrees;
-}
-
 value_type CharacterTree::getxp() const
 {
 	return m_xp;
-}
-
-void CharacterTree::setfkCharacters(value_type value)
-{
-	m_fkCharacters = value;
-	m_dirty = true;
-}
-
-void CharacterTree::setfkTrees(value_type value)
-{
-	m_fkTrees = value;
-	m_dirty = true;
 }
 
 void CharacterTree::setxp(value_type value)
@@ -1823,9 +1577,6 @@ void GrantGroups::setimplies(value_type value)
 Permissions::Permissions(Database* db) :
 m_db(db),
 m_permissionid(),
-m_fkAccounts(0),
-m_fkCommands(0),
-m_fkGrantGroups(0),
 m_grant(0)
 {
 
@@ -1867,29 +1618,20 @@ void Permissions::bindKeys(sqlite3_stmt* stmt) const
 
 void Permissions::bindUpdate(sqlite3_stmt* stmt) const
 {
-	sqlite3_bind_int64(stmt, 1, m_fkAccounts);
-	sqlite3_bind_int64(stmt, 2, m_fkCommands);
-	sqlite3_bind_int64(stmt, 3, m_fkGrantGroups);
-	sqlite3_bind_int64(stmt, 4, m_grant);
-	sqlite3_bind_int64(stmt, 5, m_permissionid);
+	sqlite3_bind_int64(stmt, 1, m_grant);
+	sqlite3_bind_int64(stmt, 2, m_permissionid);
 }
 
 void Permissions::parseInsert(sqlite3_stmt* stmt)
 {
-	m_fkAccounts = sqlite3_column_int64(stmt, 0);
-	m_fkCommands = sqlite3_column_int64(stmt, 1);
-	m_fkGrantGroups = sqlite3_column_int64(stmt, 2);
-	m_grant = sqlite3_column_int64(stmt, 3);
-	m_permissionid = sqlite3_column_int64(stmt, 4);
+	m_grant = sqlite3_column_int64(stmt, 0);
+	m_permissionid = sqlite3_column_int64(stmt, 1);
 }
 
 void Permissions::parseSelect(sqlite3_stmt* stmt)
 {
-	m_fkAccounts = sqlite3_column_int64(stmt, 0);
-	m_fkCommands = sqlite3_column_int64(stmt, 1);
-	m_fkGrantGroups = sqlite3_column_int64(stmt, 2);
-	m_grant = sqlite3_column_int64(stmt, 3);
-	m_permissionid = sqlite3_column_int64(stmt, 4);
+	m_grant = sqlite3_column_int64(stmt, 0);
+	m_permissionid = sqlite3_column_int64(stmt, 1);
 }
 
 Table* Permissions::getTable() const
@@ -1897,42 +1639,9 @@ Table* Permissions::getTable() const
 	return Tables::Get()->PERMISSIONS;
 }
 
-value_type Permissions::getfkAccounts() const
-{
-	return m_fkAccounts;
-}
-
-value_type Permissions::getfkCommands() const
-{
-	return m_fkCommands;
-}
-
-value_type Permissions::getfkGrantGroups() const
-{
-	return m_fkGrantGroups;
-}
-
 value_type Permissions::getgrant() const
 {
 	return m_grant;
-}
-
-void Permissions::setfkAccounts(value_type value)
-{
-	m_fkAccounts = value;
-	m_dirty = true;
-}
-
-void Permissions::setfkCommands(value_type value)
-{
-	m_fkCommands = value;
-	m_dirty = true;
-}
-
-void Permissions::setfkGrantGroups(value_type value)
-{
-	m_fkGrantGroups = value;
-	m_dirty = true;
 }
 
 void Permissions::setgrant(value_type value)
@@ -2048,8 +1757,6 @@ m_db(db),
 m_roomid(),
 m_name(),
 m_description(),
-m_fkAreas(0),
-m_fkSectors(0),
 m_width(0),
 m_length(0),
 m_height(0)
@@ -2095,36 +1802,30 @@ void Rooms::bindUpdate(sqlite3_stmt* stmt) const
 {
 	sqlite3_bind_text(stmt, 1, m_name.c_str(), m_name.size(), SQLITE_TRANSIENT);
 	sqlite3_bind_text(stmt, 2, m_description.c_str(), m_description.size(), SQLITE_TRANSIENT);
-	sqlite3_bind_int64(stmt, 3, m_fkAreas);
-	sqlite3_bind_int64(stmt, 4, m_fkSectors);
-	sqlite3_bind_int64(stmt, 5, m_width);
-	sqlite3_bind_int64(stmt, 6, m_length);
-	sqlite3_bind_int64(stmt, 7, m_height);
-	sqlite3_bind_int64(stmt, 8, m_roomid);
+	sqlite3_bind_int64(stmt, 3, m_width);
+	sqlite3_bind_int64(stmt, 4, m_length);
+	sqlite3_bind_int64(stmt, 5, m_height);
+	sqlite3_bind_int64(stmt, 6, m_roomid);
 }
 
 void Rooms::parseInsert(sqlite3_stmt* stmt)
 {
 	m_name = std::string((const char *)sqlite3_column_text(stmt, 0));
 	m_description = std::string((const char *)sqlite3_column_text(stmt, 1));
-	m_fkAreas = sqlite3_column_int64(stmt, 2);
-	m_fkSectors = sqlite3_column_int64(stmt, 3);
-	m_width = sqlite3_column_int64(stmt, 4);
-	m_length = sqlite3_column_int64(stmt, 5);
-	m_height = sqlite3_column_int64(stmt, 6);
-	m_roomid = sqlite3_column_int64(stmt, 7);
+	m_width = sqlite3_column_int64(stmt, 2);
+	m_length = sqlite3_column_int64(stmt, 3);
+	m_height = sqlite3_column_int64(stmt, 4);
+	m_roomid = sqlite3_column_int64(stmt, 5);
 }
 
 void Rooms::parseSelect(sqlite3_stmt* stmt)
 {
 	m_name = std::string((const char *)sqlite3_column_text(stmt, 0));
 	m_description = std::string((const char *)sqlite3_column_text(stmt, 1));
-	m_fkAreas = sqlite3_column_int64(stmt, 2);
-	m_fkSectors = sqlite3_column_int64(stmt, 3);
-	m_width = sqlite3_column_int64(stmt, 4);
-	m_length = sqlite3_column_int64(stmt, 5);
-	m_height = sqlite3_column_int64(stmt, 6);
-	m_roomid = sqlite3_column_int64(stmt, 7);
+	m_width = sqlite3_column_int64(stmt, 2);
+	m_length = sqlite3_column_int64(stmt, 3);
+	m_height = sqlite3_column_int64(stmt, 4);
+	m_roomid = sqlite3_column_int64(stmt, 5);
 }
 
 Table* Rooms::getTable() const
@@ -2140,16 +1841,6 @@ const std::string& Rooms::getname() const
 const std::string& Rooms::getdescription() const
 {
 	return m_description;
-}
-
-value_type Rooms::getfkAreas() const
-{
-	return m_fkAreas;
-}
-
-value_type Rooms::getfkSectors() const
-{
-	return m_fkSectors;
 }
 
 value_type Rooms::getwidth() const
@@ -2176,18 +1867,6 @@ void Rooms::setname(const std::string& value)
 void Rooms::setdescription(const std::string& value)
 {
 	m_description = value;
-	m_dirty = true;
-}
-
-void Rooms::setfkAreas(value_type value)
-{
-	m_fkAreas = value;
-	m_dirty = true;
-}
-
-void Rooms::setfkSectors(value_type value)
-{
-	m_fkSectors = value;
 	m_dirty = true;
 }
 
@@ -2359,8 +2038,7 @@ void Sectors::setwater(value_type value)
 Skills::Skills(Database* db) :
 m_db(db),
 m_skillid(),
-m_name(),
-m_fkBranches(0)
+m_name()
 {
 
 }
@@ -2402,22 +2080,19 @@ void Skills::bindKeys(sqlite3_stmt* stmt) const
 void Skills::bindUpdate(sqlite3_stmt* stmt) const
 {
 	sqlite3_bind_text(stmt, 1, m_name.c_str(), m_name.size(), SQLITE_TRANSIENT);
-	sqlite3_bind_int64(stmt, 2, m_fkBranches);
-	sqlite3_bind_int64(stmt, 3, m_skillid);
+	sqlite3_bind_int64(stmt, 2, m_skillid);
 }
 
 void Skills::parseInsert(sqlite3_stmt* stmt)
 {
 	m_name = std::string((const char *)sqlite3_column_text(stmt, 0));
-	m_fkBranches = sqlite3_column_int64(stmt, 1);
-	m_skillid = sqlite3_column_int64(stmt, 2);
+	m_skillid = sqlite3_column_int64(stmt, 1);
 }
 
 void Skills::parseSelect(sqlite3_stmt* stmt)
 {
 	m_name = std::string((const char *)sqlite3_column_text(stmt, 0));
-	m_fkBranches = sqlite3_column_int64(stmt, 1);
-	m_skillid = sqlite3_column_int64(stmt, 2);
+	m_skillid = sqlite3_column_int64(stmt, 1);
 }
 
 Table* Skills::getTable() const
@@ -2430,20 +2105,9 @@ const std::string& Skills::getname() const
 	return m_name;
 }
 
-value_type Skills::getfkBranches() const
-{
-	return m_fkBranches;
-}
-
 void Skills::setname(const std::string& value)
 {
 	m_name = value;
-	m_dirty = true;
-}
-
-void Skills::setfkBranches(value_type value)
-{
-	m_fkBranches = value;
 	m_dirty = true;
 }
 
@@ -2567,10 +2231,7 @@ void Stats::setshortname(const std::string& value)
 Trees::Trees(Database* db) :
 m_db(db),
 m_treeid(),
-m_name(),
-m_fkClusters(0),
-m_fkStatsPrimary(0),
-m_fkStatsSecondary(0)
+m_name()
 {
 
 }
@@ -2612,28 +2273,19 @@ void Trees::bindKeys(sqlite3_stmt* stmt) const
 void Trees::bindUpdate(sqlite3_stmt* stmt) const
 {
 	sqlite3_bind_text(stmt, 1, m_name.c_str(), m_name.size(), SQLITE_TRANSIENT);
-	sqlite3_bind_int64(stmt, 2, m_fkClusters);
-	sqlite3_bind_int64(stmt, 3, m_fkStatsPrimary);
-	sqlite3_bind_int64(stmt, 4, m_fkStatsSecondary);
-	sqlite3_bind_int64(stmt, 5, m_treeid);
+	sqlite3_bind_int64(stmt, 2, m_treeid);
 }
 
 void Trees::parseInsert(sqlite3_stmt* stmt)
 {
 	m_name = std::string((const char *)sqlite3_column_text(stmt, 0));
-	m_fkClusters = sqlite3_column_int64(stmt, 1);
-	m_fkStatsPrimary = sqlite3_column_int64(stmt, 2);
-	m_fkStatsSecondary = sqlite3_column_int64(stmt, 3);
-	m_treeid = sqlite3_column_int64(stmt, 4);
+	m_treeid = sqlite3_column_int64(stmt, 1);
 }
 
 void Trees::parseSelect(sqlite3_stmt* stmt)
 {
 	m_name = std::string((const char *)sqlite3_column_text(stmt, 0));
-	m_fkClusters = sqlite3_column_int64(stmt, 1);
-	m_fkStatsPrimary = sqlite3_column_int64(stmt, 2);
-	m_fkStatsSecondary = sqlite3_column_int64(stmt, 3);
-	m_treeid = sqlite3_column_int64(stmt, 4);
+	m_treeid = sqlite3_column_int64(stmt, 1);
 }
 
 Table* Trees::getTable() const
@@ -2646,42 +2298,9 @@ const std::string& Trees::getname() const
 	return m_name;
 }
 
-value_type Trees::getfkClusters() const
-{
-	return m_fkClusters;
-}
-
-value_type Trees::getfkStatsPrimary() const
-{
-	return m_fkStatsPrimary;
-}
-
-value_type Trees::getfkStatsSecondary() const
-{
-	return m_fkStatsSecondary;
-}
-
 void Trees::setname(const std::string& value)
 {
 	m_name = value;
-	m_dirty = true;
-}
-
-void Trees::setfkClusters(value_type value)
-{
-	m_fkClusters = value;
-	m_dirty = true;
-}
-
-void Trees::setfkStatsPrimary(value_type value)
-{
-	m_fkStatsPrimary = value;
-	m_dirty = true;
-}
-
-void Trees::setfkStatsSecondary(value_type value)
-{
-	m_fkStatsSecondary = value;
 	m_dirty = true;
 }
 
