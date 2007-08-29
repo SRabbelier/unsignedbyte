@@ -151,9 +151,9 @@ sqlite3_stmt* SqliteMgr::getInsertStmt(Table* table)
 		   sql.append(it->first);
 	}
 	sql.append(") values(");
-	for(Fields::const_iterator it = table->begin(); it != table->end(); it++)
+	for(TableMap::const_iterator it = table->keybegin(); it != table->keyend(); it++)
 	{
-		   if(it != table->begin())
+		   if(it != table->keybegin())
 				   sql.append(", ");
 
 		   sql.append("NULL");
