@@ -30,6 +30,8 @@ namespace mud
 {
 	class Account;
 	class Area;
+	
+	class Permission;
 }
 
 class UBSocket;
@@ -43,7 +45,6 @@ class Object;
 class Colour;
 class Command;
 class GrantGroup;
-class Permission;
 
 typedef std::pair<long, Exit::DIRECTION> roomexit; // roomid, direction
 typedef std::pair<long, long> permission; // account, grantgroup
@@ -69,7 +70,7 @@ typedef std::map<long,Sector*> sectors_m;
 typedef std::map<long,Colour*> colours_m;
 typedef std::map<long,Command*> command_m;
 typedef std::map<long,GrantGroup*> grantgroup_m;
-typedef std::map<long,Permission*> permission_m;
+typedef std::map<long,mud::Permission*> permission_m;
 
 typedef const std::string& cstring;
 
@@ -131,7 +132,7 @@ public:
 	GrantGroup* GetGrantGroup(long id);
 	long GetGrantGroupID(cstring name);
 	
-	Permission* GetPermission(long id);
+	mud::Permission* GetPermission(long id);
 	long GetPermissionID(long account, long grantgroup);
 
 	void CloseAccount(long accountid);

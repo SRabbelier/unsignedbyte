@@ -23,65 +23,66 @@
 #include "Savable.h"
 #include "db.h"
 
-class Permission : public Savable
+namespace mud
 {
-public:
-	static bool defaultGrant;
-	static bool defaultLog;
-	
-	/**
-	 * \brief Getters
-	 */ 
-	long getAccount() const { return m_permission->fkaccount; };
-	long getGrantGroup() const { return m_permission->fkgrantgroup; };
-	
-	bool hasGrant() const;
-	bool hasLog() const;
-
-	void setAccount(long account) { m_permission->fkaccount = account; };
-	void setGrantGroup(long grantgroup) { m_permission->fkgrantgroup = grantgroup; };
-	
-	void setGrant(bool grant);
-	void setLog(bool log);
-
-	/**
-	 * \brief Utilities
-	 */
-	std::vector<std::string> Show();
-	std::string ShowShort();
-	Table* getTable() const;
-	
-	/**
-	 * \brief Static utilities
-	 */
-	static std::vector<std::string> List();
-	static void Close(Permission* permission);
-	static bool isGrant(long grant);
-	static bool isLog(long grant);
-	
-	/**
-	 * \brief Database utilities
-	 */
-	void Delete();
-	void Save();
-	bool Exists();
-
-private:
-	db::Permissions* m_permission;
-
-	Permission(db::Permissions* Permission);
-	Permission(const Permission& rhs) {};
-	Permission operator=(const Permission& rhs) { return *this; };
-	~Permission(void);
-	
-	friend class Cache;
-	
-	enum GRANTS
+	class Permission : public Savable
 	{
-		GRANT_NOTSET, // grant for this grantgroup is not set
-		GRANT_ENABLE, // explicitly enable the grantgroup
-		GRANT_DISABLE, // explicitly disable the grantgroup
-		GRANT_ENABLEANDLOG, // enable and log the command
-		GRANT_DISABLEANDLOG, // enable and log the attemp
+	public:
+		static bool defaultGrant;
+		static bool defaultLog;
+		
+		/**
+		 * \brief Getters
+		 */ 
+		long getPermission() const { return m_permission->getpermissionid(); } 
+		long getAccount() const { return m_permission->getfkAccounts(); }
+		long getGrantGroup() const { return m_permission->getfkGrantGroups(); }
+		
+		bool hasGrant() const;
+		bool hasLog() const;
+		
+		void setGrant(bool grant);
+		void setLog(bool log);
+
+		/**
+		 * \brief Utilities
+		 */
+		std::vector<std::string> Show();
+		std::string ShowShort();
+		Table* getTable() const;
+		
+		/**
+		 * \brief Static utilities
+		 */
+		static std::vector<std::string> List();
+		static void Close(Permission* permission);
+		static bool isGrant(long grant);
+		static bool isLog(long grant);
+		
+		/**
+		 * \brief Database utilities
+		 */
+		void Delete();
+		void Save();
+		bool Exists();
+
+	private:
+		db::Permissions* m_permission;
+
+		Permission(db::Permissions* Permission);
+		Permission(const Permission& rhs) {};
+		Permission operator=(const Permission& rhs) { return *this; };
+		~Permission(void);
+		
+		friend class Cache;
+		
+		enum GRANTS
+		{
+			GRANT_NOTSET, // grant for this grantgroup is not set
+			GRANT_ENABLE, // explicitly enable the grantgroup
+			GRANT_DISABLE, // explicitly disable the grantgroup
+			GRANT_ENABLEANDLOG, // enable and log the command
+			GRANT_DISABLEANDLOG, // enable and log the attemp
+		};
 	};
-};
+}

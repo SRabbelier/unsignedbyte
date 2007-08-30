@@ -549,9 +549,11 @@ long Cache::GetPermissionID(const long account, const long grantgroup)
 	{		
 		return it->second;
 	}
-
+		
 	Query q(DatabaseMgr::Get()->DBref());
-	long id = (long)q.get_num(Global::Get()->sprintf(
+	long id = 0;
+	/*
+		(long)q.get_num(Global::Get()->sprintf(
 		"SELECT %s FROM %s WHERE %s=%d AND %s=%d;", 
 		Tables::Get()->PERMISSIONS->tableID().c_str(),
 		Tables::Get()->PERMISSIONS->tableName().c_str(),
@@ -559,6 +561,7 @@ long Cache::GetPermissionID(const long account, const long grantgroup)
 		account, 
 		Tables::Get()->GRANTGROUPS->tableID().c_str(),
 		grantgroup));
+	*/
 
 	m_permission[permission(account, grantgroup)] = id;
 
@@ -567,7 +570,7 @@ long Cache::GetPermissionID(const long account, const long grantgroup)
 
 void Cache::CloseAccount(long accountid)
 {
-	Account* p = m_accounts[accountid];
+	mud::Account* p = m_accounts[accountid];
 	if(p)
 		m_account.erase(p->getName());
 
@@ -666,9 +669,9 @@ void Cache::CloseGrantGroup(long grantgroupid)
 
 void Cache::ClosePermission(long permissionid)
 {
-	Permission* p = m_permissions[permissionid];
-	if(p && p->m_permission)
-		m_permission.erase(permission(p->m_permission->fkaccount, p->m_permission->fkgrantgroup));
+	mud::Permission* p = m_permissions[permissionid];
+	if(p && p->getPermission())
+		m_permission.erase(permission(p->getAccount(), p->getGrantGroup()));
 	
 	m_permissions.erase(permissionid);	
 }

@@ -115,10 +115,8 @@ Tables::Tables() :
 	GRANTGROUPS->addValue("defaultgrant");
 	GRANTGROUPS->addValue("implies");
 	
-	PERMISSIONS->addPK("permissionid");
-	PERMISSIONS->addFK(ACCOUNTS);
-	PERMISSIONS->addFK(COMMANDS);
-	PERMISSIONS->addFK(GRANTGROUPS);
+	PERMISSIONS->addFPK(ACCOUNTS);
+	PERMISSIONS->addFPK(GRANTGROUPS);
 	PERMISSIONS->addValue("grant");
 	
 	RACES->addPK("areaid");
