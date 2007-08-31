@@ -78,7 +78,7 @@ void EditorLoginAccount::OnLine(const std::string &line)
 		return;
 	}
 
-	int id = Cache::Get()->GetAccountID(line);
+	int id = mud::Cache::Get()->GetAccountID(line);
 	if(id <= 0)
 	{
 		m_sock->Sendf("Got ID %d, which is <= 0, disconnecting you now.\n", id);
@@ -86,7 +86,7 @@ void EditorLoginAccount::OnLine(const std::string &line)
 		return;
 	}
 
-	Account* Acc = Cache::Get()->GetAccount(id);
+	mud::Account* Acc = mud::Cache::Get()->GetAccount(id);
 
 	m_sock->Sendf("Welcome back, %s\n", line.c_str());
 	m_sock->Send("\n");

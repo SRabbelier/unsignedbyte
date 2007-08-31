@@ -12,17 +12,17 @@ IntermediateDirectory=Intermediate
 OutDir=$(IntermediateDirectory)
 LinkerName=g++
 ArchiveTool=ar rcu
-SharedObjectLinkerName=g++ -shared 
+SharedObjectLinkerName=g++ -shared -fPIC
 ObjectSuffix=.o
-DebugSwitch=-g
+DebugSwitch=-g 
 IncludeSwitch=-I
 LibrarySwitch=-l
-OutputSwitch=-o
+OutputSwitch=-o 
 LibraryPathSwitch=-L
 PreprocessorSwitch=-D
-SourceSwitch=-c
+SourceSwitch=-c 
 CompilerName=g++
-RcCompilerName=
+RcCompilerName=windres
 OutputFile=../bin/Initialize
 Preprocessors=
 CmpOptions=-g -Wall $(Preprocessors)
@@ -42,7 +42,7 @@ Objects=$(IntermediateDirectory)/main$(ObjectSuffix) $(IntermediateDirectory)/In
 all: $(OutputFile)
 
 $(OutputFile): makeDirStep $(Objects)
-	$(LinkerName) $(OutputSwitch) $(OutputFile) $(LinkOptions) $(Objects) $(LibPath) $(Libs)
+	$(LinkerName) $(OutputSwitch)$(OutputFile) $(LinkOptions) $(Objects) $(LibPath) $(Libs)
 
 makeDirStep:
 	@test -d Intermediate || mkdir Intermediate
@@ -54,12 +54,12 @@ PreBuild:
 ## Objects
 ##
 $(IntermediateDirectory)/main$(ObjectSuffix): main.cpp $(IntermediateDirectory)/main$(ObjectSuffix).d
-	$(CompilerName) $(SourceSwitch) main.cpp $(CmpOptions)   $(OutputSwitch) $(IntermediateDirectory)/main$(ObjectSuffix) $(IncludePath)
+	$(CompilerName) $(SourceSwitch)main.cpp $(CmpOptions)   $(OutputSwitch)$(IntermediateDirectory)/main$(ObjectSuffix) $(IncludePath)
 $(IntermediateDirectory)/main$(ObjectSuffix).d:
 	@$(CompilerName) $(CmpOptions) $(IncludePath) -MT$(IntermediateDirectory)/main$(ObjectSuffix) -MF$(IntermediateDirectory)/main$(ObjectSuffix).d -MM main.cpp
 
 $(IntermediateDirectory)/Initializer$(ObjectSuffix): Initializer.cpp $(IntermediateDirectory)/Initializer$(ObjectSuffix).d
-	$(CompilerName) $(SourceSwitch) Initializer.cpp $(CmpOptions)   $(OutputSwitch) $(IntermediateDirectory)/Initializer$(ObjectSuffix) $(IncludePath)
+	$(CompilerName) $(SourceSwitch)Initializer.cpp $(CmpOptions)   $(OutputSwitch)$(IntermediateDirectory)/Initializer$(ObjectSuffix) $(IncludePath)
 $(IntermediateDirectory)/Initializer$(ObjectSuffix).d:
 	@$(CompilerName) $(CmpOptions) $(IncludePath) -MT$(IntermediateDirectory)/Initializer$(ObjectSuffix) -MF$(IntermediateDirectory)/Initializer$(ObjectSuffix).d -MM Initializer.cpp
 

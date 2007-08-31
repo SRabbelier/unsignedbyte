@@ -26,7 +26,7 @@
 #include "Action.h"
 
 class UBSocket;
-class MCharacter;
+namespace mud { class MCharacter; }
 
 class EditorMobile : public OLCEditor
 {
@@ -48,11 +48,11 @@ public:
 	void setEditing(long id);
 
 private:
-	MCharacter* m_mobile;
+	mud::MCharacter* m_mobile;
 	EditorMobile(const EditorMobile& rhs) : OLCEditor(rhs.m_sock) {};
 	EditorMobile operator=(const EditorMobile& rhs) { return *this; };
 
-	typedef EditorAction<UBSocket, MCharacter> MobileAction;
+	typedef EditorAction<UBSocket, mud::MCharacter> MobileAction;
 
 	class MobileInterpreter : public Interpreter<MobileAction>, public Singleton<MobileInterpreter> {
 	private:
@@ -67,7 +67,7 @@ private:
 		~Name(void) {};
 		friend class Singleton<Name>;
 	public:
-		void Run(UBSocket* sock, const std::string& argument, MCharacter* area);
+		void Run(UBSocket* sock, const std::string& argument, mud::MCharacter* area);
 		std::string getName() { return "Name"; };
 	};
 
@@ -77,7 +77,7 @@ private:
 		~Description(void) {};
 		friend class Singleton<Description>;
 	public:
-		void Run(UBSocket* sock, const std::string& argument, MCharacter* area);
+		void Run(UBSocket* sock, const std::string& argument, mud::MCharacter* area);
 		std::string getName() { return "Description"; };
 	};
 
@@ -87,7 +87,7 @@ private:
 		~Show(void) {};
 		friend class Singleton<Show>;
 	public:
-		void Run(UBSocket* sock, const std::string& argument, MCharacter* area);
+		void Run(UBSocket* sock, const std::string& argument, mud::MCharacter* area);
 		std::string getName() { return "Show"; };
 	};
 
@@ -97,7 +97,7 @@ private:
 		~Save(void) {};
 		friend class Singleton<Save>;
 	public:
-		void Run(UBSocket* sock, const std::string& argument, MCharacter* area);
+		void Run(UBSocket* sock, const std::string& argument, mud::MCharacter* area);
 		std::string getName() { return "Save"; };
 	};
 };

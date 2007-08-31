@@ -38,6 +38,8 @@
 #include "Account.h"
 #include "Colour.h"
 
+using mud::Colour;
+
 EditorColour::EditorColour(UBSocket* sock) :
 OLCEditor(sock),
 m_colour(NULL)
@@ -89,7 +91,7 @@ Table* EditorColour::getTable()
 
 long EditorColour::addNew()
 {
-	return Cache::Get()->AddColour();
+	return mud::Cache::Get()->AddColour();
 }
 
 std::vector<std::string> EditorColour::getList()
@@ -105,7 +107,7 @@ void EditorColour::setEditing(long id)
 		return;
 	}
 	
-	m_colour = Cache::Get()->GetColour(id);
+	m_colour = mud::Cache::Get()->GetColour(id);
 	return;
 }
 

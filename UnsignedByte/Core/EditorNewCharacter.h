@@ -22,7 +22,6 @@
 #include <string>
 #include "Editor.h"
 
-class PCharacter;
 class UBSocket;
 
 class EditorNewCharacter : public Editor

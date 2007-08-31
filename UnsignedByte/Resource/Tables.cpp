@@ -119,7 +119,7 @@ Tables::Tables() :
 	PERMISSIONS->addFPK(GRANTGROUPS);
 	PERMISSIONS->addValue("grant");
 	
-	RACES->addPK("areaid");
+	RACES->addPK("raceid");
 	RACES->addTextField("name");
 	
 	ROOMS->addPK("roomid");

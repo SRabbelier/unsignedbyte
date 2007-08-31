@@ -23,57 +23,60 @@
 #include "Savable.h"
 #include "db.h"
 
-class GrantGroup : public Savable
+namespace mud
 {
-public:
-	/**
-	 * \brief Getters
-	 */ 
-	const std::string& getName() const { return m_grantgroup->name; };
-	long getImplication() const { return m_grantgroup->implies; };
-	
-	bool getDefaultGrant();
-	bool getDefaultLog();
+	class GrantGroup : public Savable
+	{
+	public:
+		/**
+		 * \brief Getters
+		 */ 
+		const std::string& getName() const { return m_grantgroup->getname(); }
+		long getImplication() const { return m_grantgroup->getimplies(); }
+		
+		bool getDefaultGrant();
+		bool getDefaultLog();
 
-	/**
-	 * \brief Setters
-	 */ 
-	void setName(const std::string& name) { m_grantgroup->name = name; };
-	void setImplication(long implication) { m_grantgroup->implies = implication; };
-	
-	void setDefaultGrant(bool defaultgrant);
-	void setDefaultLog(bool defaultlog);
+		/**
+		 * \brief Setters
+		 */ 
+		void setName(const std::string& name) { m_grantgroup->setname(name); }
+		void setImplication(long implication) { m_grantgroup->setimplies(implication); }
+		
+		void setDefaultGrant(bool defaultgrant);
+		void setDefaultLog(bool defaultlog);
 
-	/**
-	 * \brief Utilities
-	 */
-	std::vector<std::string> Show();
-	std::string ShowShort();
-	Table* getTable() const;
-	
-	/**
-	 * \brief Static utilities
-	 */
-	static std::vector<std::string> List();
-	static void Close(GrantGroup* grantgroup);
-	
-	/**
-	 * \brief Database utilities
-	 */
-	void Delete();
-	void Save();
-	bool Exists();
+		/**
+		 * \brief Utilities
+		 */
+		std::vector<std::string> Show();
+		std::string ShowShort();
+		Table* getTable() const;
+		
+		/**
+		 * \brief Static utilities
+		 */
+		static std::vector<std::string> List();
+		static void Close(GrantGroup* grantgroup);
+		
+		/**
+		 * \brief Database utilities
+		 */
+		void Delete();
+		void Save();
+		bool Exists();
 
-private:
-	db::GrantGroups* m_grantgroup;
+	private:
+		db::GrantGroups* m_grantgroup;
 
-	/**
-	 * \brief Ctors
-	 */ 
-	GrantGroup(db::GrantGroups* GrantGroup);
-	GrantGroup(const GrantGroup& rhs) {};
-	GrantGroup operator=(const GrantGroup& rhs) { return *this;};
-	~GrantGroup(void);
-	
-	friend class Cache;
-};
+		/**
+		 * \brief Ctors
+		 */ 
+		GrantGroup(db::GrantGroups* GrantGroup);
+		GrantGroup(const GrantGroup& rhs) {};
+		GrantGroup operator=(const GrantGroup& rhs) { return *this;};
+		~GrantGroup(void);
+		
+		friend class Cache;
+	};
+}

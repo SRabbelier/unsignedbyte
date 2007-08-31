@@ -26,7 +26,7 @@
 #include "Action.h"
 
 class UBSocket;
-class Permission;
+namespace mud { class Permission; }
 
 class EditorPermission : public OLCEditor
 {
@@ -48,11 +48,11 @@ public:
 	void setEditing(long id);
 
 private:
-	Permission* m_permission;
+	mud::Permission* m_permission;
 	EditorPermission(const EditorPermission& rhs) : OLCEditor(rhs.m_sock) {};
 	EditorPermission operator=(const EditorPermission& rhs) { return *this; };
 
-	typedef EditorAction<UBSocket, Permission> PermissionAction;
+	typedef EditorAction<UBSocket, mud::Permission> PermissionAction;
 
 	class PermissionInterpreter : public Interpreter<PermissionAction>, public Singleton<PermissionInterpreter> {
 	private:
@@ -67,7 +67,7 @@ private:
 		~Accounts(void) {};
 		friend class Singleton<Accounts>;
 	public:
-		void Run(UBSocket* sock, const std::string& argument, Permission* area);
+		void Run(UBSocket* sock, const std::string& argument, mud::Permission* area);
 		std::string getName() { return "Account"; };
 	};
 	
@@ -77,7 +77,7 @@ private:
 		~GrantGroups(void) {};
 		friend class Singleton<GrantGroups>;
 	public:
-		void Run(UBSocket* sock, const std::string& argument, Permission* area);
+		void Run(UBSocket* sock, const std::string& argument, mud::Permission* area);
 		std::string getName() { return "GrantGroup"; };
 	};
 	
@@ -87,7 +87,7 @@ private:
 		~Grants(void) {};
 		friend class Singleton<Grants>;
 	public:
-		void Run(UBSocket* sock, const std::string& argument, Permission* area);
+		void Run(UBSocket* sock, const std::string& argument, mud::Permission* area);
 		std::string getName() { return "Grant"; };
 	};
 	
@@ -97,7 +97,7 @@ private:
 		~Logging(void) {};
 		friend class Singleton<Logging>;
 	public:
-		void Run(UBSocket* sock, const std::string& argument, Permission* area);
+		void Run(UBSocket* sock, const std::string& argument, mud::Permission* area);
 		std::string getName() { return "Logging"; };
 	};
 
@@ -107,7 +107,7 @@ private:
 		~Show(void) {};
 		friend class Singleton<Show>;
 	public:
-		void Run(UBSocket* sock, const std::string& argument, Permission* permission);
+		void Run(UBSocket* sock, const std::string& argument, mud::Permission* permission);
 		std::string getName() { return "Show"; };
 	};
 
@@ -117,7 +117,7 @@ private:
 		~Save(void) {};
 		friend class Singleton<Save>;
 	public:
-		void Run(UBSocket* sock, const std::string& argument, Permission* area);
+		void Run(UBSocket* sock, const std::string& argument, mud::Permission* area);
 		std::string getName() { return "Save"; };
 	};
 

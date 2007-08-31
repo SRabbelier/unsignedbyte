@@ -38,6 +38,8 @@
 #include "PCharacter.h"
 #include "Room.h"
 
+using mud::Cache;
+
 extern bool m_quit;
 
 EditorAccount::EditorAccount(UBSocket* sock) :
@@ -131,7 +133,7 @@ void EditorAccount::Login::Run(UBSocket* sock, const std::string &argument)
 		return;
 	}
 
-	int id = Cache::Get()->GetPCharacterID(argument);
+	int id = Cache::Get()->GetCharacterID(argument);
 	if(id <= 0)
 	{
 		sock->Sendf("Got ID %d, which is <= 0, disconnecting you now.\n", id);
@@ -139,9 +141,11 @@ void EditorAccount::Login::Run(UBSocket* sock, const std::string &argument)
 		return;
 	}
 
-	PCharacter* Ch = Cache::Get()->GetPCharacter(sock, id);
+	// TODO - Check if isAccount before loading
+	mud::PCharacter* Ch = Cache::Get()->LoadPCharacter(sock, id);
 	if(!Ch->isAccount(sock->GetAccount()))
 	{
+		Cache::Get()->ClosePCharacter(id);
 		sock->Sendf("You don't have a character named '%s'!\n", argument.c_str());
 		Run(sock, Global::Get()->EmptyString);
 		return;
@@ -154,7 +158,7 @@ void EditorAccount::Login::Run(UBSocket* sock, const std::string &argument)
 
 void EditorAccount::List::Run(UBSocket* sock, const std::string &argument)
 {
-	Account* account = sock->GetAccount();
+	mud::Account* account = sock->GetAccount();
 	if(!account || !account->Exists())
 	{
 		sock->Send("For some reason your account does not exist?!");
@@ -163,6 +167,8 @@ void EditorAccount::List::Run(UBSocket* sock, const std::string &argument)
 		return;
 	}
 	
+	// TODO - add character listing
+	/*
 	Strings characters = DatabaseMgr::Get()->GetSavable(
 		Tables::Get()->CHARACTERS, account->getID(), 
 		Tables::Get()->ACCOUNTS->tableID());
@@ -174,6 +180,8 @@ void EditorAccount::List::Run(UBSocket* sock, const std::string &argument)
 	}
 	
 	sock->Send(String::Get()->box(characters));
+	*/
+	sock->Send("Not yet implemented!");
 	sock->Send("\n");
 	return;
 }

@@ -28,6 +28,8 @@
 #include "db.h"
 #include "Permission.h"
 
+using mud::GrantGroup;
+
 GrantGroup::GrantGroup(db::GrantGroups* area) :
 m_grantgroup(area)
 {
@@ -43,12 +45,12 @@ GrantGroup::~GrantGroup(void)
 
 bool GrantGroup::getDefaultGrant()
 {
-	return Permission::isGrant(m_grantgroup->defaultgrant);
+	return Permission::isGrant(m_grantgroup->getdefaultgrant());
 }
 
 bool GrantGroup::getDefaultLog()
 {
-	return Permission::isLog(m_grantgroup->defaultgrant);
+	return Permission::isLog(m_grantgroup->getdefaultgrant());
 }
 
 /*void GrantGroup::setDefaultGrant(bool defaultgrant)
@@ -70,7 +72,7 @@ void GrantGroup::Save()
 
 bool GrantGroup::Exists()
 {
-	return m_grantgroup->grantgroupid;
+	return m_grantgroup->exists();
 }
 
 std::vector<std::string> GrantGroup::Show()

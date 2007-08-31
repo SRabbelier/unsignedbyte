@@ -26,13 +26,13 @@
 #include "Action.h"
 
 class UBSocket;
-class PCharacter;
-class PCharacter;
+
+namespace mud { class PCharacter; };
 
 class EditorPlaying : public Editor
 {
 public:
-	EditorPlaying(UBSocket* sock, PCharacter* PCharacter);
+	EditorPlaying(UBSocket* sock, mud::PCharacter* character);
 	~EditorPlaying(void);
 
 	std::string name() { return "Playing"; };
@@ -42,11 +42,11 @@ public:
 	void dispatch(const std::string& action, const std::string& argument);
 
 private:
-	PCharacter* m_char; // current active PCharacter
+	mud::PCharacter* m_char; // current active PCharacter
 	EditorPlaying(const EditorPlaying& rhs) : Editor(rhs.m_sock) {};
 	EditorPlaying operator=(const EditorPlaying& rhs) {return *this;};
 
-	typedef EditorAction<UBSocket, PCharacter> PlayingAction;
+	typedef EditorAction<UBSocket, mud::PCharacter> PlayingAction;
 	
 	class PlayingInterpreter : public Interpreter<PlayingAction>, public Singleton<PlayingInterpreter> {
 	private:
@@ -61,7 +61,7 @@ private:
 		~Areas(void) {};
 		friend class Singleton<Areas>;
 	public:
-		void Run(UBSocket* sock, const std::string& argument, PCharacter* ch);
+		void Run(UBSocket* sock, const std::string& argument, mud::PCharacter* ch);
 		std::string getName() { return "Areas"; };
 	};
 
@@ -71,7 +71,7 @@ private:
 		~Colours(void) {};
 		friend class Singleton<Colours>;
 	public:
-		void Run(UBSocket* sock, const std::string& argument, PCharacter* ch);
+		void Run(UBSocket* sock, const std::string& argument, mud::PCharacter* ch);
 		std::string getName() { return "Colours"; };
 	};
 
@@ -81,7 +81,7 @@ private:
 		~Commands(void) {};
 		friend class Singleton<Commands>;
 	public:
-		void Run(UBSocket* sock, const std::string& argument, PCharacter* ch);
+		void Run(UBSocket* sock, const std::string& argument, mud::PCharacter* ch);
 		std::string getName() { return "Commands"; };
 	};
 
@@ -91,7 +91,7 @@ private:
 		~Laston(void) {};
 		friend class Singleton<Laston>;
 	public:
-		void Run(UBSocket* sock, const std::string& argument, PCharacter* ch);
+		void Run(UBSocket* sock, const std::string& argument, mud::PCharacter* ch);
 		std::string getName() { return "Laston"; };
 	};
 
@@ -101,7 +101,7 @@ private:
 		~Look(void) {};
 		friend class Singleton<Look>;
 	public:
-		void Run(UBSocket* sock, const std::string& argument, PCharacter* ch);
+		void Run(UBSocket* sock, const std::string& argument, mud::PCharacter* ch);
 		std::string getName() { return "Look"; };
 	};
 
@@ -111,7 +111,7 @@ private:
 		~Races(void) {};
 		friend class Singleton<Races>;
 	public:
-		void Run(UBSocket* sock, const std::string& argument, PCharacter* ch);
+		void Run(UBSocket* sock, const std::string& argument, mud::PCharacter* ch);
 		std::string getName() { return "Races"; };
 	};
 
@@ -121,7 +121,7 @@ private:
 		~Rooms(void) {};
 		friend class Singleton<Rooms>;
 	public:
-		void Run(UBSocket* sock, const std::string& argument, PCharacter* ch);
+		void Run(UBSocket* sock, const std::string& argument, mud::PCharacter* ch);
 		std::string getName() { return "Rooms"; };
 	};
 
@@ -131,7 +131,7 @@ private:
 		~Score(void) {};
 		friend class Singleton<Score>;
 	public:
-		void Run(UBSocket* sock, const std::string& argument, PCharacter* ch);
+		void Run(UBSocket* sock, const std::string& argument, mud::PCharacter* ch);
 		std::string getName() { return "Score"; };
 	};
 
@@ -141,7 +141,7 @@ private:
 		~Say(void) {};
 		friend class Singleton<Say>;
 	public:
-		void Run(UBSocket* sock, const std::string& argument, PCharacter* ch);
+		void Run(UBSocket* sock, const std::string& argument, mud::PCharacter* ch);
 		std::string getName() { return "Say"; };
 	};
 	
@@ -150,7 +150,7 @@ private:
 		Delete(void) {};
 		~Delete(void) {};
 		friend class Singleton<Delete>;
-		void Run(UBSocket* sock, const std::string& argument, PCharacter* ch);
+		void Run(UBSocket* sock, const std::string& argument, mud::PCharacter* ch);
 	public:
 		bool fullName() { return true; };
 		std::string getName() { return "Delete"; };
@@ -162,7 +162,7 @@ private:
 		~Quit(void) {};
 		friend class Singleton<Quit>;
 	public:
-		void Run(UBSocket* sock, const std::string& argument, PCharacter* ch);
+		void Run(UBSocket* sock, const std::string& argument, mud::PCharacter* ch);
 		bool fullName() { return true; };
 		std::string getName() { return "Quit"; };
 	};
@@ -173,7 +173,7 @@ private:
 		~Who(void) {};
 		friend class Singleton<Who>;
 	public:
-		void Run(UBSocket* sock, const std::string& argument, PCharacter* ch);
+		void Run(UBSocket* sock, const std::string& argument, mud::PCharacter* ch);
 		std::string getName() { return "Who"; };
 	};
 };

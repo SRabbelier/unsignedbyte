@@ -49,7 +49,7 @@ bool Initializer::VerifyDatabaseVersion()
 {
 	try
 	{
-		db::Version ver(m_db, 1);
+		db::Version ver(1);
 
 		if(ver.getmajor() != game::major)
 		{
@@ -120,11 +120,11 @@ bool Initializer::VerifyTables()
 void Initializer::InitDatabase()
 {
 	/*
-	hp::Version oldver(m_db, 1);
+	hp::Version oldver(1);
 	oldver.erase();
 	*/
 	
-	db::Version ver(m_db);
+	db::Version ver;
 	ver.setmajor(game::major);
 	ver.setminor(game::minor);
 	ver.setmicro(game::micro);
@@ -132,11 +132,11 @@ void Initializer::InitDatabase()
 	ver.save();
 	
 	/*
-	hp::Accounts oldacc(m_db, 1);
+	hp::Accounts oldacc(1);
 	oldacc.erase();
 	*/
 
-	db::Accounts acc(m_db);
+	db::Accounts acc;
 	acc.setname(game::vname);
 	acc.setpassword("qq");
 	acc.save();

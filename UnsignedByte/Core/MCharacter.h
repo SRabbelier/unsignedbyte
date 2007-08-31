@@ -23,38 +23,19 @@
 #include "Character.h"
 
 class UBSocket;
-class Account;
 
-class MCharacter : public Character
+namespace mud
 {
-public:
-	void Quit();
-	void Save();
-	void Send(const std::string& msg);
-	
-	/**
-	 * \brief Generates a strings representation of the object
-	 * \return Returns the representation
-	 */
-	std::vector<std::string> Show();
-	
-	/**
-	 * \brief Generates a one-line representation of the object
-	 * \return Returns the representation
-	 */
-	std::string ShowShort();
-	
-	/**
-	 * \brief Generates a strings representation of all instances of this savable
-	 * \return  Returns the representation
-	 */
-	static std::vector<std::string> List();
+	class MCharacter : public Character
+	{
+	public:
 
-private:
-	MCharacter(db::Characters* character);
-	MCharacter(const MCharacter& rhs) : Character(rhs.m_character) {};
-	MCharacter operator=(const MCharacter& rhs) { return *this; };
-	virtual ~MCharacter(void);
+	private:
+		MCharacter(db::Characters* character);
+		MCharacter(const MCharacter& rhs);
+		MCharacter operator=(const MCharacter& rhs);
+		virtual ~MCharacter(void);
 
-	friend class Cache; // for constructor
-};
+		friend class Cache; // for constructor
+	};
+}

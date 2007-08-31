@@ -26,8 +26,7 @@
 #include "Action.h"
 
 class UBSocket;
-class Room;
-class EditorRoom;
+namespace mud { class Room; }
 
 class EditorRoom : public OLCEditor
 {
@@ -55,11 +54,11 @@ private:
 	long m_area;
 	long m_xpos;
 	long m_ypos;
-	Room* m_room;
+	mud::Room* m_room;
 	// void getRoom(const std::string&);
 
 	typedef Action<EditorRoom> GeneralAction;
-	typedef EditorAction<UBSocket, Room> RoomAction;
+	typedef EditorAction<UBSocket, mud::Room> RoomAction;
 
 	class RoomInterpreter : public Interpreter<RoomAction>, public Singleton<RoomInterpreter> {
 	private:
@@ -82,7 +81,7 @@ private:
 		~Activate(void) {};
 		friend class Singleton<Activate>;
 	public: 
-		void Run(EditorRoom* editor, const std::string& argument);
+		void Run(Editormud::Room* editor, const std::string& argument);
 		std::string getName() { return "Activate"; };
 	};
 	*/
@@ -104,7 +103,7 @@ private:
 		~North(void) {};
 		friend class Singleton<North>;
 	public: 
-		void Run(EditorRoom* editor, const std::string& argument);
+		void Run(Editormud::Room* editor, const std::string& argument);
 		std::string getName() { return "North"; };
 	};
 	
@@ -114,7 +113,7 @@ private:
 		~NorthEast(void) {};
 		friend class Singleton<NorthEast>;
 	public: 
-		void Run(EditorRoom* editor, const std::string& argument);
+		void Run(Editormud::Room* editor, const std::string& argument);
 		std::string getName() { return "NorthEast"; };
 	};
 
@@ -124,7 +123,7 @@ private:
 		~East(void) {};
 		friend class Singleton<East>;
 	public: 
-		void Run(EditorRoom* editor, const std::string& argument);
+		void Run(Editormud::Room* editor, const std::string& argument);
 		std::string getName() { return "East"; };
 	};
 
@@ -134,7 +133,7 @@ private:
 		~SouthEast(void) {};
 		friend class Singleton<SouthEast>;
 	public: 
-		void Run(EditorRoom* editor, const std::string& argument);
+		void Run(Editormud::Room* editor, const std::string& argument);
 		std::string getName() { return "SouthEast"; };
 	}; 
 
@@ -144,7 +143,7 @@ private:
 		~South(void) {};
 		friend class Singleton<South>;
 	public: 
-		void Run(EditorRoom* editor, const std::string& argument);
+		void Run(Editormud::Room* editor, const std::string& argument);
 		std::string getName() { return "South"; };
 	};
 	
@@ -154,7 +153,7 @@ private:
 		~SouthWest(void) {};
 		friend class Singleton<SouthWest>;
 	public: 
-		void Run(EditorRoom* editor, const std::string& argument);
+		void Run(Editormud::Room* editor, const std::string& argument);
 		std::string getName() { return "SouthWest"; };
 	};
 
@@ -164,7 +163,7 @@ private:
 		~West(void) {};
 		friend class Singleton<West>;
 	public: 
-		void Run(EditorRoom* editor, const std::string& argument);
+		void Run(Editormud::Room* editor, const std::string& argument);
 		std::string getName() { return "West"; };
 	};	
 	
@@ -174,7 +173,7 @@ private:
 		~NorthWest(void) {};
 		friend class Singleton<NorthWest>;
 	public: 
-		void Run(EditorRoom* editor, const std::string& argument);
+		void Run(Editormud::Room* editor, const std::string& argument);
 		std::string getName() { return "NorthWest"; };
 	};
 	*/
@@ -194,7 +193,7 @@ private:
 		~Name(void) {};
 		friend class Singleton<Name>;
 	public: 
-		void Run(UBSocket* sock, const std::string& argument, Room* room);
+		void Run(UBSocket* sock, const std::string& argument, mud::Room* room);
 		std::string getName() { return "Name"; };
 	};
 
@@ -204,7 +203,7 @@ private:
 		~Description(void) {};
 		friend class Singleton<Description>;
 	public: 
-		void Run(UBSocket* sock, const std::string& argument, Room* room);
+		void Run(UBSocket* sock, const std::string& argument, mud::Room* room);
 		std::string getName() { return "Description"; };
 	};
 
@@ -214,7 +213,7 @@ private:
 		~Sectors(void) {};
 		friend class Singleton<Sectors>;
 	public: 
-		void Run(UBSocket* sock, const std::string& argument, Room* room);
+		void Run(UBSocket* sock, const std::string& argument, mud::Room* room);
 		std::string getName() { return ":Sectors"; };
 	};
 
@@ -224,7 +223,7 @@ private:
 		~Save(void) {};
 		friend class Singleton<Save>;
 	public: 
-		void Run(UBSocket* sock, const std::string& argument, Room* room);
+		void Run(UBSocket* sock, const std::string& argument, mud::Room* room);
 		std::string getName() { return "Save"; };
 	};
 
@@ -234,7 +233,7 @@ private:
 		~Close(void) {};
 		friend class Singleton<Close>;
 	public: 
-		void Run(UBSocket* sock, const std::string& argument, Room* room);
+		void Run(UBSocket* sock, const std::string& argument, mud::Room* room);
 		std::string getName() { return "Close"; };
 	};
 
@@ -244,7 +243,7 @@ private:
 		~Open(void) {};
 		friend class Singleton<Open>;
 	public: 
-		void Run(UBSocket* sock, const std::string& argument, Room* room);
+		void Run(UBSocket* sock, const std::string& argument, mud::Room* room);
 		std::string getName() { return "Open"; };
 	};
 
@@ -254,7 +253,7 @@ private:
 		~Deactivate(void) {};
 		friend class Singleton<Deactivate>;
 	public:
-		void Run(UBSocket* sock, const std::string& argument, Room* room);
+		void Run(UBSocket* sock, const std::string& argument, mud::Room* room);
 		std::string getName() { return "Deactivate"; };
 	};
 

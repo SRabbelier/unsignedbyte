@@ -34,6 +34,8 @@
 #include "PCharacter.h"
 #include "Room.h"
 
+using mud::PCharacter;
+
 EditorPlaying::EditorPlaying(UBSocket* sock, PCharacter* character) :
 Editor(sock),
 m_char(character)
@@ -41,7 +43,7 @@ m_char(character)
 	try
 	{
 		long id = m_char->getRoom();
-		Room* inroom = Cache::Get()->GetRoom(id);
+		mud::Room* inroom = mud::Cache::Get()->GetRoom(id);
 	
 		inroom->Sendf("%s enters the realm.\n", m_char->getName().c_str());
 	}
@@ -168,7 +170,7 @@ void EditorPlaying::Quit::Run(UBSocket* sock, const std::string &argument, PChar
 	{
 		Ch->OnSend("Thank you for visiting.\n");
 		long id =Ch->getRoom();
-		Room* room = Cache::Get()->GetRoom(id);
+		mud::Room* room = mud::Cache::Get()->GetRoom(id);
 		
 		room->Sendf("%s fades from the realm.\n", Ch->getName().c_str());	
 	}
@@ -181,7 +183,7 @@ void EditorPlaying::Quit::Run(UBSocket* sock, const std::string &argument, PChar
 	try
 	{
 		sock->SetEditor(new EditorAccount(sock));
-		Character::Close(Ch);
+		mud::PCharacter::Close(Ch);
 	}
 	catch(std::exception& e)
 	{

@@ -26,7 +26,7 @@
 #include "Action.h"
 
 class UBSocket;
-class Colour;
+namespace mud { class Colour; }
 
 class EditorColour : public OLCEditor
 {
@@ -48,13 +48,13 @@ public:
 	void setEditing(long id);
 
 private:
-	Colour* m_colour;
+	mud::Colour* m_colour;
 	
 	EditorColour(const EditorColour& rhs) : OLCEditor(rhs.m_sock) {};
 	EditorColour operator=(const EditorColour& rhs) {return *this;};
 
 private:
-	typedef EditorAction<UBSocket, Colour> ColourAction;
+	typedef EditorAction<UBSocket, mud::Colour> ColourAction;
 
 	class ColourInterpreter : public Interpreter<ColourAction>, public Singleton<ColourInterpreter> {
 	private:
@@ -69,7 +69,7 @@ private:
 		~Name(void) {};
 		friend class Singleton<Name>;
 	public:
-		void Run(UBSocket* sock, const std::string& argument, Colour* colour);
+		void Run(UBSocket* sock, const std::string& argument, mud::Colour* colour);
 		std::string getName() { return "Name"; };
 	};
 
@@ -79,7 +79,7 @@ private:
 		~ColourString(void) {};
 		friend class Singleton<ColourString>;
 	public:
-		void Run(UBSocket* sock, const std::string& argument, Colour* colour);
+		void Run(UBSocket* sock, const std::string& argument, mud::Colour* colour);
 		std::string getName() { return "ColourString"; };
 	};
 	
@@ -89,7 +89,7 @@ private:
 		~Save(void) {};
 		friend class Singleton<Save>;
 	public:
-		void Run(UBSocket* sock, const std::string& argument, Colour* colour);
+		void Run(UBSocket* sock, const std::string& argument, mud::Colour* colour);
 		std::string getName() { return "Save"; };
 	};
 	
@@ -99,7 +99,7 @@ private:
 		~Show(void) {};
 		friend class Singleton<Show>;
 	public:
-		void Run(UBSocket* sock, const std::string& argument, Colour* colour);
+		void Run(UBSocket* sock, const std::string& argument, mud::Colour* colour);
 		std::string getName() { return "Show"; };
 	};
 };

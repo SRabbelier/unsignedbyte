@@ -38,6 +38,8 @@
 #include "Command.h"
 #include "GrantGroup.h"
 
+using mud::Command;
+
 EditorCommand::EditorCommand(UBSocket* sock) :
 OLCEditor(sock),
 m_command(NULL)
@@ -88,7 +90,7 @@ Table* EditorCommand::getTable()
 
 long EditorCommand::addNew()
 {
-	return Cache::Get()->AddCommand();
+	return mud::Cache::Get()->AddCommand();
 }
 
 std::vector<std::string> EditorCommand::getList()
@@ -104,7 +106,7 @@ void EditorCommand::setEditing(long id)
 		return;
 	}
 	
-	m_command = Cache::Get()->GetCommand(id);
+	m_command = mud::Cache::Get()->GetCommand(id);
 	return;
 }
 
@@ -156,11 +158,11 @@ void EditorCommand::GrantGroups::Run(UBSocket* sock, const std::string& argument
 		return;
 	}
 
-	long id = Cache::Get()->GetGrantGroupID(argument);
+	long id = mud::Cache::Get()->GetGrantGroupID(argument);
 	if(!id)
 	{
 		sock->Sendf("'%s' is not a valid grantgroup!\n", argument.c_str());
-		sock->Send(String::Get()->box(GrantGroup::List(), "GrantGroups"));
+		sock->Send(String::Get()->box(mud::GrantGroup::List(), "GrantGroups"));
 		return;
 	}
 

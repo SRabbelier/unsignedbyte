@@ -26,8 +26,7 @@
 #include "Action.h"
 
 class UBSocket;
-class Area;
-class EditorArea;
+namespace mud { class Area; };
 
 class EditorArea : public OLCEditor
 {
@@ -49,13 +48,13 @@ public:
 	void setEditing(long id);
 
 private:
-	Area* m_area;
+	mud::Area* m_area;
 
 	EditorArea(const EditorArea& rhs) : OLCEditor(rhs.m_sock) {};
 	EditorArea operator=(const EditorArea& rhs) {return *this;};
 
 	typedef Action<EditorArea> GeneralAction;
-	typedef EditorAction<UBSocket, Area> AreaAction;
+	typedef EditorAction<UBSocket, mud::Area> AreaAction;
 
 	class AreaInterpreter : public Interpreter<AreaAction>, public Singleton<AreaInterpreter> {
 	private:
@@ -70,7 +69,7 @@ private:
 		~Name(void) {};
 		friend class Singleton<Name>;
 	public:
-		void Run(UBSocket* sock, const std::string& argument, Area* area);
+		void Run(UBSocket* sock, const std::string& argument, mud::Area* area);
 		std::string getName() { return "Name"; };
 	};
 
@@ -80,7 +79,7 @@ private:
 		~Description(void) {};
 		friend class Singleton<Description>;
 	public:
-		void Run(UBSocket* sock, const std::string& argument, Area* area);
+		void Run(UBSocket* sock, const std::string& argument, mud::Area* area);
 		std::string getName() { return ":Description"; };
 	};
 
@@ -90,7 +89,7 @@ private:
 		~Height(void) {};
 		friend class Singleton<Height>;
 	public:
-		void Run(UBSocket* sock, const std::string& argument, Area* area);
+		void Run(UBSocket* sock, const std::string& argument, mud::Area* area);
 		std::string getName() { return "Height"; };
 	};
 
@@ -100,7 +99,7 @@ private:
 		~Width(void) {};
 		friend class Singleton<Width>;
 	public:
-		void Run(UBSocket* sock, const std::string& argument, Area* area);
+		void Run(UBSocket* sock, const std::string& argument, mud::Area* area);
 		std::string getName() { return "Width"; };
 	};
 
@@ -110,7 +109,7 @@ private:
 		~Show(void) {};
 		friend class Singleton<Show>;
 	public:
-		void Run(UBSocket* sock, const std::string& argument, Area* area);
+		void Run(UBSocket* sock, const std::string& argument, mud::Area* area);
 		std::string getName() { return "Show"; };
 	};
 
@@ -120,7 +119,7 @@ private:
 		~Save(void) {};
 		friend class Singleton<Save>;
 	public:
-		void Run(UBSocket* sock, const std::string& argument, Area* area);
+		void Run(UBSocket* sock, const std::string& argument, mud::Area* area);
 		std::string getName() { return "Save"; };
 	};
 

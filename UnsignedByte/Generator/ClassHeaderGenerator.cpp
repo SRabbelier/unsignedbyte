@@ -84,11 +84,16 @@ void ClassHeaderGenerator::AppendCtor()
 	
 	// Empty ctor for creating new objects
 	if(m_table->hasSinglularPrimaryKey())
-		(*m_file) << m_tabs << m_tabs << name << "(Database* db);" << endl;
+		(*m_file) << m_tabs << m_tabs << name << "();" << endl;
 
-	(*m_file) << m_tabs << m_tabs << name << "(Database* db";
+	(*m_file) << m_tabs << m_tabs << name << "(";
 	for(TableMap::const_iterator it = m_table->keybegin(); it != m_table->keyend(); it++)
-		(*m_file) << ", value_type " << it->first;
+	{
+		if(it != m_table->keybegin())
+			(*m_file) << ", ";
+		
+		(*m_file) << "value_type " << it->first;
+	}
 	(*m_file) << ");" << endl;
 	
 	// Destructor

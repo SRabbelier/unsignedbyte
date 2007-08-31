@@ -37,6 +37,8 @@
 #include "Sector.h"
 #include "Character.h"
 
+using mud::Room;
+
 Room::Room(db::Rooms* room) :
 m_room(room)
 {
@@ -50,6 +52,7 @@ Room::~Room(void)
 	m_room = NULL;
 }
 
+/*
 Characters Room::getCharacters()
 {
 	Longs ids = DatabaseMgr::Get()->GetSavableIDS(
@@ -77,15 +80,19 @@ Characters Room::getCharacters()
 
 	return result;
 }
+*/
 
 void Room::Send(const std::string& msg)
 {
+	// TODO - send msg to all characters in room
+	/*
 	Characters inroom = getCharacters();
-
+	
 	for(Characters::iterator it = inroom.begin(); it != inroom.end(); it++)
 	{
 		(*it)->OnSend(msg);
 	}
+	*/
 }
 
 void Room::Sendf(char* format, ...)
@@ -108,7 +115,7 @@ void Room::Save()
 
 bool Room::Exists()
 {
-	return m_room->roomid;
+	return m_room->getroomid();
 }
 
 std::string Room::CreateMap(long id, long origx, long origy)
@@ -280,7 +287,7 @@ void Room::Close(Room* room)
 	if(room == NULL)
 		throw std::invalid_argument("Room::Close(), room == NULL!");
 	
-	Cache::Get()->CloseRoom(room->m_room->roomid);
+	Cache::Get()->CloseRoom(room->getID());
 	delete room;
 }
 

@@ -23,47 +23,50 @@
 #include "Savable.h"
 #include "db.h"
 
-class Colour : public Savable
+namespace mud
 {
-public:
-	const std::string& getName() const { return m_colour->name; };
-	std::string getColourString();
-	const std::string& getCode() const { return m_colour->code; };
+	class Colour : public Savable
+	{
+	public:
+		const std::string& getName() const { return m_colour->getname(); }
+		std::string getColourString();
+		const std::string& getCode() const { return m_colour->getcode(); }
 
-	void setName(const std::string& name) { m_colour->name = name; };
-	void setColourString(const std::string& colourstring) { m_colour->colourstring = colourstring; };
-	void setCode(const std::string& code) { m_colour->code = code; };
+		void setName(const std::string& name) { m_colour->setname(name); }
+		void setColourString(const std::string& colourstring) { m_colour->setcolourstring(colourstring); }
+		void setCode(const std::string& code) { m_colour->setcode(code); };
 
-	/**
-	 * \brief Utilities
-	 */
-	std::vector<std::string> Show();
-	std::string ShowShort();
-	Table* getTable() const;
-	
-	/**
-	 * \brief Static utilities
-	 */
-	static std::vector<std::string> List();
-	static void Close(Colour* colour);
-	
-	/**
-	 * \brief Database utilities
-	 */
-	void Delete();
-	void Save();
-	bool Exists();
+		/**
+		 * \brief Utilities
+		 */
+		std::vector<std::string> Show();
+		std::string ShowShort();
+		Table* getTable() const;
+		
+		/**
+		 * \brief Static utilities
+		 */
+		static std::vector<std::string> List();
+		static void Close(Colour* colour);
+		
+		/**
+		 * \brief Database utilities
+		 */
+		void Delete();
+		void Save();
+		bool Exists();
 
-private:
-	db::Colours* m_colour;
+	private:
+		db::Colours* m_colour;
 
-	/**
-	 * \brief Ctors
-	 */ 
-	Colour(db::Colours* object);
-	Colour(const Colour& rhs) {};
-	Colour operator=(const Colour& rhs) { return *this;};
-	~Colour(void);
-	
-	friend class Cache;
-};
+		/**
+		 * \brief Ctors
+		 */ 
+		Colour(db::Colours* object);
+		Colour(const Colour& rhs) {};
+		Colour operator=(const Colour& rhs) { return *this;};
+		~Colour(void);
+		
+		friend class Cache;
+	};
+}

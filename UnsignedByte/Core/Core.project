@@ -100,5 +100,10 @@
       </CustomBuild>
     </Configuration>
   </Settings>
-  <Dependencies/>
+  <Dependencies>
+    <Project Name="Resource"/>
+    <Project Name="Generator"/>
+    <Project Name="DAL"/>
+    <Project Name="Initializer"/>
+  </Dependencies>
 </CodeLite_Project>

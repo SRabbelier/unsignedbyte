@@ -37,6 +37,8 @@
 #include "Account.h"
 #include "Sector.h"
 
+using mud::Sector;
+
 EditorSector::EditorSector(UBSocket* sock) :
 OLCEditor(sock),
 m_sector(NULL)
@@ -87,7 +89,7 @@ Table* EditorSector::getTable()
 
 long EditorSector::addNew()
 {
-	return Cache::Get()->AddSector();
+	return mud::Cache::Get()->AddSector();
 }
 
 std::vector<std::string> EditorSector::getList()
@@ -103,7 +105,7 @@ void EditorSector::setEditing(long id)
 		return;
 	}
 	
-	m_sector = Cache::Get()->GetSector(id);
+	m_sector = mud::Cache::Get()->GetSector(id);
 	return;
 }
 

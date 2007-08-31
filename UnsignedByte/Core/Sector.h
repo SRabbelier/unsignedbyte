@@ -23,55 +23,58 @@
 #include "Savable.h"
 #include "db.h"
 
-class Sector : public Savable
+namespace mud
 {
-public:
-	/** 
-	 * \brief Getters
-	 */ 
-	const std::string& getName() const { return m_sector->name; };
-	const std::string& getSymbol() const { return m_sector->symbol; };
-	long getMoveCost() const { return m_sector->movecost; };
-	bool isWater() const { return m_sector->water; };
-	
-	/**
-	 * \brief Setters
-	 */ 
-	void setName(const std::string& name) { m_sector->name = name; };
-	void setSymbol(const std::string& symbol) { m_sector->symbol = symbol; };
-	void setMoveCost(long movecost) { m_sector->movecost = movecost; };
-	void setWater(bool water) { m_sector->water = water; };
+	class Sector : public Savable
+	{
+	public:
+		/** 
+		 * \brief Getters
+		 */ 
+		const std::string& getName() const { return m_sector->getname(); }
+		const std::string& getSymbol() const { return m_sector->getsymbol(); }
+		long getMoveCost() const { return m_sector->getmovecost(); }
+		bool isWater() const { return m_sector->getwater(); }
+		
+		/**
+		 * \brief Setters
+		 */ 
+		void setName(const std::string& name) { m_sector->setname(name); }
+		void setSymbol(const std::string& symbol) { m_sector->setsymbol(symbol); }
+		void setMoveCost(long movecost) { m_sector->setmovecost(movecost); }
+		void setWater(bool water) { m_sector->setwater(water); }
 
-	/**
-	 * \brief Utilities
-	 */
-	std::vector<std::string> Show();
-	std::string ShowShort();
-	Table* getTable() const;
-	
-	/**
-	 * \brief Static utilities
-	 */
-	static std::vector<std::string> List();
-	static void Close(Sector* sector);
-	
-	/**
-	 * \brief Database utilities
-	 */
-	void Delete();
-	void Save();
-	bool Exists();
+		/**
+		 * \brief Utilities
+		 */
+		std::vector<std::string> Show();
+		std::string ShowShort();
+		Table* getTable() const;
+		
+		/**
+		 * \brief Static utilities
+		 */
+		static std::vector<std::string> List();
+		static void Close(Sector* sector);
+		
+		/**
+		 * \brief Database utilities
+		 */
+		void Delete();
+		void Save();
+		bool Exists();
 
-private:
-	db::Sectors* m_sector;
+	private:
+		db::Sectors* m_sector;
 
-	/**
-	 * \brief Ctors
-	 */ 
-	Sector(db::Sectors* Sector);
-	Sector(const Sector& rhs) {};
-	Sector operator=(const Sector& rhs) {return *this;};
-	~Sector(void);
-	
-	friend class Cache;
-};
+		/**
+		 * \brief Ctors
+		 */ 
+		Sector(db::Sectors* Sector);
+		Sector(const Sector& rhs) {};
+		Sector operator=(const Sector& rhs) {return *this;};
+		~Sector(void);
+		
+		friend class Cache;
+	};
+}

@@ -18,6 +18,9 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include <stdexcept>
+#include <sstream>
+
 #include "Cache.h"
 #include "UBSocket.h"
 #include "DatabaseMgr.h"
@@ -37,128 +40,123 @@
 #include "GrantGroup.h"
 #include "Permission.h"
 
-long Cache::AddAccount()
-{
-	db::Accounts p(DatabaseMgr::Get()->DB());
-	long id = p.insert();
+using namespace mud;
 
-	return id;
+value_type Cache::AddAccount()
+{
+	db::Accounts p;
+	p.save();
+
+	return p.getaccountid();
 }
 
-long Cache::AddCharacter()
+value_type Cache::AddCharacter()
 {
-	db::Characters p(DatabaseMgr::Get()->DB());
-	long id = p.insert();
+	db::Characters p;
+	p.save();
 
-	return id;
+	return p.getcharacterid();
 }
 
-long Cache::AddRace()
+value_type Cache::AddRace()
 {
-	db::Races p(DatabaseMgr::Get()->DB());
-	long id = p.insert();
+	db::Races p;
+	p.save();
 
-	return id;
+	return p.getraceid();
 }
 
-long Cache::AddArea()
+value_type Cache::AddArea()
 {
-	db::Areas p(DatabaseMgr::Get()->DB());
-	p.height = 1;
-	p.width = 1;
-	long id = p.insert();
+	db::Areas p;
+	p.setheight(1);
+	p.setwidth(1);
+	p.save();
 	
-	return id;
+	return p.getareaid();
 }
 
-long Cache::AddRoom()
+value_type Cache::AddRoom()
 {
-	db::Rooms p(DatabaseMgr::Get()->DB());
-	long id = p.insert();
+	db::Rooms p;
+	p.save();
 
-	return id;
+	return p.getroomid();
 }
 
-long Cache::AddSector()
+value_type Cache::AddSector()
 {
-	db::Sectors p(DatabaseMgr::Get()->DB());
-	long id = p.insert();
+	db::Sectors p;
+	p.save();
 
-	return id;
+	return p.getsectorid();
 }
 
 /*
-long Cache::AddExit()
+value_type Cache::AddExit()
 {
-	db::Exits ex(DatabaseMgr::Get()->DB());
-	long id = ex.insert();
+	db::Exits ex();
+	ex.save();
 
 	return id;
 }
 */
 
-long Cache::AddColour()
+value_type Cache::AddColour()
 {
-	db::Colours p(DatabaseMgr::Get()->DB());
-	long id = p.insert();
+	db::Colours p;
+	p.save();
 
-	return id;
+	return p.getcolourid();
 }
 
-long Cache::AddCommand()
+value_type Cache::AddCommand()
 {
-	db::Commands p(DatabaseMgr::Get()->DB());
-	long id = p.insert();
+	db::Commands p;
+	p.save();
 
-	return id;
+	return p.getcommandid();
 }
 
-long Cache::AddGrantGroup()
+value_type Cache::AddGrantGroup()
 {
-	db::GrantGroups p(DatabaseMgr::Get()->DB());
-	long id = p.insert();
+	db::GrantGroups gg;
+	gg.save();
 	
-	return id;
+	return gg.getgrantgroupid();
 }
 
-long Cache::AddPermission()
+void Cache::AddPermission(value_type account, value_type grantgroup)
 {
-	db::Permissions p(DatabaseMgr::Get()->DB());
-	long id = p.insert();
-	
-	return id;
+	db::Permissions p(account, grantgroup);
+	p.save();
 }
 
-bool Cache::IsMobile(long id)
-{
-	long count = DatabaseMgr::Get()->CountSavable(Tables::Get()->CHARACTERS, id);
-	if(count <= 0)
-		return false;
 
-	MCharacter* mobile = GetMCharacter(id);
-	return (mobile->getID() == 1);
-}
+/**
+ *   Wrapped
+ *   Database
+ *   Object
+ *	 Retreival 
+ */
 
-Account* Cache::GetAccount(long id)
+Account* Cache::GetAccount(value_type id)
 {
 	Account* p = m_accounts[id];
 	if (p)
 		return p;
 
 	// Account delete's db::Account on deletion
-	db::Accounts* d = new db::Accounts(DatabaseMgr::Get()->DBref(), id);
+	db::Accounts* d = new db::Accounts(id);
 	p = new Account(d);
 
 	m_accounts[id] = p;
-	m_account[d->name] = id;
-
-	if(!p->Exists())
-		Global::Get()->bugf("Cache::GetAccount() was asked to get account %d, which does not exist!\n", id);
+	m_account[d->getname()] = id;
 	
 	return p;
 }
 
-long Cache::GetAccountID(const std::string& name)
+value_type Cache::GetAccountID(const std::string& name)
 {
 	lookup_mi it = m_account.find(name);
 	if(it != m_account.end())
@@ -166,74 +164,71 @@ long Cache::GetAccountID(const std::string& name)
 		return it->second;
 	}
 
-	long num = DatabaseMgr::Get()->GetSavableID(Tables::Get()->ACCOUNTS, name);
+	value_type id = DatabaseMgr::Get()->GetSavableID(Tables::Get()->ACCOUNTS, name);
 
-	m_account[name] = num;
+	m_account[name] = id;
 
-	return num;
+	return id;
 }
 
-PCharacter* Cache::GetPCharacter(UBSocket* sock, long id)
+PCharacter* Cache::GetPCharacter(value_type id)
 {
 	PCharacter* p = m_players[id];
 	if (p)
-	{
-		p->m_sock = sock;
 		return p;
-	}
+	
+	std::ostringstream err;
+	err << "No such PCharacter '" << id << "' logged in.";
+	throw std::invalid_argument(err.str());
+}
 
+PCharacter* Cache::LoadPCharacter(UBSocket* sock, value_type id)
+{
 	// Character delete's db::Characters on deletion
-	db::Characters* d = new db::Characters(DatabaseMgr::Get()->DBref(), id);
-	p = new PCharacter(sock, d);
+	db::Characters* d = new db::Characters(id);
+	PCharacter* p = new PCharacter(sock, d);
 
 	m_players[id] = p;
-	m_character[d->name] = id;
-
-	if(!p->Exists())
-		Global::Get()->bugf("Cache::GetPCharacter() was asked to get character %d, which does not exist!\n", id);
+	m_character[d->getname()] = id;
+	
+	m_pcharacters.insert(id);
 
 	return p;
 }
 
-MCharacter* Cache::GetMCharacter(long id)
+MCharacter* Cache::GetMCharacter(value_type id)
 {
 	MCharacter* p = m_mobiles[id];
 	if (p)
 		return p;
 
 	// MCharacter delete's db::Characters on deletion
-	db::Characters* d = new db::Characters(DatabaseMgr::Get()->DBref(), id);
+	db::Characters* d = new db::Characters(id);
 	p = new MCharacter(d);
 
 	m_mobiles[id] = p;
-	m_character[d->name] = id;
-
-	if(!p->Exists())
-		Global::Get()->bugf("Cache::GetMCharacter() was asked to get character %d, which does not exist!\n", id);
+	m_character[d->getname()] = id;
 
 	return p;
 }
 
-Character* Cache::GetCharacter(long id)
+Character* Cache::GetCharacter(value_type id)
 {
 	Character* p = m_characters[id];
 	if (p)
 		return p;
 
 	// Character delete's db::Characters on deletion
-	db::Characters* d = new db::Characters(DatabaseMgr::Get()->DBref(), id);
+	db::Characters* d = new db::Characters(id);
 	p = new Character(d);
 
 	m_characters[id] = p;
-	m_character[d->name] = id;
-
-	if(!p->Exists())
-		Global::Get()->bugf("Cache::GetCharacter() was asked to get character %d, which does not exist!\n", id);
+	m_character[d->getname()] = id;
 
 	return p;
 }
 
-long Cache::GetPCharacterID(const std::string& name)
+value_type Cache::GetCharacterID(const std::string& name)
 {
 	lookup_mi it = m_character.find(name);
 	if(it != m_character.end())
@@ -248,43 +243,38 @@ long Cache::GetPCharacterID(const std::string& name)
 	return id;
 }
 
-bool Cache::isActive(long id)
+bool Cache::isActive(value_type id)
 {
-	players_m::iterator it = m_players.find(id);
-	if(it == m_players.end())
+	valueset::iterator it = m_pcharacters.find(id);
+	if(it == m_pcharacters.end())
 		return false;
-
+	
 	return true;
 }
 
 bool Cache::isActive(cstring name)
 {
-	lookup_mi it = m_character.find(name);
-	if(it == m_character.end())
-		return false;
-
-	return isActive(it->second);
+	value_type id = GetCharacterID(name);
+	return isActive(id);
 }
 	
-Race* Cache::GetRace(long id)
+Race* Cache::GetRace(value_type id)
 {
 	Race* p = m_races[id];
 	if (p)
 		return p;
 
 	// Races delete's db::Races on deletion
-	db::Races* d = new db::Races(DatabaseMgr::Get()->DBref(), id);
+	db::Races* d = new db::Races(id);
 	p = new Race(d);
 
 	m_races[id] = p;
-	m_race[d->name] = id;
+	m_race[d->getname()] = id;
 	
-	if(!p->Exists())
-		Global::Get()->bugf("Cache::GetRace() was asked to get race %d, which does not exist!\n", id);
 	return p;
 }
 
-long Cache::GetRaceID(const std::string& name)
+value_type Cache::GetRaceID(const std::string& name)
 {
 	lookup_mi it = m_race.find(name);
 	if(it != m_race.end())
@@ -298,40 +288,36 @@ long Cache::GetRaceID(const std::string& name)
 	return id;
 }
 
-Area* Cache::GetArea(long id)
+Area* Cache::GetArea(value_type id)
 {
 	Area* p = m_areas[id];
 	if (p)
 		return p;
 
 	// Area delete's db::Area on deletion
-	p = new Area(new db::Areas(DatabaseMgr::Get()->DBref(), id));
+	db::Areas* d = new db::Areas(id);
+	p = new Area(d);
 	m_areas[id] = p;
-
-	if(!p->Exists())	
-		Global::Get()->bugf("Cache::GetArea() was asked to get area %d, which does not exist!\n", id);
 
 	return p;
 }
 
-Room* Cache::GetRoom(long id)
+Room* Cache::GetRoom(value_type id)
 {
 	Room* p = m_rooms[id];
 	if (p)
 		return p;
 
 	// Room delete's db::Room on deletion
-	p = new Room(new db::Rooms(DatabaseMgr::Get()->DBref(), id));
+	db::Rooms* d = new db::Rooms(id);
+	p = new Room(d);
 	m_rooms[id] = p;
-
-	if(!p->Exists())
-		Global::Get()->bugf("Cache::GetRoom() was asked to get room %d, which does not exist!\n", id);
 
 	return p;
 }
 
 /*
-long Cache::GetRoomID(long area, long x, long y)
+value_type Cache::GetRoomID(value_type area, value_type x, value_type y)
 {
 	Coordinate c(area, xycoord(x,y));
 	rlookup_mi it = m_room.find(c);
@@ -341,7 +327,7 @@ long Cache::GetRoomID(long area, long x, long y)
 	}
 
 	Query q(DatabaseMgr::Get()->DBref());
-	long num = (long)q.get_num(Global::Get()->sprintf(
+	value_type num = (value_type)q.get_num(Global::Get()->sprintf(
 		"SELECT %s FROM %s WHERE %s=%d AND x=%d AND y=%d;", 
 		Tables::Get()->ROOMS->tableID().c_str(),
 		Tables::Get()->ROOMS->tableName().c_str(),
@@ -355,25 +341,23 @@ long Cache::GetRoomID(long area, long x, long y)
 }
 */
 
-Sector* Cache::GetSector(long id)
+Sector* Cache::GetSector(value_type id)
 {
 	Sector* p = m_sectors[id];
 	if (p)
 		return p;
 
 	// Sector delete's db::Sectors on deletion
-	db::Sectors* d = new db::Sectors(DatabaseMgr::Get()->DBref(), id);
+	db::Sectors* d = new db::Sectors(id);
 	p = new Sector(d);
 	
 	m_sectors[id] = p;
-	m_sector[d->name] = id;
+	m_sector[d->getname()] = id;
 
-	if(!p->Exists())	
-		Global::Get()->bugf("Cache::GetSector() was asked to get sector %d, which does not exist!\n", id);
 	return p;
 }
 
-long Cache::GetSectorID(const std::string& name)
+value_type Cache::GetSectorID(const std::string& name)
 {
 	lookup_mi it = m_sector.find(name);
 	if(it != m_sector.end())
@@ -387,25 +371,23 @@ long Cache::GetSectorID(const std::string& name)
 	return id;
 }
 
-Colour* Cache::GetColour(long id)
+Colour* Cache::GetColour(value_type id)
 {
 	Colour* p = m_colours[id];
 	if (p)
 		return p;
 
 	// Colour delete's db::Colours on deletion
-	db::Colours* d = new db::Colours(DatabaseMgr::Get()->DBref(), id);
+	db::Colours* d = new db::Colours(id);
 	p = new Colour(d);
 
 	m_colours[id] = p;
-	m_colour[d->code] = id;
+	m_colour[d->getcode()] = id;
 	
-	if(!p->Exists())
-		Global::Get()->bugf("Cache::GetColour() was asked to get colour %d, which does not exist!\n", id);
 	return p;
 }
 
-long Cache::GetColourID(const std::string& code)
+value_type Cache::GetColourID(const std::string& code)
 {
 	lookup_mi it = m_colour.find(code);
 	if(it != m_colour.end())
@@ -420,14 +402,14 @@ long Cache::GetColourID(const std::string& code)
 }
 
 /*
-Exit* Cache::GetExit(long id)
+Exit* Cache::GetExit(value_type id)
 {
 	Exit* p = m_exits[id];
 	if (p)
 		return p;
 
 	// Exit delete's db::Exits on deletion
-	db::Exits* d = new db::Exits(DatabaseMgr::Get()->DBref(), id);
+	db::Exits* d = new db::Exits(id);
 	p = new Exit(d);
 
 	m_exits[id] = p;
@@ -437,7 +419,7 @@ Exit* Cache::GetExit(long id)
 	return p;
 }
 
-long Cache::GetExitID(long room, Exit::DIRECTION dir)
+value_type Cache::GetExitID(value_type room, Exit::DIRECTION dir)
 {
 	roomexit e(room, dir);	
 	elookup_mi it = m_exit.find(e);
@@ -447,7 +429,7 @@ long Cache::GetExitID(long room, Exit::DIRECTION dir)
 	}
 
 	Query q(DatabaseMgr::Get()->DBref());
-	long id = (long)q.get_num(Global::Get()->sprintf(
+	(value_type)q.get_num(Global::Get()->sprintf(
 		"SELECT %s FROM %s WHERE %s=%d AND dir=%d;", 
 		Tables::Get()->EXITS->tableID().c_str(),
 		Tables::Get()->EXITS->tableName().c_str(),
@@ -460,25 +442,23 @@ long Cache::GetExitID(long room, Exit::DIRECTION dir)
 }
 */
 
-Command* Cache::GetCommand(long id)
+Command* Cache::GetCommand(value_type id)
 {
 	Command* p = m_commands[id];
 	if (p)
 		return p;
 
 	// Command delete's db::Commands on deletion
-	db::Commands* d = new db::Commands(DatabaseMgr::Get()->DBref(), id);
+	db::Commands* d = new db::Commands(id);
 	p = new Command(d);
 	
 	m_commands[id] = p;
-	m_command[d->name] = id;
+	m_command[d->getname()] = id;
 
-	if(!p->Exists())	
-		Global::Get()->bugf("Cache::GetCommand() was asked to get command %d, which does not exist!\n", id);
 	return p;
 }
 
-long Cache::GetCommandID(const std::string& name)
+value_type Cache::GetCommandID(const std::string& name)
 {
 	lookup_mi it = m_command.find(name);
 	if(it != m_command.end())
@@ -492,25 +472,22 @@ long Cache::GetCommandID(const std::string& name)
 	return id;
 }
 
-GrantGroup* Cache::GetGrantGroup(long id)
+GrantGroup* Cache::GetGrantGroup(value_type id)
 {
 	GrantGroup* p = m_grantgroups[id];
 	if(p)
 		return p;
 		
-	db::GrantGroups* d = new db::GrantGroups(DatabaseMgr::Get()->DBref(), id);
+	db::GrantGroups* d = new db::GrantGroups(id);
 	p = new GrantGroup(d);
 	
 	m_grantgroups[id] = p;
-	m_grantgroup[d->name] = id;
-	
-	if(!p->Exists())
-		Global::Get()->bugf("Cache::GetGrantGroup() was asked to get grant group %d, which does not exist!\n", id);
+	m_grantgroup[d->getname()] = id;
 	
 	return p;
 }
 
-long Cache::GetGrantGroupID(const std::string& name)
+value_type Cache::GetGrantGroupID(const std::string& name)
 {
 	lookup_mi it = m_grantgroup.find(name);
 	if(it != m_grantgroup.end())
@@ -524,60 +501,32 @@ long Cache::GetGrantGroupID(const std::string& name)
 	return id;
 }
 
-Permission* Cache::GetPermission(long id)
+Permission* Cache::GetPermission(value_type account, value_type grantgroup)
 {
-	Permission* p = m_permissions[id];
+	twokey key(account, grantgroup);
+	Permission* p = m_permissions[key];
 	if (p)
 		return p;
 
-	// Command delete's db::Commands on deletion
-	db::Permissions* d = new db::Permissions(DatabaseMgr::Get()->DBref(), id);
+	// Permission delete's db::Permissions on deletion
+	db::Permissions* d = new db::Permissions(account, grantgroup);
 	p = new Permission(d);
 	
-	m_permissions[id] = p;
-	m_permission[permission(d->fkaccount, d->fkgrantgroup)] = id;
+	m_permissions[key] = p;
 
-	if(!p->Exists())	
-		Global::Get()->bugf("Cache::GetPermission() was asked to get permission %d, which does not exist!\n", id);
 	return p;
 }
 
-long Cache::GetPermissionID(const long account, const long grantgroup)
+void Cache::CloseAccount(value_type accountid)
 {
-	plookup_mi it = m_permission.find(permission(account, grantgroup));
-	if(it != m_permission.end())
-	{		
-		return it->second;
-	}
-		
-	Query q(DatabaseMgr::Get()->DBref());
-	long id = 0;
-	/*
-		(long)q.get_num(Global::Get()->sprintf(
-		"SELECT %s FROM %s WHERE %s=%d AND %s=%d;", 
-		Tables::Get()->PERMISSIONS->tableID().c_str(),
-		Tables::Get()->PERMISSIONS->tableName().c_str(),
-		Tables::Get()->ACCOUNTS->tableID().c_str(),
-		account, 
-		Tables::Get()->GRANTGROUPS->tableID().c_str(),
-		grantgroup));
-	*/
-
-	m_permission[permission(account, grantgroup)] = id;
-
-	return id;
-}
-
-void Cache::CloseAccount(long accountid)
-{
-	mud::Account* p = m_accounts[accountid];
+	Account* p = m_accounts[accountid];
 	if(p)
 		m_account.erase(p->getName());
 
 	m_accounts.erase(accountid);
 }
 
-void Cache::CloseCharacter(long characterid)
+void Cache::CloseCharacter(value_type characterid)
 {
 	Character* p = m_characters[characterid];
 	if(p)
@@ -586,7 +535,7 @@ void Cache::CloseCharacter(long characterid)
 	m_characters.erase(characterid);
 }
 
-void Cache::ClosePCharacter(long characterid)
+void Cache::ClosePCharacter(value_type characterid)
 {
 	PCharacter* p = m_players[characterid];
 	if(p)
@@ -595,7 +544,7 @@ void Cache::ClosePCharacter(long characterid)
 	m_players.erase(characterid);
 }
 
-void Cache::CloseMCharacter(long characterid)
+void Cache::CloseMCharacter(value_type characterid)
 {
 	MCharacter* p = m_mobiles[characterid];
 	if(p)
@@ -604,7 +553,7 @@ void Cache::CloseMCharacter(long characterid)
 	m_mobiles.erase(characterid);
 }
 
-void Cache::CloseRace(long raceid)
+void Cache::CloseRace(value_type raceid)
 {
 	Race* p = m_races[raceid];
 	if(p)
@@ -613,24 +562,24 @@ void Cache::CloseRace(long raceid)
 	m_races.erase(raceid);
 }
 
-void Cache::CloseArea(long areaid)
+void Cache::CloseArea(value_type areaid)
 {
 	m_areas.erase(areaid);
 }
 
-void Cache::CloseRoom(long roomid)
+void Cache::CloseRoom(value_type roomid)
 {
 	// Room* p = m_rooms[roomid];
 	m_rooms.erase(roomid);
 }
 
-void Cache::CloseSector(long sectorid)
+void Cache::CloseSector(value_type sectorid)
 {
 	m_sectors.erase(sectorid);
 }
 
 /*
-void Cache::CloseExit(long exitid)
+void Cache::CloseExit(value_type exitid)
 {
 	Exit* p = m_exits[exitid];
 	if(p && p->m_exit)
@@ -640,7 +589,7 @@ void Cache::CloseExit(long exitid)
 }
 */
 
-void Cache::CloseColour(long colourcode)
+void Cache::CloseColour(value_type colourcode)
 {
 	Colour* p = m_colours[colourcode];
 	if(p)
@@ -649,7 +598,7 @@ void Cache::CloseColour(long colourcode)
 	m_colours.erase(colourcode);
 }
 
-void Cache::CloseCommand(long commandid)
+void Cache::CloseCommand(value_type commandid)
 {
 	Command* p = m_commands[commandid];
 	if(p)
@@ -658,7 +607,7 @@ void Cache::CloseCommand(long commandid)
 	m_commands.erase(commandid);
 }
 
-void Cache::CloseGrantGroup(long grantgroupid)
+void Cache::CloseGrantGroup(value_type grantgroupid)
 {
 	GrantGroup* p = m_grantgroups[grantgroupid];
 	if(p)
@@ -667,11 +616,7 @@ void Cache::CloseGrantGroup(long grantgroupid)
 	m_grantgroups.erase(grantgroupid);
 }
 
-void Cache::ClosePermission(long permissionid)
+void Cache::ClosePermission(value_type account, value_type permission)
 {
-	mud::Permission* p = m_permissions[permissionid];
-	if(p && p->getPermission())
-		m_permission.erase(permission(p->getAccount(), p->getGrantGroup()));
-	
-	m_permissions.erase(permissionid);	
+	m_permissions.erase(twokey(account, permission));	
 }

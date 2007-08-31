@@ -43,6 +43,8 @@
 #include "Area.h"
 #include "Room.h"
 
+using mud::Character;
+
 Character::Character(db::Characters* character) :
 m_character(character)
 {
@@ -122,11 +124,13 @@ void Character::OnLook(const std::string& msg)
 		OnSendf("Room (%d|<%dx%dx%d): %s\n", room->getArea(), room->getHeight(), room->getLength(), room->getWidth(), room->getName().c_str());
 		OnSendf("%s\n", room->getDescription().c_str());
 
+		/*
 		Characters chars = room->getCharacters();
 		for(Characters::iterator it = chars.begin(); it != chars.end(); it++)
 		{
 			OnSendf("(%s) %s.\n", (*it)->getName().c_str(), (*it)->getDescription().c_str());
 		}
+		*/
 		
 		return;
 	}
@@ -220,7 +224,7 @@ void Character::Save()
 
 bool Character::Exists() 
 { 
-	return m_character->characterid; 
+	return m_character->exists(); 
 };
 
 bool Character::IllegalName(const std::string& name)
@@ -261,7 +265,7 @@ std::vector<std::string> Character::List()
 	return result;
 }
 
-void Character::Close(Character* Ch)
+void Character::Close(mud::Character* Ch)
 {
 	if(Ch == NULL)
 	{
@@ -269,7 +273,7 @@ void Character::Close(Character* Ch)
 		return;
 	}
 	
-	Cache::Get()->CloseCharacter(Ch->m_character->characterid);
+	Cache::Get()->CloseCharacter(Ch->getID());
 	delete Ch;
 }
 

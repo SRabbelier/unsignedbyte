@@ -23,7 +23,7 @@
 #include "Savable.h"
 
 namespace db { class Exits; };
-class Cache;
+namespace mud { class Cache; };
 
 class Exit : public Savable
 {
@@ -78,5 +78,5 @@ private:
 	Exit operator=(const Exit& rhs) {return *this; };
 	~Exit(void);
 	
-	friend class Cache; // constructor
+	friend class mud::Cache; // constructor
 };

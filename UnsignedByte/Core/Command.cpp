@@ -30,6 +30,8 @@
 #include "GrantGroup.h"
 #include "Account.h"
 
+using mud::Command;
+
 bool Command::defaultHighForce = true;
 bool Command::defaultForce = true;
 bool Command::defaultLowForce = false;
@@ -54,8 +56,7 @@ bool Command::getGrant(UBSocket* sock)
 		long gid = getGrantGroup();
 		long aid = sock->GetAccount()->getID();
 		
-		long pid = Cache::Get()->GetPermissionID(aid, gid);
-		Permission* prm = Cache::Get()->GetPermission(pid);
+		Permission* prm = Cache::Get()->GetPermission(aid, gid);
 		return prm->hasGrant();
 	}
 	catch(std::exception& e)
@@ -87,8 +88,7 @@ bool Command::getLog(UBSocket* sock)
 		long gid = getGrantGroup();
 		long aid = sock->GetAccount()->getID();
 		
-		long pid = Cache::Get()->GetPermissionID(aid, gid);
-		Permission* prm = Cache::Get()->GetPermission(pid);
+		Permission* prm = Cache::Get()->GetPermission(aid, gid);
 		return prm->hasLog();
 	}
 	catch(std::exception& e)
@@ -125,7 +125,7 @@ void Command::Save()
 
 bool Command::Exists()
 {
-	return m_command->commandid;
+	return m_command->getcommandid();
 }
 
 std::vector<std::string> Command::Show()

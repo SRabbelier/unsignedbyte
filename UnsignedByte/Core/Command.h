@@ -22,65 +22,67 @@
 #include <string>
 #include "Savable.h"
 #include "Permission.h"
+#include "db.h"
 
-namespace db { class Commands; };
-
-class Command : public Savable
+namespace mud
 {
-public:
-	static bool defaultHighForce;
-	static bool defaultForce;
-	static bool defaultLowForce;
+	class Command : public Savable
+	{
+	public:
+		static bool defaultHighForce;
+		static bool defaultForce;
+		static bool defaultLowForce;
 
-	/**
-	 * \brief Getters
-	 */ 
-	std::string& getName() const { return m_command->name; };
-	long getGrantGroup() const { return m_command->grantgroup; };
-	bool canHighForce() const { return m_command->highforce; };
-	bool canForce() const { return m_command->force; };
-	bool canLowForce() const { return m_command->lowforce; };
-	
-	bool getGrant(UBSocket* sock);
-	bool getDefaultGrant();
-	
-	bool getLog(UBSocket* sock);
-	bool getDefaultLog();
-	
-	/**
-	 * \brief Setters
-	 */ 
-	void setName(const std::string& name) { m_command->name = name; };
-	void setGrantGroup(long grantgroup) { m_command->grantgroup = grantgroup; };
-	void setHighForce(bool highforce) { m_command->highforce = highforce; };
-	void setForce(bool force) { m_command->force = force; };
-	void setLowForce(bool lowforce) { m_command->lowforce = lowforce; };
+		/**
+		 * \brief Getters
+		 */ 
+		const std::string& getName() const { return m_command->getname(); }
+		long getGrantGroup() const { return m_command->getgrantgroup(); }
+		bool canHighForce() const { return m_command->gethighforce(); }
+		bool canForce() const { return m_command->getforce(); }
+		bool canLowForce() const { return m_command->getlowforce(); }
+		
+		bool getGrant(UBSocket* sock);
+		bool getDefaultGrant();
+		
+		bool getLog(UBSocket* sock);
+		bool getDefaultLog();
+		
+		/**
+		 * \brief Setters
+		 */ 
+		void setName(const std::string& name) { m_command->setname(name); }
+		void setGrantGroup(long grantgroup) { m_command->setgrantgroup(grantgroup); }
+		void setHighForce(bool highforce) { m_command->sethighforce(highforce); }
+		void setForce(bool force) { m_command->setforce(force); }
+		void setLowForce(bool lowforce) { m_command->setlowforce(lowforce); }
 
-	/**
-	 * \brief Utilities
-	 */
-	std::vector<std::string> Show();
-	std::string ShowShort();
-	Table* getTable() const;
-	
-	/**
-	 * \brief Static utilities
-	 */
-	static std::vector<std::string> List();
-	
-	/**
-	 * \brief Database utilities
-	 */
-	void Delete();
-	void Save();
-	bool Exists();
+		/**
+		 * \brief Utilities
+		 */
+		std::vector<std::string> Show();
+		std::string ShowShort();
+		Table* getTable() const;
+		
+		/**
+		 * \brief Static utilities
+		 */
+		static std::vector<std::string> List();
+		
+		/**
+		 * \brief Database utilities
+		 */
+		void Delete();
+		void Save();
+		bool Exists();
 
-private:
-	db::Commands* m_command;
+	private:
+		db::Commands* m_command;
 
-	Command(db::Commands* Command);
-	Command(const Command& rhs) {};
-	Command operator=(const Command& rhs) { return *this; };
-	~Command(void);
-	friend class Cache;
-};
+		Command(db::Commands* Command);
+		Command(const Command& rhs) {};
+		Command operator=(const Command& rhs) { return *this; };
+		~Command(void);
+		friend class Cache;
+	};
+}

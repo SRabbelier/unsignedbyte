@@ -87,12 +87,12 @@ Table* EditorMobile::getTable()
 
 long EditorMobile::addNew()
 {
-	return Cache::Get()->AddCharacter();
+	return mud::Cache::Get()->AddCharacter();
 }
 
 std::vector<std::string> EditorMobile::getList()
 {
-	return MCharacter::List();
+	return mud::MCharacter::List();
 }
 
 void EditorMobile::setEditing(long id)
@@ -103,7 +103,7 @@ void EditorMobile::setEditing(long id)
 		return;
 	}
 	
-	m_mobile = Cache::Get()->GetMCharacter(id);
+	m_mobile = mud::Cache::Get()->GetMCharacter(id);
 	return;
 }
 
@@ -128,7 +128,7 @@ EditorMobile::MobileInterpreter::~MobileInterpreter(void)
 	Save::Free();
 }
 
-void EditorMobile::Name::Run(UBSocket* sock, const std::string& argument, MCharacter* mobile)
+void EditorMobile::Name::Run(UBSocket* sock, const std::string& argument, mud::MCharacter* mobile)
 {
 	if(argument.size() == 0)
 	{
@@ -141,7 +141,7 @@ void EditorMobile::Name::Run(UBSocket* sock, const std::string& argument, MChara
 	return;
 }
 
-void EditorMobile::Description::Run(UBSocket* sock, const std::string& argument, MCharacter* mobile)
+void EditorMobile::Description::Run(UBSocket* sock, const std::string& argument, mud::MCharacter* mobile)
 {
 	if(!mobile->Exists())
 	{
@@ -160,13 +160,13 @@ void EditorMobile::Description::Run(UBSocket* sock, const std::string& argument,
 	return;
 }
 
-void EditorMobile::Show::Run(UBSocket* sock, const std::string& argument, MCharacter* mobile)
+void EditorMobile::Show::Run(UBSocket* sock, const std::string& argument, mud::MCharacter* mobile)
 {
 	sock->Send(String::Get()->box(mobile->Show(), "Mobile"));
 	return;
 }
 
-void EditorMobile::Save::Run(UBSocket* sock, const std::string& argument, MCharacter* mobile)
+void EditorMobile::Save::Run(UBSocket* sock, const std::string& argument, mud::MCharacter* mobile)
 {
 	sock->Sendf("Saving mobile '%s'.\n", mobile->getName().c_str());
 	mobile->Save();

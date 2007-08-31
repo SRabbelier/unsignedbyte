@@ -40,6 +40,8 @@
 #include "Room.h"
 #include "Sector.h"
 
+using mud::Room;
+
 EditorRoom::EditorRoom(UBSocket* sock) :
 OLCEditor(sock),
 m_area(1),
@@ -99,7 +101,7 @@ Table* EditorRoom::getTable()
 
 long EditorRoom::addNew()
 {
-	return Cache::Get()->AddRoom();
+	return mud::Cache::Get()->AddRoom();
 }
 
 std::vector<std::string> EditorRoom::getList()
@@ -115,7 +117,7 @@ void EditorRoom::setEditing(long id)
 		return;
 	}
 	
-	m_room = Cache::Get()->GetRoom(id);
+	m_room = mud::Cache::Get()->GetRoom(id);
 	return;
 }
 
@@ -232,17 +234,17 @@ void EditorRoom::Sectors::Run(UBSocket* sock, const std::string& argument, Room*
 		return;
 	}
 
-	long id = Cache::Get()->GetSectorID(argument);
+	long id = mud::Cache::Get()->GetSectorID(argument);
 	if(!id)
 	{
 		sock->Sendf("'%s' is not a valid sector type!\n", argument.c_str());
-		sock->Send(String::Get()->box(Sector::List(), "Sectors"));
+		sock->Send(String::Get()->box(mud::Sector::List(), "Sectors"));
 		return;
 	}
 	
 	try
 	{
-		Sector* sector = Cache::Get()->GetSector(id);
+		mud::Sector* sector = mud::Cache::Get()->GetSector(id);
 		sock->Sendf("Sector type changed from '%s' to '%s'.\n", sector->getName().c_str(), argument.c_str());
 	}
 	catch(std::exception& e)
@@ -460,7 +462,7 @@ void EditorRoom::AreaList::Run(EditorRoom* editor, const std::string& argument)
 	{
 		editor->m_sock->Send("Please specify an area id to change to.\n");
 		editor->m_sock->Sendf("'%s' is not a valid area.\n", argument.c_str());
-		editor->m_sock->Send(String::Get()->box(Area::List(), "Areas"));
+		editor->m_sock->Send(String::Get()->box(mud::Area::List(), "Areas"));
 		return;
 	}
 	editor->m_area = area;	

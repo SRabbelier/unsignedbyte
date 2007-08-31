@@ -34,7 +34,6 @@ namespace mud
 		/**
 		 * \brief Getters
 		 */ 
-		long getPermission() const { return m_permission->getpermissionid(); } 
 		long getAccount() const { return m_permission->getfkAccounts(); }
 		long getGrantGroup() const { return m_permission->getfkGrantGroups(); }
 		

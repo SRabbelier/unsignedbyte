@@ -27,6 +27,8 @@
 #include "Cache.h"
 #include "db.h"
 
+using mud::Sector;
+
 Sector::Sector(db::Sectors* Sector) :
 m_sector(Sector)
 {
@@ -52,7 +54,7 @@ void Sector::Save()
 
 bool Sector::Exists()
 {
-	return m_sector->sectorid;
+	return m_sector->getsectorid();
 }
 
 std::vector<std::string> Sector::Show()

@@ -26,7 +26,7 @@
 #include "Action.h"
 
 class UBSocket;
-class GrantGroup;
+namespace mud { class GrantGroup; }
 
 class EditorGrantGroup : public OLCEditor
 {
@@ -48,11 +48,11 @@ public:
 	void setEditing(long id);
 
 private:
-	GrantGroup* m_grantgroup;
+	mud::GrantGroup* m_grantgroup;
 	EditorGrantGroup(const EditorGrantGroup& rhs) : OLCEditor(rhs.m_sock) {};
 	EditorGrantGroup operator=(const EditorGrantGroup& rhs) { return *this; };
 
-	typedef EditorAction<UBSocket, GrantGroup> GrantGroupAction;
+	typedef EditorAction<UBSocket, mud::GrantGroup> GrantGroupAction;
 
 	class GrantGroupInterpreter : public Interpreter<GrantGroupAction>, public Singleton<GrantGroupInterpreter> {
 	private:
@@ -67,7 +67,7 @@ private:
 		~Name(void) {};
 		friend class Singleton<Name>;
 	public:
-		void Run(UBSocket* sock, const std::string& argument, GrantGroup* area);
+		void Run(UBSocket* sock, const std::string& argument, mud::GrantGroup* area);
 		std::string getName() { return "Name"; };
 	};
 		
@@ -77,7 +77,7 @@ private:
 		~Implication(void) {};
 		friend class Singleton<Implication>;
 	public:
-		void Run(UBSocket* sock, const std::string& argument, GrantGroup* area);
+		void Run(UBSocket* sock, const std::string& argument, mud::GrantGroup* area);
 		std::string getName() { return "Implication"; };
 	};
 
@@ -87,7 +87,7 @@ private:
 		~Show(void) {};
 		friend class Singleton<Show>;
 	public:
-		void Run(UBSocket* sock, const std::string& argument, GrantGroup* area);
+		void Run(UBSocket* sock, const std::string& argument, mud::GrantGroup* area);
 		std::string getName() { return "Show"; };
 	};
 
@@ -97,7 +97,7 @@ private:
 		~Save(void) {};
 		friend class Singleton<Save>;
 	public:
-		void Run(UBSocket* sock, const std::string& argument, GrantGroup* area);
+		void Run(UBSocket* sock, const std::string& argument, mud::GrantGroup* area);
 		std::string getName() { return "Save"; };
 	};
 	

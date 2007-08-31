@@ -12,17 +12,17 @@ IntermediateDirectory=./Debug
 OutDir=$(IntermediateDirectory)
 LinkerName=g++
 ArchiveTool=ar rcu
-SharedObjectLinkerName=g++ -shared 
+SharedObjectLinkerName=g++ -shared -fPIC
 ObjectSuffix=.o
-DebugSwitch=-g
+DebugSwitch=-g 
 IncludeSwitch=-I
 LibrarySwitch=-l
-OutputSwitch=-o
+OutputSwitch=-o 
 LibraryPathSwitch=-L
 PreprocessorSwitch=-D
-SourceSwitch=-c
+SourceSwitch=-c 
 CompilerName=g++
-RcCompilerName=
+RcCompilerName=windres
 OutputFile=../lib/libubdal.a
 Preprocessors=
 CmpOptions=-g $(Preprocessors)
@@ -54,7 +54,7 @@ PreBuild:
 ## Objects
 ##
 $(IntermediateDirectory)/db$(ObjectSuffix): db.cpp $(IntermediateDirectory)/db$(ObjectSuffix).d
-	$(CompilerName) $(SourceSwitch) db.cpp $(CmpOptions)   $(OutputSwitch) $(IntermediateDirectory)/db$(ObjectSuffix) $(IncludePath)
+	$(CompilerName) $(SourceSwitch)db.cpp $(CmpOptions)   $(OutputSwitch)$(IntermediateDirectory)/db$(ObjectSuffix) $(IncludePath)
 $(IntermediateDirectory)/db$(ObjectSuffix).d:
 	@$(CompilerName) $(CmpOptions) $(IncludePath) -MT$(IntermediateDirectory)/db$(ObjectSuffix) -MF$(IntermediateDirectory)/db$(ObjectSuffix).d -MM db.cpp
 

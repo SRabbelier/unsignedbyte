@@ -24,64 +24,65 @@
 #include "Savable.h"
 #include "db.h"
 
-class Area;
-class Character;
-class Cache;
-
-typedef std::vector<Character*> Characters;
-
-class Room : public Savable
+namespace mud
 {
-public:
-	const std::string& getName() const { return m_room->name; };
-	const std::string& getDescription() const { return m_room->description; };
-	long getSector() const { return m_room->fksector; }
-	long getArea() const { return m_room->fkarea; };
-	long getHeight() const { return m_room->height; };
-	long getWidth() const { return m_room->width; };
-	long getLength() const { return m_room->length; };
-
-	void setName(const std::string name) { m_room->name = name; };
-	void setDescription(const std::string description) { m_room->description = description; };
-	void setSector(long sector) { m_room->fksector = sector; };
-	void setArea(long area) { m_room->fkarea = area; };
-	void setHeight(long height) { m_room->height = height; };
-	void setWidth(long width) { m_room->width = width; };
-	void setLength(long length) { m_room->length = length; };
-
-	Characters getCharacters();
-
-	void Send(const std::string& msg);
-	void Sendf(char* format, ...);
-
-	/**
-	 * \brief Utilities
-	 */
-	std::vector<std::string> Show();
-	std::string ShowShort();
-	Table* getTable() const;
+	// class Character;
+	// typedef std::vector<Character*> Characters;
 	
-	/**
-	 * \brief static utilities
-	 */
-	static std::vector<std::string> List();
-	static std::string CreateMap(long id, long origx, long origy);
-	static void Close(Room* room);
-	
-	/**
-	 * \brief Database utilities
-	 */
-	void Delete();
-	void Save();
-	bool Exists();
+	class Room : public Savable
+	{
+	public:
+		long getID() const { return m_room->getroomid(); }
+		const std::string& getName() const { return m_room->getname(); }
+		const std::string& getDescription() const { return m_room->getdescription(); }
+		long getSector() const { return m_room->getfkSectors(); }
+		long getArea() const { return m_room->getfkAreas(); }
+		long getHeight() const { return m_room->getheight(); }
+		long getWidth() const { return m_room->getwidth(); }
+		long getLength() const { return m_room->getlength(); }
 
-private:
-	db::Rooms* m_room;
+		void setName(const std::string name) { m_room->setname(name); }
+		void setDescription(const std::string description) { m_room->setdescription(description); }
+		void setSector(long sector) { m_room->setfkSectors(sector); }
+		void setArea(long area) { m_room->setfkAreas(area); }
+		void setHeight(long height) { m_room->setheight(height); }
+		void setWidth(long width) { m_room->setwidth(width); }
+		void setLength(long length) { m_room->setlength(length); }
 
-	Room(db::Rooms* room);
-	Room(const Room& rhs) {};
-	Room operator=(const Room& rhs) { return *this; };
-	~Room(void);
+		// Characters getCharacters();
 
-	friend class Cache; // constructor
-};
+		void Send(const std::string& msg);
+		void Sendf(char* format, ...);
+
+		/**
+		 * \brief Utilities
+		 */
+		std::vector<std::string> Show();
+		std::string ShowShort();
+		Table* getTable() const;
+		
+		/**
+		 * \brief static utilities
+		 */
+		static std::vector<std::string> List();
+		static std::string CreateMap(long id, long origx, long origy);
+		static void Close(Room* room);
+		
+		/**
+		 * \brief Database utilities
+		 */
+		void Delete();
+		void Save();
+		bool Exists();
+
+	private:
+		db::Rooms* m_room;
+
+		Room(db::Rooms* room);
+		Room(const Room& rhs) {};
+		Room operator=(const Room& rhs) { return *this; };
+		~Room(void);
+
+		friend class Cache; // constructor
+	};
+}

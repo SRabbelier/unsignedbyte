@@ -70,7 +70,7 @@ void EditorNewCharacter::OnLine(const std::string &line)
 			return;
 		}
 
-		if(Character::IllegalName(line))
+		if(mud::Character::IllegalName(line))
 		{
 			m_sock->Sendf("You cannot use the name %s, please pick another name.\n", line.c_str());
 			OnLine(Global::Get()->EmptyString);
@@ -136,7 +136,7 @@ void EditorNewCharacter::OnLine(const std::string &line)
 				return;
 			}
 
-			int id = Cache::Get()->GetRaceID(line);
+			int id = mud::Cache::Get()->GetRaceID(line);
 			if(id <= 0)
 			{
 				m_sock->Sendf("Got ID %d, which is <= 0, disconnecting you now.\n", id);
@@ -167,7 +167,7 @@ void EditorNewCharacter::OnLine(const std::string &line)
 			return;
 		}
 
-		Account* Acc = m_sock->GetAccount();
+		mud::Account* Acc = m_sock->GetAccount();
 		if(!Acc->Exists())
 		{
 			m_sock->Send("For some reason your account doesn't exist.\n");
@@ -176,7 +176,7 @@ void EditorNewCharacter::OnLine(const std::string &line)
 			return;			
 		}
 
-		long accountid = Cache::Get()->GetAccountID(Acc->getName());
+		long accountid = mud::Cache::Get()->GetAccountID(Acc->getName());
 		if(accountid <= 0)
 		{
 			m_sock->Send("For some reason your accountid is <= 0.\n");
@@ -185,7 +185,7 @@ void EditorNewCharacter::OnLine(const std::string &line)
 			return;
 		}
 
-		long id = Cache::Get()->AddCharacter();
+		long id = mud::Cache::Get()->AddCharacter();
 		if(id <= 0)
 		{
 			m_sock->Send("For some reason your characters newly inserted id is <= 0.\n");
@@ -194,7 +194,7 @@ void EditorNewCharacter::OnLine(const std::string &line)
 			return;
 		}
 
-		PCharacter* Ch = Cache::Get()->GetPCharacter(m_sock, id);
+		mud::PCharacter* Ch = mud::Cache::Get()->LoadPCharacter(m_sock, id);
 		if(!Ch)
 		{
 			m_sock->Send("For some reason your new characters could not be retreived.\n");

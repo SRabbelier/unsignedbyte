@@ -23,49 +23,46 @@
 #include "Savable.h"
 #include "db.h"
 
-class Race : public Savable
+namespace mud
 {
-public:
-	/**
-	 * \brief Getters
-	 */ 
-	const std::string& getName() const { return m_race->name; };
-	
-	/**
-	 * \brief Setters
-	 */ 
-	void setName(const std::string& name) { m_race->name = name; };
+	class Race : public Savable
+	{
+	public:
+		const std::string& getName() const { return m_race->getname(); }
 
-	/**
-	 * \brief Utilities
-	 */
-	std::vector<std::string> Show();
-	std::string ShowShort();
-	Table* getTable() const;
-	
-	/**
-	 * \brief Static utilities
-	 */
-	static std::vector<std::string> List();
-	static void Close(Race* race);
-	
-	/**
-	 * \brief Database utilities
-	 */
-	void Delete();	
-	void Save();
-	bool Exists();
+		void setName(const std::string& name) { m_race->setname(name); }
 
-private:
-	db::Races* m_race;
+		/**
+		 * \brief Utilities
+		 */
+		std::vector<std::string> Show();
+		std::string ShowShort();
+		Table* getTable() const;
+		
+		/**
+		 * \brief Static utilities
+		 */
+		static std::vector<std::string> List();
+		static void Close(Race* race);
+		
+		/**
+		 * \brief Database utilities
+		 */
+		void Delete();	
+		void Save();
+		bool Exists();
 
-	/**
-	 * \brief Ctors
-	 */ 
-	Race(db::Races* race);
-	Race(const Race& rhs) {};
-	Race operator=(const Race& rhs) { return *this; };
-	~Race(void);
-	
-	friend class Cache;
-};
+	private:
+		db::Races* m_race;
+
+		/**
+		 * \brief Ctors
+		 */ 
+		Race(db::Races* race);
+		Race(const Race& rhs) {};
+		Race operator=(const Race& rhs) { return *this; };
+		~Race(void);
+		
+		friend class Cache;
+	};
+}

@@ -28,6 +28,8 @@
 #include "db.h"
 #include <sqlite3.h>
 
+using namespace mud;
+
 Colour::Colour(db::Colours* object) :
 m_colour(object)
 {
@@ -45,7 +47,7 @@ std::string Colour::getColourString()
 {
 	std::string restore = "\x1B[0;0m";
 	std::string prefix = "\x1B[";
-	std::string str = m_colour->colourstring;
+	std::string str = m_colour->getcolourstring();
 	
 	std::string result = restore;
 	result.append(prefix);
@@ -66,7 +68,7 @@ void Colour::Save()
 
 bool Colour::Exists()
 {
-	return m_colour->colourid;
+	return m_colour->exists();
 }
 
 std::vector<std::string> Colour::Show()

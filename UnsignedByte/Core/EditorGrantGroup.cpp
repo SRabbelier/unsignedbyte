@@ -37,6 +37,8 @@
 #include "Account.h"
 #include "GrantGroup.h"
 
+using mud::GrantGroup;
+
 EditorGrantGroup::EditorGrantGroup(UBSocket* sock) :
 OLCEditor(sock),
 m_grantgroup(NULL)
@@ -87,7 +89,7 @@ Table* EditorGrantGroup::getTable()
 
 long EditorGrantGroup::addNew()
 {
-	return Cache::Get()->AddGrantGroup();
+	return mud::Cache::Get()->AddGrantGroup();
 }
 
 std::vector<std::string> EditorGrantGroup::getList()
@@ -103,7 +105,7 @@ void EditorGrantGroup::setEditing(long id)
 		return;
 	}
 	
-	m_grantgroup = Cache::Get()->GetGrantGroup(id);
+	m_grantgroup = mud::Cache::Get()->GetGrantGroup(id);
 	return;
 }
 

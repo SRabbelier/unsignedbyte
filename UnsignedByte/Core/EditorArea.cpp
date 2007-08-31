@@ -88,12 +88,12 @@ Table* EditorArea::getTable()
 
 long EditorArea::addNew()
 {
-	return Cache::Get()->AddArea();
+	return mud::Cache::Get()->AddArea();
 }
 
 std::vector<std::string> EditorArea::getList()
 {
-	return Area::List();
+	return mud::Area::List();
 }
 
 void EditorArea::setEditing(long id)
@@ -104,7 +104,7 @@ void EditorArea::setEditing(long id)
 		return;
 	}
 	
-	m_area = Cache::Get()->GetArea(id);
+	m_area = mud::Cache::Get()->GetArea(id);
 	return;
 }
 
@@ -133,7 +133,7 @@ EditorArea::AreaInterpreter::~AreaInterpreter(void)
 	Save::Free();
 }
 
-void EditorArea::Name::Run(UBSocket* sock, const std::string& argument, Area* area)
+void EditorArea::Name::Run(UBSocket* sock, const std::string& argument, mud::Area* area)
 {
 	if(argument.size() == 0)
 	{
@@ -146,7 +146,7 @@ void EditorArea::Name::Run(UBSocket* sock, const std::string& argument, Area* ar
 	return;
 }
 
-void EditorArea::Description::Run(UBSocket* sock, const std::string& argument, Area* area)
+void EditorArea::Description::Run(UBSocket* sock, const std::string& argument, mud::Area* area)
 {
 	if(!area->Exists())
 	{
@@ -165,7 +165,7 @@ void EditorArea::Description::Run(UBSocket* sock, const std::string& argument, A
 	return;
 }
 
-void EditorArea::Height::Run(UBSocket* sock, const std::string& argument, Area* area)
+void EditorArea::Height::Run(UBSocket* sock, const std::string& argument, mud::Area* area)
 {
 	if(argument.size() == 0)
 	{
@@ -185,7 +185,7 @@ void EditorArea::Height::Run(UBSocket* sock, const std::string& argument, Area* 
 	return;
 }
 
-void EditorArea::Width::Run(UBSocket* sock, const std::string& argument, Area* area)
+void EditorArea::Width::Run(UBSocket* sock, const std::string& argument, mud::Area* area)
 {
 	if(argument.size() == 0)
 	{
@@ -205,12 +205,12 @@ void EditorArea::Width::Run(UBSocket* sock, const std::string& argument, Area* a
 	return;
 }
 
-void EditorArea::Show::Run(UBSocket* sock, const std::string& argument, Area* area)
+void EditorArea::Show::Run(UBSocket* sock, const std::string& argument, mud::Area* area)
 {
 	sock->Send(String::Get()->box(area->Show(), "Area"));
 }
 
-void EditorArea::Save::Run(UBSocket* sock, const std::string& argument, Area* area)
+void EditorArea::Save::Run(UBSocket* sock, const std::string& argument, mud::Area* area)
 {
 	sock->Sendf("Saving area '%s'.\n", area->getName().c_str());
 	area->Save();

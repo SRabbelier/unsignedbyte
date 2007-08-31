@@ -28,6 +28,8 @@
 #include "Account.h"
 #include "EditorAccount.h"
 
+using mud::MCharacter;
+
 MCharacter::MCharacter(db::Characters* character) :
 Character(character)
 {
@@ -36,58 +38,5 @@ Character(character)
 
 MCharacter::~MCharacter(void)
 {
-	//m_sock is deleted by handler
-}
-
-void MCharacter::Quit()
-{
-	Save();
-	return;	
-}
-
-void MCharacter::Save()
-{
-	Send("Saving...\n");
-	Character::Save();
-	Send("Saved!\n");
-
-	return;
-}
-
-void MCharacter::Send(const std::string &msg)
-{
-	return;
-}
-
-std::vector<std::string> MCharacter::Show()
-{
-	std::vector<std::string> result;
 	
-	return result;
-}
-
-std::string MCharacter::ShowShort()
-{
-	std::string result;
-	
-	return result;
-}
-
-std::vector<std::string> MCharacter::List()
-{
-	std::vector<std::string> result;
-	Longs ids = DatabaseMgr::Get()->GetSavableIDS(Tables::Get()->CHARACTERS);
-	for(Longs::iterator it = ids.begin(); it != ids.end(); it++)
-	{
-		long id = (*it);
-		if(!Cache::Get()->IsMobile(id))
-			continue;
-			
-		MCharacter* mcharacter = Cache::Get()->GetMCharacter(id);
-		std::string line;
-		line.append(Global::Get()->sprintf("%d> ", id));
-		line.append(mcharacter->ShowShort());
-		result.push_back(line);
-	}
-	return result;
 }

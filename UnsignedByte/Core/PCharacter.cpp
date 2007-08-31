@@ -29,6 +29,8 @@
 #include "Account.h"
 #include "EditorAccount.h"
 
+using mud::PCharacter;
+
 PCharacter::PCharacter(UBSocket* sock, db::Characters* character) :
 Character(character),
 m_sock(sock)
@@ -80,6 +82,6 @@ void PCharacter::Close(PCharacter* Ch)
 	if(Ch == NULL)
 		throw std::invalid_argument("PCharacter::Close(), Ch == NULL!");
 	
-	Cache::Get()->ClosePCharacter(Ch->m_character->characterid);
+	Cache::Get()->ClosePCharacter(Ch->getID());
 	delete Ch;
 }

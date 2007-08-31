@@ -62,7 +62,7 @@ UBSocket::~UBSocket(void)
 
 	if(m_account)
 	{
-		Account::Close(m_account);
+		mud::Account::Close(m_account);
 		m_account = NULL;
 	}
 }
@@ -95,7 +95,7 @@ void UBSocket::OnLine(const std::string &line)
 	return;
 }
 
-Account* UBSocket::GetAccount() const
+mud::Account* UBSocket::GetAccount() const
 {
 	if(m_account == NULL)
 		throw std::logic_error("UBSocket::GetAccount(), m_account == NULL!");
@@ -192,14 +192,14 @@ void UBSocket::Send(const std::string& msg)
 		buf.erase(i+1, 1);
 		buf.erase(i, 1);
 
-		long id = Cache::Get()->GetColourID(code);
+		long id = mud::Cache::Get()->GetColourID(code);
 		if(!id)
 		{
 			Global::Get()->bugf("Unknown colour code %s!\n", code.c_str());
 			continue;
 		}
 
-		Colour* colour = Cache::Get()->GetColour(id);
+		mud::Colour* colour = mud::Cache::Get()->GetColour(id);
 		buf.insert(i, colour->getColourString());
 	}
 	

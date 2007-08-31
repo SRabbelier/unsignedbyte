@@ -26,7 +26,7 @@
 #include "Action.h"
 
 class UBSocket;
-class Command;
+namespace mud { class Command; }
 
 class EditorCommand : public OLCEditor
 {
@@ -48,12 +48,12 @@ public:
 	void setEditing(long id);
 
 private:
-	Command* m_command;
+	mud::Command* m_command;
 	
 	EditorCommand(const EditorCommand& rhs) : OLCEditor(rhs.m_sock) {};
 	EditorCommand operator=(const EditorCommand& rhs) { return *this; };
 
-	typedef EditorAction<UBSocket, Command> CommandAction;
+	typedef EditorAction<UBSocket, mud::Command> CommandAction;
 
 	class CommandInterpreter : public Interpreter<CommandAction>, public Singleton<CommandInterpreter> {
 	private:
@@ -68,7 +68,7 @@ private:
 		~Name(void) {};
 		friend class Singleton<Name>;
 	public:
-		void Run(UBSocket* sock, const std::string& argument, Command* area);
+		void Run(UBSocket* sock, const std::string& argument, mud::Command* area);
 		std::string getName() { return "Name"; };
 	};
 
@@ -78,7 +78,7 @@ private:
 		~GrantGroups(void) {};
 		friend class Singleton<GrantGroups>;
 	public:
-		void Run(UBSocket* sock, const std::string& argument, Command* area);
+		void Run(UBSocket* sock, const std::string& argument, mud::Command* area);
 		std::string getName() { return "GrantGroups"; };
 	};
 	
@@ -88,7 +88,7 @@ private:
 		~HighForce(void) {};
 		friend class Singleton<HighForce>;
 	public:
-		void Run(UBSocket* sock, const std::string& argument, Command* area);
+		void Run(UBSocket* sock, const std::string& argument, mud::Command* area);
 		std::string getName() { return "HighForce"; };
 	};
 	
@@ -98,7 +98,7 @@ private:
 		~Force(void) {};
 		friend class Singleton<Force>;
 	public:
-		void Run(UBSocket* sock, const std::string& argument, Command* area);
+		void Run(UBSocket* sock, const std::string& argument, mud::Command* area);
 		std::string getName() { return "Force"; };
 	};
 	
@@ -108,7 +108,7 @@ private:
 		~LowForce (void) {};
 		friend class Singleton<LowForce>;
 	public:
-		void Run(UBSocket* sock, const std::string& argument, Command* area);
+		void Run(UBSocket* sock, const std::string& argument, mud::Command* area);
 		std::string getName() { return "LowForce"; };
 	};
 
@@ -118,7 +118,7 @@ private:
 		~Show(void) {};
 		friend class Singleton<Show>;
 	public:
-		void Run(UBSocket* sock, const std::string& argument, Command* area);
+		void Run(UBSocket* sock, const std::string& argument, mud::Command* area);
 		std::string getName() { return "Show"; };
 	};
 
@@ -128,7 +128,7 @@ private:
 		~Save(void) {};
 		friend class Singleton<Save>;
 	public:
-		void Run(UBSocket* sock, const std::string& argument, Command* area);
+		void Run(UBSocket* sock, const std::string& argument, mud::Command* area);
 		std::string getName() { return "Save"; };
 	};
 };

@@ -27,7 +27,7 @@ class UBSocket;
 #include "DatabaseMgr.h"
 #include "db.h"
 
-using namespace mud;
+using mud::Account;
 
 Account::Account(db::Accounts* dbaccount) :
 m_account(dbaccount)

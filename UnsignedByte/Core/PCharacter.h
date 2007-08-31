@@ -23,25 +23,29 @@
 #include "Character.h"
 
 class UBSocket;
-class Account;
 
-class PCharacter : public Character
+namespace mud
 {
-public:
-	void Quit();
-	void Save();
-	void OnSend(const std::string& msg);
-	bool isAccount(Account* account);
+	class Account;
 	
-	static void Close(PCharacter* Ch);
-	
-private:
-	UBSocket* m_sock;
+	class PCharacter : public Character
+	{
+	public:
+		void Quit();
+		void Save();
+		void OnSend(const std::string& msg);
+		bool isAccount(Account* account);
+		
+		static void Close(PCharacter* Ch);
+		
+	private:
+		UBSocket* m_sock;
 
-	PCharacter(UBSocket* sock, db::Characters* character);
-	PCharacter(const PCharacter& rhs) : Character(rhs.m_character) {};
-	PCharacter operator=(const PCharacter& rhs) { return *this; };
-	virtual ~PCharacter(void);
+		PCharacter(UBSocket* sock, db::Characters* character);
+		PCharacter(const PCharacter& rhs);
+		PCharacter operator=(const PCharacter& rhs);
+		virtual ~PCharacter(void);
 
-	friend class Cache; // for constructor
-};
+		friend class Cache; // for constructor
+	};
+}

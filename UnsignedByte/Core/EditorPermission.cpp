@@ -38,6 +38,8 @@
 #include "Permission.h"
 #include "GrantGroup.h"
 
+using mud::Permission;
+
 EditorPermission::EditorPermission(UBSocket* sock) :
 OLCEditor(sock),
 m_permission(NULL)
@@ -88,7 +90,8 @@ Table* EditorPermission::getTable()
 
 long EditorPermission::addNew()
 {
-	return Cache::Get()->AddPermission();
+	// TODO - add new
+	return 0;
 }
 
 std::vector<std::string> EditorPermission::getList()
@@ -104,7 +107,7 @@ void EditorPermission::setEditing(long id)
 		return;
 	}
 	
-	m_permission = Cache::Get()->GetPermission(id);
+	// TODO = set editing
 	return;
 }
 
@@ -139,17 +142,19 @@ void EditorPermission::Accounts::Run(UBSocket* sock, const std::string& argument
 		return;
 	}
 
-	long id = Cache::Get()->GetAccountID(argument);
+	long id = mud::Cache::Get()->GetAccountID(argument);
 	if(!id)
 	{
 		sock->Sendf("'%s' is not a valid account!\n", argument.c_str());
-		sock->Send(String::Get()->box(Account::List(), "Accounts"));
+		sock->Send(String::Get()->box(mud::Account::List(), "Accounts"));
 		return;
 	}
 
 	sock->Sendf("Account changed from '%d' to '%d'.\n", permission->getAccount(), id);
-	permission->setAccount(id);
+	// permission->setAccount(id);
 	return;
+	
+	// TODO - set account
 }
 
 void EditorPermission::GrantGroups::Run(UBSocket* sock, const std::string& argument, Permission* permission)
@@ -160,17 +165,19 @@ void EditorPermission::GrantGroups::Run(UBSocket* sock, const std::string& argum
 		return;
 	}
 
-	long id = Cache::Get()->GetGrantGroupID(argument);
+	long id = mud::Cache::Get()->GetGrantGroupID(argument);
 	if(!id)
 	{
 		sock->Sendf("'%s' is not a valid grantgroup!\n", argument.c_str());
-		sock->Send(String::Get()->box(GrantGroup::List(), "GrantGroups"));
+		sock->Send(String::Get()->box(mud::GrantGroup::List(), "GrantGroups"));
 		return;
 	}
 
 	sock->Sendf("Grantgroup changed from '%d' to '%d'.\n", permission->getGrantGroup(), id);
-	permission->setGrantGroup(id);
+	// permission->setGrantGroup(id);
 	return;
+	
+	// TODO - set permission
 }
 
 void EditorPermission::Grants::Run(UBSocket* sock, const std::string& argument, Permission* permission)

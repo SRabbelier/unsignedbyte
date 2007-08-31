@@ -25,7 +25,7 @@
 #include <ISocketHandler.h>
 #include "Global.h"
 
-class Account;
+namespace mud { class Account; };
 class Editor;
 
 class UBSocket : public TcpSocket
@@ -58,7 +58,7 @@ public:
 	/**
 	 * \brief Getters
 	 */ 
-	Account* GetAccount() const;
+	mud::Account* GetAccount() const;
 	UBSocket* GetForcer() const;
 	bool hasAccount() const;
 	bool isHighForced() const { return m_highforced; };
@@ -68,7 +68,7 @@ public:
 	/**
 	 * \brief Setters
 	 */ 
-	void SetAccount(Account* account) { m_account = account; };
+	void SetAccount(mud::Account* account) { m_account = account; };
 	void SetEditor(Editor* cmd);
 	void SetForcer(UBSocket* forcer, bool weakForce = true, bool forced = false, bool highforced = false);
 	void EndForce();
@@ -94,7 +94,7 @@ private:
 	 * \brief Variables
 	 */ 
 	std::string m_prompt;	// Current prompt
-	Account* m_account; 	// Current account
+	mud::Account* m_account; 	// Current account
 	Editor* m_editor; 		// Current editor
 	Editor* m_nexteditor; 	// Next Editor
 	UBSocket* m_forcer; 	// Current forcer

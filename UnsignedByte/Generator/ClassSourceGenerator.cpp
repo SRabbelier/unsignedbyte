@@ -95,8 +95,7 @@ void ClassSourceGenerator::AppendCtorGeneral()
 	
 	// Empty constructor for creating new entries
 	(*m_file) << "// Ctors" << endl;
-	(*m_file) << m_name << "::" << m_name << "(Database* db) :" << endl;
-	(*m_file) << "m_db(db)," << endl;
+	(*m_file) << m_name << "::" << m_name << "() :" << endl;
 	(*m_file) << "m_" << m_table->firstKey() << "()";
 		
 	for(Fields::const_iterator it = m_table->begin(); it != m_table->end(); it++)
@@ -121,16 +120,25 @@ void ClassSourceGenerator::AppendCtorSpecific()
 		throw std::logic_error("Source file is not open for writing.\n");
 		
 	// Specific constructor
-	(*m_file) << m_name << "::" << m_name << "(Database* db";
+	(*m_file) << m_name << "::" << m_name << "(";
 
 	for(TableMap::const_iterator it = m_table->keybegin(); it != m_table->keyend(); it++)
-		(*m_file) << ", value_type " << it->first;
+	{
+		if(it != m_table->keybegin())
+			(*m_file) << ", ";
+		
+		(*m_file) << "value_type " << it->first;
+	}
 
 	(*m_file) << ") :" << endl;
-	(*m_file) << "m_db(db)";
 	
 	for(TableMap::const_iterator it = m_table->keybegin(); it != m_table->keyend(); it++)
-		(*m_file) << ", " << endl << "m_" << it->first << "(" << it->first<< ")";
+	{
+		if(it != m_table->keybegin())
+			(*m_file) << ", " << endl;
+			
+		(*m_file) << "m_" << it->first << "(" << it->first<< ")";
+	}
 	(*m_file) << endl;
 	
 	(*m_file) << "{" << endl;

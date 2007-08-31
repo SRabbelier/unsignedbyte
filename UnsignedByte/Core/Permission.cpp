@@ -27,6 +27,8 @@
 #include "Cache.h"
 #include "db.h"
 
+using mud::Permission;
+
 bool Permission::defaultGrant = true;
 bool Permission::defaultLog = false;
 
@@ -45,12 +47,12 @@ Permission::~Permission(void)
 
 bool Permission::hasGrant() const
 {
-	return isGrant(m_permission->grant);
+	return isGrant(m_permission->getgrant());
 }
 
 bool Permission::hasLog() const
 {
-	return isLog(m_permission->grant);
+	return isLog(m_permission->getgrant());
 }
 
 bool Permission::isGrant(long grant)
@@ -92,16 +94,16 @@ void Permission::setGrant(bool grant)
 	if(grant)
 	{
 		if(hasLog())
-			m_permission->grant = GRANT_ENABLEANDLOG;
+			m_permission->setgrant(GRANT_ENABLEANDLOG);
 		else
-			m_permission->grant = GRANT_ENABLE;
+			m_permission->setgrant(GRANT_ENABLE);
 	}
 	else
 	{
 		if(hasLog())
-			m_permission->grant = GRANT_DISABLEANDLOG;
+			m_permission->setgrant(GRANT_DISABLEANDLOG);
 		else
-			m_permission->grant = GRANT_DISABLE;
+			m_permission->setgrant(GRANT_DISABLE);
 	}
 }
 
@@ -110,16 +112,16 @@ void Permission::setLog(bool log)
 	if(log)
 	{
 		if(hasGrant())
-			m_permission->grant = GRANT_ENABLEANDLOG;
+			m_permission->setgrant(GRANT_ENABLEANDLOG);
 		else
-			m_permission->grant = GRANT_DISABLEANDLOG;
+			m_permission->setgrant(GRANT_DISABLEANDLOG);
 	}
 	else
 	{
 		if(hasGrant())
-			m_permission->grant = GRANT_ENABLE;
+			m_permission->setgrant(GRANT_ENABLE);
 		else
-			m_permission->grant = GRANT_DISABLE;
+			m_permission->setgrant(GRANT_DISABLE);
 	}
 }
 
@@ -135,7 +137,7 @@ void Permission::Save()
 
 bool Permission::Exists()
 {
-	return m_permission->permissionid;
+	return m_permission->exists();
 }
 
 std::vector<std::string> Permission::Show()
@@ -155,6 +157,8 @@ std::string Permission::ShowShort()
 std::vector<std::string> Permission::List()
 {
 	std::vector<std::string> result;
+	// TODO - list permissions
+	/*
 	Longs ids = DatabaseMgr::Get()->GetSavableIDS(Tables::Get()->PERMISSIONS);
 	for(Longs::iterator it = ids.begin(); it != ids.end(); it++)
 	{
@@ -165,6 +169,7 @@ std::vector<std::string> Permission::List()
 		line.append(permission->ShowShort());
 		result.push_back(line);
 	}
+	*/
 	return result;
 }
 

@@ -26,7 +26,7 @@
 #include "DatabaseMgr.h"
 #include "Cache.h"
 
-using namespace mud;
+using mud::Area;
 
 Area::Area(db::Areas* area) :
 m_area(area)

@@ -27,6 +27,8 @@
 #include "Cache.h"
 #include "db.h"
 
+using mud::Race;
+
 Race::Race(db::Races* race) :
 m_race(race)
 {
@@ -52,7 +54,7 @@ void Race::Save()
 
 bool Race::Exists()
 {
-	return m_race->raceid;
+	return m_race->getraceid();
 }
 
 std::vector<std::string> Race::Show()

@@ -67,7 +67,7 @@ void EditorNewAccount::OnLine(const std::string &line)
 			return;
 		}
 
-		if(Account::IllegalName(line))
+		if(mud::Account::IllegalName(line))
 		{
 			m_sock->Sendf("You cannot use the name %s, please pick another name.\n", line.c_str());
 			OnLine(Global::Get()->EmptyString);
@@ -151,8 +151,8 @@ void EditorNewAccount::OnLine(const std::string &line)
 			return;
 		}
 
-		long id = Cache::Get()->AddAccount();
-		Account* Acc = Cache::Get()->GetAccount(id);
+		long id = mud::Cache::Get()->AddAccount();
+		mud::Account* Acc = mud::Cache::Get()->GetAccount(id);
 		Acc->setName(m_name);
 		Acc->setPassword(m_password);
 

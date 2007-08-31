@@ -24,7 +24,6 @@
 #include "db.h"
 
 class UBSocket;
-class Cache;
 
 namespace mud
 {
