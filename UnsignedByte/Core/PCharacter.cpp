@@ -74,7 +74,7 @@ void PCharacter::OnSend(const std::string &msg)
 bool PCharacter::isAccount(Account* account)
 {
 	return true;
-	// TODO
+	// TODO - isAccount
 }
 
 void PCharacter::Close(PCharacter* Ch)

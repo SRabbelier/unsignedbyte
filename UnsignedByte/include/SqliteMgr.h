@@ -42,6 +42,7 @@ class SqliteMgr
 		void doErase(Bindable* bindable);
 		void doUpdate(Bindable* bindable);
 		void doSelect(Bindable* bindable);
+		void doLookup(Bindable* bindable);
 	
 	private:
 		Database* m_db;
@@ -55,6 +56,7 @@ class SqliteMgr
 		sqlite3_stmt* getEraseStmt(Table* table);
 		sqlite3_stmt* getUpdateStmt(Table* table);
 		sqlite3_stmt* getSelectStmt(Table* table);
+		sqlite3_stmt* getLookupStmt(Table* table);
 	
 		SqliteMgr();
 		~SqliteMgr();

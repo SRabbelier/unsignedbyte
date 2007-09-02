@@ -100,6 +100,20 @@ void ClassHeaderGenerator::AppendCtor()
 	(*m_file) << m_tabs << m_tabs << "~" << name << "();" << endl;
 	(*m_file) << endl;
 	
+	if(m_table->lookupsize() == 0)
+		return;
+		
+	(*m_file) << m_tabs << m_tabs << "// Factories" << endl;
+	for(Fields::const_iterator it = m_table->lookupbegin(); it != m_table->lookupend(); it++)
+	{
+		(*m_file) << m_tabs << m_tabs << "static " << name << "* by" << (*it)->getName() << "(";
+		if((*it)->isText())
+			(*m_file) << "const std::string& value);" << endl;
+		else
+			(*m_file) << "value_type value);" << endl;
+	}
+	(*m_file) << endl;
+	
 	return;
 }
 
@@ -117,6 +131,7 @@ void ClassHeaderGenerator::AppendBody()
 	(*m_file) << m_tabs << m_tabs << "// Bindable interface" << endl;
 	(*m_file) << m_tabs << m_tabs << "void bindKeys(sqlite3_stmt* stmt) const;" << endl;
 	(*m_file) << m_tabs << m_tabs << "void bindUpdate(sqlite3_stmt* stmt) const;" << endl;
+	(*m_file) << m_tabs << m_tabs << "void bindLookup(sqlite3_stmt* stmt) const;" << endl;
 	(*m_file) << m_tabs << m_tabs << "void parseInsert(sqlite3* db);" << endl;
 	(*m_file) << m_tabs << m_tabs << "void parseSelect(sqlite3_stmt* stmt);" << endl;
 	(*m_file) << m_tabs << m_tabs << "Table* getTable() const;" << endl;
@@ -164,9 +179,18 @@ void ClassHeaderGenerator::AppendFields()
 	(*m_file) << m_tabs << m_tabs << "Database* m_db;" << endl;
 	(*m_file) << endl;
 	
+	if(m_table->lookupsize())
+	{
+		(*m_file) << m_tabs << m_tabs << "// Lookup" << endl;
+		(*m_file) << m_tabs << m_tabs << "std::string m_lookupfield;" << endl;
+		(*m_file) << m_tabs << m_tabs << "std::string m_lookupvalue;" << endl;
+		(*m_file) << endl;
+	}
+	
 	(*m_file) << m_tabs << m_tabs << "// Keys" << endl;
 	for(TableMap::const_iterator it = m_table->keybegin(); it != m_table->keyend(); it++)
 		(*m_file) << m_tabs << m_tabs << "value_type m_" << it->first << ";" << endl;
+	(*m_file) << endl;
 	
 	(*m_file) << m_tabs << m_tabs << "// Fields" << endl;
 	for(Fields::const_iterator it = m_table->begin(); it != m_table->end(); it++)

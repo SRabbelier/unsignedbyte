@@ -335,11 +335,12 @@ value_type Cache::GetRoomID(value_type area, value_type x, value_type y)
 		area, x, y));
 
 	//m_room[c] = num;
-	// TODO
+	// TODO - Cache Room
 
 	return num;
 }
 */
+// TODO - getroom()
 
 Sector* Cache::GetSector(value_type id)
 {

@@ -36,16 +36,19 @@ public:
 	sqlite3_stmt* getInsert() const {return m_insert;}
 	sqlite3_stmt* getUpdate() const {return m_update;}
 	sqlite3_stmt* getSelect() const {return m_select;}
+	sqlite3_stmt* getLookup() const {return m_lookup;}
 	
 	// Setters
 	void setErase(sqlite3_stmt* erase) { m_erase = erase; }
 	void setInsert(sqlite3_stmt* insert) { m_insert = insert; }
 	void setUpdate(sqlite3_stmt* update) { m_update = update; }
 	void setSelect(sqlite3_stmt* select) { m_select = select; }
+	void setLookup(sqlite3_stmt* lookup) { m_lookup = lookup; }
 	
 private:
 	sqlite3_stmt* m_insert;
 	sqlite3_stmt* m_erase;
 	sqlite3_stmt* m_update;
 	sqlite3_stmt* m_select;
+	sqlite3_stmt* m_lookup;
 };

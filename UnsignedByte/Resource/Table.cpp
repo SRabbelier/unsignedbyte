@@ -77,29 +77,38 @@ void Table::addFPK(Table* table)
 
 void Table::addValue(const std::string& name)
 {
-	addField(name, false, Global::Get()->EmptyString);
+	addField(name, false, Global::Get()->EmptyString, false);
 }
 
 void Table::addValue(const std::string& name, value_type defaultvalue)
 {
 	std::ostringstream str;
 	str << defaultvalue;
-	addField(name, false, str.str());
+	addField(name, false, str.str(), false);
 }
 
 void Table::addTextField(const std::string& name)
 {
-	addField(name, true, Global::Get()->EmptyString);
+	addField(name, true, Global::Get()->EmptyString, false);
+}
+
+void Table::addLookupTextField(const std::string& name)
+{
+	addField(name, true, Global::Get()->EmptyString, true);
 }
 
 void Table::addTextField(const std::string& name, const std::string& defaulttext)
 {
-	addField(name, true, defaulttext);
+	addField(name, true, defaulttext, false);
 }
 
-void Table::addField(const std::string& name, bool text, const std::string& defaulttext)
+void Table::addField(const std::string& name, bool text, const std::string& defaulttext, bool providelookup)
 {
-	m_fields.push_back(new Field(name, text, defaulttext));
+	Field* field = new Field(name, text, defaulttext);
+	m_fields.push_back(field);
+	
+	if(providelookup)
+		m_lookupfields.push_back(field);
 }
 
 void Table::addFK(Table* table)

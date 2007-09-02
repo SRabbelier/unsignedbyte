@@ -44,7 +44,8 @@ EditorPermission::EditorPermission(UBSocket* sock) :
 OLCEditor(sock),
 m_permission(NULL)
 {
-	// TODO - commands
+	GeneralAction* act = Commands::Get();
+	act->Run(this, Global::Get()->EmptyString);
 	OnLine(Global::Get()->EmptyString);
 }
 
@@ -107,7 +108,7 @@ void EditorPermission::setEditing(long id)
 		return;
 	}
 	
-	// TODO = set editing
+	// TODO - set editing
 	return;
 }
 

@@ -42,7 +42,8 @@ EditorArea::EditorArea(UBSocket* sock) :
 OLCEditor(sock),
 m_area(NULL)
 {
-	// TODO - commands
+	Action<OLCEditor>* act = Commands::Get();
+	act->Run(this, Global::Get()->EmptyString);
 	OnLine(Global::Get()->EmptyString);
 }
 

@@ -54,9 +54,11 @@ void ClassSourceGenerator::GenerateClass()
 		AppendCtorGeneral();
 		AppendCtorSpecific();	
 		AppendCtorDtor();
+		AppendCtorFactory();
 		AppendBody();
 		AppendBindKeys();
 		AppendBindUpdate();
+		AppendBindLookup();
 		AppendParseInsert();
 		AppendParseSelect();
 		AppendGetTable();
@@ -162,6 +164,33 @@ void ClassSourceGenerator::AppendCtorDtor()
 	return;
 }
 
+void ClassSourceGenerator::AppendCtorFactory()
+{
+	if(!m_file)
+		throw std::logic_error("Source file is not open for writing.\n");
+		
+	if(m_table->lookupsize() == 0)
+		return;
+		
+	for(Fields::const_iterator it = m_table->lookupbegin(); it != m_table->lookupend(); it++)
+	{
+		(*m_file) << m_name << "* " << m_name << "::by" << (*it)->getName() << "(";
+		if((*it)->isText())
+			(*m_file) << "const std::string& value)" << endl;
+		else
+			(*m_file) << "value_type value);" << endl;
+		(*m_file) << "{" << endl;
+		(*m_file) << m_tabs << m_name << "* result = new " << m_name << "();" << endl;
+		(*m_file) << m_tabs << "result->m_lookupfield = \"" << (*it)->getName() << "\";" << endl;
+		(*m_file) << m_tabs << "result->m_lookupvalue = value;" << endl;
+		(*m_file) << m_tabs << "SqliteMgr::Get()->doLookup(result);" << endl;
+		(*m_file) << m_tabs << "return result;" << endl;
+		(*m_file) << "}" << endl;
+		(*m_file) << endl;
+	}
+	(*m_file) << endl;
+}
+
 void ClassSourceGenerator::AppendBody()
 {
 	if(!m_file)
@@ -247,6 +276,26 @@ void ClassSourceGenerator::AppendBindUpdate()
 		pos++;
 	}
 
+	(*m_file) << "}" << endl;
+	(*m_file) << endl;
+}
+
+void ClassSourceGenerator::AppendBindLookup()
+{
+	if(!m_file)
+		throw std::logic_error("Source file is not open for writing.\n");
+	
+	(*m_file) << "void " << m_name << "::bindLookup(sqlite3_stmt* stmt) const" << endl;
+	(*m_file) << "{" << endl;
+	if(m_table->lookupsize())
+	{
+		(*m_file) << m_tabs << "sqlite3_bind_text(stmt, 1, m_lookupfield.c_str(), m_lookupfield.size(), SQLITE_TRANSIENT);" << endl;
+		(*m_file) << m_tabs << "sqlite3_bind_text(stmt, 2, m_lookupvalue.c_str(), m_lookupvalue.size(), SQLITE_TRANSIENT);" << endl;
+	}
+	else
+	{
+		(*m_file) << m_tabs << "// Do nothing" << endl;
+	}
 	(*m_file) << "}" << endl;
 	(*m_file) << endl;
 }

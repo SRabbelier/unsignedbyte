@@ -44,11 +44,15 @@ public:
 	void addValue(const std::string& name);
 	void addValue(const std::string& name, value_type defaultvalue);
 	void addTextField(const std::string& name);
+	void addLookupTextField(const std::string& name);
 	void addTextField(const std::string& name, const std::string& defaulttext);
 	
 	// Add Foreign Key
 	void addFK(Table* table);
 	void addFK(Table* table, const std::string& suffix);
+	
+	// Provide lookup functionality for the last 'count' entries
+	// void provideLookup(unsigned int count);
 
 	const std::string& tableName() const;
 	const std::string& tableForeignName() const;
@@ -64,16 +68,22 @@ public:
 	TableMap::const_iterator keybegin() const { return m_primarykeys.begin(); }
 	TableMap::const_iterator keyend() const { return m_primarykeys.end(); }
 	size_t keysize() const { return m_primarykeys.size(); }
+	
+	Fields::const_iterator lookupbegin() const { return m_lookupfields.begin(); }
+	Fields::const_iterator lookupend() const { return m_lookupfields.end(); }
+	size_t lookupsize() const { return m_lookupfields.size(); }
+
 		
 	bool hasSinglularPrimaryKey() { return m_spkey; }
 	
 private:
-	void addField(const std::string& name, bool text, const std::string& defaulttext);
+	void addField(const std::string& name, bool text, const std::string& defaulttext, bool providelookup);
 
 	const std::string m_name;
 	std::string m_foreignname;
 	bool m_spkey; // singular primary key
 
 	Fields m_fields;
+	Fields m_lookupfields;
 	TableMap m_primarykeys; // All keys added with addFPK()
 };

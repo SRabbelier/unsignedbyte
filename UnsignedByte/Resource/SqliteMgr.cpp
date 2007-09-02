@@ -99,6 +99,16 @@ void SqliteMgr::doSelect(Bindable* bindable)
 	bindable->parseSelect(select);
 }
 
+void SqliteMgr::doLookup(Bindable* bindable)
+{
+	Table* table = bindable->getTable();
+	sqlite3_stmt* lookup = getLookupStmt(table);
+	
+	bindable->bindLookup(lookup);
+	doStatement(lookup);
+	bindable->parseSelect(lookup);
+}
+
 void SqliteMgr::doStatement(sqlite3_stmt* stmt)
 {
 	int rc = sqlite3_step(stmt);
@@ -300,3 +310,38 @@ sqlite3_stmt* SqliteMgr::getSelectStmt(Table* table)
 	return statement;
 }
 
+sqlite3_stmt* SqliteMgr::getLookupStmt(Table* table)
+{
+	Statements* statements = getStatements(table);
+	sqlite3_stmt* statement = statements->getLookup();
+	if(statement)
+		return statement;
+		
+	std::string sql;
+	sql.append("Select ");
+	for(Fields::const_iterator it = table->begin(); it != table->end(); it++)
+	{
+		if(it != table->begin())
+			sql.append(", ");
+
+		sql.append((*it)->getName());
+	}
+	 
+	sql.append(" from ");
+	sql.append(table->tableName());
+	sql.append(" where ?=?");
+	sql.append(";");
+	
+	Global::Get()->logf("SQL is: %s\n", sql.c_str());
+		
+	int errorcode = sqlite3_prepare_v2(m_odb->db, sql.c_str(), (int)sql.size(), &statement, &m_leftover);
+
+	if(errorcode != SQLITE_OK)
+		throw std::runtime_error("SqliteMgr::getLookupStmt(), Could not prepare lookup query!");
+		
+	if(m_leftover != NULL && strlen(m_leftover) > 0)
+		throw std::runtime_error("SqliteMgr::getLookupStmt(), Leftover from lookup is not NULL!");
+		
+	statements->setLookup(statement);
+	return statement;
+}

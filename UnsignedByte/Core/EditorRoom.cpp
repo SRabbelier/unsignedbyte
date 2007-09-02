@@ -49,7 +49,8 @@ m_xpos(1),
 m_ypos(1),
 m_room(NULL)
 {
-	// TODO - commands
+	Action<OLCEditor>* act = Commands::Get();
+	act->Run(this, Global::Get()->EmptyString);
 	OnLine(Global::Get()->EmptyString);
 }
 
@@ -69,7 +70,7 @@ std::string EditorRoom::lookup(const std::string& action)
 	if(act)
 		return act->getName();
 	*/
-	// TODO
+	// TODO - EditorRoom::lookup
 		
 	return Global::Get()->EmptyString;
 }
@@ -84,7 +85,7 @@ void EditorRoom::dispatch(const std::string& action, const std::string& argument
 	else
 	*/
 		OLCEditor::dispatch(action, argument);
-		// TODO
+		// TODO - EditorRoom::dispatch
 		
 	return;
 }

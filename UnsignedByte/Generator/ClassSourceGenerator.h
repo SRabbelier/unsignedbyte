@@ -40,9 +40,11 @@ private:
 	void AppendCtorGeneral();
 	void AppendCtorSpecific();	
 	void AppendCtorDtor();
+	void AppendCtorFactory();
 	void AppendBody();
 	void AppendBindKeys();
 	void AppendBindUpdate();
+	void AppendBindLookup();
 	void AppendParseInsert();
 	void AppendParseSelect();
 	void AppendGetTable();

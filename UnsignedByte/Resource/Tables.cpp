@@ -47,17 +47,17 @@ Tables::Tables() :
 	VERSION( new Table("Version") )
 {	
 	ACCOUNTS->addPK("accountid");
-	ACCOUNTS->addTextField("name");
+	ACCOUNTS->addLookupTextField("name");
 	ACCOUNTS->addTextField("password");
 	
 	AREAS->addPK("areaid");
-	AREAS->addTextField("name");
+	AREAS->addLookupTextField("name");
 	AREAS->addTextField("description");
 	AREAS->addValue("height");
 	AREAS->addValue("width");
 	
 	BRANCHES->addPK("branchid");
-	BRANCHES->addTextField("name");
+	BRANCHES->addLookupTextField("name");
 	BRANCHES->addFK(TREES);
 	BRANCHES->addFK(STATS, "Primary");
 	BRANCHES->addFK(STATS, "Secondary");
@@ -76,7 +76,7 @@ Tables::Tables() :
 	CHARACTERS->addPK("characterid");
 	CHARACTERS->addFK(RACES);
 	CHARACTERS->addFK(ROOMS);
-	CHARACTERS->addTextField("name");
+	CHARACTERS->addLookupTextField("name");
 	CHARACTERS->addTextField("description");
 	
 	CHARACTERSKILL->addFPK(CHARACTERS);
@@ -92,16 +92,16 @@ Tables::Tables() :
 	CHARACTERTREE->addValue("xp");
 	
 	CLUSTERS->addPK("clusterid");
-	CLUSTERS->addTextField("name");
+	CLUSTERS->addLookupTextField("name");
 		
 	COLOURS->addPK("colourid");
-	COLOURS->addTextField("name");
-	COLOURS->addTextField("code");
+	COLOURS->addLookupTextField("name");
+	COLOURS->addLookupTextField("code");
 	COLOURS->addTextField("colourstring");
 	COLOURS->addValue("ansi");
 	
 	COMMANDS->addPK("commandid");
-	COMMANDS->addTextField("name");
+	COMMANDS->addLookupTextField("name");
 	COMMANDS->addValue("grantgroup", 1);
 	COMMANDS->addValue("highforce", 1);
 	COMMANDS->addValue("force", 1);
@@ -111,7 +111,7 @@ Tables::Tables() :
 	EXITS->addValue("dir");
 		
 	GRANTGROUPS->addPK("grantgroupid");
-	GRANTGROUPS->addTextField("name");
+	GRANTGROUPS->addLookupTextField("name");
 	GRANTGROUPS->addValue("defaultgrant");
 	GRANTGROUPS->addValue("implies");
 	
@@ -120,7 +120,7 @@ Tables::Tables() :
 	PERMISSIONS->addValue("grant");
 	
 	RACES->addPK("raceid");
-	RACES->addTextField("name");
+	RACES->addLookupTextField("name");
 	
 	ROOMS->addPK("roomid");
 	ROOMS->addTextField("name");
@@ -132,21 +132,21 @@ Tables::Tables() :
 	ROOMS->addValue("height");
 	
 	SECTORS->addPK("sectorid");
-	SECTORS->addTextField("name");
+	SECTORS->addLookupTextField("name");
 	SECTORS->addTextField("symbol");
 	SECTORS->addValue("movecost");
 	SECTORS->addValue("water");
 	
 	SKILLS->addPK("skillid");
-	SKILLS->addTextField("name");
+	SKILLS->addLookupTextField("name");
 	SKILLS->addFK(BRANCHES);
 	
 	STATS->addPK("statid");
-	STATS->addTextField("name");
-	STATS->addTextField("shortname");
+	STATS->addLookupTextField("name");
+	STATS->addLookupTextField("shortname");
 	
 	TREES->addPK("treeid");
-	TREES->addTextField("name");
+	TREES->addLookupTextField("name");
 	TREES->addFK(CLUSTERS);
 	TREES->addFK(STATS, "Primary");
 	TREES->addFK(STATS, "Secondary");

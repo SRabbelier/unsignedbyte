@@ -238,14 +238,14 @@ bool Character::IllegalName(const std::string& name)
 std::vector<std::string> Character::Show()
 {
 	std::vector<std::string> result;
-	// TODO
+	// TODO - Character::Show()
 	return result;
 }
 
 std::string Character::ShowShort()
 {
 	std::string result;
-	// TODO
+	// TODO - Character::ShowShort()
 	return result;
 }
 
