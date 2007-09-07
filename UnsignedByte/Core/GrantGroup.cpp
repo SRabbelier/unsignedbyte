@@ -91,7 +91,7 @@ std::string GrantGroup::ShowShort()
 std::vector<std::string> GrantGroup::List()
 {
 	std::vector<std::string> result;
-	Longs ids = DatabaseMgr::Get()->GetSavableIDS(Tables::Get()->GRANTGROUPS);
+	/*Longs ids = DatabaseMgr::Get()->GetSavableIDS(Tables::Get()->GRANTGROUPS);
 	for(Longs::iterator it = ids.begin(); it != ids.end(); it++)
 	{
 		long id = (*it);
@@ -100,7 +100,7 @@ std::vector<std::string> GrantGroup::List()
 		line.append(Global::Get()->sprintf("%d> ", id));
 		line.append(grantgroup->ShowShort());
 		result.push_back(line);
-	}
+	}*/
 	return result;
 }
 

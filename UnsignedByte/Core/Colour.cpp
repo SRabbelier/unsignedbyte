@@ -89,7 +89,7 @@ std::string Colour::ShowShort()
 std::vector<std::string> Colour::List()
 {
 	std::vector<std::string> result;
-	Longs ids = DatabaseMgr::Get()->GetSavableIDS(Tables::Get()->COLOURS);
+	/*Longs ids = DatabaseMgr::Get()->GetSavableIDS(Tables::Get()->COLOURS);
 	for(Longs::iterator it = ids.begin(); it != ids.end(); it++)
 	{
 		long id = (*it);
@@ -98,7 +98,7 @@ std::vector<std::string> Colour::List()
 		line.append(Global::Get()->sprintf("%d> ", id));
 		line.append(colour->ShowShort());
 		result.push_back(line);
-	}
+	}*/
 	return result;
 }
 

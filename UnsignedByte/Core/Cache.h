@@ -48,28 +48,23 @@ class UBSocket;
 typedef unsigned long value_type;
 typedef std::set<value_type> valueset;
 
-typedef std::pair<value_type, Exit::DIRECTION> roomexit; // roomid, direction
-typedef std::pair<value_type, value_type> twokey; // account, grantgroup
-typedef std::map<Coordinate, value_type> rlookup_m; // room lookup
-typedef std::map<twokey, value_type> plookup_m; // grants lookup
-typedef std::map<std::string, value_type> lookup_m; // string lookup
+typedef value_type oneValueKey;
+typedef std::string oneStringKey;
 
-typedef rlookup_m::iterator rlookup_mi;
-typedef plookup_m::iterator plookup_mi;
-typedef lookup_m::iterator lookup_mi;
+typedef std::pair<value_type, value_type> twoValueKey;
 
-typedef std::map<value_type,mud::Account*> accounts_m;
-typedef std::map<value_type,mud::Area*> areas_m;
-typedef std::map<value_type,mud::MCharacter*> mobiles_m;
-typedef std::map<value_type,mud::Character*> characters_m;
-typedef std::map<value_type,mud::Colour*> colours_m;
-typedef std::map<value_type,mud::Command*> command_m;
-typedef std::map<value_type,mud::GrantGroup*> grantgroup_m;
-typedef std::map<value_type,mud::Race*> races_m;
-typedef std::map<value_type,mud::Room*> rooms_m;
-typedef std::map<value_type,mud::Sector*> sectors_m;
-typedef std::map<value_type,mud::PCharacter*> players_m;
-typedef std::map<twokey,mud::Permission*> permission_m;
+typedef std::map<oneValueKey,mud::Account*> accounts_m;
+typedef std::map<oneValueKey,mud::Area*> areas_m;
+typedef std::map<oneValueKey,mud::MCharacter*> mobiles_m;
+typedef std::map<oneValueKey,mud::Character*> characters_m;
+typedef std::map<oneValueKey,mud::Colour*> colours_m;
+typedef std::map<oneValueKey,mud::Command*> command_m;
+typedef std::map<oneValueKey,mud::GrantGroup*> grantgroup_m;
+typedef std::map<oneValueKey,mud::Race*> races_m;
+typedef std::map<oneValueKey,mud::Room*> rooms_m;
+typedef std::map<oneValueKey,mud::Sector*> sectors_m;
+typedef std::map<oneValueKey,mud::PCharacter*> players_m;
+typedef std::map<twoValueKey,mud::Permission*> permission_m;
 
 typedef const std::string& cstring;
 
@@ -78,91 +73,62 @@ namespace mud
 	class Cache : public Singleton<Cache>
 	{
 	public:
-		value_type AddAccount();
-		value_type AddCharacter();
-		value_type AddRace();
-		value_type AddArea();
-		value_type AddRoom();
-		value_type AddSector();
-		value_type AddColour();
-		value_type AddCommand();
-		value_type AddGrantGroup();
-		void AddPermission(value_type account, value_type grantgroup);
-
 		bool IsMobile(value_type id);
 		bool isActive(value_type id);
 		bool isActive(cstring name);
 
-		mud::Account* GetAccount(value_type id);
-		value_type GetAccountID(cstring name);
-		
-		mud::Area* GetArea(value_type id);
-
+		mud::Account* GetAccountByKey(value_type id);
+		mud::Area* GetAreaByKey(value_type id);
+		mud::Character* GetCharacterByKey(value_type id);
+		mud::Colour* GetColourByKey(value_type id);
+		mud::Command* GetCommandByKey(value_type id);
+		mud::GrantGroup* GetGrantGroupByKey(value_type id);
+		mud::MCharacter* GetMCharacterByKey(value_type id);
+		mud::PCharacter* GetPCharacterByKey(value_type id);
 		mud::PCharacter* LoadPCharacter(UBSocket* sock, value_type id);
-		mud::PCharacter* GetPCharacter(value_type id);
-		mud::MCharacter* GetMCharacter(value_type id);
-		mud::Character* GetCharacter(value_type id);
-		value_type GetCharacterID(const std::string& name);
-
-		mud::Race* GetRace(value_type id);
-		value_type GetRaceID(cstring name);
-
-		mud::Sector* GetSector(value_type id);
-		value_type GetSectorID(cstring name);
-
-		mud::Room* GetRoom(value_type id);
-		// value_type GetRoomID(value_type area, value_type x, value_type y);
-
-		mud::Colour* GetColour(value_type id);
-		value_type GetColourID(cstring code);
-		
-		mud::Command* GetCommand(value_type id);
-		value_type GetCommandID(cstring name);
-		
-		mud::GrantGroup* GetGrantGroup(value_type id);
-		value_type GetGrantGroupID(cstring name);
-		
-		mud::Permission* GetPermission(value_type account, value_type grantgroup);
+		mud::Permission* GetPermissionByKeys(value_type account, value_type grantgroup);
+		mud::Race* GetRaceByKey(value_type id);
+		mud::Room* GetRoomByKey(value_type id);
+		mud::Sector* GetSectorByKey(value_type id);
 
 		void CloseAccount(value_type accountid);
-		void CloseCharacter(value_type characterid);
-		void ClosePCharacter(value_type characterid);
-		void CloseMCharacter(value_type characterid);
-		void CloseRace(value_type raceid);
 		void CloseArea(value_type areaid);
-		void CloseRoom(value_type roomid);
-		void CloseSector(value_type sectorid);
-		// void CloseExit(value_type exitid);
 		void CloseColour(value_type colourid);
 		void CloseCommand(value_type commandid);
 		void CloseGrantGroup(value_type grantgroupid);
+		void CloseMCharacter(value_type characterid);
+		void ClosePCharacter(value_type characterid);
 		void ClosePermission(value_type account, value_type permission);
+		void CloseRace(value_type raceid);
+		void CloseRoom(value_type roomid);
+		void CloseSector(value_type sectorid);
 
 	private:
-		accounts_m m_accounts;
-		players_m m_players;
-		mobiles_m m_mobiles;
-		characters_m m_characters;
-		races_m m_races;
-		areas_m m_areas;
-		rooms_m m_rooms;
-		sectors_m m_sectors;
-		colours_m m_colours;
-		command_m m_commands;
-		grantgroup_m m_grantgroups;
-		permission_m m_permissions;
+		Account* cacheAccount(db::Accounts* d);
+		Area* cacheArea(db::Areas* d);
+		Colour* cacheColour(db::Colours* d);
+		Command* cacheCommand(db::Commands* d);
+		GrantGroup* cacheGrantGroup(db::GrantGroups* d);
+		MCharacter* cacheMCharacter(db::Characters* d);
+		PCharacter* cachePCharacter(UBSocket* sock, db::Characters* d);
+		Permission* cachePermission(db::Permissions* d);
+		Race* cacheRace(db::Race* d);
+		Room* cacheRoom(db::Room* d);
+		Sector* cacheSector(db::Sector* d);
+		
+		accounts_m m_accountByKey;
+		areas_m m_areaByKey;
+		mobiles_m m_mobileByKey;
+		characters_m m_characterByKey;
+		colours_m m_colourByKey;
+		command_m m_commandByKey;
+		grantgroup_m m_grantgroupByKey;
+		races_m m_raceByKey;
+		rooms_m m_roomByKey;
+		sectors_m m_sectorByKey;
+		players_m m_playerByKey;
+		permission_m m_permissionByKeys;
 
-		lookup_m m_account;
-		lookup_m m_character;
-		lookup_m m_race;
-		lookup_m m_sector;
-		lookup_m m_command;
-		lookup_m m_grantgroup;
-		lookup_m m_colour;
-		
-		rlookup_m m_room;
-		plookup_m m_permission;
-		
 		valueset m_pcharacters;
 
 	private:

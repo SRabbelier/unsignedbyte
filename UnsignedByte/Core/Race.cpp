@@ -74,7 +74,7 @@ std::string Race::ShowShort()
 std::vector<std::string> Race::List()
 {
 	std::vector<std::string> result;
-	Longs ids = DatabaseMgr::Get()->GetSavableIDS(Tables::Get()->RACES);
+	/*Longs ids = DatabaseMgr::Get()->GetSavableIDS(Tables::Get()->RACES);
 	for(Longs::iterator it = ids.begin(); it != ids.end(); it++)
 	{
 		long id = (*it);
@@ -83,7 +83,7 @@ std::vector<std::string> Race::List()
 		line.append(Global::Get()->sprintf("%d> ", id));
 		line.append(race->ShowShort());
 		result.push_back(line);
-	}
+	}*/
 	return result;
 }
 

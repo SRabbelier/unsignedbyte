@@ -74,7 +74,7 @@ std::string Sector::ShowShort()
 std::vector<std::string> Sector::List()
 {
 	std::vector<std::string> result;
-	Longs ids = DatabaseMgr::Get()->GetSavableIDS(Tables::Get()->SECTORS);
+	/*Longs ids = DatabaseMgr::Get()->GetSavableIDS(Tables::Get()->SECTORS);
 	for(Longs::iterator it = ids.begin(); it != ids.end(); it++)
 	{
 		long id = (*it);
@@ -83,7 +83,7 @@ std::vector<std::string> Sector::List()
 		line.append(Global::Get()->sprintf("%d> ", id));
 		line.append(sector->ShowShort());
 		result.push_back(line);
-	}
+	}*/
 	return result;
 }
 

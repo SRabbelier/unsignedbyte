@@ -252,7 +252,7 @@ std::string Character::ShowShort()
 std::vector<std::string> Character::List()
 {
 	std::vector<std::string> result;
-	Longs ids = DatabaseMgr::Get()->GetSavableIDS(Tables::Get()->CHARACTERS);
+	/*Longs ids = DatabaseMgr::Get()->GetSavableIDS(Tables::Get()->CHARACTERS);
 	for(Longs::iterator it = ids.begin(); it != ids.end(); it++)
 	{
 		long id = (*it);
@@ -261,7 +261,7 @@ std::vector<std::string> Character::List()
 		line.append(Global::Get()->sprintf("%d> ", id));
 		line.append(character->ShowShort());
 		result.push_back(line);
-	}
+	}*/
 	return result;
 }
 

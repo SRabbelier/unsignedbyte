@@ -269,7 +269,7 @@ std::string Room::ShowShort()
 std::vector<std::string> Room::List()
 {
 	std::vector<std::string> result;
-	Longs ids = DatabaseMgr::Get()->GetSavableIDS(Tables::Get()->ROOMS);
+	/*Longs ids = DatabaseMgr::Get()->GetSavableIDS(Tables::Get()->ROOMS);
 	for(Longs::iterator it = ids.begin(); it != ids.end(); it++)
 	{
 		long id = (*it);
@@ -278,7 +278,7 @@ std::vector<std::string> Room::List()
 		line.append(Global::Get()->sprintf("%d> ", id));
 		line.append(room->ShowShort());
 		result.push_back(line);
-	}
+	}*/
 	return result;
 }
 

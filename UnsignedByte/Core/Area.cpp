@@ -80,7 +80,7 @@ std::string Area::ShowShort()
 std::vector<std::string> Area::List()
 {
 	std::vector<std::string> result;
-	Longs ids = DatabaseMgr::Get()->GetSavableIDS(Tables::Get()->AREAS);
+	/*Longs ids = DatabaseMgr::Get()->GetSavableIDS(Tables::Get()->AREAS);
 	for(Longs::iterator it = ids.begin(); it != ids.end(); it++)
 	{
 		long id = (*it);
@@ -89,7 +89,7 @@ std::vector<std::string> Area::List()
 		line.append(Global::Get()->sprintf("%d> ", id));
 		line.append(area->ShowShort());
 		result.push_back(line);
-	}
+	}*/
 	return result;
 }
 

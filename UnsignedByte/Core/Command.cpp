@@ -161,7 +161,7 @@ std::string Command::ShowShort()
 std::vector<std::string> Command::List()
 {
 	std::vector<std::string> result;
-	Longs ids = DatabaseMgr::Get()->GetSavableIDS(Tables::Get()->COMMANDS);
+	/*Longs ids = DatabaseMgr::Get()->GetSavableIDS(Tables::Get()->COMMANDS);
 	for(Longs::iterator it = ids.begin(); it != ids.end(); it++)
 	{
 		long id = (*it);
@@ -170,7 +170,7 @@ std::vector<std::string> Command::List()
 		line.append(Global::Get()->sprintf("%d> ", id));
 		line.append(command->ShowShort());
 		result.push_back(line);
-	}
+	}*/
 	return result;
 }
 
