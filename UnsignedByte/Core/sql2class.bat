@@ -1,1 +1,0 @@
-sql2class.exe -lib ub -sqlite ub.sql -namespace db -overwrite -getset
