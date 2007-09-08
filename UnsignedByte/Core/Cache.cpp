@@ -42,6 +42,97 @@
 
 using namespace mud;
 
+value_type Cache::AddAccount()
+{
+	db::Accounts p;
+	p.save();
+
+	return p.getaccountid();
+}
+
+value_type Cache::AddCharacter()
+{
+	db::Characters p;
+	p.save();
+
+	return p.getcharacterid();
+}
+
+value_type Cache::AddRace()
+{
+	db::Races p;
+	p.save();
+
+	return p.getraceid();
+}
+
+value_type Cache::AddArea()
+{
+	db::Areas p;
+	p.setheight(1);
+	p.setwidth(1);
+	p.save();
+	
+	return p.getareaid();
+}
+
+value_type Cache::AddRoom()
+{
+	db::Rooms p;
+	p.save();
+
+	return p.getroomid();
+}
+
+value_type Cache::AddSector()
+{
+	db::Sectors p;
+	p.save();
+
+	return p.getsectorid();
+}
+
+/*
+value_type Cache::AddExit()
+{
+	db::Exits ex();
+	ex.save();
+
+	return id;
+}
+*/
+
+value_type Cache::AddColour()
+{
+	db::Colours p;
+	p.save();
+
+	return p.getcolourid();
+}
+
+value_type Cache::AddCommand()
+{
+	db::Commands p;
+	p.save();
+
+	return p.getcommandid();
+}
+
+value_type Cache::AddGrantGroup()
+{
+	db::GrantGroups gg;
+	gg.save();
+	
+	return gg.getgrantgroupid();
+}
+
+void Cache::AddPermission(value_type account, value_type grantgroup)
+{
+	db::Permissions p(account, grantgroup);
+	p.save();
+}
+
+
 /**
  *   Wrapped
  *   Database
@@ -49,15 +140,7 @@ using namespace mud;
  *	 Retreival 
  */
 
-Account* Cache::cacheAccount(db::Accounts* d)
-{
-	Account* p = new Account(d);
-	m_account[name] = d->getaccountid();
-	m_accounts[id] = p;
-	return p;
-}
-
-Account* Cache::GetAccountByID(value_type id)
+Account* Cache::GetAccount(value_type id)
 {
 	Account* p = m_accounts[id];
 	if (p)
@@ -65,23 +148,28 @@ Account* Cache::GetAccountByID(value_type id)
 
 	// Account delete's db::Account on deletion
 	db::Accounts* d = new db::Accounts(id);
-	p = cacheAccount(d);
-	return p;
-}
+	p = new Account(d);
 
-Account* Cache::GetAccountByName(const std::string& value)
-{
-	lookup_mi it = m_account.find(name);
-	if(it != m_account.end())
-		return it->second;
-
-	db::Accounts* p = db::Accounts::byName(value);
-	p = cacheAccount(p);
+	m_accounts[id] = p;
+	m_account[d->getname()] = id;
 	
 	return p;
 }
 
+value_type Cache::GetAccountID(const std::string& name)
+{
+	lookup_mi it = m_account.find(name);
+	if(it != m_account.end())
+	{		
+		return it->second;
+	}
 
+	value_type id = DatabaseMgr::Get()->GetSavableID(Tables::Get()->ACCOUNTS, name);
+
+	m_account[name] = id;
+
+	return id;
+}
 
 PCharacter* Cache::GetPCharacter(value_type id)
 {

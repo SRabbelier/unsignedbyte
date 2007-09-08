@@ -4,6 +4,7 @@
 	Version="8,00"
 	Name="Resource"
 	ProjectGUID="{8AB214A5-91BF-4231-9ABD-ECFBE4E64AF3}"
+	RootNamespace="Resource"
 	>
 	<Platforms>
 		<Platform
@@ -36,7 +37,7 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
-				AdditionalIncludeDirectories="&quot;D:\Projects\Visual Studio\Trunk\include&quot;"
+				AdditionalIncludeDirectories="..\..\include"
 				PreprocessorDefinitions="_CRT_SECURE_NO_DEPRECATE"
 				RuntimeLibrary="3"
 			/>
@@ -51,7 +52,7 @@
 			/>
 			<Tool
 				Name="VCLibrarianTool"
-				OutputFile="..\..\$(ProjectName).lib"
+				OutputFile="..\..\lib\$(ProjectName).lib"
 			/>
 			<Tool
 				Name="VCALinkTool"
@@ -138,18 +139,6 @@
 			Filter="cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx"
 			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}"
 			>
-		</Filter>
-		<Filter
-			Name="Header Files"
-			Filter="h;hpp;hxx;hm;inl;inc;xsd"
-			UniqueIdentifier="{93995380-89BD-4b04-88EB-625FBE52EBFB}"
-			>
-		</Filter>
-		<Filter
-			Name="Resource Files"
-			Filter="rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav"
-			UniqueIdentifier="{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}"
-			>
 			<File
 				RelativePath="..\Base64.cpp"
 				>
@@ -160,6 +149,10 @@
 			</File>
 			<File
 				RelativePath="..\Database.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\DatabaseMgr.cpp"
 				>
 			</File>
 			<File
@@ -176,6 +169,10 @@
 			</File>
 			<File
 				RelativePath="..\EventTime.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\Field.cpp"
 				>
 			</File>
 			<File
@@ -291,7 +288,15 @@
 				>
 			</File>
 			<File
+				RelativePath="..\SqliteMgr.cpp"
+				>
+			</File>
+			<File
 				RelativePath="..\SSLInitializer.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\Statements.cpp"
 				>
 			</File>
 			<File
@@ -308,6 +313,10 @@
 			</File>
 			<File
 				RelativePath="..\StringUtilities.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\Table.cpp"
 				>
 			</File>
 			<File
@@ -330,6 +339,12 @@
 				RelativePath="..\Utility.cpp"
 				>
 			</File>
+		</Filter>
+		<Filter
+			Name="Header Files"
+			Filter="h;hpp;hxx;hm;inl;inc;xsd"
+			UniqueIdentifier="{93995380-89BD-4b04-88EB-625FBE52EBFB}"
+			>
 		</Filter>
 	</Files>
 	<Globals>
