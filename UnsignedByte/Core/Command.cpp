@@ -160,21 +160,10 @@ std::string Command::ShowShort()
 
 std::vector<std::string> Command::List()
 {
-	std::vector<std::string> result;
-	/*Longs ids = DatabaseMgr::Get()->GetSavableIDS(Tables::Get()->COMMANDS);
-	for(Longs::iterator it = ids.begin(); it != ids.end(); it++)
-	{
-		long id = (*it);
-		Command* command = Cache::Get()->GetCommand(id);
-		std::string line;
-		line.append(Global::Get()->sprintf("%d> ", id));
-		line.append(command->ShowShort());
-		result.push_back(line);
-	}*/
-	return result;
+	return GetTable()->tableList();
 }
 
-Table* Command::getTable() const
+Table* Command::GetTable()
 {
 	return Tables::Get()->COMMANDS;
 }

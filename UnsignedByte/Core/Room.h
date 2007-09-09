@@ -59,11 +59,12 @@ namespace mud
 		 */
 		std::vector<std::string> Show();
 		std::string ShowShort();
-		Table* getTable() const;
+		Table* getTable() const { return GetTable(); }
 		
 		/**
 		 * \brief static utilities
 		 */
+		static Table* GetTable();
 		static std::vector<std::string> List();
 		static std::string CreateMap(long id, long origx, long origy);
 		static void Close(Room* room);

@@ -34,11 +34,13 @@ m_name(name),
 m_tabs("\t")
 {
 	std::string headername;
+	headername.append("../include/");
 	headername.append(m_name);
 	headername.append(".h");
 	m_headerfile.open(headername.c_str());
 	
 	std::string sourcename;
+	sourcename.append("../DAL/");
 	sourcename.append(m_name);
 	sourcename.append(".cpp");
 	m_sourcefile.open(sourcename.c_str());
@@ -105,6 +107,7 @@ void Generator::AppendHeaderIncludes()
 		throw std::logic_error("Header file is not open for writing.\n");
 	
 	m_headerfile << "#pragma once" << endl;
+	m_headerfile << "#pragma warning (disable:4800)" << endl;
 	m_headerfile << endl;
 	
 	m_headerfile << "#include <string>" << endl;
@@ -175,6 +178,10 @@ void Generator::AppendSourceIncludes()
 {
 	if(!m_sourcefile)
 		throw std::logic_error("Header file is not open for writing.\n");
+
+	m_sourcefile << "#pragma warning (disable:4244)" << endl;
+	m_sourcefile << "#pragma warning (disable:4267)" << endl;
+	m_sourcefile << endl;
 	
 	m_sourcefile << "#include <string>" << endl;
 	m_sourcefile << "#include <stdexcept>" << endl;

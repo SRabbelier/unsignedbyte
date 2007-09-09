@@ -88,21 +88,10 @@ std::string Colour::ShowShort()
 
 std::vector<std::string> Colour::List()
 {
-	std::vector<std::string> result;
-	/*Longs ids = DatabaseMgr::Get()->GetSavableIDS(Tables::Get()->COLOURS);
-	for(Longs::iterator it = ids.begin(); it != ids.end(); it++)
-	{
-		long id = (*it);
-		Colour* colour = Cache::Get()->GetColour(id);
-		std::string line;
-		line.append(Global::Get()->sprintf("%d> ", id));
-		line.append(colour->ShowShort());
-		result.push_back(line);
-	}*/
-	return result;
+	return GetTable()->tableList();
 }
 
-Table* Colour::getTable() const
+Table* Colour::GetTable()
 {
 	return Tables::Get()->COLOURS;
 }

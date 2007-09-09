@@ -156,24 +156,10 @@ std::string Permission::ShowShort()
 
 std::vector<std::string> Permission::List()
 {
-	std::vector<std::string> result;
-	// TODO - list permissions
-	/*
-	Longs ids = DatabaseMgr::Get()->GetSavableIDS(Tables::Get()->PERMISSIONS);
-	for(Longs::iterator it = ids.begin(); it != ids.end(); it++)
-	{
-		long id = (*it);
-		Permission* permission = Cache::Get()->GetPermission(id);
-		std::string line;
-		line.append(Global::Get()->sprintf("%d> ", id));
-		line.append(permission->ShowShort());
-		result.push_back(line);
-	}
-	*/
-	return result;
+	return GetTable()->tableList();
 }
 
-Table* Permission::getTable() const
+Table* Permission::GetTable()
 {
 	return Tables::Get()->PERMISSIONS;
 }

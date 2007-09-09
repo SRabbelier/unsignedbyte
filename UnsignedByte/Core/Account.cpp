@@ -60,11 +60,8 @@ bool Account::Exists()
 
 bool Account::IllegalName(const std::string& name)
 {
-	/*
 	if(DatabaseMgr::Get()->CountSavable(Tables::Get()->ACCOUNTS, name) > 0)
 		return true;
-	*/
-	// TODO - Count Accounts
 
 	return false;
 }

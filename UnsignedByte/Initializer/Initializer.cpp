@@ -47,41 +47,36 @@ bool Initializer::DatabasePopulated()
 
 bool Initializer::VerifyDatabaseVersion()
 {
-	try
-	{
-		db::Version ver(1);
+	bool equal = true;
 
-		if(ver.getmajor() != game::major)
-		{
-			Global::Get()->logf("Major / Major mismatch.");
-			return false;
-		}
-		
-		if(ver.getminor() != game::minor)
-		{
-			Global::Get()->logf("Minor / Minor mismatch.");
-			return false;
-		}
-		
-		if(ver.getmicro() != game::micro)
-		{
-			Global::Get()->logf("Micro / Micro mismatch.");
-			return false;
-		}
-		
-		if(ver.getversiontext().compare(game::vstring))
-		{
-			Global::Get()->logf("Versiontext / Vstring mismatch.");
-			return false;
-		}
-		
-		return true;
-	}
-	catch(std::runtime_error& e)
+	db::Version* ver = db::Version::bykey(1);
+
+	if(ver->getmajor() != game::major)
 	{
-		Global::Get()->bug(e.what());
-		return false;
+		Global::Get()->logf("Major / Major mismatch.");
+		equal = false;
 	}
+	
+	if(ver->getminor() != game::minor)
+	{
+		Global::Get()->logf("Minor / Minor mismatch.");
+		equal = false;
+	}
+	
+	if(ver->getmicro() != game::micro)
+	{
+		Global::Get()->logf("Micro / Micro mismatch.");
+		equal = false;
+	}
+	
+	if(ver->getversiontext().compare(game::vstring))
+	{
+		Global::Get()->logf("Versiontext / Vstring mismatch.");
+		equal = false;
+	}
+
+	delete ver;
+	return equal;
 }
 
 void Initializer::InitTables()

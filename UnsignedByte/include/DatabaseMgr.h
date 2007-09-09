@@ -46,8 +46,7 @@ public:
 	 * Savable Interaction
 	 */
 	Strings GetSavable(const Table* table, const long& value = Global::Get()->EmptyLong, const std::string& field = Global::Get()->EmptyString);
-	Longs GetSavableIDS(const Table* table, const long& value = Global::Get()->EmptyLong, const std::string& field = Global::Get()->EmptyString);
-	long GetSavableID(const Table* table, const std::string& value, const std::string& field = "name");
+	//long GetSavableID(const Table* table, const std::string& value, const std::string& field = "name");
 	long CountSavable(const Table* table, const std::string& value, const std::string& field = "name");
 	long CountSavable(const Table* table, const long id);
 

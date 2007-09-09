@@ -37,6 +37,7 @@ public:
 	sqlite3_stmt* getUpdate() const {return m_update;}
 	sqlite3_stmt* getSelect() const {return m_select;}
 	sqlite3_stmt* getLookup() const {return m_lookup;}
+	sqlite3_stmt* getList() const {return m_list;}
 	
 	// Setters
 	void setErase(sqlite3_stmt* erase) { m_erase = erase; }
@@ -44,6 +45,7 @@ public:
 	void setUpdate(sqlite3_stmt* update) { m_update = update; }
 	void setSelect(sqlite3_stmt* select) { m_select = select; }
 	void setLookup(sqlite3_stmt* lookup) { m_lookup = lookup; }
+	void setList(sqlite3_stmt* list) { m_list = list; }
 	
 private:
 	sqlite3_stmt* m_insert;
@@ -51,4 +53,5 @@ private:
 	sqlite3_stmt* m_update;
 	sqlite3_stmt* m_select;
 	sqlite3_stmt* m_lookup;
+	sqlite3_stmt* m_list;
 };

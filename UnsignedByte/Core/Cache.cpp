@@ -18,6 +18,10 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#ifdef _WIN32
+	#include "winsock2.h"
+#endif
+
 #include <stdexcept>
 #include <sstream>
 
@@ -42,97 +46,6 @@
 
 using namespace mud;
 
-value_type Cache::AddAccount()
-{
-	db::Accounts p;
-	p.save();
-
-	return p.getaccountid();
-}
-
-value_type Cache::AddCharacter()
-{
-	db::Characters p;
-	p.save();
-
-	return p.getcharacterid();
-}
-
-value_type Cache::AddRace()
-{
-	db::Races p;
-	p.save();
-
-	return p.getraceid();
-}
-
-value_type Cache::AddArea()
-{
-	db::Areas p;
-	p.setheight(1);
-	p.setwidth(1);
-	p.save();
-	
-	return p.getareaid();
-}
-
-value_type Cache::AddRoom()
-{
-	db::Rooms p;
-	p.save();
-
-	return p.getroomid();
-}
-
-value_type Cache::AddSector()
-{
-	db::Sectors p;
-	p.save();
-
-	return p.getsectorid();
-}
-
-/*
-value_type Cache::AddExit()
-{
-	db::Exits ex();
-	ex.save();
-
-	return id;
-}
-*/
-
-value_type Cache::AddColour()
-{
-	db::Colours p;
-	p.save();
-
-	return p.getcolourid();
-}
-
-value_type Cache::AddCommand()
-{
-	db::Commands p;
-	p.save();
-
-	return p.getcommandid();
-}
-
-value_type Cache::AddGrantGroup()
-{
-	db::GrantGroups gg;
-	gg.save();
-	
-	return gg.getgrantgroupid();
-}
-
-void Cache::AddPermission(value_type account, value_type grantgroup)
-{
-	db::Permissions p(account, grantgroup);
-	p.save();
-}
-
-
 /**
  *   Wrapped
  *   Database
@@ -140,36 +53,86 @@ void Cache::AddPermission(value_type account, value_type grantgroup)
  *	 Retreival 
  */
 
-Account* Cache::GetAccount(value_type id)
+Account* Cache::cacheAccount(db::Accounts* d)
 {
-	Account* p = m_accounts[id];
+	Account* p = new Account(d);
+	m_accountByName[d->getname()] = p;
+	m_accountByKey[d->getaccountid()] = p;
+	return p;
+}
+
+Account* Cache::GetAccountByKey(value_type id)
+{
+	Account* p = m_accountByKey[id];
 	if (p)
 		return p;
 
-	// Account delete's db::Account on deletion
 	db::Accounts* d = new db::Accounts(id);
-	p = new Account(d);
+	p = cacheAccount(d);
+	return p;
+}
 
-	m_accounts[id] = p;
-	m_account[d->getname()] = id;
+Account* Cache::GetAccountByName(const std::string& value)
+{
+	Account* p = m_accountByName[value];
+	if(p)
+		return p;
+
+	db::Accounts* d = db::Accounts::byname(value);
+	p = cacheAccount(d);
 	
 	return p;
 }
 
-value_type Cache::GetAccountID(const std::string& name)
+Area* Cache::cacheArea(db::Areas* d)
 {
-	lookup_mi it = m_account.find(name);
-	if(it != m_account.end())
-	{		
-		return it->second;
-	}
-
-	value_type id = DatabaseMgr::Get()->GetSavableID(Tables::Get()->ACCOUNTS, name);
-
-	m_account[name] = id;
-
-	return id;
+	Area* p = new Area(d);
+	m_areaByKey[d->getareaid()] = p;
+	return p;
 }
+
+mud::Area* Cache::GetAreaByKey(value_type id)
+{
+	Area* p = m_areaByKey[id];
+	if(p)
+		return p;
+
+	db::Areas* d = new db::Areas(id);
+	p = cacheArea(d);
+	return p;
+}
+
+Character* Cache::cacheCharacter(db::Characters *d)
+{
+	Character* p = new Character(d);
+	m_characterByKey[d->getcharacterid()] = p;
+	m_characterByName[d->getname()] = p;
+	return p;
+}
+
+mud::Character* Cache::GetCharacterByKey(value_type id)
+{
+	Character* p = m_characterByKey[id];
+	if(p)
+		return p;
+
+	db::Characters* d = new db::Characters(id);
+	p = cacheCharacter(d);
+	return p;
+}
+
+mud::Colour* Cache::GetColourByKey(value_type id)
+{
+	Colour* p = m_colourByKey[id];
+	if(p)
+		return p;
+
+	db::Colours* d = new db::Colours(id);
+	p = cacheColour(d);
+	return p;
+}
+
+#if 0
 
 PCharacter* Cache::GetPCharacter(value_type id)
 {
@@ -621,3 +584,4 @@ void Cache::ClosePermission(value_type account, value_type permission)
 {
 	m_permissions.erase(twokey(account, permission));	
 }
+#endif

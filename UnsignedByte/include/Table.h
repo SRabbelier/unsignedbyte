@@ -22,6 +22,7 @@
 #include <string>
 #include <vector>
 #include <map>
+#include "sqlite3.h"
 
 class Field;
 class Table;
@@ -56,9 +57,14 @@ public:
 
 	const std::string& tableName() const;
 	const std::string& tableForeignName() const;
+	const std::vector<std::string>& tableList();
 	
 	std::string tableQuery() const;
 	std::string creationQuery(bool verify = false) const;
+
+	void parseList(sqlite3_stmt* statement);
+
+	void modify();
 	
 	Fields::const_iterator begin() const { return m_fields.begin(); }
 	Fields::const_iterator end() const { return m_fields.end(); }
@@ -72,18 +78,23 @@ public:
 	Fields::const_iterator lookupbegin() const { return m_lookupfields.begin(); }
 	Fields::const_iterator lookupend() const { return m_lookupfields.end(); }
 	size_t lookupsize() const { return m_lookupfields.size(); }
-
-		
+	
 	bool hasSinglularPrimaryKey() { return m_spkey; }
 	
 private:
 	void addField(const std::string& name, bool text, const std::string& defaulttext, bool providelookup);
 
-	const std::string m_name;
+	std::string m_name;
 	std::string m_foreignname;
+	
 	bool m_spkey; // singular primary key
 
 	Fields m_fields;
 	Fields m_lookupfields;
 	TableMap m_primarykeys; // All keys added with addFPK()
+
+	time_t m_lastchange;
+	
+	std::vector<std::string> m_list; // a list representation of all elements in the table
+	time_t m_listcache; // the moment the list was cached
 };

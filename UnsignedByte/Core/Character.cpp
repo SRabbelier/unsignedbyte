@@ -251,18 +251,7 @@ std::string Character::ShowShort()
 
 std::vector<std::string> Character::List()
 {
-	std::vector<std::string> result;
-	/*Longs ids = DatabaseMgr::Get()->GetSavableIDS(Tables::Get()->CHARACTERS);
-	for(Longs::iterator it = ids.begin(); it != ids.end(); it++)
-	{
-		long id = (*it);
-		Character* character= Cache::Get()->GetCharacter(id);
-		std::string line;
-		line.append(Global::Get()->sprintf("%d> ", id));
-		line.append(character->ShowShort());
-		result.push_back(line);
-	}*/
-	return result;
+	return GetTable()->tableList();
 }
 
 void Character::Close(mud::Character* Ch)
@@ -277,7 +266,7 @@ void Character::Close(mud::Character* Ch)
 	delete Ch;
 }
 
-Table* Character::getTable() const
+Table* Character::GetTable()
 { 
 	return Tables::Get()->CHARACTERS; 
 };

@@ -43,6 +43,7 @@ class SqliteMgr
 		void doUpdate(Bindable* bindable);
 		void doSelect(Bindable* bindable);
 		void doLookup(Bindable* bindable);
+		void doList(Table* table);
 	
 	private:
 		Database* m_db;
@@ -57,9 +58,10 @@ class SqliteMgr
 		sqlite3_stmt* getUpdateStmt(Table* table);
 		sqlite3_stmt* getSelectStmt(Table* table);
 		sqlite3_stmt* getLookupStmt(Table* table);
+		sqlite3_stmt* getListStmt(Table* table);
 	
 		SqliteMgr();
 		~SqliteMgr();
-		void doStatement(sqlite3_stmt* stmt);
+		bool doStatement(sqlite3_stmt* stmt);
 		static SqliteMgr* m_instance;
 };

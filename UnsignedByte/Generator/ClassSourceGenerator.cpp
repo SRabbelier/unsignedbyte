@@ -52,8 +52,8 @@ void ClassSourceGenerator::GenerateClass()
 	{
 		AppendHeader();
 		AppendCtorGeneral();
-		AppendCtorSpecific();	
 		AppendCtorDtor();
+		AppendKeyFactory();
 		AppendCtorFactory();
 		AppendBody();
 		AppendBindKeys();
@@ -91,11 +91,8 @@ void ClassSourceGenerator::AppendCtorGeneral()
 {
 	if(!m_file)
 		throw std::logic_error("Source file is not open for writing.\n");
-		
-	if(!m_table->hasSinglularPrimaryKey())
-		return;
-	
-	// Empty constructor for creating new entries
+			
+	// Empty constructor
 	(*m_file) << "// Ctors" << endl;
 	(*m_file) << m_name << "::" << m_name << "() :" << endl;
 	(*m_file) << "m_" << m_table->firstKey() << "()";
@@ -116,39 +113,6 @@ void ClassSourceGenerator::AppendCtorGeneral()
 	(*m_file) << endl;
 }
 
-void ClassSourceGenerator::AppendCtorSpecific()
-{
-	if(!m_file)
-		throw std::logic_error("Source file is not open for writing.\n");
-		
-	// Specific constructor
-	(*m_file) << m_name << "::" << m_name << "(";
-
-	for(TableMap::const_iterator it = m_table->keybegin(); it != m_table->keyend(); it++)
-	{
-		if(it != m_table->keybegin())
-			(*m_file) << ", ";
-		
-		(*m_file) << "value_type " << it->first;
-	}
-
-	(*m_file) << ") :" << endl;
-	
-	for(TableMap::const_iterator it = m_table->keybegin(); it != m_table->keyend(); it++)
-	{
-		if(it != m_table->keybegin())
-			(*m_file) << ", " << endl;
-			
-		(*m_file) << "m_" << it->first << "(" << it->first<< ")";
-	}
-	(*m_file) << endl;
-	
-	(*m_file) << "{" << endl;
-	(*m_file) << m_tabs << "SqliteMgr::Get()->doSelect(this);" << endl;
-	(*m_file) << "}" << endl;
-	(*m_file) << endl;
-}
-
 void ClassSourceGenerator::AppendCtorDtor()
 {
 	if(!m_file)
@@ -162,6 +126,35 @@ void ClassSourceGenerator::AppendCtorDtor()
 	(*m_file) << endl;
 	
 	return;
+}
+
+void ClassSourceGenerator::AppendKeyFactory()
+{
+	if(!m_file)
+		throw std::logic_error("Source file is not open for writing.\n");
+		
+	// Specific constructor
+	(*m_file) << m_name << "* " << m_name << "::bykey(";
+
+	for(TableMap::const_iterator it = m_table->keybegin(); it != m_table->keyend(); it++)
+	{
+		if(it != m_table->keybegin())
+			(*m_file) << ", ";
+		
+		(*m_file) << "value_type " << it->first;
+	}
+
+	(*m_file) << ")" << endl;
+	(*m_file) << "{" << endl;
+	(*m_file) << m_tabs << m_name << "* result = new " << m_name << "();" << endl;
+		
+	for(TableMap::const_iterator it = m_table->keybegin(); it != m_table->keyend(); it++)
+		(*m_file) << m_tabs << "result->m_" << it->first << " = " << it->first<< ";" << endl;
+	
+	(*m_file) << m_tabs << "SqliteMgr::Get()->doSelect(result);" << endl;
+	(*m_file) << m_tabs << "return result;" << endl;
+	(*m_file) << "}" << endl;
+	(*m_file) << endl;
 }
 
 void ClassSourceGenerator::AppendCtorFactory()
@@ -211,7 +204,12 @@ void ClassSourceGenerator::AppendBody()
 	(*m_file) << m_tabs << m_tabs << "m_newentry = false;" << endl;
 	(*m_file) << m_tabs << "}" << endl;
 	(*m_file) << endl;
-	(*m_file) << m_tabs << "SqliteMgr::Get()->doUpdate(this);" << endl;
+	(*m_file) << m_tabs << "if(m_dirty)" << endl;
+	(*m_file) << m_tabs << "{" << endl;
+	(*m_file) << m_tabs << m_tabs << "SqliteMgr::Get()->doUpdate(this);" << endl;
+	(*m_file) << m_tabs << m_tabs << "getTable()->modify();" << endl;
+	(*m_file) << m_tabs << m_tabs << "m_dirty = false;" << endl;
+	(*m_file) << m_tabs << "}" << endl;
 	(*m_file) << "}" << endl;
 	(*m_file) << endl;
 	

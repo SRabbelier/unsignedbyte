@@ -38,8 +38,8 @@ private:
 	
 	void AppendHeader();
 	void AppendCtorGeneral();
-	void AppendCtorSpecific();	
 	void AppendCtorDtor();
+	void AppendKeyFactory();
 	void AppendCtorFactory();
 	void AppendBody();
 	void AppendBindKeys();

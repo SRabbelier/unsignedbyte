@@ -268,18 +268,7 @@ std::string Room::ShowShort()
 
 std::vector<std::string> Room::List()
 {
-	std::vector<std::string> result;
-	/*Longs ids = DatabaseMgr::Get()->GetSavableIDS(Tables::Get()->ROOMS);
-	for(Longs::iterator it = ids.begin(); it != ids.end(); it++)
-	{
-		long id = (*it);
-		Room* room = Cache::Get()->GetRoom(id);
-		std::string line;
-		line.append(Global::Get()->sprintf("%d> ", id));
-		line.append(room->ShowShort());
-		result.push_back(line);
-	}*/
-	return result;
+	return GetTable()->tableList();
 }
 
 void Room::Close(Room* room)
@@ -291,7 +280,7 @@ void Room::Close(Room* room)
 	delete room;
 }
 
-Table* Room::getTable() const
+Table* Room::GetTable()
 {
 	return Tables::Get()->ROOMS;
 }

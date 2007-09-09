@@ -85,8 +85,13 @@ void ClassHeaderGenerator::AppendCtor()
 	// Empty ctor for creating new objects
 	if(m_table->hasSinglularPrimaryKey())
 		(*m_file) << m_tabs << m_tabs << name << "();" << endl;
-
-	(*m_file) << m_tabs << m_tabs << name << "(";
+	
+	// Destructor
+	(*m_file) << m_tabs << m_tabs << "~" << name << "();" << endl;
+	(*m_file) << endl;
+		
+	(*m_file) << m_tabs << m_tabs << "// Factories" << endl;
+	(*m_file) << m_tabs << m_tabs << "static " << name << "* bykey" << "(";
 	for(TableMap::const_iterator it = m_table->keybegin(); it != m_table->keyend(); it++)
 	{
 		if(it != m_table->keybegin())
@@ -95,15 +100,7 @@ void ClassHeaderGenerator::AppendCtor()
 		(*m_file) << "value_type " << it->first;
 	}
 	(*m_file) << ");" << endl;
-	
-	// Destructor
-	(*m_file) << m_tabs << m_tabs << "~" << name << "();" << endl;
-	(*m_file) << endl;
-	
-	if(m_table->lookupsize() == 0)
-		return;
-		
-	(*m_file) << m_tabs << m_tabs << "// Factories" << endl;
+
 	for(Fields::const_iterator it = m_table->lookupbegin(); it != m_table->lookupend(); it++)
 	{
 		(*m_file) << m_tabs << m_tabs << "static " << name << "* by" << (*it)->getName() << "(";
@@ -218,7 +215,9 @@ void ClassHeaderGenerator::AppendFooter()
 		
 	std::string name = m_table->tableName();
 	
-	(*m_file) << m_tabs << m_tabs << "// Hide copy constructor and assignment operator" << endl;
+	(*m_file) << m_tabs << m_tabs << "// Hide constructor and assignment operator" << endl;
+	if(!m_table->hasSinglularPrimaryKey())
+		(*m_file) << m_tabs << m_tabs << name << "();" << endl;
 	(*m_file) << m_tabs << m_tabs << name << "(const " << name << "& rhs);" << endl;
 	(*m_file) << m_tabs << m_tabs << name << " operator=(const " << name << "& rhs);" << endl;
 	

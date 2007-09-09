@@ -109,7 +109,19 @@ void SqliteMgr::doLookup(Bindable* bindable)
 	bindable->parseSelect(lookup);
 }
 
-void SqliteMgr::doStatement(sqlite3_stmt* stmt)
+void SqliteMgr::doList(Table* table)
+{
+	sqlite3_stmt* list = getListStmt(table);
+	bool good = true;
+	for(int i = 0; good; i++)
+	{
+		printf("%d\n", i);
+		good = doStatement(list);
+		table->parseList(list);
+	}
+}
+
+bool SqliteMgr::doStatement(sqlite3_stmt* stmt)
 {
 	int rc = sqlite3_step(stmt);
 	
@@ -125,8 +137,10 @@ void SqliteMgr::doStatement(sqlite3_stmt* stmt)
 		throw new std::runtime_error("SqliteMgr::doUpdate(), Database misuse.");
 		
 	case SQLITE_DONE:
+		return false;
+
 	case SQLITE_ROW:
-		break;
+		return true;
 	}
 }
 
@@ -343,5 +357,40 @@ sqlite3_stmt* SqliteMgr::getLookupStmt(Table* table)
 		throw std::runtime_error("SqliteMgr::getLookupStmt(), Leftover from lookup is not NULL!");
 		
 	statements->setLookup(statement);
+	return statement;
+}
+
+sqlite3_stmt* SqliteMgr::getListStmt(Table* table)
+{
+	Statements* statements = getStatements(table);
+	sqlite3_stmt* statement = statements->getList();
+	if(statement)
+		return statement;
+		
+	std::string sql;
+	sql.append("Select ");
+	for(Fields::const_iterator it = table->begin(); it != table->end(); it++)
+	{
+		if(it != table->begin())
+			sql.append(", ");
+
+		sql.append((*it)->getName());
+	}
+	 
+	sql.append(" from ");
+	sql.append(table->tableName());
+	sql.append(";");
+	
+	Global::Get()->logf("SQL is: %s\n", sql.c_str());
+		
+	int errorcode = sqlite3_prepare_v2(m_odb->db, sql.c_str(), (int)sql.size(), &statement, &m_leftover);
+
+	if(errorcode != SQLITE_OK)
+		throw std::runtime_error("SqliteMgr::getSelectStmt(), Could not prepare list query!");
+		
+	if(m_leftover != NULL && strlen(m_leftover) > 0)
+		throw std::runtime_error("SqliteMgr::getSelectStmt(), Leftover from list is not NULL!");
+		
+	statements->setList(statement);
 	return statement;
 }

@@ -80,7 +80,7 @@ void OLCEditor::New::Run(OLCEditor* editor, const std::string& argument)
 		return;
 	}
 
-	editor->Sendf("%s created! Please give it at least a name!\n", editor->name().c_str());
+	editor->Sendf("%s created!\n", editor->name().c_str());
 	editor->setEditing(id);
 	return;
 }
