@@ -136,7 +136,7 @@ void EditorNewCharacter::OnLine(const std::string &line)
 				return;
 			}
 
-			int id = mud::Cache::Get()->GetRaceID(line);
+			int id = db::Races::lookupname(line);
 			if(id <= 0)
 			{
 				m_sock->Sendf("Got ID %d, which is <= 0, disconnecting you now.\n", id);
@@ -176,16 +176,9 @@ void EditorNewCharacter::OnLine(const std::string &line)
 			return;			
 		}
 
-		long accountid = mud::Cache::Get()->GetAccountID(Acc->getName());
-		if(accountid <= 0)
-		{
-			m_sock->Send("For some reason your accountid is <= 0.\n");
-			m_sock->Send("Disconnecting you now.\n");
-			m_sock->SetCloseAndDelete();
-			return;
-		}
-
-		long id = mud::Cache::Get()->AddCharacter();
+		// long id = mud::Cache::Get()->AddCharacter();
+		// TODO - AddCharacter()
+		long id = 0;
 		if(id <= 0)
 		{
 			m_sock->Send("For some reason your characters newly inserted id is <= 0.\n");
@@ -194,7 +187,7 @@ void EditorNewCharacter::OnLine(const std::string &line)
 			return;
 		}
 
-		mud::PCharacter* Ch = mud::Cache::Get()->LoadPCharacter(m_sock, id);
+		mud::PCharacter* Ch = mud::Cache::Get()->LoadPCharacterByKey(m_sock, id);
 		if(!Ch)
 		{
 			m_sock->Send("For some reason your new characters could not be retreived.\n");

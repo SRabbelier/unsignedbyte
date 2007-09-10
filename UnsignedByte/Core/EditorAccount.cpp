@@ -133,6 +133,7 @@ void EditorAccount::Login::Run(UBSocket* sock, const std::string &argument)
 		return;
 	}
 
+	/*
 	int id = Cache::Get()->GetCharacterID(argument);
 	if(id <= 0)
 	{
@@ -140,12 +141,13 @@ void EditorAccount::Login::Run(UBSocket* sock, const std::string &argument)
 		sock->SetCloseAndDelete();
 		return;
 	}
+	*/
 
 	// TODO - Check if isAccount before loading
-	mud::PCharacter* Ch = Cache::Get()->LoadPCharacter(sock, id);
+	mud::PCharacter* Ch = Cache::Get()->LoadPCharacterByName(sock, argument);
 	if(!Ch->isAccount(sock->GetAccount()))
 	{
-		Cache::Get()->ClosePCharacter(id);
+		Cache::Get()->ClosePCharacter(Ch->getID());
 		sock->Sendf("You don't have a character named '%s'!\n", argument.c_str());
 		Run(sock, Global::Get()->EmptyString);
 		return;

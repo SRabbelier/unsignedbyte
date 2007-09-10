@@ -56,7 +56,7 @@ bool Command::getGrant(UBSocket* sock)
 		long gid = getGrantGroup();
 		long aid = sock->GetAccount()->getID();
 		
-		Permission* prm = Cache::Get()->GetPermission(aid, gid);
+		Permission* prm = Cache::Get()->GetPermissionByKeys(aid, gid);
 		return prm->hasGrant();
 	}
 	catch(std::exception& e)
@@ -71,7 +71,7 @@ bool Command::getDefaultGrant()
 	try
 	{
 		long id = getGrantGroup();
-		GrantGroup* grp = Cache::Get()->GetGrantGroup(id);
+		GrantGroup* grp = Cache::Get()->GetGrantGroupByKey(id);
 		return grp->getDefaultGrant();
 	}
 	catch(std::exception& e)
@@ -88,7 +88,7 @@ bool Command::getLog(UBSocket* sock)
 		long gid = getGrantGroup();
 		long aid = sock->GetAccount()->getID();
 		
-		Permission* prm = Cache::Get()->GetPermission(aid, gid);
+		Permission* prm = Cache::Get()->GetPermissionByKeys(aid, gid);
 		return prm->hasLog();
 	}
 	catch(std::exception& e)
@@ -103,7 +103,7 @@ bool Command::getDefaultLog()
 	try
 	{
 		long id = getGrantGroup();
-		GrantGroup* grp = Cache::Get()->GetGrantGroup(id);
+		GrantGroup* grp = Cache::Get()->GetGrantGroupByKey(id);
 		return grp->getDefaultLog();
 	}
 	catch(std::exception& e)

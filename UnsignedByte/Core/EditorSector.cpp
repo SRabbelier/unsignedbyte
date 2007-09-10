@@ -90,7 +90,9 @@ Table* EditorSector::getTable()
 
 long EditorSector::addNew()
 {
-	return mud::Cache::Get()->AddSector();
+	// return mud::Cache::Get()->AddSector();
+	// TODO - addNew()
+	return 0;
 }
 
 std::vector<std::string> EditorSector::getList()
@@ -106,7 +108,7 @@ void EditorSector::setEditing(long id)
 		return;
 	}
 	
-	m_sector = mud::Cache::Get()->GetSector(id);
+	m_sector = mud::Cache::Get()->GetSectorByKey(id);
 	return;
 }
 

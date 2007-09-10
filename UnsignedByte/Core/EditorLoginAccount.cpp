@@ -78,15 +78,15 @@ void EditorLoginAccount::OnLine(const std::string &line)
 		return;
 	}
 
-	int id = mud::Cache::Get()->GetAccountID(line);
-	if(id <= 0)
+	int id = db::Accounts::lookupname(line);
+	if(id == 0)
 	{
-		m_sock->Sendf("Got ID %d, which is <= 0, disconnecting you now.\n", id);
+		m_sock->Send("Got ID 0, disconnecting you now.\n");
 		m_sock->SetCloseAndDelete();
 		return;
 	}
 
-	mud::Account* Acc = mud::Cache::Get()->GetAccount(id);
+	mud::Account* Acc = mud::Cache::Get()->GetAccountByKey(id);
 
 	m_sock->Sendf("Welcome back, %s\n", line.c_str());
 	m_sock->Send("\n");

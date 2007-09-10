@@ -91,7 +91,9 @@ Table* EditorCommand::getTable()
 
 long EditorCommand::addNew()
 {
-	return mud::Cache::Get()->AddCommand();
+	// return mud::Cache::Get()->AddCommand();
+	// TODO - addNew()
+	return 0;
 }
 
 std::vector<std::string> EditorCommand::getList()
@@ -107,7 +109,7 @@ void EditorCommand::setEditing(long id)
 		return;
 	}
 	
-	m_command = mud::Cache::Get()->GetCommand(id);
+	m_command = mud::Cache::Get()->GetCommandByKey(id);
 	return;
 }
 
@@ -159,7 +161,7 @@ void EditorCommand::GrantGroups::Run(UBSocket* sock, const std::string& argument
 		return;
 	}
 
-	long id = mud::Cache::Get()->GetGrantGroupID(argument);
+	long id = db::GrantGroups::lookupname(argument);
 	if(!id)
 	{
 		sock->Sendf("'%s' is not a valid grantgroup!\n", argument.c_str());

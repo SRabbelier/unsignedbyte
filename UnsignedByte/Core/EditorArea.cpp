@@ -89,7 +89,9 @@ Table* EditorArea::getTable()
 
 long EditorArea::addNew()
 {
-	return mud::Cache::Get()->AddArea();
+	// return mud::Cache::Get()->AddArea();
+	// TODO - addNew()
+	return 0;
 }
 
 std::vector<std::string> EditorArea::getList()
@@ -105,7 +107,7 @@ void EditorArea::setEditing(long id)
 		return;
 	}
 	
-	m_area = mud::Cache::Get()->GetArea(id);
+	m_area = mud::Cache::Get()->GetAreaByKey(id);
 	return;
 }
 

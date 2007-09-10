@@ -143,7 +143,7 @@ void EditorPermission::Accounts::Run(UBSocket* sock, const std::string& argument
 		return;
 	}
 
-	long id = mud::Cache::Get()->GetAccountID(argument);
+	long id = db::Accounts::lookupname(argument);
 	if(!id)
 	{
 		sock->Sendf("'%s' is not a valid account!\n", argument.c_str());
@@ -166,7 +166,7 @@ void EditorPermission::GrantGroups::Run(UBSocket* sock, const std::string& argum
 		return;
 	}
 
-	long id = mud::Cache::Get()->GetGrantGroupID(argument);
+	long id = db::GrantGroups::lookupname(argument);
 	if(!id)
 	{
 		sock->Sendf("'%s' is not a valid grantgroup!\n", argument.c_str());

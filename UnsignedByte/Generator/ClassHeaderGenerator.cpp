@@ -109,6 +109,19 @@ void ClassHeaderGenerator::AppendCtor()
 		else
 			(*m_file) << "value_type value);" << endl;
 	}
+	
+	if(m_table->hasSinglularPrimaryKey())
+	{
+		for(Fields::const_iterator it = m_table->lookupbegin(); it != m_table->lookupend(); it++)
+		{
+			(*m_file) << m_tabs << m_tabs << "static value_type lookup";
+			(*m_file) << (*it)->getName() << "(";
+			if((*it)->isText())
+				(*m_file) << "const std::string& value);" << endl;
+			else
+				(*m_file) << "value_type value);" << endl;
+		}
+	}
 	(*m_file) << endl;
 	
 	return;

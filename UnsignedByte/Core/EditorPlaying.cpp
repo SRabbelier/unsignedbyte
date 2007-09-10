@@ -43,7 +43,7 @@ m_char(character)
 	try
 	{
 		long id = m_char->getRoom();
-		mud::Room* inroom = mud::Cache::Get()->GetRoom(id);
+		mud::Room* inroom = mud::Cache::Get()->GetRoomByKey(id);
 	
 		inroom->Sendf("%s enters the realm.\n", m_char->getName().c_str());
 	}
@@ -170,7 +170,7 @@ void EditorPlaying::Quit::Run(UBSocket* sock, const std::string &argument, PChar
 	{
 		Ch->OnSend("Thank you for visiting.\n");
 		long id =Ch->getRoom();
-		mud::Room* room = mud::Cache::Get()->GetRoom(id);
+		mud::Room* room = mud::Cache::Get()->GetRoomByKey(id);
 		
 		room->Sendf("%s fades from the realm.\n", Ch->getName().c_str());	
 	}

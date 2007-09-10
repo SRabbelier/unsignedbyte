@@ -34,13 +34,17 @@ m_name(name),
 m_tabs("\t")
 {
 	std::string headername;
+	#ifdef _WIN32
 	headername.append("../include/");
+	#endif
 	headername.append(m_name);
 	headername.append(".h");
 	m_headerfile.open(headername.c_str());
 	
 	std::string sourcename;
+	#ifdef _WIN32
 	sourcename.append("../DAL/");
+	#endif
 	sourcename.append(m_name);
 	sourcename.append(".cpp");
 	m_sourcefile.open(sourcename.c_str());
@@ -107,7 +111,9 @@ void Generator::AppendHeaderIncludes()
 		throw std::logic_error("Header file is not open for writing.\n");
 	
 	m_headerfile << "#pragma once" << endl;
-	m_headerfile << "#pragma warning (disable:4800)" << endl;
+	m_headerfile << "#ifdef _WIN32" << endl;
+	m_headerfile << m_tabs << "#pragma warning (disable:4800)" << endl;
+	m_headerfile << "#endif" << endl;
 	m_headerfile << endl;
 	
 	m_headerfile << "#include <string>" << endl;

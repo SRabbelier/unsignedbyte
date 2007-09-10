@@ -248,7 +248,7 @@ std::vector<std::string> Room::Show()
 	result.push_back(Global::Get()->sprintf("Description: '%s'.\n", getDescription().c_str()));
 	try
 	{
-		Sector* sector = Cache::Get()->GetSector(getSector());
+		Sector* sector = Cache::Get()->GetSectorByKey(getSector());
 		result.push_back(Global::Get()->sprintf("Sector: '%s' (%s).\n", sector->getName().c_str(), sector->getSymbol().c_str()));
 	}
 	catch(std::exception& e)

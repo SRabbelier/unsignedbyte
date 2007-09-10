@@ -151,8 +151,10 @@ void EditorNewAccount::OnLine(const std::string &line)
 			return;
 		}
 
-		long id = mud::Cache::Get()->AddAccount();
-		mud::Account* Acc = mud::Cache::Get()->GetAccount(id);
+		long id = 0;
+		//long id = mud::Cache::Get()->AddAccount();
+		// TODO - AddAccount
+		mud::Account* Acc = mud::Cache::Get()->GetAccountByKey(id);
 		Acc->setName(m_name);
 		Acc->setPassword(m_password);
 

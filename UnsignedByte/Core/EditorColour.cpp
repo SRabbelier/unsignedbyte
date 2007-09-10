@@ -91,7 +91,9 @@ Table* EditorColour::getTable()
 
 long EditorColour::addNew()
 {
-	return mud::Cache::Get()->AddColour();
+	// return mud::Cache::Get()->AddColour();
+	// TODO - addNew()
+	return 0;
 }
 
 std::vector<std::string> EditorColour::getList()
@@ -107,7 +109,7 @@ void EditorColour::setEditing(long id)
 		return;
 	}
 	
-	m_colour = mud::Cache::Get()->GetColour(id);
+	m_colour = mud::Cache::Get()->GetColourByKey(id);
 	return;
 }
 

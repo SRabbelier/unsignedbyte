@@ -192,14 +192,14 @@ void UBSocket::Send(const std::string& msg)
 		buf.erase(i+1, 1);
 		buf.erase(i, 1);
 
-		long id = mud::Cache::Get()->GetColourID(code);
+		long id = db::Colours::lookupcode(code);
 		if(!id)
 		{
 			Global::Get()->bugf("Unknown colour code %s!\n", code.c_str());
 			continue;
 		}
 
-		mud::Colour* colour = mud::Cache::Get()->GetColour(id);
+		mud::Colour* colour = mud::Cache::Get()->GetColourByKey(id);
 		buf.insert(i, colour->getColourString());
 	}
 	

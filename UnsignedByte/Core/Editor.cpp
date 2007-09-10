@@ -100,10 +100,10 @@ void Editor::OnLine(const std::string& line)
 	bool isHighForced = m_sock->isHighForced();
 	bool isForced = isLowForced || isNormalForced || isHighForced;
 	
-	long id = mud::Cache::Get()->GetCommandID(actionname);
+	long id = db::Commands::lookupname(actionname);
 	if(id)
 	{
-		Command* cmd = mud::Cache::Get()->GetCommand(id);
+		Command* cmd = mud::Cache::Get()->GetCommandByKey(id);
 		hasGrant = cmd->getGrant(m_sock);
 		hasLog = cmd->getLog(m_sock);
 		if(isForced)

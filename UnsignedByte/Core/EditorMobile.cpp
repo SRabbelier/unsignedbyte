@@ -88,7 +88,9 @@ Table* EditorMobile::getTable()
 
 long EditorMobile::addNew()
 {
-	return mud::Cache::Get()->AddCharacter();
+	// return mud::Cache::Get()->AddCharacter();
+	// TODO - addNew()
+	return 0;
 }
 
 std::vector<std::string> EditorMobile::getList()
@@ -104,7 +106,7 @@ void EditorMobile::setEditing(long id)
 		return;
 	}
 	
-	m_mobile = mud::Cache::Get()->GetMCharacter(id);
+	m_mobile = mud::Cache::Get()->GetMCharacterByKey(id);
 	return;
 }
 

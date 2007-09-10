@@ -102,7 +102,9 @@ Table* EditorRoom::getTable()
 
 long EditorRoom::addNew()
 {
-	return mud::Cache::Get()->AddRoom();
+	// return mud::Cache::Get()->AddRoom();
+	// TODO - addNew()
+	return 0;
 }
 
 std::vector<std::string> EditorRoom::getList()
@@ -118,7 +120,7 @@ void EditorRoom::setEditing(long id)
 		return;
 	}
 	
-	m_room = mud::Cache::Get()->GetRoom(id);
+	m_room = mud::Cache::Get()->GetRoomByKey(id);
 	return;
 }
 
@@ -235,7 +237,7 @@ void EditorRoom::Sectors::Run(UBSocket* sock, const std::string& argument, Room*
 		return;
 	}
 
-	long id = mud::Cache::Get()->GetSectorID(argument);
+	long id = db::Sectors::lookupname(argument);
 	if(!id)
 	{
 		sock->Sendf("'%s' is not a valid sector type!\n", argument.c_str());
@@ -243,16 +245,9 @@ void EditorRoom::Sectors::Run(UBSocket* sock, const std::string& argument, Room*
 		return;
 	}
 	
-	try
-	{
-		mud::Sector* sector = mud::Cache::Get()->GetSector(id);
-		sock->Sendf("Sector type changed from '%s' to '%s'.\n", sector->getName().c_str(), argument.c_str());
-	}
-	catch(std::exception& e)
-	{
-		Global::Get()->bug(e.what());
-	}
-	
+	mud::Sector* sector = mud::Cache::Get()->GetSectorByKey(id);
+	sock->Sendf("Sector type changed from '%s' to '%s'.\n", sector->getName().c_str(), argument.c_str());
+		
 	room->setSector(id);
 	return;
 }

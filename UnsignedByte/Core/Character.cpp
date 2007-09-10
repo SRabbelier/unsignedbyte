@@ -119,8 +119,8 @@ void Character::OnLook(const std::string& msg)
 	try 
 	{
 		long id = this->getRoom();
-		Room* room = Cache::Get()->GetRoom(id);
-		
+		Room* room = Cache::Get()->GetRoomByKey(id);
+
 		OnSendf("Room (%d|<%dx%dx%d): %s\n", room->getArea(), room->getHeight(), room->getLength(), room->getWidth(), room->getName().c_str());
 		OnSendf("%s\n", room->getDescription().c_str());
 
@@ -176,7 +176,7 @@ void Character::OnSay(const std::string& msg)
 	try
 	{
 		long id = getRoom();
-		Room* room = Cache::Get()->GetRoom(id);
+		Room* room = Cache::Get()->GetRoomByKey(id);
 
 		room->Sendf("%s says '%s`^'\n", getName().c_str(), msg.c_str());
 		return;

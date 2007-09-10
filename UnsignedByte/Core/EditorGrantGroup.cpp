@@ -90,7 +90,9 @@ Table* EditorGrantGroup::getTable()
 
 long EditorGrantGroup::addNew()
 {
-	return mud::Cache::Get()->AddGrantGroup();
+	// return mud::Cache::Get()->AddGrantGroup();
+	// TODO - addNew()
+	return 0;
 }
 
 std::vector<std::string> EditorGrantGroup::getList()
@@ -106,7 +108,7 @@ void EditorGrantGroup::setEditing(long id)
 		return;
 	}
 	
-	m_grantgroup = mud::Cache::Get()->GetGrantGroup(id);
+	m_grantgroup = mud::Cache::Get()->GetGrantGroupByKey(id);
 	return;
 }
 

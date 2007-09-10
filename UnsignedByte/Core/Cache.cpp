@@ -67,7 +67,7 @@ Account* Cache::GetAccountByKey(value_type id)
 	if (p)
 		return p;
 
-	db::Accounts* d = new db::Accounts(id);
+	db::Accounts* d = db::Accounts::bykey(id);
 	p = cacheAccount(d);
 	return p;
 }
@@ -97,7 +97,7 @@ mud::Area* Cache::GetAreaByKey(value_type id)
 	if(p)
 		return p;
 
-	db::Areas* d = new db::Areas(id);
+	db::Areas* d = db::Areas::bykey(id);
 	p = cacheArea(d);
 	return p;
 }
@@ -116,7 +116,7 @@ mud::Character* Cache::GetCharacterByKey(value_type id)
 	if(p)
 		return p;
 
-	db::Characters* d = new db::Characters(id);
+	db::Characters* d = db::Characters::bykey(id);
 	p = cacheCharacter(d);
 	return p;
 }
@@ -127,7 +127,7 @@ mud::Colour* Cache::GetColourByKey(value_type id)
 	if(p)
 		return p;
 
-	db::Colours* d = new db::Colours(id);
+	db::Colours* d = db::Colours::bykey(id);
 	p = cacheColour(d);
 	return p;
 }
