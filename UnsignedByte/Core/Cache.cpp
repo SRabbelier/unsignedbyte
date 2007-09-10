@@ -38,7 +38,6 @@
 #include "Area.h"
 #include "Room.h"
 #include "Sector.h"
-#include "Exit.h"
 #include "Colour.h"
 #include "Command.h"
 #include "GrantGroup.h"

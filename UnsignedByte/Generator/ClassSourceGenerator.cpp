@@ -181,7 +181,27 @@ void ClassSourceGenerator::AppendCtorFactory()
 		(*m_file) << "}" << endl;
 		(*m_file) << endl;
 	}
-	(*m_file) << endl;
+	
+	if(m_table->hasSinglularPrimaryKey())
+	{	
+		for(Fields::const_iterator it = m_table->lookupbegin(); it != m_table->lookupend(); it++)
+		{
+			(*m_file) << "value_type " << m_name << "::lookup" << (*it)->getName() << "(";
+			if((*it)->isText())
+				(*m_file) << "const std::string& value)" << endl;
+			else
+				(*m_file) << "value_type value);" << endl;
+			(*m_file) << "{" << endl;
+			(*m_file) << m_tabs << m_name << " result;" << endl;
+			(*m_file) << m_tabs << "result.m_lookupfield = \"" << (*it)->getName() << "\";" << endl;
+			(*m_file) << m_tabs << "result.m_lookupvalue = value;" << endl;
+			(*m_file) << m_tabs << "SqliteMgr::Get()->doLookup(&result);" << endl;
+			(*m_file) << m_tabs << "value_type key = result.get" << m_table->firstKey() << "();" << endl;
+			(*m_file) << m_tabs << "return key;" << endl;
+			(*m_file) << "}" << endl;
+			(*m_file) << endl;
+		}
+	}
 }
 
 void ClassSourceGenerator::AppendBody()

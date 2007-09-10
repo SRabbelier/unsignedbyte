@@ -33,7 +33,6 @@
 
 #include "Room.h"
 #include "Area.h"
-#include "Exit.h"
 #include "Sector.h"
 #include "Character.h"
 
