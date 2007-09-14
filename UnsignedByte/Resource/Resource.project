@@ -79,7 +79,6 @@
     <File Name="../include/Ipv6Address.h"/>
     <File Name="../include/ISocketHandler.h"/>
     <File Name="../include/libfuture.h"/>
-    <File Name="../include/libsqlitewrapped.h"/>
     <File Name="../include/ListenSocket.h"/>
     <File Name="../include/Lock.h"/>
     <File Name="../include/MemFile.h"/>

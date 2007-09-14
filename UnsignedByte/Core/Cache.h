@@ -46,19 +46,22 @@ class UBSocket;
 
 typedef unsigned long value_type;
 typedef std::set<value_type> valueset;
+typedef std::set<std::string> stringset;
 
 typedef value_type oneValueKey;
 typedef std::string oneStringKey;
 
 typedef std::pair<value_type, value_type> twoValueKey;
 
+typedef std::map<std::string, value_type> reverseStringKey;
+
 typedef std::map<oneValueKey,mud::Account*> accounts_m;
 typedef std::map<oneValueKey,mud::Area*> areas_m;
 typedef std::map<oneValueKey,mud::MCharacter*> mobiles_m;
 typedef std::map<oneValueKey,mud::Character*> characters_m;
 typedef std::map<oneValueKey,mud::Colour*> colours_m;
-typedef std::map<oneValueKey,mud::Command*> command_m;
-typedef std::map<oneValueKey,mud::GrantGroup*> grantgroup_m;
+typedef std::map<oneValueKey,mud::Command*> commands_m;
+typedef std::map<oneValueKey,mud::GrantGroup*> grantgroups_m;
 typedef std::map<oneValueKey,mud::Race*> races_m;
 typedef std::map<oneValueKey,mud::Room*> rooms_m;
 typedef std::map<oneValueKey,mud::Sector*> sectors_m;
@@ -69,14 +72,14 @@ typedef std::map<oneStringKey,mud::Area*> areas_ms;
 typedef std::map<oneStringKey,mud::MCharacter*> mobiles_ms;
 typedef std::map<oneStringKey,mud::Character*> characters_ms;
 typedef std::map<oneStringKey,mud::Colour*> colours_ms;
-typedef std::map<oneStringKey,mud::Command*> command_ms;
-typedef std::map<oneStringKey,mud::GrantGroup*> grantgroup_ms;
+typedef std::map<oneStringKey,mud::Command*> commands_ms;
+typedef std::map<oneStringKey,mud::GrantGroup*> grantgroups_ms;
 typedef std::map<oneStringKey,mud::Race*> races_ms;
 typedef std::map<oneStringKey,mud::Room*> rooms_ms;
 typedef std::map<oneStringKey,mud::Sector*> sectors_ms;
 typedef std::map<oneStringKey,mud::PCharacter*> players_ms;
 
-typedef std::map<twoValueKey,mud::Permission*> permission_m;
+typedef std::map<twoValueKey,mud::Permission*> permissions_m; // account, grantgroup
 
 typedef const std::string& cstring;
 
@@ -85,7 +88,6 @@ namespace mud
 	class Cache : public Singleton<Cache>
 	{
 	public:
-		bool IsMobile(value_type id);
 		bool isActive(value_type id);
 		bool isActive(cstring name);
 
@@ -125,6 +127,15 @@ namespace mud
 		
 		mud::Sector* GetSectorByKey(value_type id);
 		mud::Sector* GetSectorByName(cstring name);
+		
+		value_type lookupAccountByName(cstring value);
+		value_type lookupCharacdterByName(cstring value);
+		value_type lookupColourByCode(cstring value);
+		value_type lookupColourByName(cstring value);
+		value_type lookupCommandByName(cstring value);
+		value_type lookupGrantGroupByName(cstring value);
+		value_type lookupRaceByName(cstring value);
+		value_type lookupSectorByName(cstring value);
 
 		void CloseAccount(value_type accountid);
 		void CloseArea(value_type areaid);
@@ -165,16 +176,16 @@ namespace mud
 		colours_ms m_colourByCode;
 		colours_ms m_colourByName;
 		
-		command_m m_commandByKey;
-		command_ms m_commandByName;
+		commands_m m_commandByKey;
+		commands_ms m_commandByName;
 		
-		grantgroup_m m_grantgroupByKey;
-		grantgroup_ms m_grantgroupByName;
+		grantgroups_m m_grantgroupByKey;
+		grantgroups_ms m_grantgroupByName;
 		
 		mobiles_m m_mobileByKey;
 		mobiles_ms m_mobileByName;
 		
-		permission_m m_permissionByKeys;
+		permissions_m m_permissionByKeys;
 		
 		players_m m_playerByKey;
 		players_ms m_playerByName;
@@ -187,7 +198,17 @@ namespace mud
 		sectors_m m_sectorByKey;
 		sectors_ms m_sectorByName;
 
-		valueset m_pcharacters;
+		valueset m_pcharactersByKey;
+		stringset m_pcharactersByName;
+		
+		reverseStringKey m_lookupAccountByName;
+		reverseStringKey m_lookupCharacterByName;
+		reverseStringKey m_lookupColourByCode;
+		reverseStringKey m_lookupColourByName;
+		reverseStringKey m_lookupCommandByName;
+		reverseStringKey m_lookupGrantGroupByName;
+		reverseStringKey m_lookupRaceByName;
+		reverseStringKey m_lookupSectorByName;
 
 	private:
 		Cache(void) {};

@@ -45,20 +45,22 @@
 
 using namespace mud;
 
+bool Cache::isActive(value_type id)
+{
+	return m_pcharactersByKey.find(id) != m_pcharactersByKey.end();
+}
+
+bool Cache::isActive(cstring value)
+{
+	return m_pcharactersByName.find(value) != m_pcharactersByName.end();
+}
+
 /**
  *   Wrapped
  *   Database
  *   Object
  *	 Retreival 
  */
-
-Account* Cache::cacheAccount(db::Accounts* d)
-{
-	Account* p = new Account(d);
-	m_accountByName[d->getname()] = p;
-	m_accountByKey[d->getaccountid()] = p;
-	return p;
-}
 
 Account* Cache::GetAccountByKey(value_type id)
 {
@@ -71,7 +73,7 @@ Account* Cache::GetAccountByKey(value_type id)
 	return p;
 }
 
-Account* Cache::GetAccountByName(const std::string& value)
+Account* Cache::GetAccountByName(cstring value)
 {
 	Account* p = m_accountByName[value];
 	if(p)
@@ -80,13 +82,6 @@ Account* Cache::GetAccountByName(const std::string& value)
 	db::Accounts* d = db::Accounts::byname(value);
 	p = cacheAccount(d);
 	
-	return p;
-}
-
-Area* Cache::cacheArea(db::Areas* d)
-{
-	Area* p = new Area(d);
-	m_areaByKey[d->getareaid()] = p;
 	return p;
 }
 
@@ -101,14 +96,6 @@ mud::Area* Cache::GetAreaByKey(value_type id)
 	return p;
 }
 
-Character* Cache::cacheCharacter(db::Characters *d)
-{
-	Character* p = new Character(d);
-	m_characterByKey[d->getcharacterid()] = p;
-	m_characterByName[d->getname()] = p;
-	return p;
-}
-
 mud::Character* Cache::GetCharacterByKey(value_type id)
 {
 	Character* p = m_characterByKey[id];
@@ -116,6 +103,17 @@ mud::Character* Cache::GetCharacterByKey(value_type id)
 		return p;
 
 	db::Characters* d = db::Characters::bykey(id);
+	p = cacheCharacter(d);
+	return p;
+}
+
+mud::Character* Cache::GetCharacterByName(cstring value)
+{
+	Character* p = m_characterByName[value];
+	if(p)
+		return p;
+		
+	db::Characters* d = db::Characters::byname(value);
 	p = cacheCharacter(d);
 	return p;
 }
@@ -131,456 +129,500 @@ mud::Colour* Cache::GetColourByKey(value_type id)
 	return p;
 }
 
-#if 0
-
-PCharacter* Cache::GetPCharacter(value_type id)
+mud::Colour* Cache::GetColourByName(cstring value)
 {
-	PCharacter* p = m_players[id];
-	if (p)
+	Colour* p = m_colourByName[value];
+	if(p)
 		return p;
-	
+
+	db::Colours* d = db::Colours::byname(value);
+	p = cacheColour(d);
+	return p;
+}
+
+mud::Colour* Cache::GetColourByCode(cstring value)
+{
+	Colour* p = m_colourByCode[value];
+	if(p)
+		return p;
+
+	db::Colours* d = db::Colours::bycode(value);
+	p = cacheColour(d);
+	return p;
+}
+
+mud::Command* Cache::GetCommandByKey(value_type id)
+{
+	Command* p = m_commandByKey[id];
+	if(p)
+		return p;
+		
+	db::Commands* d = db::Commands::bykey(id);
+	p = cacheCommand(d);
+	return p;
+}
+
+mud::Command* Cache::GetCommandByName(cstring value)
+{
+	Command* p = m_commandByName[value];
+	if(p)
+		return p;
+		
+	db::Commands* d = db::Commands::byname(value);
+	p = cacheCommand(d);
+	return p;
+}
+
+mud::GrantGroup* Cache::GetGrantGroupByKey(value_type id)
+{
+	GrantGroup* p = m_grantgroupByKey[id];
+	if(p)
+		return p;
+		
+	db::GrantGroups* d = db::GrantGroups::bykey(id);
+	p = cacheGrantGroup(d);
+	return p;
+}
+
+mud::GrantGroup* Cache::GetGrantGroupByName(cstring value)
+{
+	GrantGroup* p = m_grantgroupByName[value];
+	if(p)
+		return p;
+		
+	db::GrantGroups* d = db::GrantGroups::byname(value);
+	p = cacheGrantGroup(d);
+	return p;
+}
+
+mud::MCharacter* Cache::GetMCharacterByKey(value_type id)
+{
+	MCharacter* p = m_mobileByKey[id];
+	if(p)
+		return p;
+		
+	db::Characters* d = db::Characters::bykey(id);
+	p = cacheMCharacter(d);
+	return p;
+}
+
+mud::MCharacter* Cache::GetMCharacterByName(cstring value)
+{
+	MCharacter* p = m_mobileByName[value];
+	if(p)
+		return p;
+		
+	db::Characters* d = db::Characters::byname(value);
+	p = cacheMCharacter(d);
+	return p;
+}
+
+mud::PCharacter* Cache::GetPCharacterByKey(value_type id)
+{
+	PCharacter* p = m_playerByKey[id];
+	if(p)
+		return p;
+		
 	std::ostringstream err;
-	err << "No such PCharacter '" << id << "' logged in.";
+	err << "Cache::GetPCharacterByKey(), The id '" << id << "' has not been loaded yet.";
 	throw std::invalid_argument(err.str());
 }
 
-PCharacter* Cache::LoadPCharacter(UBSocket* sock, value_type id)
+mud::PCharacter* Cache::GetPCharacterByName(cstring value)
 {
-	// Character delete's db::Characters on deletion
-	db::Characters* d = new db::Characters(id);
-	PCharacter* p = new PCharacter(sock, d);
-
-	m_players[id] = p;
-	m_character[d->getname()] = id;
-	
-	m_pcharacters.insert(id);
-
-	return p;
-}
-
-MCharacter* Cache::GetMCharacter(value_type id)
-{
-	MCharacter* p = m_mobiles[id];
-	if (p)
-		return p;
-
-	// MCharacter delete's db::Characters on deletion
-	db::Characters* d = new db::Characters(id);
-	p = new MCharacter(d);
-
-	m_mobiles[id] = p;
-	m_character[d->getname()] = id;
-
-	return p;
-}
-
-Character* Cache::GetCharacter(value_type id)
-{
-	Character* p = m_characters[id];
-	if (p)
-		return p;
-
-	// Character delete's db::Characters on deletion
-	db::Characters* d = new db::Characters(id);
-	p = new Character(d);
-
-	m_characters[id] = p;
-	m_character[d->getname()] = id;
-
-	return p;
-}
-
-value_type Cache::GetCharacterID(const std::string& name)
-{
-	lookup_mi it = m_character.find(name);
-	if(it != m_character.end())
-	{		
-		return it->second;
-	}
-
-	long id = DatabaseMgr::Get()->GetSavableID(Tables::Get()->CHARACTERS, name);
-
-	m_character[name] = id;
-
-	return id;
-}
-
-bool Cache::isActive(value_type id)
-{
-	valueset::iterator it = m_pcharacters.find(id);
-	if(it == m_pcharacters.end())
-		return false;
-	
-	return true;
-}
-
-bool Cache::isActive(cstring name)
-{
-	value_type id = GetCharacterID(name);
-	return isActive(id);
-}
-	
-Race* Cache::GetRace(value_type id)
-{
-	Race* p = m_races[id];
-	if (p)
-		return p;
-
-	// Races delete's db::Races on deletion
-	db::Races* d = new db::Races(id);
-	p = new Race(d);
-
-	m_races[id] = p;
-	m_race[d->getname()] = id;
-	
-	return p;
-}
-
-value_type Cache::GetRaceID(const std::string& name)
-{
-	lookup_mi it = m_race.find(name);
-	if(it != m_race.end())
-	{		
-		return it->second;
-	}
-
-	long id = DatabaseMgr::Get()->GetSavableID(Tables::Get()->RACES, name);
-	m_race[name] = id;
-
-	return id;
-}
-
-Area* Cache::GetArea(value_type id)
-{
-	Area* p = m_areas[id];
-	if (p)
-		return p;
-
-	// Area delete's db::Area on deletion
-	db::Areas* d = new db::Areas(id);
-	p = new Area(d);
-	m_areas[id] = p;
-
-	return p;
-}
-
-Room* Cache::GetRoom(value_type id)
-{
-	Room* p = m_rooms[id];
-	if (p)
-		return p;
-
-	// Room delete's db::Room on deletion
-	db::Rooms* d = new db::Rooms(id);
-	p = new Room(d);
-	m_rooms[id] = p;
-
-	return p;
-}
-
-/*
-value_type Cache::GetRoomID(value_type area, value_type x, value_type y)
-{
-	Coordinate c(area, xycoord(x,y));
-	rlookup_mi it = m_room.find(c);
-	if(it != m_room.end())
-	{		
-		return it->second;
-	}
-
-	Query q(DatabaseMgr::Get()->DBref());
-	value_type num = (value_type)q.get_num(Global::Get()->sprintf(
-		"SELECT %s FROM %s WHERE %s=%d AND x=%d AND y=%d;", 
-		Tables::Get()->ROOMS->tableID().c_str(),
-		Tables::Get()->ROOMS->tableName().c_str(),
-		Tables::Get()->AREAS->tableID().c_str(),
-		area, x, y));
-
-	//m_room[c] = num;
-	// TODO - Cache Room
-
-	return num;
-}
-*/
-// TODO - getroom()
-
-Sector* Cache::GetSector(value_type id)
-{
-	Sector* p = m_sectors[id];
-	if (p)
-		return p;
-
-	// Sector delete's db::Sectors on deletion
-	db::Sectors* d = new db::Sectors(id);
-	p = new Sector(d);
-	
-	m_sectors[id] = p;
-	m_sector[d->getname()] = id;
-
-	return p;
-}
-
-value_type Cache::GetSectorID(const std::string& name)
-{
-	lookup_mi it = m_sector.find(name);
-	if(it != m_sector.end())
-	{		
-		return it->second;
-	}
-
-	long id = DatabaseMgr::Get()->GetSavableID(Tables::Get()->SECTORS, name);
-	m_sector[name] = id;
-
-	return id;
-}
-
-Colour* Cache::GetColour(value_type id)
-{
-	Colour* p = m_colours[id];
-	if (p)
-		return p;
-
-	// Colour delete's db::Colours on deletion
-	db::Colours* d = new db::Colours(id);
-	p = new Colour(d);
-
-	m_colours[id] = p;
-	m_colour[d->getcode()] = id;
-	
-	return p;
-}
-
-value_type Cache::GetColourID(const std::string& code)
-{
-	lookup_mi it = m_colour.find(code);
-	if(it != m_colour.end())
-	{		
-		return it->second;
-	}
-
-	long id = DatabaseMgr::Get()->GetSavableID(Tables::Get()->COLOURS, code, "code");
-	m_colour[code] = id;
-
-	return id;
-}
-
-/*
-Exit* Cache::GetExit(value_type id)
-{
-	Exit* p = m_exits[id];
-	if (p)
-		return p;
-
-	// Exit delete's db::Exits on deletion
-	db::Exits* d = new db::Exits(id);
-	p = new Exit(d);
-
-	m_exits[id] = p;
-	
-	if(!p->Exists())
-		Global::Get()->bugf("Cache::GetExit() was asked to get exit %d, which does not exist!\n", id);
-	return p;
-}
-
-value_type Cache::GetExitID(value_type room, Exit::DIRECTION dir)
-{
-	roomexit e(room, dir);	
-	elookup_mi it = m_exit.find(e);
-	if(it != m_exit.end())
-	{		
-		return it->second;
-	}
-
-	Query q(DatabaseMgr::Get()->DBref());
-	(value_type)q.get_num(Global::Get()->sprintf(
-		"SELECT %s FROM %s WHERE %s=%d AND dir=%d;", 
-		Tables::Get()->EXITS->tableID().c_str(),
-		Tables::Get()->EXITS->tableName().c_str(),
-		Tables::Get()->ROOMS->tableID().c_str(),
-		room, (int)dir));
-
-	m_exit[e] = id;
-
-	return id;
-}
-*/
-
-Command* Cache::GetCommand(value_type id)
-{
-	Command* p = m_commands[id];
-	if (p)
-		return p;
-
-	// Command delete's db::Commands on deletion
-	db::Commands* d = new db::Commands(id);
-	p = new Command(d);
-	
-	m_commands[id] = p;
-	m_command[d->getname()] = id;
-
-	return p;
-}
-
-value_type Cache::GetCommandID(const std::string& name)
-{
-	lookup_mi it = m_command.find(name);
-	if(it != m_command.end())
-	{		
-		return it->second;
-	}
-
-	long id = DatabaseMgr::Get()->GetSavableID(Tables::Get()->COMMANDS, name);
-	m_command[name] = id;
-
-	return id;
-}
-
-GrantGroup* Cache::GetGrantGroup(value_type id)
-{
-	GrantGroup* p = m_grantgroups[id];
+	PCharacter* p = m_playerByName[value];
 	if(p)
 		return p;
 		
-	db::GrantGroups* d = new db::GrantGroups(id);
-	p = new GrantGroup(d);
+	std::ostringstream err;
+	err << "Cache::GetPCharacterByKey(), No character with name '" << value << "' has not been loaded yet.";
+	throw std::invalid_argument(err.str());	
+}
+
+mud::PCharacter* Cache::LoadPCharacterByKey(UBSocket* sock, value_type id)
+{
+	PCharacter* p = m_playerByKey[id];
+	if(p)
+	{
+		std::ostringstream err;
+		err << "Cache::LoadPCharacterByKey(), id '" << id << "' has already been loaded.";
+		throw std::invalid_argument(err.str());
+	}
 	
-	m_grantgroups[id] = p;
-	m_grantgroup[d->getname()] = id;
-	
+	db::Characters* d = db::Characters::bykey(id);
+	p = cachePCharacter(sock, d);
 	return p;
 }
 
-value_type Cache::GetGrantGroupID(const std::string& name)
+mud::PCharacter* Cache::LoadPCharacterByName(UBSocket* sock, cstring value)
 {
-	lookup_mi it = m_grantgroup.find(name);
-	if(it != m_grantgroup.end())
-	{		
+	PCharacter* p = m_playerByName[value];
+	if(p)
+	{
+		std::ostringstream err;
+		err << "Cache::LoadPCharacterByKey(), A character with name '" << value << "' has already been loaded.";
+		throw std::invalid_argument(err.str());
+	}	
+	
+	db::Characters* d = db::Characters::byname(value);
+	p = cachePCharacter(sock, d);
+	return p;
+}
+
+mud::Permission* Cache::GetPermissionByKeys(value_type account, value_type grantgroup)
+{
+	Permission* p = m_permissionByKeys[twoValueKey(account, grantgroup)];
+	if(p)
+		return p;
+		
+	db::Permissions* d = db::Permissions::bykey(account, grantgroup);
+	p = cachePermission(d);
+	return p;	
+}
+		
+mud::Race* Cache::GetRaceByKey(value_type id)
+{
+	Race* p = m_raceByKey[id];
+	if(p)
+		return p;
+		
+	db::Races* d = db::Races::bykey(id);
+	p = cacheRace(d);
+	return p;
+}
+
+mud::Race* Cache::GetRaceByName(cstring value)
+{
+	Race* p = m_raceByName[value];
+	if(p)
+		return p;
+		
+	db::Races* d = db::Races::byname(value);
+	p = cacheRace(d);
+	return p;
+}
+
+mud::Room* Cache::GetRoomByKey(value_type id)
+{
+	Room* p = m_roomByKey[id];
+	if(p)
+		return p;
+		
+	db::Rooms* d = db::Rooms::bykey(id);
+	p = cacheRoom(d);
+	return p;
+}
+
+mud::Sector* Cache::GetSectorByKey(value_type id)
+{
+	Sector* p = m_sectorByKey[id];
+	if(p)
+		return p;
+		
+	db::Sectors* d = db::Sectors::bykey(id);
+	p = cacheSector(d);
+	return p;
+}
+
+mud::Sector* Cache::GetSectorByName(cstring value)
+{
+	Sector* p = m_sectorByName[value];
+	if(p)
+		return p;
+		
+	db::Sectors* d = db::Sectors::byname(value);
+	p = cacheSector(d);
+	return p;
+}
+
+/**
+ *
+ * Lookup
+ * By Field
+ * Functionality 
+ *
+ */ 
+
+value_type mud::Cache::lookupAccountByName(cstring value)
+{
+	reverseStringKey::iterator it = m_lookupAccountByName.find(value);
+	if(it != m_lookupAccountByName.end())
 		return it->second;
-	}
-
-	long id = DatabaseMgr::Get()->GetSavableID(Tables::Get()->GRANTGROUPS, name);
-	m_grantgroup[name] = id;
-
+	
+	value_type id = db::Accounts::lookupname(value);
+	m_lookupAccountByName[value] = id;
 	return id;
 }
 
-Permission* Cache::GetPermission(value_type account, value_type grantgroup)
+value_type mud::Cache::lookupCharacdterByName(cstring value)
 {
-	twokey key(account, grantgroup);
-	Permission* p = m_permissions[key];
-	if (p)
-		return p;
-
-	// Permission delete's db::Permissions on deletion
-	db::Permissions* d = new db::Permissions(account, grantgroup);
-	p = new Permission(d);
+	reverseStringKey::iterator it = m_lookupCharacterByName.find(value);
+	if(it != m_lookupCharacterByName.end())
+		return it->second;
 	
-	m_permissions[key] = p;
-
-	return p;
+	value_type id = db::Characters::lookupname(value);
+	m_lookupCharacterByName[value] = id;
+	return id;
 }
 
-void Cache::CloseAccount(value_type accountid)
+value_type mud::Cache::lookupColourByCode(cstring value)
 {
-	Account* p = m_accounts[accountid];
-	if(p)
-		m_account.erase(p->getName());
-
-	m_accounts.erase(accountid);
-}
-
-void Cache::CloseCharacter(value_type characterid)
-{
-	Character* p = m_characters[characterid];
-	if(p)
-		m_character.erase(p->getName());
-		
-	m_characters.erase(characterid);
-}
-
-void Cache::ClosePCharacter(value_type characterid)
-{
-	PCharacter* p = m_players[characterid];
-	if(p)
-		m_character.erase(p->getName());
-
-	m_players.erase(characterid);
-}
-
-void Cache::CloseMCharacter(value_type characterid)
-{
-	MCharacter* p = m_mobiles[characterid];
-	if(p)
-		m_character.erase(p->getName());
-		
-	m_mobiles.erase(characterid);
-}
-
-void Cache::CloseRace(value_type raceid)
-{
-	Race* p = m_races[raceid];
-	if(p)
-		m_race.erase(p->getName());
+	reverseStringKey::iterator it = m_lookupColourByCode.find(value);
+	if(it != m_lookupColourByCode.end())
+		return it->second;
 	
-	m_races.erase(raceid);
+	value_type id = db::Colours::lookupcode(value);
+	m_lookupColourByCode[value] = id;
+	return id;
 }
 
-void Cache::CloseArea(value_type areaid)
+value_type mud::Cache::lookupColourByName(cstring value)
 {
-	m_areas.erase(areaid);
+	reverseStringKey::iterator it = m_lookupColourByName.find(value);
+	if(it != m_lookupColourByName.end())
+		return it->second;
+	
+	value_type id = db::Colours::lookupname(value);
+	m_lookupColourByName[value] = id;
+	return id;
 }
 
-void Cache::CloseRoom(value_type roomid)
+value_type mud::Cache::lookupCommandByName(cstring value)
 {
-	// Room* p = m_rooms[roomid];
-	m_rooms.erase(roomid);
+	reverseStringKey::iterator it = m_lookupCommandByName.find(value);
+	if(it != m_lookupCommandByName.end())
+		return it->second;
+	
+	value_type id = db::Commands::lookupname(value);
+	m_lookupCommandByName[value] = id;
+	return id;
 }
 
-void Cache::CloseSector(value_type sectorid)
+value_type mud::Cache::lookupGrantGroupByName(cstring value)
 {
-	m_sectors.erase(sectorid);
+	reverseStringKey::iterator it = m_lookupGrantGroupByName.find(value);
+	if(it != m_lookupGrantGroupByName.end())
+		return it->second;
+	
+	value_type id = db::GrantGroups::lookupname(value);
+	m_lookupGrantGroupByName[value] = id;
+	return id;
 }
 
-/*
-void Cache::CloseExit(value_type exitid)
+value_type mud::Cache::lookupRaceByName(cstring value)
 {
-	Exit* p = m_exits[exitid];
-	if(p && p->m_exit)
-		m_exit.erase(roomexit(p->m_exit->fkroom, Exit::DIRECTION(p->m_exit->dir)));
-
-	m_exits.erase(exitid);
-}
-*/
-
-void Cache::CloseColour(value_type colourcode)
-{
-	Colour* p = m_colours[colourcode];
-	if(p)
-		m_colour.erase(p->getCode());
-
-	m_colours.erase(colourcode);
+	reverseStringKey::iterator it = m_lookupRaceByName.find(value);
+	if(it != m_lookupRaceByName.end())
+		return it->second;
+	
+	value_type id = db::Races::lookupname(value);
+	m_lookupRaceByName[value] = id;
+	return id;
 }
 
-void Cache::CloseCommand(value_type commandid)
+value_type mud::Cache::lookupSectorByName(cstring value)
 {
-	Command* p = m_commands[commandid];
-	if(p)
-		m_command.erase(p->getName());
-
-	m_commands.erase(commandid);
+	reverseStringKey::iterator it = m_lookupSectorByName.find(value);
+	if(it != m_lookupSectorByName.end())
+		return it->second;
+	
+	value_type id = db::Sectors::lookupname(value);
+	m_lookupSectorByName[value] = id;
+	return id;
 }
 
-void Cache::CloseGrantGroup(value_type grantgroupid)
-{
-	GrantGroup* p = m_grantgroups[grantgroupid];
-	if(p)
-		m_grantgroup.erase(p->getName());
+/**
+ *
+ * Close
+ * Entity
+ * Functionality 
+ *
+ */ 
 
-	m_grantgroups.erase(grantgroupid);
+void Cache::CloseAccount(value_type id)
+{
+	accounts_m::iterator key = m_accountByKey.find(id);
+	accounts_ms::iterator name = m_accountByName.find(key->second->getName());
+	m_accountByKey.erase(key);
+	m_accountByName.erase(name);
+}
+
+void Cache::CloseArea(value_type id)
+{
+	areas_m::iterator key = m_areaByKey.find(id);
+	m_areaByKey.erase(key);
+}
+
+void Cache::CloseCharacter(value_type id)
+{
+	characters_m::iterator key = m_characterByKey.find(id);
+	characters_ms::iterator name = m_characterByName.find(key->second->getName());
+	m_characterByKey.erase(key);
+	m_characterByName.erase(name);
+}
+
+void Cache::CloseColour(value_type id)
+{
+	colours_m::iterator key = m_colourByKey.find(id);
+	colours_ms::iterator name = m_colourByName.find(key->second->getName());
+	colours_ms::iterator code = m_colourByCode.find(key->second->getCode());
+	m_colourByKey.erase(key);
+	m_colourByName.erase(name);
+	m_colourByCode.erase(code);
+}
+
+void Cache::CloseCommand(value_type id)
+{
+	commands_m::iterator key = m_commandByKey.find(id);
+	commands_ms::iterator name = m_commandByName.find(key->second->getName());
+	m_commandByKey.erase(key);
+	m_commandByName.erase(name);
+}
+
+void Cache::CloseGrantGroup(value_type id)
+{
+	grantgroups_m::iterator key = m_grantgroupByKey.find(id);
+	grantgroups_ms::iterator name = m_grantgroupByName.find(key->second->getName());
+	m_grantgroupByKey.erase(key);
+	m_grantgroupByName.erase(name);
+}
+
+void Cache::CloseMCharacter(value_type id)
+{
+	mobiles_m::iterator key = m_mobileByKey.find(id);
+	mobiles_ms::iterator name = m_mobileByName.find(key->second->getName());
+	m_mobileByKey.erase(key);
+	m_mobileByName.erase(name);
+}
+
+void Cache::ClosePCharacter(value_type id)
+{
+	players_m::iterator key = m_playerByKey.find(id);
+	players_ms::iterator name = m_playerByName.find(key->second->getName());
+	m_playerByKey.erase(key);
+	m_playerByName.erase(name);
 }
 
 void Cache::ClosePermission(value_type account, value_type permission)
 {
-	m_permissions.erase(twokey(account, permission));	
+	permissions_m::iterator key = m_permissionByKeys.find(twoValueKey(account, permission));
+	m_permissionByKeys.erase(key);
 }
-#endif
+
+void Cache::CloseRace(value_type id)
+{
+	races_m::iterator key = m_raceByKey.find(id);
+	races_ms::iterator name = m_raceByName.find(key->second->getName());
+	m_raceByKey.erase(key);
+	m_raceByName.erase(name);	
+}
+
+void Cache::CloseRoom(value_type id)
+{
+	rooms_m::iterator key = m_roomByKey.find(id);
+	m_roomByKey.erase(key);
+}
+
+void Cache::CloseSector(value_type id)
+{
+	sectors_m::iterator key = m_sectorByKey.find(id);
+	sectors_ms::iterator name = m_sectorByName.find(key->second->getName());
+	m_sectorByKey.erase(key);
+	m_sectorByName.erase(name);	
+}
+
+Account* Cache::cacheAccount(db::Accounts* d)
+{
+	Account* p = new Account(d);
+	m_accountByKey[d->getaccountid()] = p;
+	m_accountByName[d->getname()] = p;
+	return p;
+}
+
+Area* Cache::cacheArea(db::Areas* d)
+{
+	Area* p = new Area(d);
+	m_areaByKey[d->getareaid()] = p;
+	return p;
+}
+
+Character* Cache::cacheCharacter(db::Characters *d)
+{
+	Character* p = new Character(d);
+	m_characterByKey[d->getcharacterid()] = p;
+	m_characterByName[d->getname()] = p;
+	return p;
+}
+
+Colour* mud::Cache::cacheColour(db::Colours* d)
+{
+	Colour* p = new Colour(d);
+	m_colourByKey[d->getcolourid()] = p;
+	m_colourByName[d->getname()] = p;
+	m_colourByCode[d->getcode()] = p;
+	return p;
+}
+
+Command* Cache::cacheCommand(db::Commands* d)
+{
+	Command* p = new Command(d);
+	m_commandByKey[d->getcommandid()] = p;
+	m_commandByName[d->getname()] = p;
+	return p;
+}
+
+GrantGroup* Cache::cacheGrantGroup(db::GrantGroups* d)
+{
+	GrantGroup* p = new GrantGroup(d);
+	m_grantgroupByKey[d->getgrantgroupid()] = p;
+	m_grantgroupByName[d->getname()] = p;
+	return p;
+}
+
+MCharacter* Cache::cacheMCharacter(db::Characters* d)
+{
+	MCharacter* p = new MCharacter(d);
+	m_mobileByKey[d->getcharacterid()] = p;
+	m_mobileByName[d->getname()] = p;
+	return p;
+}
+
+PCharacter* Cache::cachePCharacter(UBSocket* sock, db::Characters* d)
+{
+	PCharacter* p = new PCharacter(sock, d);
+	m_playerByKey[d->getcharacterid()] = p;
+	m_pcharactersByKey.insert(d->getcharacterid());
+	m_playerByName[d->getname()] = p;
+	m_pcharactersByName.insert(d->getname());
+	return p;
+}
+
+Permission* Cache::cachePermission(db::Permissions* d)
+{
+	Permission* p = new Permission(d);
+	m_permissionByKeys[twoValueKey(d->getfkAccounts(), d->getfkGrantGroups())] = p;
+	return p;
+}
+
+Race* Cache::cacheRace(db::Races* d)
+{
+	Race* p = new Race(d);
+	m_raceByKey[d->getraceid()] = p;
+	m_raceByName[d->getname()] = p;
+	return p;
+}
+
+Room* Cache::cacheRoom(db::Rooms* d)
+{
+	Room* p = new Room(d);
+	m_roomByKey[d->getroomid()] = p;
+	return p;
+}
+
+Sector* Cache::cacheSector(db::Sectors* d)
+{
+	Sector* p = new Sector(d);
+	m_sectorByKey[d->getsectorid()] = p;
+	m_sectorByName[d->getname()] = p;
+	return p;
+}
