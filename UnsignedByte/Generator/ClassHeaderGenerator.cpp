@@ -192,7 +192,6 @@ void ClassHeaderGenerator::AppendFields()
 	if(m_table->lookupsize())
 	{
 		(*m_file) << m_tabs << m_tabs << "// Lookup" << endl;
-		(*m_file) << m_tabs << m_tabs << "std::string m_lookupfield;" << endl;
 		(*m_file) << m_tabs << m_tabs << "std::string m_lookupvalue;" << endl;
 		(*m_file) << endl;
 	}

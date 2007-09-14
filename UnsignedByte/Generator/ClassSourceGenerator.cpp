@@ -306,10 +306,7 @@ void ClassSourceGenerator::AppendBindLookup()
 	if(m_table->lookupsize())
 	{
 		(*m_file) << m_tabs << "int rc;" << endl;
-		(*m_file) << m_tabs << "rc = sqlite3_bind_text(stmt, 1, m_lookupfield.c_str(), m_lookupfield.size(), SQLITE_TRANSIENT);" << endl;
-		(*m_file) << m_tabs << "if(rc != SQLITE_OK)" << endl;
-		(*m_file) << m_tabs << m_tabs << "throw new std::runtime_error(\"SqliteMgr::bindLookup(), rc != SQLITE_OK.\");" << endl;
-		(*m_file) << m_tabs << "rc = sqlite3_bind_text(stmt, 2, m_lookupvalue.c_str(), m_lookupvalue.size(), SQLITE_TRANSIENT);" << endl;
+		(*m_file) << m_tabs << "rc = sqlite3_bind_text(stmt, 1, m_lookupvalue.c_str(), m_lookupvalue.size(), SQLITE_TRANSIENT);" << endl;
 		(*m_file) << m_tabs << "if(rc != SQLITE_OK)" << endl;
 		(*m_file) << m_tabs << m_tabs << "throw new std::runtime_error(\"SqliteMgr::bindLookup(), rc != SQLITE_OK.\");" << endl;
 	}
