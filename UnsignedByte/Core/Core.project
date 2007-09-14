@@ -76,7 +76,7 @@
     <File Name="EditorString.h"/>
   </VirtualDirectory>
   <Settings Type="Executable">
-    <Configuration Name="Debug" CompilerType="gnu g++" DebuggerType="GNU gdb debugger">
+    <Configuration Name="Debug" CompilerType="gnu g++" DebuggerType="">
       <General OutputFile="../bin/UnsignedByte" IntermediateDirectory="./Debug" Command="UnsignedByte" CommandArguments="" WorkingDirectory="../bin"/>
       <Compiler Required="yes" Options="-g -Wall">
         <IncludePath Value="."/>

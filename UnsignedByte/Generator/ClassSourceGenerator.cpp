@@ -174,9 +174,8 @@ void ClassSourceGenerator::AppendCtorFactory()
 			(*m_file) << "value_type value);" << endl;
 		(*m_file) << "{" << endl;
 		(*m_file) << m_tabs << m_name << "* result = new " << m_name << "();" << endl;
-		(*m_file) << m_tabs << "result->m_lookupfield = \"" << (*it)->getName() << "\";" << endl;
 		(*m_file) << m_tabs << "result->m_lookupvalue = value;" << endl;
-		(*m_file) << m_tabs << "SqliteMgr::Get()->doLookup(result);" << endl;
+		(*m_file) << m_tabs << "SqliteMgr::Get()->doLookup(result,\"" << (*it)->getName() << "\");" << endl;
 		(*m_file) << m_tabs << "return result;" << endl;
 		(*m_file) << "}" << endl;
 		(*m_file) << endl;
@@ -193,9 +192,8 @@ void ClassSourceGenerator::AppendCtorFactory()
 				(*m_file) << "value_type value);" << endl;
 			(*m_file) << "{" << endl;
 			(*m_file) << m_tabs << m_name << " result;" << endl;
-			(*m_file) << m_tabs << "result.m_lookupfield = \"" << (*it)->getName() << "\";" << endl;
 			(*m_file) << m_tabs << "result.m_lookupvalue = value;" << endl;
-			(*m_file) << m_tabs << "SqliteMgr::Get()->doLookup(&result);" << endl;
+			(*m_file) << m_tabs << "SqliteMgr::Get()->doLookup(&result, \"" << (*it)->getName() << "\");" << endl;
 			(*m_file) << m_tabs << "value_type key = result.get" << m_table->firstKey() << "();" << endl;
 			(*m_file) << m_tabs << "return key;" << endl;
 			(*m_file) << "}" << endl;
@@ -307,8 +305,13 @@ void ClassSourceGenerator::AppendBindLookup()
 	(*m_file) << "{" << endl;
 	if(m_table->lookupsize())
 	{
-		(*m_file) << m_tabs << "sqlite3_bind_text(stmt, 1, m_lookupfield.c_str(), m_lookupfield.size(), SQLITE_TRANSIENT);" << endl;
-		(*m_file) << m_tabs << "sqlite3_bind_text(stmt, 2, m_lookupvalue.c_str(), m_lookupvalue.size(), SQLITE_TRANSIENT);" << endl;
+		(*m_file) << m_tabs << "int rc;" << endl;
+		(*m_file) << m_tabs << "rc = sqlite3_bind_text(stmt, 1, m_lookupfield.c_str(), m_lookupfield.size(), SQLITE_TRANSIENT);" << endl;
+		(*m_file) << m_tabs << "if(rc != SQLITE_OK)" << endl;
+		(*m_file) << m_tabs << m_tabs << "throw new std::runtime_error(\"SqliteMgr::bindLookup(), rc != SQLITE_OK.\");" << endl;
+		(*m_file) << m_tabs << "rc = sqlite3_bind_text(stmt, 2, m_lookupvalue.c_str(), m_lookupvalue.size(), SQLITE_TRANSIENT);" << endl;
+		(*m_file) << m_tabs << "if(rc != SQLITE_OK)" << endl;
+		(*m_file) << m_tabs << m_tabs << "throw new std::runtime_error(\"SqliteMgr::bindLookup(), rc != SQLITE_OK.\");" << endl;
 	}
 	else
 	{
@@ -339,17 +342,37 @@ void ClassSourceGenerator::AppendParseSelect()
 {
 	if(!m_file)
 		throw std::logic_error("Source file is not open for writing.\n");
+		
+	bool hasText = false;
+	for(Fields::const_iterator it = m_table->begin(); it != m_table->end(); it++)
+	{
+		if((*it)->isText())
+		{
+			hasText = true;
+			break;
+		}
+	}
 	
 	(*m_file) << "void " << m_name << "::parseSelect(sqlite3_stmt* stmt)" << endl;
 	(*m_file) << "{" << endl;
+	
+	if(hasText)
+		(*m_file) << m_tabs << "const unsigned char * text;" << endl;
+
 	int count = 0;
 	for(Fields::const_iterator it = m_table->begin(); it != m_table->end(); it++)
 	{
-		(*m_file) << m_tabs << "m_" << (*it)->getName() << " = ";
 		if((*it)->isText())
-			(*m_file) << "std::string((const char *)sqlite3_column_text(stmt, " << count << "));" << endl;
+		{
+			(*m_file) << m_tabs << "text = sqlite3_column_text(stmt, " << count << ");" << endl;
+			(*m_file) << m_tabs << "m_" << (*it)->getName() << " = ";
+			(*m_file) << "std::string((const char *)text);" << endl;
+		}
 		else
+		{
+			(*m_file) << m_tabs << "m_" << (*it)->getName() << " = ";
 			(*m_file) << "sqlite3_column_int64(stmt, " << count << ");" << endl;
+		}
 
 		count++;
 	}

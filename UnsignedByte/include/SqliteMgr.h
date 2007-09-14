@@ -42,7 +42,7 @@ class SqliteMgr
 		void doErase(Bindable* bindable);
 		void doUpdate(Bindable* bindable);
 		void doSelect(Bindable* bindable);
-		void doLookup(Bindable* bindable);
+		void doLookup(Bindable* bindable, const std::string& field);
 		void doList(Table* table);
 	
 	private:
@@ -57,7 +57,7 @@ class SqliteMgr
 		sqlite3_stmt* getEraseStmt(Table* table);
 		sqlite3_stmt* getUpdateStmt(Table* table);
 		sqlite3_stmt* getSelectStmt(Table* table);
-		sqlite3_stmt* getLookupStmt(Table* table);
+		sqlite3_stmt* getLookupStmt(Table* table, const std::string& field);
 		sqlite3_stmt* getListStmt(Table* table);
 	
 		SqliteMgr();

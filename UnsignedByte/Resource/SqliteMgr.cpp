@@ -67,8 +67,11 @@ void SqliteMgr::doInsert(Bindable* bindable)
 	sqlite3_stmt* insert = getInsertStmt(table);
 	
 	bindable->bindKeys(insert);	
-	doStatement(insert);
-	bindable->parseInsert(m_odb->db);
+	bool row = doStatement(insert);
+	if(row)
+		bindable->parseInsert(m_odb->db);
+	else
+		throw new std::runtime_error("SqliteMgr::doInsert(), no row returned.");
 }
 
 void SqliteMgr::doErase(Bindable* bindable)
@@ -99,14 +102,17 @@ void SqliteMgr::doSelect(Bindable* bindable)
 	bindable->parseSelect(select);
 }
 
-void SqliteMgr::doLookup(Bindable* bindable)
+void SqliteMgr::doLookup(Bindable* bindable, const std::string& field)
 {
 	Table* table = bindable->getTable();
-	sqlite3_stmt* lookup = getLookupStmt(table);
+	sqlite3_stmt* lookup = getLookupStmt(table, field);
 	
 	bindable->bindLookup(lookup);
-	doStatement(lookup);
-	bindable->parseSelect(lookup);
+	bool row = doStatement(lookup);
+	if(row)
+		bindable->parseSelect(lookup);
+	else
+		throw new std::runtime_error("SqliteMgr::doLookup(), no row returned.");
 }
 
 void SqliteMgr::doList(Table* table)
@@ -324,10 +330,10 @@ sqlite3_stmt* SqliteMgr::getSelectStmt(Table* table)
 	return statement;
 }
 
-sqlite3_stmt* SqliteMgr::getLookupStmt(Table* table)
+sqlite3_stmt* SqliteMgr::getLookupStmt(Table* table, const std::string& field)
 {
 	Statements* statements = getStatements(table);
-	sqlite3_stmt* statement = statements->getLookup();
+	sqlite3_stmt* statement = statements->getLookup(field);
 	if(statement)
 		return statement;
 		
@@ -343,7 +349,9 @@ sqlite3_stmt* SqliteMgr::getLookupStmt(Table* table)
 	 
 	sql.append(" from ");
 	sql.append(table->tableName());
-	sql.append(" where ?=?");
+	sql.append(" where ");
+	sql.append(field);
+	sql.append("=?");
 	sql.append(";");
 	
 	Global::Get()->logf("SQL is: %s\n", sql.c_str());
@@ -356,7 +364,7 @@ sqlite3_stmt* SqliteMgr::getLookupStmt(Table* table)
 	if(m_leftover != NULL && strlen(m_leftover) > 0)
 		throw std::runtime_error("SqliteMgr::getLookupStmt(), Leftover from lookup is not NULL!");
 		
-	statements->setLookup(statement);
+	statements->setLookup(field, statement);
 	return statement;
 }
 

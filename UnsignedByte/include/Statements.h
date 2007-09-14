@@ -21,6 +21,7 @@
 #pragma once
 
 #include <string>
+#include <map>
 
 class sqlite3_stmt;
 
@@ -36,7 +37,7 @@ public:
 	sqlite3_stmt* getInsert() const {return m_insert;}
 	sqlite3_stmt* getUpdate() const {return m_update;}
 	sqlite3_stmt* getSelect() const {return m_select;}
-	sqlite3_stmt* getLookup() const {return m_lookup;}
+	sqlite3_stmt* getLookup(const std::string& field) {return m_lookup[field];}
 	sqlite3_stmt* getList() const {return m_list;}
 	
 	// Setters
@@ -44,14 +45,16 @@ public:
 	void setInsert(sqlite3_stmt* insert) { m_insert = insert; }
 	void setUpdate(sqlite3_stmt* update) { m_update = update; }
 	void setSelect(sqlite3_stmt* select) { m_select = select; }
-	void setLookup(sqlite3_stmt* lookup) { m_lookup = lookup; }
+	void setLookup(const std::string& field, sqlite3_stmt* lookup) { m_lookup[field] = lookup; }
 	void setList(sqlite3_stmt* list) { m_list = list; }
 	
 private:
+	typedef std::map<std::string, sqlite3_stmt*> fieldmap;
+	
 	sqlite3_stmt* m_insert;
 	sqlite3_stmt* m_erase;
 	sqlite3_stmt* m_update;
 	sqlite3_stmt* m_select;
-	sqlite3_stmt* m_lookup;
+	fieldmap m_lookup;
 	sqlite3_stmt* m_list;
 };

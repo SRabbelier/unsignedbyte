@@ -25,7 +25,8 @@ Statements::Statements() :
 m_insert(NULL),
 m_erase(NULL),
 m_update(NULL),
-m_select(NULL)
+m_select(NULL),
+m_list(NULL)
 {
 	
 }
