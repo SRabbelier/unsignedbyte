@@ -67,11 +67,8 @@ void SqliteMgr::doInsert(Bindable* bindable)
 	sqlite3_stmt* insert = getInsertStmt(table);
 	
 	bindable->bindKeys(insert);	
-	bool row = doStatement(insert);
-	if(row)
-		bindable->parseInsert(m_odb->db);
-	else
-		throw new std::runtime_error("SqliteMgr::doInsert(), no row returned.");
+	doStatement(insert);
+	bindable->parseInsert(m_odb->db);
 }
 
 void SqliteMgr::doErase(Bindable* bindable)
