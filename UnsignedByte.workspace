@@ -6,6 +6,7 @@
   <Project Name="Core" Path="UnsignedByte/Core/Core.project" Active="Yes"/>
   <Project Name="Core" Path="UnsignedByte/Core/Core.project" Active="No"/>
   <Project Name="Initializer" Path="UnsignedByte/Initializer/Initializer.project" Active="No"/>
+  <Project Name="Sqlite3" Path="UnsignedByte/Sqlite3/Sqlite3.project"/>
   <BuildMatrix>
     <WorkspaceConfiguration Name="Debug" Selected="yes">
       <Project Name="Resource" ConfigName="Debug"/>
@@ -13,6 +14,7 @@
       <Project Name="DAL" ConfigName="Debug"/>
       <Project Name="Core" ConfigName="Debug"/>
       <Project Name="Initializer" ConfigName="Debug"/>
+      <Project Name="Sqlite3" ConfigName="Debug"/>
     </WorkspaceConfiguration>
   </BuildMatrix>
   <Environment>

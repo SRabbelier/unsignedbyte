@@ -87,9 +87,9 @@
         <LibraryPath Value="../lib"/>
         <Library Value="pthread"/>
         <Library Value="dl"/>
-        <Library Value="sqlite3"/>
         <Library Value="ubdal"/>
         <Library Value="ubresource"/>
+        <Library Value="MySqlite3"/>
       </Linker>
       <ResourceCompiler Required="no" Options=""/>
       <PreBuild/>

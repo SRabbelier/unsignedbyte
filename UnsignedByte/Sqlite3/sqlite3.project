@@ -6,25 +6,35 @@
   <VirtualDirectory Name="Header Files">
     <File Name="sqlite3.h"/>
   </VirtualDirectory>
+  <Dependencies/>
   <Settings Type="Static Library">
-    <Configuration Name="ReleaseANSI" CompilerType="gnu gcc">
-      <General OutputFile="../libmysqlite3.a" IntermediateDirectory="./Release" Command="" CommandArguments="" WorkingDirectory="./Release"/>
+    <Configuration Name="ReleaseANSI" CompilerType="gnu gcc" DebuggerType="GNU gdb debugger">
+      <General OutputFile="../lib/libmysqlite3.a" IntermediateDirectory="./Release" Command="" CommandArguments="" WorkingDirectory="./Release"/>
       <Compiler Required="yes" Options="-O2">
         <IncludePath Value="."/>
       </Compiler>
       <Linker Required="yes" Options=" "/>
+      <ResourceCompiler Required="no" Options=""/>
       <PreBuild/>
       <PostBuild/>
+      <CustomBuild Enabled="no">
+        <CleanCommand></CleanCommand>
+        <BuildCommand></BuildCommand>
+      </CustomBuild>
     </Configuration>
-    <Configuration Name="ReleaseANSIStaticLibrary" CompilerType="gnu gcc">
+    <Configuration Name="ReleaseANSIStaticLibrary" CompilerType="gnu gcc" DebuggerType="">
       <General OutputFile="../lib/gcc_lib/libsqlite3.a" IntermediateDirectory="./Release_static" Command="" CommandArguments="" WorkingDirectory=""/>
       <Compiler Required="yes" Options="-O2">
         <IncludePath Value="."/>
       </Compiler>
       <Linker Required="yes" Options=""/>
+      <ResourceCompiler Required="no" Options=""/>
       <PreBuild/>
       <PostBuild/>
+      <CustomBuild Enabled="no">
+        <CleanCommand></CleanCommand>
+        <BuildCommand></BuildCommand>
+      </CustomBuild>
     </Configuration>
   </Settings>
-  <Dependencies/>
 </CodeLite_Project>

@@ -1,6 +1,8 @@
 .PHONY: clean All
 
 All:
+	@echo ----------Building project:[ Sqlite3 - Debug ]----------
+	@cd "UnsignedByte/Sqlite3" && "make" -f "Sqlite3.mk" type=Debug 
 	@echo ----------Building project:[ Resource - Debug ]----------
 	@cd "UnsignedByte/Resource" && "make" -f "Resource.mk" type=Debug 
 	@echo ----------Building project:[ Generator - Debug ]----------
@@ -10,6 +12,8 @@ All:
 	@echo ----------Building project:[ Initializer - Debug ]----------
 	@cd "UnsignedByte/Initializer" && "make" -f "Initializer.mk" type=Debug 
 clean:
+	@echo ----------Building project:[ Sqlite3 - Debug ]----------
+	@cd "UnsignedByte/Sqlite3" && "make" -f "Sqlite3.mk" type=Debug  clean
 	@echo ----------Building project:[ Resource - Debug ]----------
 	@cd "UnsignedByte/Resource" && "make" -f "Resource.mk" type=Debug  clean
 	@echo ----------Building project:[ Generator - Debug ]----------

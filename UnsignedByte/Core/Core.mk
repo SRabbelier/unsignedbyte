@@ -30,7 +30,7 @@ RcCmpOptions=
 LinkOptions=
 IncludePath=$(IncludeSwitch). $(IncludeSwitch)../include 
 RcIncludePath=
-Libs=$(LibrarySwitch)pthread $(LibrarySwitch)dl $(LibrarySwitch)sqlite3 $(LibrarySwitch)ubdal $(LibrarySwitch)ubresource 
+Libs=$(LibrarySwitch)pthread $(LibrarySwitch)dl $(LibrarySwitch)ubdal $(LibrarySwitch)ubresource $(LibrarySwitch)MySqlite3 
 LibPath=$(LibraryPathSwitch). $(LibraryPathSwitch)../lib 
 endif
 
