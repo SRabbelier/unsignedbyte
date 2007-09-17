@@ -94,7 +94,7 @@ void Room::Send(const std::string& msg)
 	*/
 }
 
-void Room::Sendf(char* format, ...)
+void Room::Sendf(const char* format, ...)
 {
 	va_list args;
 	va_start(args, format);

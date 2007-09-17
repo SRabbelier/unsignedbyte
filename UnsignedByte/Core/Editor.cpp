@@ -49,7 +49,7 @@ void Editor::Send(const std::string& msg)
 	m_sock->Send(msg); 
 }
 
-void Editor::Sendf(char* format, ...)
+void Editor::Sendf(const char* format, ...)
 {
 	va_list args;
 	va_start(args, format);

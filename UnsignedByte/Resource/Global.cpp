@@ -34,7 +34,7 @@ Global::~Global()
 
 }
 
-std::string Global::sprintf(char* format, ...)
+std::string Global::sprintf(const char* format, ...)
 {
 	va_list args;
 	va_start(args, format);

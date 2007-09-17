@@ -56,10 +56,120 @@ bool Cache::isActive(cstring value)
 }
 
 /**
+ *
+ *	 Adding
+ *	 New
+ *	 Rows
+ *	 Functionality
+ * 
+ */ 
+
+value_type mud::Cache::AddAccount()
+{
+	db::Accounts d;
+	d.save();
+	value_type id = d.getaccountid();
+	if(id == 0)
+		Global::Get()->bug("Cache::AddAcount(), id = 0");
+		
+	return id;
+}
+
+value_type mud::Cache::AddArea()
+{
+	db::Areas d;
+	d.save();
+	value_type id = d.getareaid();
+	if(id == 0)
+		Global::Get()->bug("Cache::AddArea(), id = 0");
+		
+	return id;
+}
+
+value_type mud::Cache::AddCharacter()
+{
+	db::Characters d;
+	d.save();
+	value_type id = d.getcharacterid();
+	if(id == 0)
+		Global::Get()->bug("Cache::AddCharacter(), id = 0");
+		
+	return id;
+}
+
+value_type mud::Cache::AddColour()
+{
+	db::Colours d;
+	d.save();
+	value_type id = d.getcolourid();
+	if(id == 0)
+		Global::Get()->bug("Cache::AddColour(), id = 0");
+	
+	return id;
+}
+
+value_type mud::Cache::AddCommand()
+{
+	db::Commands d;
+	d.save();
+	value_type id = d.getcommandid();
+	if(id == 0)
+		Global::Get()->bug("Cache::AddCommand(), id = 0");
+	
+	return id;
+}
+
+value_type mud::Cache::AddGrantGroup()
+{
+	db::GrantGroups d;
+	d.save();
+	value_type id = d.getgrantgroupid();
+	if(id == 0)
+		Global::Get()->bug("Cache::AddGrantGroup(), id = 0");
+	
+	return id;
+}
+
+value_type mud::Cache::AddRace()
+{
+	db::Races d;
+	d.save();
+	value_type id = d.getraceid();
+	if(id == 0)
+		Global::Get()->bug("Cache::AddRace(), id = 0");
+	
+	return id;
+}
+
+value_type mud::Cache::AddRoom()
+{
+	db::Rooms d;
+	d.save();
+	value_type id = d.getroomid();
+	if(id == 0)
+		Global::Get()->bug("Cache::AddRoom(), id = 0");
+	
+	return id;
+}
+
+value_type mud::Cache::AddSector()
+{	
+	db::Sectors d;
+	d.save();
+	value_type id = d.getsectorid();
+	if(id == 0)
+		Global::Get()->bug("Cache::AddSector(), id = 0");
+	
+	return id;	
+}
+
+/**
+ *
  *   Wrapped
  *   Database
  *   Object
  *	 Retreival 
+ * 
  */
 
 Account* Cache::GetAccountByKey(value_type id)

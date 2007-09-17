@@ -37,7 +37,7 @@ public:
 	virtual void dispatch(const std::string& action, const std::string& argument) { return; };
 	
 	void Send(const std::string& msg);
-	void Sendf(char* format, ...);
+	void Sendf(const char* format, ...);
 	void Disconnect();
 
 protected:

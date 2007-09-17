@@ -13,7 +13,7 @@
  *   GNU General Public License for more details.                          *
  *                                                                         *
  *   You should have received a copy of the GNU General Public License     *
- *   avalue_type with this program; if not, write to the                         *
+ *   along with this program; if not, write to the                         *
  *   Free Software Foundation, Inc.,                                       *
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
@@ -39,7 +39,7 @@ namespace mud
 	class Room;
 	class Sector;
 	class PCharacter;
-	class Permission;
+	class Permission; 
 }
 
 class UBSocket;
@@ -90,6 +90,16 @@ namespace mud
 	public:
 		bool isActive(value_type id);
 		bool isActive(cstring name);
+		
+		value_type AddAccount();
+		value_type AddArea();
+		value_type AddCharacter();
+		value_type AddColour();
+		value_type AddCommand();
+		value_type AddGrantGroup();
+		value_type AddRace();
+		value_type AddRoom();
+		value_type AddSector();
 
 		mud::Account* GetAccountByKey(value_type id);
 		mud::Account* GetAccountByName(cstring name);

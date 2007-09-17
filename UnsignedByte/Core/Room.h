@@ -52,7 +52,7 @@ namespace mud
 		// Characters getCharacters();
 
 		void Send(const std::string& msg);
-		void Sendf(char* format, ...);
+		void Sendf(const char* format, ...);
 
 		/**
 		 * \brief Utilities

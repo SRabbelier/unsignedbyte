@@ -43,7 +43,7 @@ public:
 	std::string EmptyString;
 	long EmptyLong;
 
-	std::string sprintf(char* format, ...);
+	std::string sprintf(const char* format, ...);
 	std::string sprint(va_list& args, const char* format);
 
 	void bug(const char* msg);

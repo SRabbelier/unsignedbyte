@@ -31,7 +31,7 @@ namespace mud
 	{
 	public:
 		virtual void OnSend(const std::string& msg);
-		virtual void OnSendf(char* format, ...);
+		virtual void OnSendf(const char* format, ...);
 		
 		/**
 		 * Start of Commands

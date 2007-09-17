@@ -67,7 +67,7 @@ void Character::OnSend(const std::string& msg)
 	return;
 }
 
-void Character::OnSendf(char* format, ...)
+void Character::OnSendf(const char* format, ...)
 {
 	va_list args;
 	va_start(args, format);
