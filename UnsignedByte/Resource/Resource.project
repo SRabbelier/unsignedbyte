@@ -103,7 +103,6 @@
     <File Name="../include/StdLog.h"/>
     <File Name="../include/StdoutLog.h"/>
     <File Name="../include/StreamSocket.h"/>
-    <File Name="../include/String.h"/>
     <File Name="../include/TcpSocket.h"/>
     <File Name="../include/telnet.h"/>
     <File Name="../include/Thread.h"/>

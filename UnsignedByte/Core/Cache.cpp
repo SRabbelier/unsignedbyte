@@ -447,6 +447,26 @@ mud::Sector* Cache::GetSectorByName(cstring value)
 
 /**
  *
+ * Database
+ * Relation
+ * Checking 
+ *
+ */ 
+
+bool mud::Cache::existsCharacterWithAccount(value_type characterid, value_type accountid)
+{
+	db::CharacterAccount* d = m_map[twokey(accountid, characterid)];
+	if(d)
+		return d->exists();
+	
+	d = db::CharacterAccount::bykey(accountid, characterid);
+	cacheCharacterAccount(d);
+	return d->exists();
+}
+
+
+/**
+ *
  * Lookup
  * By Field
  * Functionality 
@@ -464,7 +484,7 @@ value_type mud::Cache::lookupAccountByName(cstring value)
 	return id;
 }
 
-value_type mud::Cache::lookupCharacdterByName(cstring value)
+value_type mud::Cache::lookupCharacterByName(cstring value)
 {
 	reverseStringKey::iterator it = m_lookupCharacterByName.find(value);
 	if(it != m_lookupCharacterByName.end())

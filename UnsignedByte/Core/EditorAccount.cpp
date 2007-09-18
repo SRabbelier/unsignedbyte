@@ -133,18 +133,18 @@ void EditorAccount::Login::Run(UBSocket* sock, const std::string &argument)
 		return;
 	}
 
-	/*
-	int id = Cache::Get()->GetCharacterID(argument);
+	int id = mud::Cache::lookupCharacterByName(argument);
 	if(id <= 0)
 	{
 		sock->Sendf("Got ID %d, which is <= 0, disconnecting you now.\n", id);
 		sock->SetCloseAndDelete();
 		return;
 	}
-	*/
+
+
 
 	// TODO - Check if isAccount before loading
-	mud::PCharacter* Ch = Cache::Get()->LoadPCharacterByName(sock, argument);
+	mud::PCharacter* Ch = Cache::Get()->LoadPCharacterByKey(sock, id);
 	if(!Ch->isAccount(sock->GetAccount()))
 	{
 		Cache::Get()->ClosePCharacter(Ch->getID());

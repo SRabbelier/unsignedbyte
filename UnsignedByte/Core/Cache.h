@@ -138,8 +138,10 @@ namespace mud
 		mud::Sector* GetSectorByKey(value_type id);
 		mud::Sector* GetSectorByName(cstring name);
 		
+		bool existsCharacterWithAccount(value_type characterid, value_type accountid);
+		
 		value_type lookupAccountByName(cstring value);
-		value_type lookupCharacdterByName(cstring value);
+		value_type lookupCharacterByName(cstring value);
 		value_type lookupColourByCode(cstring value);
 		value_type lookupColourByName(cstring value);
 		value_type lookupCommandByName(cstring value);
