@@ -90,9 +90,7 @@ Table* EditorGrantGroup::getTable()
 
 long EditorGrantGroup::addNew()
 {
-	// return mud::Cache::Get()->AddGrantGroup();
-	// TODO - addNew()
-	return 0;
+	return mud::Cache::Get()->AddGrantGroup();
 }
 
 std::vector<std::string> EditorGrantGroup::getList()

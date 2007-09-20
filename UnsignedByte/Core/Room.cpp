@@ -51,47 +51,17 @@ Room::~Room(void)
 	m_room = NULL;
 }
 
-/*
-Characters Room::getCharacters()
+const mud::Characters& mud::Room::getCharactersInRoom()
 {
-	Longs ids = DatabaseMgr::Get()->GetSavableIDS(
-		Tables::Get()->CHARACTERS, 
-		m_room->roomid, 
-		Tables::Get()->ROOMS->tableID());
-
-	Characters result;
-	for(Longs::iterator it = ids.begin(); it != ids.end(); it++)
-	{
-		long id = *it;
-		if(!Cache::Get()->isActive(id))
-			continue;
-
-		try
-		{
-			Character* Ch = Cache::Get()->GetCharacter(id);
-			result.push_back(Ch);
-		}
-		catch(std::exception& e)
-		{
-			Global::Get()->bug(e.what());
-		}
-	}
-
-	return result;
+	return m_charactersInRoom;
 }
-*/
 
 void Room::Send(const std::string& msg)
 {
-	// TODO - send msg to all characters in room
-	/*
-	Characters inroom = getCharacters();
+	Characters inroom = getCharactersInRoom();
 	
 	for(Characters::iterator it = inroom.begin(); it != inroom.end(); it++)
-	{
 		(*it)->OnSend(msg);
-	}
-	*/
 }
 
 void Room::Sendf(const char* format, ...)

@@ -49,8 +49,11 @@ public:
 
 private:
 	mud::Permission* m_permission;
-	EditorPermission(const EditorPermission& rhs) : OLCEditor(rhs.m_sock) {};
-	EditorPermission operator=(const EditorPermission& rhs) { return *this; };
+	value_type m_account;
+	value_type m_grantgroup;
+	
+	EditorPermission(const EditorPermission& rhs);
+	EditorPermission operator=(const EditorPermission& rhs);
 
 	typedef EditorAction<UBSocket, mud::Permission> PermissionAction;
 

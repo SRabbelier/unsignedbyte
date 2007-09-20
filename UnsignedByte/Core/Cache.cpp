@@ -381,12 +381,14 @@ mud::PCharacter* Cache::LoadPCharacterByName(UBSocket* sock, cstring value)
 
 mud::Permission* Cache::GetPermissionByKeys(value_type account, value_type grantgroup)
 {
-	Permission* p = m_permissionByKeys[twoValueKey(account, grantgroup)];
+	twoValueKey key(account, grantgroup);
+	Permission* p = m_permissionByKeys[key];
 	if(p)
 		return p;
 		
 	db::Permissions* d = db::Permissions::bykey(account, grantgroup);
-	p = cachePermission(d);
+	p = new Permission(d);
+	m_permissionByKeys[key] = p;
 	return p;	
 }
 		
@@ -455,12 +457,13 @@ mud::Sector* Cache::GetSectorByName(cstring value)
 
 bool mud::Cache::existsCharacterWithAccount(value_type characterid, value_type accountid)
 {
-	db::CharacterAccount* d = m_map[twokey(accountid, characterid)];
+	twoValueKey key(accountid, characterid);
+	db::CharacterAccount* d = m_characteraccountByKey[key];
 	if(d)
 		return d->exists();
 	
 	d = db::CharacterAccount::bykey(accountid, characterid);
-	cacheCharacterAccount(d);
+	m_characteraccountByKey[key] = d;
 	return d->exists();
 }
 
@@ -724,13 +727,6 @@ PCharacter* Cache::cachePCharacter(UBSocket* sock, db::Characters* d)
 	m_pcharactersByKey.insert(d->getcharacterid());
 	m_playerByName[d->getname()] = p;
 	m_pcharactersByName.insert(d->getname());
-	return p;
-}
-
-Permission* Cache::cachePermission(db::Permissions* d)
-{
-	Permission* p = new Permission(d);
-	m_permissionByKeys[twoValueKey(d->getfkAccounts(), d->getfkGrantGroups())] = p;
 	return p;
 }
 

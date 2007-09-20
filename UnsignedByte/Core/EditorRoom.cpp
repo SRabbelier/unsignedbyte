@@ -102,9 +102,7 @@ Table* EditorRoom::getTable()
 
 long EditorRoom::addNew()
 {
-	// return mud::Cache::Get()->AddRoom();
-	// TODO - addNew()
-	return 0;
+	return mud::Cache::Get()->AddRoom();
 }
 
 std::vector<std::string> EditorRoom::getList()

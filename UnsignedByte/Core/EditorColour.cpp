@@ -91,8 +91,7 @@ Table* EditorColour::getTable()
 
 long EditorColour::addNew()
 {
-	// return mud::Cache::Get()->AddColour();
-	// TODO - addNew()
+	return mud::Cache::Get()->AddColour();
 	return 0;
 }
 

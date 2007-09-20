@@ -89,9 +89,7 @@ Table* EditorArea::getTable()
 
 long EditorArea::addNew()
 {
-	// return mud::Cache::Get()->AddArea();
-	// TODO - addNew()
-	return 0;
+	return mud::Cache::Get()->AddArea();
 }
 
 std::vector<std::string> EditorArea::getList()

@@ -176,9 +176,7 @@ void EditorNewCharacter::OnLine(const std::string &line)
 			return;			
 		}
 
-		// long id = mud::Cache::Get()->AddCharacter();
-		// TODO - AddCharacter()
-		long id = 0;
+		long id = mud::Cache::Get()->AddCharacter();
 		if(id <= 0)
 		{
 			m_sock->Send("For some reason your characters newly inserted id is <= 0.\n");

@@ -34,7 +34,6 @@ namespace mud
 		void Quit();
 		void Save();
 		void OnSend(const std::string& msg);
-		bool isAccount(Account* account);
 		
 		static void Close(PCharacter* Ch);
 		

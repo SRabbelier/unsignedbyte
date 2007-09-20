@@ -91,9 +91,7 @@ Table* EditorCommand::getTable()
 
 long EditorCommand::addNew()
 {
-	// return mud::Cache::Get()->AddCommand();
-	// TODO - addNew()
-	return 0;
+	return mud::Cache::Get()->AddCommand();
 }
 
 std::vector<std::string> EditorCommand::getList()

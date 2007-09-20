@@ -26,8 +26,8 @@
 
 namespace mud
 {
-	// class Character;
-	// typedef std::vector<Character*> Characters;
+	class Character;
+	typedef std::vector<Character*> Characters;
 	
 	class Room : public Savable
 	{
@@ -49,7 +49,7 @@ namespace mud
 		void setWidth(long width) { m_room->setwidth(width); }
 		void setLength(long length) { m_room->setlength(length); }
 
-		// Characters getCharacters();
+		const Characters& getCharactersInRoom();
 
 		void Send(const std::string& msg);
 		void Sendf(const char* format, ...);
@@ -78,6 +78,7 @@ namespace mud
 
 	private:
 		db::Rooms* m_room;
+		Characters m_charactersInRoom;
 
 		Room(db::Rooms* room);
 		Room(const Room& rhs) {};

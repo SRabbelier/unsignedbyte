@@ -91,7 +91,7 @@ Table* EditorPermission::getTable()
 
 long EditorPermission::addNew()
 {
-	// TODO - add new
+	// TODO - TwoKey addNew()
 	return 0;
 }
 
@@ -108,7 +108,7 @@ void EditorPermission::setEditing(long id)
 		return;
 	}
 	
-	// TODO - set editing
+	// TODO - TwoKey setEditing()
 	return;
 }
 
@@ -151,11 +151,9 @@ void EditorPermission::Accounts::Run(UBSocket* sock, const std::string& argument
 		return;
 	}
 
-	sock->Sendf("Account changed from '%d' to '%d'.\n", permission->getAccount(), id);
-	// permission->setAccount(id);
+	sock->Sendf("Preparing to edit permission with account '%d'.\n", id);
+	m_account = id;
 	return;
-	
-	// TODO - set account
 }
 
 void EditorPermission::GrantGroups::Run(UBSocket* sock, const std::string& argument, Permission* permission)
@@ -174,11 +172,9 @@ void EditorPermission::GrantGroups::Run(UBSocket* sock, const std::string& argum
 		return;
 	}
 
-	sock->Sendf("Grantgroup changed from '%d' to '%d'.\n", permission->getGrantGroup(), id);
-	// permission->setGrantGroup(id);
+	sock->Sendf("Preparing to edit permission with grangroup '%d'.\n", id);
+	m_grantgroup = id
 	return;
-	
-	// TODO - set permission
 }
 
 void EditorPermission::Grants::Run(UBSocket* sock, const std::string& argument, Permission* permission)

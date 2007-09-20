@@ -151,13 +151,13 @@ void EditorNewAccount::OnLine(const std::string &line)
 			return;
 		}
 
-		long id = 0;
-		//long id = mud::Cache::Get()->AddAccount();
-		// TODO - AddAccount
-		Global::Get()->bugf("AddAcount() NOT IMPLEMENTED!");
-		m_sock->Send("AddAccount() NOT IMPLEMENTED!\n");
-		m_sock->SetCloseAndDelete();
-		return;
+		long id = mud::Cache::Get()->AddAccount();
+		if(id == 0)
+		{
+			m_sock->Send("Could not create a new account.\n");
+			m_sock->SetCloseAndDelete();
+			return;
+		}
 		
 		mud::Account* Acc = mud::Cache::Get()->GetAccountByKey(id);
 		Acc->setName(m_name);

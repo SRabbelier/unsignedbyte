@@ -79,6 +79,7 @@ typedef std::map<oneStringKey,mud::Room*> rooms_ms;
 typedef std::map<oneStringKey,mud::Sector*> sectors_ms;
 typedef std::map<oneStringKey,mud::PCharacter*> players_ms;
 
+typedef std::map<twoValueKey,db::CharacterAccount*> characteraccount_m; // character, account
 typedef std::map<twoValueKey,mud::Permission*> permissions_m; // account, grantgroup
 
 typedef const std::string& cstring;
@@ -171,7 +172,6 @@ namespace mud
 		GrantGroup* cacheGrantGroup(db::GrantGroups* d);
 		MCharacter* cacheMCharacter(db::Characters* d);
 		PCharacter* cachePCharacter(UBSocket* sock, db::Characters* d);
-		Permission* cachePermission(db::Permissions* d);
 		Race* cacheRace(db::Races* d);
 		Room* cacheRoom(db::Rooms* d);
 		Sector* cacheSector(db::Sectors* d);
@@ -180,6 +180,8 @@ namespace mud
 		accounts_ms m_accountByName;
 		
 		areas_m m_areaByKey;
+		
+		characteraccount_m m_characteraccountByKey;
 		
 		characters_m m_characterByKey;
 		characters_ms m_characterByName;

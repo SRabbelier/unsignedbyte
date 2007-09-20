@@ -75,12 +75,6 @@ void PCharacter::OnSend(const std::string &msg)
 	return;
 }
 
-bool PCharacter::isAccount(mud::Account* account)
-{
-	return true;
-	// TODO - isAccount
-}
-
 void PCharacter::Close(PCharacter* Ch)
 {
 	if(Ch == NULL)

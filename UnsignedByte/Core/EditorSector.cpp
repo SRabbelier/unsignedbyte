@@ -90,8 +90,7 @@ Table* EditorSector::getTable()
 
 long EditorSector::addNew()
 {
-	// return mud::Cache::Get()->AddSector();
-	// TODO - addNew()
+	return mud::Cache::Get()->AddSector();
 	return 0;
 }
 
