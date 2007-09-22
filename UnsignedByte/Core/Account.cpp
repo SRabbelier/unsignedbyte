@@ -60,7 +60,7 @@ bool Account::Exists()
 
 bool Account::IllegalName(const std::string& name)
 {
-	if(DatabaseMgr::Get()->CountSavable(Tables::Get()->ACCOUNTS, name) > 0)
+	if(mud::Cache::Get()->lookupAccountByName(name))
 		return true;
 
 	return false;

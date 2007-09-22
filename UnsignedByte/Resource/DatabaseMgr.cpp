@@ -27,7 +27,10 @@
 #include "StderrLog.h"
 #include "Query.h"
 #include "Global.h"
-// #include "ub.h"
+
+#include "SPKCriteria.h"
+#include "CountActor.h"
+#include "SqliteMgr.h"
 
 std::string DatabaseMgr::m_staticpath = Global::Get()->EmptyString;
 
@@ -62,61 +65,14 @@ Database& DatabaseMgr::DBref()
 	return *m_db;
 }
 
-/**
- * Savable Interaction
- */
-Strings DatabaseMgr::GetSavable(const Table* table, const long& value, const std::string& field)
-{
-	Strings result;
-	std::string condition;
-	if(field != Global::Get()->EmptyString)
-	{
-		condition = Global::Get()->sprintf("WHERE %s=%d", field.c_str(), value);
-	}
-
-	Query q(DBref());
-	q.get_result(Global::Get()->sprintf(
-		"SELECT name FROM %s %s ORDER BY name ASC;",
-		table->tableName().c_str(),
-		condition.c_str()
-		));
-
-	while(q.fetch_row())
-	{
-		result.push_back(q.getstr(0));
-	}
-
-	q.free_result();
-	return result;
-}
-
-long DatabaseMgr::CountSavable(const Table* table, const std::string& value, const std::string& field)
-{
-	Query q(DBref());
-	long count = 
-	q.get_count(Global::Get()->sprintf(
-		"SELECT COUNT(*) FROM %s WHERE %s='%s';",
-		table->tableName().c_str(),
-		field.c_str(),
-		value.c_str()
-		));
-
-	return count;
-}
-
 long DatabaseMgr::CountSavable(const Table* table, const long id)
 {
-	Query q(DBref());
 	long count = 0;
-	/*
-	count = q.get_count(Global::Get()->sprintf(
-		"SELECT COUNT(*) FROM %s WHERE %s='%d';",
-		table->tableName().c_str(),
-		table->tableID().c_str(), 
-		id
-		));
-	*/
-	// TODO - Blocker
-
+	
+	SPKCriteria crit(id);
+	CountActor act(&crit);
+	SqliteMgr::Get()->doForEach(table, &act);
+	count = act.getCount();
+	
 	return count;
 }

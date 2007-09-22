@@ -62,7 +62,7 @@ public:
 	std::string tableQuery() const;
 	std::string creationQuery(bool verify = false) const;
 
-	void parseList(sqlite3_stmt* statement);
+	void parseRow(sqlite3_stmt* statement);
 
 	void modify();
 	
@@ -79,7 +79,7 @@ public:
 	Fields::const_iterator lookupend() const { return m_lookupfields.end(); }
 	size_t lookupsize() const { return m_lookupfields.size(); }
 	
-	bool hasSinglularPrimaryKey() { return m_spkey; }
+	bool hasSinglularPrimaryKey() const { return m_spkey; }
 	
 private:
 	void addField(const std::string& name, bool text, const std::string& defaulttext, bool providelookup);

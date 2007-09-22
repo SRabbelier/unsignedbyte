@@ -152,7 +152,8 @@ void EditorPermission::Accounts::Run(UBSocket* sock, const std::string& argument
 	}
 
 	sock->Sendf("Preparing to edit permission with account '%d'.\n", id);
-	m_account = id;
+	// m_account = id;
+	// TODO - find some way to pass the Editor to Run()
 	return;
 }
 
@@ -173,7 +174,8 @@ void EditorPermission::GrantGroups::Run(UBSocket* sock, const std::string& argum
 	}
 
 	sock->Sendf("Preparing to edit permission with grangroup '%d'.\n", id);
-	m_grantgroup = id
+	// m_grantgroup = id;
+	// TODO - find some way to pass the Editor to Run()
 	return;
 }
 

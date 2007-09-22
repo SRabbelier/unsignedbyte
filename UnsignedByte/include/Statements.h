@@ -39,6 +39,7 @@ public:
 	sqlite3_stmt* getSelect() const {return m_select;}
 	sqlite3_stmt* getLookup(const std::string& field) {return m_lookup[field];}
 	sqlite3_stmt* getList() const {return m_list;}
+	sqlite3_stmt* getForEach() const {return m_foreach;}
 	
 	// Setters
 	void setErase(sqlite3_stmt* erase) { m_erase = erase; }
@@ -47,6 +48,7 @@ public:
 	void setSelect(sqlite3_stmt* select) { m_select = select; }
 	void setLookup(const std::string& field, sqlite3_stmt* lookup) { m_lookup[field] = lookup; }
 	void setList(sqlite3_stmt* list) { m_list = list; }
+	void setForEach(sqlite3_stmt* forEach) { m_foreach = forEach; }
 	
 private:
 	typedef std::map<std::string, sqlite3_stmt*> fieldmap;
@@ -57,4 +59,5 @@ private:
 	sqlite3_stmt* m_select;
 	fieldmap m_lookup;
 	sqlite3_stmt* m_list;
+	sqlite3_stmt* m_foreach;
 };

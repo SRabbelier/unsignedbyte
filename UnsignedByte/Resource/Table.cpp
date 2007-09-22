@@ -28,6 +28,7 @@
 #include "Tables.h"
 #include "Field.h"
 #include "SqliteMgr.h"
+#include "ListActor.h"
 
 Table::Table(std::string name) :
 m_name(name),
@@ -141,7 +142,12 @@ const std::string& Table::tableForeignName() const
 const std::vector<std::string>& Table::tableList()
 {
 	if(m_listcache > m_lastchange)
-		SqliteMgr::Get()->doList(this);
+	{
+		ListActor act;
+		SqliteMgr::Get()->doForEach(this, &act);
+		m_list = act.getList();
+		m_listcache = time(NULL);
+	}
 
 	return m_list;
 }
@@ -227,39 +233,6 @@ std::string Table::creationQuery(bool verify) const
 	
 	return result;
 }
-
-void Table::parseList(sqlite3_stmt* statement)
-{
-	std::string result;
-
-	int columns = sqlite3_column_count(statement);
-	for(int i = 0; i < columns; i++)
-	{
-		int type = sqlite3_column_type(statement, i);
-		std::ostringstream str;
-		switch(type)
-		{
-		case SQLITE_TEXT:			
-			str << ", " << sqlite3_column_text(statement, i);
-			break;
-
-		case SQLITE_INTEGER:
-			str << ", " << sqlite3_column_int64(statement, i);
-			break;
-
-		default:
-			std::ostringstream err;
-			err << "Unknown data type '" << type << "'.";
-			throw new std::runtime_error(err.str());
-		}
-
-		result.append(str.str());
-	}
-
-	m_list.push_back(result);
-	m_listcache = time(NULL);
-}
-
 
 void Table::modify()
 {

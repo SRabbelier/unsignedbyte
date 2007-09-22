@@ -39,7 +39,7 @@ Objects=$(IntermediateDirectory)/Base64$(ObjectSuffix) $(IntermediateDirectory)/
 	$(IntermediateDirectory)/MemFile$(ObjectSuffix) $(IntermediateDirectory)/Mutex$(ObjectSuffix) $(IntermediateDirectory)/Parse$(ObjectSuffix) $(IntermediateDirectory)/Query$(ObjectSuffix) $(IntermediateDirectory)/RandomNumber$(ObjectSuffix) $(IntermediateDirectory)/ResolvServer$(ObjectSuffix) $(IntermediateDirectory)/ResolvSocket$(ObjectSuffix) $(IntermediateDirectory)/SmtpdSocket$(ObjectSuffix) $(IntermediateDirectory)/Socket$(ObjectSuffix) $(IntermediateDirectory)/SocketHandler$(ObjectSuffix) \
 	$(IntermediateDirectory)/socket_include$(ObjectSuffix) $(IntermediateDirectory)/SSLInitializer$(ObjectSuffix) $(IntermediateDirectory)/StderrLog$(ObjectSuffix) $(IntermediateDirectory)/StdoutLog$(ObjectSuffix) $(IntermediateDirectory)/StreamSocket$(ObjectSuffix) $(IntermediateDirectory)/TcpSocket$(ObjectSuffix) $(IntermediateDirectory)/Thread$(ObjectSuffix) $(IntermediateDirectory)/UdpSocket$(ObjectSuffix) $(IntermediateDirectory)/Utility$(ObjectSuffix) $(IntermediateDirectory)/Coordinate$(ObjectSuffix) \
 	$(IntermediateDirectory)/Path$(ObjectSuffix) $(IntermediateDirectory)/Global$(ObjectSuffix) $(IntermediateDirectory)/sha2$(ObjectSuffix) $(IntermediateDirectory)/StringUtilities$(ObjectSuffix) $(IntermediateDirectory)/Tables$(ObjectSuffix) $(IntermediateDirectory)/Table$(ObjectSuffix) $(IntermediateDirectory)/Field$(ObjectSuffix) $(IntermediateDirectory)/DatabaseMgr$(ObjectSuffix) $(IntermediateDirectory)/SqliteMgr$(ObjectSuffix) $(IntermediateDirectory)/Statements$(ObjectSuffix) \
-	
+	$(IntermediateDirectory)/ListActor$(ObjectSuffix) $(IntermediateDirectory)/CountActor$(ObjectSuffix) $(IntermediateDirectory)/SPKCriteria$(ObjectSuffix) 
 
 ##
 ## Main Build Tragets 
@@ -308,6 +308,21 @@ $(IntermediateDirectory)/Statements$(ObjectSuffix): Statements.cpp $(Intermediat
 $(IntermediateDirectory)/Statements$(ObjectSuffix).d:
 	@$(CompilerName) $(CmpOptions) $(IncludePath) -MT$(IntermediateDirectory)/Statements$(ObjectSuffix) -MF$(IntermediateDirectory)/Statements$(ObjectSuffix).d -MM Statements.cpp
 
+$(IntermediateDirectory)/ListActor$(ObjectSuffix): ListActor.cpp $(IntermediateDirectory)/ListActor$(ObjectSuffix).d
+	$(CompilerName) $(SourceSwitch)ListActor.cpp $(CmpOptions)   $(OutputSwitch)$(IntermediateDirectory)/ListActor$(ObjectSuffix) $(IncludePath)
+$(IntermediateDirectory)/ListActor$(ObjectSuffix).d:
+	@$(CompilerName) $(CmpOptions) $(IncludePath) -MT$(IntermediateDirectory)/ListActor$(ObjectSuffix) -MF$(IntermediateDirectory)/ListActor$(ObjectSuffix).d -MM ListActor.cpp
+
+$(IntermediateDirectory)/CountActor$(ObjectSuffix): CountActor.cpp $(IntermediateDirectory)/CountActor$(ObjectSuffix).d
+	$(CompilerName) $(SourceSwitch)CountActor.cpp $(CmpOptions)   $(OutputSwitch)$(IntermediateDirectory)/CountActor$(ObjectSuffix) $(IncludePath)
+$(IntermediateDirectory)/CountActor$(ObjectSuffix).d:
+	@$(CompilerName) $(CmpOptions) $(IncludePath) -MT$(IntermediateDirectory)/CountActor$(ObjectSuffix) -MF$(IntermediateDirectory)/CountActor$(ObjectSuffix).d -MM CountActor.cpp
+
+$(IntermediateDirectory)/SPKCriteria$(ObjectSuffix): SPKCriteria.cpp $(IntermediateDirectory)/SPKCriteria$(ObjectSuffix).d
+	$(CompilerName) $(SourceSwitch)SPKCriteria.cpp $(CmpOptions)   $(OutputSwitch)$(IntermediateDirectory)/SPKCriteria$(ObjectSuffix) $(IncludePath)
+$(IntermediateDirectory)/SPKCriteria$(ObjectSuffix).d:
+	@$(CompilerName) $(CmpOptions) $(IncludePath) -MT$(IntermediateDirectory)/SPKCriteria$(ObjectSuffix) -MF$(IntermediateDirectory)/SPKCriteria$(ObjectSuffix).d -MM SPKCriteria.cpp
+
 ##
 ## Clean
 ##
@@ -412,6 +427,12 @@ clean:
 	$(RM) $(IntermediateDirectory)/SqliteMgr$(ObjectSuffix).d
 	$(RM) $(IntermediateDirectory)/Statements$(ObjectSuffix)
 	$(RM) $(IntermediateDirectory)/Statements$(ObjectSuffix).d
+	$(RM) $(IntermediateDirectory)/ListActor$(ObjectSuffix)
+	$(RM) $(IntermediateDirectory)/ListActor$(ObjectSuffix).d
+	$(RM) $(IntermediateDirectory)/CountActor$(ObjectSuffix)
+	$(RM) $(IntermediateDirectory)/CountActor$(ObjectSuffix).d
+	$(RM) $(IntermediateDirectory)/SPKCriteria$(ObjectSuffix)
+	$(RM) $(IntermediateDirectory)/SPKCriteria$(ObjectSuffix).d
 	$(RM) $(OutputFile)
 
 -include $(IntermediateDirectory)/*.d

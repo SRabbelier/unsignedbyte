@@ -85,10 +85,7 @@ void Character::OnSendf(const char* format, ...)
  */ 	
 void Character::OnAreaList(const std::string& msg)
 {
-	OnSend("Listing known areas:\n");
-	OnSend(String::Get()->unlines(DatabaseMgr::Get()->GetSavable(Tables::Get()->AREAS), "\t", 3));
-	OnSend("\n");
-	OnSend("End of area list\n");
+	OnSend(String::Get()->box(mud::Area::List(), "Areas"));
 	return;
 }
 
@@ -101,16 +98,7 @@ void Character::OnColourList(const std::string& msg)
 
 void Character::OnLaston(const std::string& msg)
 {
-	OnSend("Listing known characters:\n");
-
-	Strings list = DatabaseMgr::Get()->GetSavable(Tables::Get()->CHARACTERS);
-	for(Strings::iterator it = list.begin(); it != list.end(); it++)
-	{
-		OnSend(*it);
-		OnSend("\n");
-	}
-
-	OnSend("End of character list\n");
+	OnSend(String::Get()->box(mud::Character::List(), "Characters"));
 	return;	
 }
 
@@ -143,19 +131,13 @@ void Character::OnLook(const std::string& msg)
 
 void Character::OnRaceList(const std::string& msg)
 {
-	OnSend("Listing known races:\n");
-	OnSend(String::Get()->unlines(DatabaseMgr::Get()->GetSavable(Tables::Get()->RACES), "\t", 3));
-	OnSend("\n");
-	OnSend("End of races list\n");
+	OnSend(String::Get()->box(mud::Race::List(), "Races"));
 	return;
 }
 
 void Character::OnRoomList(const std::string& msg)
 {
-	OnSend("Listing known rooms:\n");
-	OnSend(String::Get()->unlines(DatabaseMgr::Get()->GetSavable(Tables::Get()->ROOMS), "\t", 3));
-	OnSend("\n");
-	OnSend("End of room list\n");
+	OnSend(String::Get()->box(mud::Room::List(), "Rooms"));
 	return;
 }
 
@@ -229,7 +211,7 @@ bool Character::Exists()
 
 bool Character::IllegalName(const std::string& name)
 {
-	if(DatabaseMgr::Get()->CountSavable(Tables::Get()->AREAS, name) > 0)
+	if(mud::Cache::Get()->lookupCharacterByName(name))
 		return true;
 
 	return false;

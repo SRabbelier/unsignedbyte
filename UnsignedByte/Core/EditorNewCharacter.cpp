@@ -29,6 +29,7 @@
 #include "Cache.h"
 #include "Account.h"
 #include "db.h"
+#include "Race.h"
 
 EditorNewCharacter::EditorNewCharacter(UBSocket* sock) :
 Editor(sock),
@@ -116,31 +117,15 @@ void EditorNewCharacter::OnLine(const std::string &line)
 			if(line.size() == 0)
 			{
 				m_sock->Send("Please choose a race: \n");
-				m_sock->Send(String::Get()->unlines(DatabaseMgr::Get()->GetSavable(Tables::Get()->RACES), "\t", 3));
-				return;
-			}
-
-			int count = DatabaseMgr::Get()->CountSavable(Tables::Get()->RACES, line);
-			if(count <= 0)
-			{
-				m_sock->Sendf("Unknown race %s, please choose an existing race.\n", line.c_str());
-				OnLine(Global::Get()->EmptyString);
-				return;
-			}
-
-			if(count >= 2)
-			{
-				m_sock->Sendf("For some reason there is more than one occurance of race %s known!\n", line.c_str());
-				m_sock->Send("Closing your connection now.\n");
-				m_sock->SetCloseAndDelete();
+				m_sock->Send(String::Get()->box(mud::Race::List(), "Races"));
 				return;
 			}
 
 			int id = db::Races::lookupname(line);
 			if(id <= 0)
 			{
-				m_sock->Sendf("Got ID %d, which is <= 0, disconnecting you now.\n", id);
-				m_sock->SetCloseAndDelete();
+				m_sock->Send("No such race.\n");
+				OnLine(Global::Get()->EmptyString);
 				return;
 			}
 

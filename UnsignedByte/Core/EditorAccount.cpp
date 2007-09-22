@@ -117,27 +117,11 @@ void EditorAccount::Login::Run(UBSocket* sock, const std::string &argument)
 		return;
 	}
 
-	int count = DatabaseMgr::Get()->CountSavable(Tables::Get()->CHARACTERS, argument);
-	if(count <= 0)
-	{
-		sock->Sendf("You don't have a character named '%s'!\n", argument.c_str());
-		Run(sock, Global::Get()->EmptyString);
-		return;
-	}
-
-	if(count >= 2)
-	{
-		sock->Sendf("For some reason there are %d character named '%s' known, please contact administration!\n", count, argument.c_str());
-		sock->Send("Disconnecting you now.\n");
-		sock->SetCloseAndDelete();
-		return;
-	}
-
 	int id = mud::Cache::Get()->lookupCharacterByName(argument);
 	if(id <= 0)
 	{
-		sock->Sendf("Got ID %d, which is <= 0, disconnecting you now.\n", id);
-		sock->SetCloseAndDelete();
+		sock->Send("No such character.\n");
+		Run(sock, Global::Get()->EmptyString);
 		return;
 	}
 	

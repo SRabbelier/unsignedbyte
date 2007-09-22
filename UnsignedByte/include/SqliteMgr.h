@@ -28,6 +28,7 @@
 class Table;
 class Bindable;
 class Statements;
+class Actor;
 
 typedef std::map<Table*, Statements*>  TableStatements;
 typedef unsigned long value_type;
@@ -43,7 +44,7 @@ class SqliteMgr
 		void doUpdate(Bindable* bindable);
 		void doSelect(Bindable* bindable);
 		void doLookup(Bindable* bindable, const std::string& field);
-		void doList(Table* table);
+		void doForEach(const Table* table, Actor* act);
 	
 	private:
 		Database* m_db;
@@ -52,13 +53,13 @@ class SqliteMgr
 		
 		TableStatements m_statements;
 		
-		Statements* getStatements(Table* table);
-		sqlite3_stmt* getInsertStmt(Table* table);
-		sqlite3_stmt* getEraseStmt(Table* table);
-		sqlite3_stmt* getUpdateStmt(Table* table);
-		sqlite3_stmt* getSelectStmt(Table* table);
-		sqlite3_stmt* getLookupStmt(Table* table, const std::string& field);
-		sqlite3_stmt* getListStmt(Table* table);
+		Statements* getStatements(const Table* table);
+		sqlite3_stmt* getInsertStmt(const Table* table);
+		sqlite3_stmt* getEraseStmt(const Table* table);
+		sqlite3_stmt* getUpdateStmt(const Table* table);
+		sqlite3_stmt* getSelectStmt(const Table* table);
+		sqlite3_stmt* getLookupStmt(const Table* table, const std::string& field);
+		sqlite3_stmt* getForEachStmt(const Table* table);		
 	
 		SqliteMgr();
 		~SqliteMgr();

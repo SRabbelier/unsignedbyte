@@ -2,8 +2,6 @@
 *.tags
 *.o
 *.d
-db.cpp
-db.h
 UnsignedByte_wsp.mk
 *.ilk
 *.ncb

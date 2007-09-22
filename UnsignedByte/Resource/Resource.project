@@ -51,6 +51,9 @@
     <File Name="DatabaseMgr.cpp"/>
     <File Name="SqliteMgr.cpp"/>
     <File Name="Statements.cpp"/>
+    <File Name="ListActor.cpp"/>
+    <File Name="CountActor.cpp"/>
+    <File Name="SPKCriteria.cpp"/>
   </VirtualDirectory>
   <VirtualDirectory Name="Header Files">
     <File Name="../include/Base64.h"/>
@@ -117,6 +120,11 @@
     <File Name="../include/SqliteMgr.h"/>
     <File Name="../include/Statements.h"/>
     <File Name="../include/Bindable.h"/>
+    <File Name="Actor.h"/>
+    <File Name="ListActor.h"/>
+    <File Name="CountActor.h"/>
+    <File Name="Criteria.h"/>
+    <File Name="SPKCriteria.h"/>
   </VirtualDirectory>
   <Settings Type="Static Library">
     <Configuration Name="Debug" CompilerType="gnu g++" DebuggerType="GNU gdb debugger">
