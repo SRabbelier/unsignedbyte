@@ -76,7 +76,7 @@ std::vector<std::string> Sector::List()
 	return GetTable()->tableList();
 }
 
-Table* Sector::GetTable()
+TablePtr Sector::GetTable()
 {
 	return Tables::Get()->SECTORS;
 }

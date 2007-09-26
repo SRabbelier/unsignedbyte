@@ -48,7 +48,7 @@ namespace mud
 		 */
 		std::vector<std::string> Show();
 		std::string ShowShort();
-		Table* getTable() const;
+		TablePtr getTable() const;
 		
 		/**
 		 * \brief Static operations

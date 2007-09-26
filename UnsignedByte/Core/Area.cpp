@@ -82,7 +82,7 @@ std::vector<std::string> Area::List()
 	return GetTable()->tableList();
 }
 
-Table* Area::GetTable()
+TablePtr Area::GetTable()
 {
 	return Tables::Get()->AREAS;
 }

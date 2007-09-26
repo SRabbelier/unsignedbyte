@@ -76,7 +76,7 @@ std::vector<std::string> Race::List()
 	return GetTable()->tableList();
 }
 
-Table* Race::GetTable()
+TablePtr Race::GetTable()
 {
 	return Tables::Get()->RACES;
 }

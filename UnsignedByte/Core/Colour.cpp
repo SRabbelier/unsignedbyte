@@ -91,7 +91,7 @@ std::vector<std::string> Colour::List()
 	return GetTable()->tableList();
 }
 
-Table* Colour::GetTable()
+TablePtr Colour::GetTable()
 {
 	return Tables::Get()->COLOURS;
 }

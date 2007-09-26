@@ -79,12 +79,12 @@ void EditorPermission::dispatch(const std::string& action, const std::string& ar
 	return;
 }
 
-Savable* EditorPermission::getEditing()
+SavablePtr EditorPermission::getEditing()
 {
 	return m_permission;
 }
 
-Table* EditorPermission::getTable()
+TablePtr EditorPermission::getTable()
 {
 	return Tables::Get()->PERMISSIONS;
 }

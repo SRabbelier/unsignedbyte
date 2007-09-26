@@ -90,12 +90,12 @@ void EditorRoom::dispatch(const std::string& action, const std::string& argument
 	return;
 }
 
-Savable* EditorRoom::getEditing()
+SavablePtr EditorRoom::getEditing()
 {
 	return m_room;
 }
 
-Table* EditorRoom::getTable()
+TablePtr EditorRoom::getTable()
 {
 	return Tables::Get()->ROOMS;
 }

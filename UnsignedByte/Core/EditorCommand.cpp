@@ -79,12 +79,12 @@ void EditorCommand::dispatch(const std::string& action, const std::string& argum
 	return;
 }
 
-Savable* EditorCommand::getEditing()
+SavablePtr EditorCommand::getEditing()
 {
 	return m_command;
 }
 
-Table* EditorCommand::getTable()
+TablePtr EditorCommand::getTable()
 {
 	return Tables::Get()->COMMANDS;
 }

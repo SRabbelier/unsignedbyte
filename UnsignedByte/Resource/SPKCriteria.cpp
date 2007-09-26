@@ -33,7 +33,7 @@ bool SPKCriteria::evaluate(sqlite3_stmt* statement)
 	return false;
 }
 
-bool SPKCriteria::evaluate(sqlite3_stmt* statement, const Table* table)
+bool SPKCriteria::evaluate(sqlite3_stmt* statement, const TablePtr table)
 {
 	if(!table->hasSinglularPrimaryKey())
 		throw new std::logic_error("SPKCriteria::evaluate(), table doesn't have a singular primary key.");

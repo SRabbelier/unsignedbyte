@@ -28,7 +28,7 @@
 
 using std::endl;
 
-ClassHeaderGenerator::ClassHeaderGenerator(Table* table, std::ofstream* file) :
+ClassHeaderGenerator::ClassHeaderGenerator(TablePtr table, std::ofstream* file) :
 m_tabs("\t"),
 m_table(table),
 m_file(file)
@@ -147,7 +147,7 @@ void ClassHeaderGenerator::AppendBody()
 	(*m_file) << m_tabs << m_tabs << "void parseInsert(sqlite3* db);" << endl;
 	(*m_file) << m_tabs << m_tabs << "void parseSelect(sqlite3_stmt* stmt);" << endl;
 	(*m_file) << m_tabs << m_tabs << "void parseLookup(sqlite3_stmt* stmt);" << endl;
-	(*m_file) << m_tabs << m_tabs << "Table* getTable() const;" << endl;
+	(*m_file) << m_tabs << m_tabs << "TablePtr getTable() const;" << endl;
 	(*m_file) << endl;
 
 	return;
@@ -167,7 +167,7 @@ void ClassHeaderGenerator::AppendFields()
 	{
 		for(Fields::const_iterator it = m_table->begin(); it != m_table->end(); it++)
 		{
-			Field* field = *it;
+			FieldPtr field = *it;
 			if(field->isText())
 				(*m_file) << m_tabs << m_tabs << "const std::string& get" << field->getName() << "() const;" << endl;
 			else
@@ -178,7 +178,7 @@ void ClassHeaderGenerator::AppendFields()
 		(*m_file) << m_tabs << m_tabs << "// Setters" << endl;
 		for(Fields::const_iterator it = m_table->begin(); it != m_table->end(); it++)
 		{
-			Field* field = *it;
+			FieldPtr field = *it;
 			if(field->isText())
 				(*m_file) << m_tabs << m_tabs << "void set" << field->getName() << "(const std::string& value);" << endl;
 			else
@@ -207,7 +207,7 @@ void ClassHeaderGenerator::AppendFields()
 	(*m_file) << m_tabs << m_tabs << "// Fields" << endl;
 	for(Fields::const_iterator it = m_table->begin(); it != m_table->end(); it++)
 	{
-		Field* field = *it;
+		FieldPtr field = *it;
 		if(field->isText())
 			(*m_file) << m_tabs << m_tabs << "std::string m_" << field->getName() << ";" << endl;
 		else

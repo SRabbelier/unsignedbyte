@@ -21,8 +21,10 @@
 
 #include <string>
 #include <vector>
+#include <smart_ptr.h>
 
 class Table;
+typedef SmartPtr<Table> TablePtr;
 
 class Bindable
 {
@@ -38,8 +40,10 @@ public:
 	virtual void parseSelect(sqlite3_stmt* stmt) = 0;
 	virtual void parseLookup(sqlite3_stmt* stmt) = 0;
 	
-	virtual Table* getTable() const = 0;
+	virtual TablePtr getTable() const = 0;
 	
 private:
 	Bindable(const Bindable& rhs) {};
 };
+
+typedef SmartPtr<Bindable> BindablePtr;

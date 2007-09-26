@@ -149,7 +149,7 @@ void OLCEditor::Done::Run(OLCEditor* editor, const std::string& argument)
 {
 	editor->m_sock->Send("Ok.\n");
 	
-	Savable* editing = editor->getEditing();
+	SavablePtr editing = editor->getEditing();
 	if(editing)
 		editing->Save();
 

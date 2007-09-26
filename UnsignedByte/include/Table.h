@@ -22,13 +22,17 @@
 #include <string>
 #include <vector>
 #include <map>
+#include <smart_ptr.h>
 #include "sqlite3.h"
 
 class Field;
 class Table;
 
-typedef std::vector<Field*> Fields;
-typedef std::map<std::string, Table*> TableMap;
+typedef SmartPtr<Field> FieldPtr;
+typedef SmartPtr<Table> TablePtr;
+
+typedef std::vector<FieldPtr> Fields;
+typedef std::map<std::string, TablePtr> TableMap;
 typedef unsigned long value_type;
 
 class Table
@@ -39,7 +43,7 @@ public:
 	
 	// Add Primary Key
 	void addPK(const std::string& name);
-	void addFPK(Table* table);
+	void addFPK(TablePtr table);
 
 	// Add Field
 	void addValue(const std::string& name);
@@ -49,8 +53,8 @@ public:
 	void addTextField(const std::string& name, const std::string& defaulttext);
 	
 	// Add Foreign Key
-	void addFK(Table* table);
-	void addFK(Table* table, const std::string& suffix);
+	void addFK(TablePtr table);
+	void addFK(TablePtr table, const std::string& suffix);
 	
 	// Provide lookup functionality for the last 'count' entries
 	// void provideLookup(unsigned int count);

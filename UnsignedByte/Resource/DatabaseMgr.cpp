@@ -65,7 +65,7 @@ Database& DatabaseMgr::DBref()
 	return *m_db;
 }
 
-long DatabaseMgr::CountSavable(const Table* table, const long id)
+long DatabaseMgr::CountSavable(const TablePtr table, const long id)
 {
 	long count = 0;
 	

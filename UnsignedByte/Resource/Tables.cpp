@@ -184,8 +184,5 @@ Tables::Tables() :
 
 Tables::~Tables()
 {
-	for(TableVector::iterator it = m_tables.begin(); it != m_tables.end(); it++)
-	{
-		delete (*it);
-	}
+
 }

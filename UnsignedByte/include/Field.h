@@ -20,6 +20,7 @@
 #pragma once
 
 #include <string>
+#include <smart_ptr.h>
 
 class Field
 {
@@ -37,3 +38,5 @@ private:
 	bool m_text;
 	std::string m_defaultvalue;
 };
+
+typedef SmartPtr<Field> FieldPtr;

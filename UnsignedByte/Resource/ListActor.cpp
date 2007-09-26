@@ -25,7 +25,7 @@
 #include "ListActor.h"
 #include "Table.h"
 
-void ListActor::parseRow(sqlite3_stmt* statement, const Table* table)
+void ListActor::parseRow(sqlite3_stmt* statement, TablePtr table)
 {
 	std::string result;
 

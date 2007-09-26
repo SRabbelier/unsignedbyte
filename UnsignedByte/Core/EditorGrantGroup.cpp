@@ -78,12 +78,12 @@ void EditorGrantGroup::dispatch(const std::string& action, const std::string& ar
 	return;
 }
 
-Savable* EditorGrantGroup::getEditing()
+SavablePtr EditorGrantGroup::getEditing()
 {
 	return m_grantgroup;
 }
 
-Table* EditorGrantGroup::getTable()
+TablePtr EditorGrantGroup::getTable()
 {
 	return Tables::Get()->GRANTGROUPS;
 }

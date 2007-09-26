@@ -25,34 +25,34 @@
 #include "singleton.h"
 #include "Table.h"
 
-typedef std::vector<Table*> TableVector;
+typedef std::vector<TablePtr> TableVector;
 
 class Tables : public Singleton<Tables>
 {
 public:
-	Table* ACCOUNTS;
-	Table* AREAS;
-	Table* BRANCHES;
-	Table* CHARACTERACCOUNT;
-	Table* CHARACTERBRANCH;
-	Table* CHARACTERCLUSTER;
-	Table* CHARACTERS;
-	Table* CHARACTERSKILL;
-	Table* CHARACTERSTAT;
-	Table* CHARACTERTREE;
-	Table* CLUSTERS;
-	Table* COLOURS;
-	Table* COMMANDS;
-	Table* EXITS;
-	Table* GRANTGROUPS;
-	Table* PERMISSIONS;
-	Table* RACES;
-	Table* ROOMS;
-	Table* SECTORS;
-	Table* SKILLS;
-	Table* STATS;
-	Table* TREES;
-	Table* VERSION;
+	TablePtr ACCOUNTS;
+	TablePtr AREAS;
+	TablePtr BRANCHES;
+	TablePtr CHARACTERACCOUNT;
+	TablePtr CHARACTERBRANCH;
+	TablePtr CHARACTERCLUSTER;
+	TablePtr CHARACTERS;
+	TablePtr CHARACTERSKILL;
+	TablePtr CHARACTERSTAT;
+	TablePtr CHARACTERTREE;
+	TablePtr CLUSTERS;
+	TablePtr COLOURS;
+	TablePtr COMMANDS;
+	TablePtr EXITS;
+	TablePtr GRANTGROUPS;
+	TablePtr PERMISSIONS;
+	TablePtr RACES;
+	TablePtr ROOMS;
+	TablePtr SECTORS;
+	TablePtr SKILLS;
+	TablePtr STATS;
+	TablePtr TREES;
+	TablePtr VERSION;
 	
 	TableVector::const_iterator begin() const { return m_tables.begin(); };
 	TableVector::const_iterator end() const { return m_tables.end(); };

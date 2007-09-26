@@ -51,12 +51,12 @@ namespace mud
 		 */
 		std::vector<std::string> Show();
 		std::string ShowShort();
-		Table* getTable() const { return GetTable(); }
+		TablePtr getTable() const { return GetTable(); }
 		
 		/**
 		 * \brief Static utilities
 		 */
-		static Table* GetTable();
+		static TablePtr GetTable();
 		static std::vector<std::string> List();
 		static void Close(GrantGroup* grantgroup);
 		

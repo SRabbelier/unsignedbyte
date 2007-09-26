@@ -20,6 +20,7 @@
 #pragma once
 
 #include <string>
+#include <smart_ptr.h>
 
 class UBSocket;
 
@@ -27,7 +28,7 @@ template <class T>
 class Action
 {
     public:
-        virtual void Run(T * act, const std::string& argument) = 0;
+        virtual void Run(T* act, const std::string& argument) = 0;
 		virtual std::string getName() = 0;
 		virtual bool fullName(); // only add the full name
 

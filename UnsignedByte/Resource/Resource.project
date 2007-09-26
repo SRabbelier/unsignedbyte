@@ -8,15 +8,6 @@
     <File Name="EventHandler.cpp"/>
     <File Name="EventTime.cpp"/>
     <File Name="File.cpp"/>
-    <File Name="HttpClientSocket.cpp"/>
-    <File Name="HttpdCookies.cpp"/>
-    <File Name="HttpDebugSocket.cpp"/>
-    <File Name="HttpdForm.cpp"/>
-    <File Name="HttpdSocket.cpp"/>
-    <File Name="HttpGetSocket.cpp"/>
-    <File Name="HttpPostSocket.cpp"/>
-    <File Name="HttpPutSocket.cpp"/>
-    <File Name="HTTPSocket.cpp"/>
     <File Name="IEventOwner.cpp"/>
     <File Name="Ipv4Address.cpp"/>
     <File Name="Ipv6Address.cpp"/>
@@ -65,15 +56,6 @@
     <File Name="../include/EventTime.h"/>
     <File Name="../include/File.h"/>
     <File Name="../include/Global.h"/>
-    <File Name="../include/HttpClientSocket.h"/>
-    <File Name="../include/HttpdCookies.h"/>
-    <File Name="../include/HttpDebugSocket.h"/>
-    <File Name="../include/HttpdForm.h"/>
-    <File Name="../include/HttpdSocket.h"/>
-    <File Name="../include/HttpGetSocket.h"/>
-    <File Name="../include/HttpPostSocket.h"/>
-    <File Name="../include/HttpPutSocket.h"/>
-    <File Name="../include/HTTPSocket.h"/>
     <File Name="../include/IError.h"/>
     <File Name="../include/IEventHandler.h"/>
     <File Name="../include/IEventOwner.h"/>
@@ -125,6 +107,7 @@
     <File Name="CountActor.h"/>
     <File Name="Criteria.h"/>
     <File Name="SPKCriteria.h"/>
+    <File Name="../include/smart_ptr.h"/>
   </VirtualDirectory>
   <Settings Type="Static Library">
     <Configuration Name="Debug" CompilerType="gnu g++" DebuggerType="GNU gdb debugger">

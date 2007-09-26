@@ -77,12 +77,12 @@ void EditorArea::dispatch(const std::string& action, const std::string& argument
 	return;
 }
 
-Savable* EditorArea::getEditing()
+SavablePtr EditorArea::getEditing()
 {
 	return m_area;
 }
 
-Table* EditorArea::getTable()
+TablePtr EditorArea::getTable()
 {
 	return Tables::Get()->AREAS;
 }

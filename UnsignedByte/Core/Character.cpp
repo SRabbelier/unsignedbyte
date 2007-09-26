@@ -248,7 +248,7 @@ void Character::Close(mud::Character* Ch)
 	delete Ch;
 }
 
-Table* Character::GetTable()
+TablePtr Character::GetTable()
 { 
 	return Tables::Get()->CHARACTERS; 
 };

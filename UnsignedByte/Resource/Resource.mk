@@ -34,12 +34,11 @@ Libs=
 LibPath=$(LibraryPathSwitch). 
 endif
 
-Objects=$(IntermediateDirectory)/Base64$(ObjectSuffix) $(IntermediateDirectory)/Database$(ObjectSuffix) $(IntermediateDirectory)/Debug$(ObjectSuffix) $(IntermediateDirectory)/Event$(ObjectSuffix) $(IntermediateDirectory)/EventHandler$(ObjectSuffix) $(IntermediateDirectory)/EventTime$(ObjectSuffix) $(IntermediateDirectory)/File$(ObjectSuffix) $(IntermediateDirectory)/HttpClientSocket$(ObjectSuffix) $(IntermediateDirectory)/HttpdCookies$(ObjectSuffix) $(IntermediateDirectory)/HttpDebugSocket$(ObjectSuffix) \
-	$(IntermediateDirectory)/HttpdForm$(ObjectSuffix) $(IntermediateDirectory)/HttpdSocket$(ObjectSuffix) $(IntermediateDirectory)/HttpGetSocket$(ObjectSuffix) $(IntermediateDirectory)/HttpPostSocket$(ObjectSuffix) $(IntermediateDirectory)/HttpPutSocket$(ObjectSuffix) $(IntermediateDirectory)/HTTPSocket$(ObjectSuffix) $(IntermediateDirectory)/IEventOwner$(ObjectSuffix) $(IntermediateDirectory)/Ipv4Address$(ObjectSuffix) $(IntermediateDirectory)/Ipv6Address$(ObjectSuffix) $(IntermediateDirectory)/Lock$(ObjectSuffix) \
-	$(IntermediateDirectory)/MemFile$(ObjectSuffix) $(IntermediateDirectory)/Mutex$(ObjectSuffix) $(IntermediateDirectory)/Parse$(ObjectSuffix) $(IntermediateDirectory)/Query$(ObjectSuffix) $(IntermediateDirectory)/RandomNumber$(ObjectSuffix) $(IntermediateDirectory)/ResolvServer$(ObjectSuffix) $(IntermediateDirectory)/ResolvSocket$(ObjectSuffix) $(IntermediateDirectory)/SmtpdSocket$(ObjectSuffix) $(IntermediateDirectory)/Socket$(ObjectSuffix) $(IntermediateDirectory)/SocketHandler$(ObjectSuffix) \
-	$(IntermediateDirectory)/socket_include$(ObjectSuffix) $(IntermediateDirectory)/SSLInitializer$(ObjectSuffix) $(IntermediateDirectory)/StderrLog$(ObjectSuffix) $(IntermediateDirectory)/StdoutLog$(ObjectSuffix) $(IntermediateDirectory)/StreamSocket$(ObjectSuffix) $(IntermediateDirectory)/TcpSocket$(ObjectSuffix) $(IntermediateDirectory)/Thread$(ObjectSuffix) $(IntermediateDirectory)/UdpSocket$(ObjectSuffix) $(IntermediateDirectory)/Utility$(ObjectSuffix) $(IntermediateDirectory)/Coordinate$(ObjectSuffix) \
-	$(IntermediateDirectory)/Path$(ObjectSuffix) $(IntermediateDirectory)/Global$(ObjectSuffix) $(IntermediateDirectory)/sha2$(ObjectSuffix) $(IntermediateDirectory)/StringUtilities$(ObjectSuffix) $(IntermediateDirectory)/Tables$(ObjectSuffix) $(IntermediateDirectory)/Table$(ObjectSuffix) $(IntermediateDirectory)/Field$(ObjectSuffix) $(IntermediateDirectory)/DatabaseMgr$(ObjectSuffix) $(IntermediateDirectory)/SqliteMgr$(ObjectSuffix) $(IntermediateDirectory)/Statements$(ObjectSuffix) \
-	$(IntermediateDirectory)/ListActor$(ObjectSuffix) $(IntermediateDirectory)/CountActor$(ObjectSuffix) $(IntermediateDirectory)/SPKCriteria$(ObjectSuffix) 
+Objects=$(IntermediateDirectory)/Base64$(ObjectSuffix) $(IntermediateDirectory)/Database$(ObjectSuffix) $(IntermediateDirectory)/Debug$(ObjectSuffix) $(IntermediateDirectory)/Event$(ObjectSuffix) $(IntermediateDirectory)/EventHandler$(ObjectSuffix) $(IntermediateDirectory)/EventTime$(ObjectSuffix) $(IntermediateDirectory)/File$(ObjectSuffix) $(IntermediateDirectory)/IEventOwner$(ObjectSuffix) $(IntermediateDirectory)/Ipv4Address$(ObjectSuffix) $(IntermediateDirectory)/Ipv6Address$(ObjectSuffix) \
+	$(IntermediateDirectory)/Lock$(ObjectSuffix) $(IntermediateDirectory)/MemFile$(ObjectSuffix) $(IntermediateDirectory)/Mutex$(ObjectSuffix) $(IntermediateDirectory)/Parse$(ObjectSuffix) $(IntermediateDirectory)/Query$(ObjectSuffix) $(IntermediateDirectory)/RandomNumber$(ObjectSuffix) $(IntermediateDirectory)/ResolvServer$(ObjectSuffix) $(IntermediateDirectory)/ResolvSocket$(ObjectSuffix) $(IntermediateDirectory)/SmtpdSocket$(ObjectSuffix) $(IntermediateDirectory)/Socket$(ObjectSuffix) \
+	$(IntermediateDirectory)/SocketHandler$(ObjectSuffix) $(IntermediateDirectory)/socket_include$(ObjectSuffix) $(IntermediateDirectory)/SSLInitializer$(ObjectSuffix) $(IntermediateDirectory)/StderrLog$(ObjectSuffix) $(IntermediateDirectory)/StdoutLog$(ObjectSuffix) $(IntermediateDirectory)/StreamSocket$(ObjectSuffix) $(IntermediateDirectory)/TcpSocket$(ObjectSuffix) $(IntermediateDirectory)/Thread$(ObjectSuffix) $(IntermediateDirectory)/UdpSocket$(ObjectSuffix) $(IntermediateDirectory)/Utility$(ObjectSuffix) \
+	$(IntermediateDirectory)/Coordinate$(ObjectSuffix) $(IntermediateDirectory)/Path$(ObjectSuffix) $(IntermediateDirectory)/Global$(ObjectSuffix) $(IntermediateDirectory)/sha2$(ObjectSuffix) $(IntermediateDirectory)/StringUtilities$(ObjectSuffix) $(IntermediateDirectory)/Tables$(ObjectSuffix) $(IntermediateDirectory)/Table$(ObjectSuffix) $(IntermediateDirectory)/Field$(ObjectSuffix) $(IntermediateDirectory)/DatabaseMgr$(ObjectSuffix) $(IntermediateDirectory)/SqliteMgr$(ObjectSuffix) \
+	$(IntermediateDirectory)/Statements$(ObjectSuffix) $(IntermediateDirectory)/ListActor$(ObjectSuffix) $(IntermediateDirectory)/CountActor$(ObjectSuffix) $(IntermediateDirectory)/SPKCriteria$(ObjectSuffix) 
 
 ##
 ## Main Build Tragets 
@@ -93,51 +92,6 @@ $(IntermediateDirectory)/File$(ObjectSuffix): File.cpp $(IntermediateDirectory)/
 	$(CompilerName) $(SourceSwitch)File.cpp $(CmpOptions)   $(OutputSwitch)$(IntermediateDirectory)/File$(ObjectSuffix) $(IncludePath)
 $(IntermediateDirectory)/File$(ObjectSuffix).d:
 	@$(CompilerName) $(CmpOptions) $(IncludePath) -MT$(IntermediateDirectory)/File$(ObjectSuffix) -MF$(IntermediateDirectory)/File$(ObjectSuffix).d -MM File.cpp
-
-$(IntermediateDirectory)/HttpClientSocket$(ObjectSuffix): HttpClientSocket.cpp $(IntermediateDirectory)/HttpClientSocket$(ObjectSuffix).d
-	$(CompilerName) $(SourceSwitch)HttpClientSocket.cpp $(CmpOptions)   $(OutputSwitch)$(IntermediateDirectory)/HttpClientSocket$(ObjectSuffix) $(IncludePath)
-$(IntermediateDirectory)/HttpClientSocket$(ObjectSuffix).d:
-	@$(CompilerName) $(CmpOptions) $(IncludePath) -MT$(IntermediateDirectory)/HttpClientSocket$(ObjectSuffix) -MF$(IntermediateDirectory)/HttpClientSocket$(ObjectSuffix).d -MM HttpClientSocket.cpp
-
-$(IntermediateDirectory)/HttpdCookies$(ObjectSuffix): HttpdCookies.cpp $(IntermediateDirectory)/HttpdCookies$(ObjectSuffix).d
-	$(CompilerName) $(SourceSwitch)HttpdCookies.cpp $(CmpOptions)   $(OutputSwitch)$(IntermediateDirectory)/HttpdCookies$(ObjectSuffix) $(IncludePath)
-$(IntermediateDirectory)/HttpdCookies$(ObjectSuffix).d:
-	@$(CompilerName) $(CmpOptions) $(IncludePath) -MT$(IntermediateDirectory)/HttpdCookies$(ObjectSuffix) -MF$(IntermediateDirectory)/HttpdCookies$(ObjectSuffix).d -MM HttpdCookies.cpp
-
-$(IntermediateDirectory)/HttpDebugSocket$(ObjectSuffix): HttpDebugSocket.cpp $(IntermediateDirectory)/HttpDebugSocket$(ObjectSuffix).d
-	$(CompilerName) $(SourceSwitch)HttpDebugSocket.cpp $(CmpOptions)   $(OutputSwitch)$(IntermediateDirectory)/HttpDebugSocket$(ObjectSuffix) $(IncludePath)
-$(IntermediateDirectory)/HttpDebugSocket$(ObjectSuffix).d:
-	@$(CompilerName) $(CmpOptions) $(IncludePath) -MT$(IntermediateDirectory)/HttpDebugSocket$(ObjectSuffix) -MF$(IntermediateDirectory)/HttpDebugSocket$(ObjectSuffix).d -MM HttpDebugSocket.cpp
-
-$(IntermediateDirectory)/HttpdForm$(ObjectSuffix): HttpdForm.cpp $(IntermediateDirectory)/HttpdForm$(ObjectSuffix).d
-	$(CompilerName) $(SourceSwitch)HttpdForm.cpp $(CmpOptions)   $(OutputSwitch)$(IntermediateDirectory)/HttpdForm$(ObjectSuffix) $(IncludePath)
-$(IntermediateDirectory)/HttpdForm$(ObjectSuffix).d:
-	@$(CompilerName) $(CmpOptions) $(IncludePath) -MT$(IntermediateDirectory)/HttpdForm$(ObjectSuffix) -MF$(IntermediateDirectory)/HttpdForm$(ObjectSuffix).d -MM HttpdForm.cpp
-
-$(IntermediateDirectory)/HttpdSocket$(ObjectSuffix): HttpdSocket.cpp $(IntermediateDirectory)/HttpdSocket$(ObjectSuffix).d
-	$(CompilerName) $(SourceSwitch)HttpdSocket.cpp $(CmpOptions)   $(OutputSwitch)$(IntermediateDirectory)/HttpdSocket$(ObjectSuffix) $(IncludePath)
-$(IntermediateDirectory)/HttpdSocket$(ObjectSuffix).d:
-	@$(CompilerName) $(CmpOptions) $(IncludePath) -MT$(IntermediateDirectory)/HttpdSocket$(ObjectSuffix) -MF$(IntermediateDirectory)/HttpdSocket$(ObjectSuffix).d -MM HttpdSocket.cpp
-
-$(IntermediateDirectory)/HttpGetSocket$(ObjectSuffix): HttpGetSocket.cpp $(IntermediateDirectory)/HttpGetSocket$(ObjectSuffix).d
-	$(CompilerName) $(SourceSwitch)HttpGetSocket.cpp $(CmpOptions)   $(OutputSwitch)$(IntermediateDirectory)/HttpGetSocket$(ObjectSuffix) $(IncludePath)
-$(IntermediateDirectory)/HttpGetSocket$(ObjectSuffix).d:
-	@$(CompilerName) $(CmpOptions) $(IncludePath) -MT$(IntermediateDirectory)/HttpGetSocket$(ObjectSuffix) -MF$(IntermediateDirectory)/HttpGetSocket$(ObjectSuffix).d -MM HttpGetSocket.cpp
-
-$(IntermediateDirectory)/HttpPostSocket$(ObjectSuffix): HttpPostSocket.cpp $(IntermediateDirectory)/HttpPostSocket$(ObjectSuffix).d
-	$(CompilerName) $(SourceSwitch)HttpPostSocket.cpp $(CmpOptions)   $(OutputSwitch)$(IntermediateDirectory)/HttpPostSocket$(ObjectSuffix) $(IncludePath)
-$(IntermediateDirectory)/HttpPostSocket$(ObjectSuffix).d:
-	@$(CompilerName) $(CmpOptions) $(IncludePath) -MT$(IntermediateDirectory)/HttpPostSocket$(ObjectSuffix) -MF$(IntermediateDirectory)/HttpPostSocket$(ObjectSuffix).d -MM HttpPostSocket.cpp
-
-$(IntermediateDirectory)/HttpPutSocket$(ObjectSuffix): HttpPutSocket.cpp $(IntermediateDirectory)/HttpPutSocket$(ObjectSuffix).d
-	$(CompilerName) $(SourceSwitch)HttpPutSocket.cpp $(CmpOptions)   $(OutputSwitch)$(IntermediateDirectory)/HttpPutSocket$(ObjectSuffix) $(IncludePath)
-$(IntermediateDirectory)/HttpPutSocket$(ObjectSuffix).d:
-	@$(CompilerName) $(CmpOptions) $(IncludePath) -MT$(IntermediateDirectory)/HttpPutSocket$(ObjectSuffix) -MF$(IntermediateDirectory)/HttpPutSocket$(ObjectSuffix).d -MM HttpPutSocket.cpp
-
-$(IntermediateDirectory)/HTTPSocket$(ObjectSuffix): HTTPSocket.cpp $(IntermediateDirectory)/HTTPSocket$(ObjectSuffix).d
-	$(CompilerName) $(SourceSwitch)HTTPSocket.cpp $(CmpOptions)   $(OutputSwitch)$(IntermediateDirectory)/HTTPSocket$(ObjectSuffix) $(IncludePath)
-$(IntermediateDirectory)/HTTPSocket$(ObjectSuffix).d:
-	@$(CompilerName) $(CmpOptions) $(IncludePath) -MT$(IntermediateDirectory)/HTTPSocket$(ObjectSuffix) -MF$(IntermediateDirectory)/HTTPSocket$(ObjectSuffix).d -MM HTTPSocket.cpp
 
 $(IntermediateDirectory)/IEventOwner$(ObjectSuffix): IEventOwner.cpp $(IntermediateDirectory)/IEventOwner$(ObjectSuffix).d
 	$(CompilerName) $(SourceSwitch)IEventOwner.cpp $(CmpOptions)   $(OutputSwitch)$(IntermediateDirectory)/IEventOwner$(ObjectSuffix) $(IncludePath)
@@ -342,24 +296,6 @@ clean:
 	$(RM) $(IntermediateDirectory)/EventTime$(ObjectSuffix).d
 	$(RM) $(IntermediateDirectory)/File$(ObjectSuffix)
 	$(RM) $(IntermediateDirectory)/File$(ObjectSuffix).d
-	$(RM) $(IntermediateDirectory)/HttpClientSocket$(ObjectSuffix)
-	$(RM) $(IntermediateDirectory)/HttpClientSocket$(ObjectSuffix).d
-	$(RM) $(IntermediateDirectory)/HttpdCookies$(ObjectSuffix)
-	$(RM) $(IntermediateDirectory)/HttpdCookies$(ObjectSuffix).d
-	$(RM) $(IntermediateDirectory)/HttpDebugSocket$(ObjectSuffix)
-	$(RM) $(IntermediateDirectory)/HttpDebugSocket$(ObjectSuffix).d
-	$(RM) $(IntermediateDirectory)/HttpdForm$(ObjectSuffix)
-	$(RM) $(IntermediateDirectory)/HttpdForm$(ObjectSuffix).d
-	$(RM) $(IntermediateDirectory)/HttpdSocket$(ObjectSuffix)
-	$(RM) $(IntermediateDirectory)/HttpdSocket$(ObjectSuffix).d
-	$(RM) $(IntermediateDirectory)/HttpGetSocket$(ObjectSuffix)
-	$(RM) $(IntermediateDirectory)/HttpGetSocket$(ObjectSuffix).d
-	$(RM) $(IntermediateDirectory)/HttpPostSocket$(ObjectSuffix)
-	$(RM) $(IntermediateDirectory)/HttpPostSocket$(ObjectSuffix).d
-	$(RM) $(IntermediateDirectory)/HttpPutSocket$(ObjectSuffix)
-	$(RM) $(IntermediateDirectory)/HttpPutSocket$(ObjectSuffix).d
-	$(RM) $(IntermediateDirectory)/HTTPSocket$(ObjectSuffix)
-	$(RM) $(IntermediateDirectory)/HTTPSocket$(ObjectSuffix).d
 	$(RM) $(IntermediateDirectory)/IEventOwner$(ObjectSuffix)
 	$(RM) $(IntermediateDirectory)/IEventOwner$(ObjectSuffix).d
 	$(RM) $(IntermediateDirectory)/Ipv4Address$(ObjectSuffix)

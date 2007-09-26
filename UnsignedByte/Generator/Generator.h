@@ -21,8 +21,10 @@
 
 #include <string>
 #include <fstream>
+#include <smart_ptr.h>
 
 class Table;
+typedef SmartPtr<Table> TablePtr;
 
 class Generator
 {
@@ -39,12 +41,12 @@ private:
 	void AppendLicense(std::ofstream& file);
 	
 	void AppendHeaderIncludes();
-	void AppendHeaderClass(Table* table);
+	void AppendHeaderClass(TablePtr table);
 	void AppendHeaderFooter();
 	void CreateHeader();
 	
 	void AppendSourceIncludes();
-	void AppendSourceClass(Table* table);
+	void AppendSourceClass(TablePtr table);
 	void AppendSourceFooter();
 	void CreateSource();
 	

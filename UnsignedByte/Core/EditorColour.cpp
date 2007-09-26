@@ -79,12 +79,12 @@ void EditorColour::dispatch(const std::string& action, const std::string& argume
 	return;
 }
 
-Savable* EditorColour::getEditing()
+SavablePtr EditorColour::getEditing()
 {
 	return m_colour;
 }
 
-Table* EditorColour::getTable()
+TablePtr EditorColour::getTable()
 {
 	return Tables::Get()->COLOURS;
 }

@@ -21,13 +21,15 @@
 
 #include <string>
 #include <fstream>
+#include <smart_ptr.h>
 
 class Table;
+typedef SmartPtr<Table> TablePtr;
 
 class ClassHeaderGenerator
 {
 public:
-	ClassHeaderGenerator(Table* table, std::ofstream* file);
+	ClassHeaderGenerator(TablePtr table, std::ofstream* file);
 	~ClassHeaderGenerator();
 	
 	void GenerateClass();
@@ -43,6 +45,6 @@ private:
 	void AppendFooter();
 	
 	std::string m_tabs;
-	Table* m_table;
+	TablePtr m_table;
 	std::ofstream* m_file;
 };

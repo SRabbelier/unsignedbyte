@@ -130,7 +130,7 @@ void Generator::AppendHeaderIncludes()
 	return;
 }
 
-void Generator::AppendHeaderClass(Table* table)
+void Generator::AppendHeaderClass(TablePtr table)
 {
 	try
 	{
@@ -207,7 +207,7 @@ void Generator::AppendSourceIncludes()
 	return;
 }
 
-void Generator::AppendSourceClass(Table* table)
+void Generator::AppendSourceClass(TablePtr table)
 {
 	try
 	{

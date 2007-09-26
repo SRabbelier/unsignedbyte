@@ -163,7 +163,7 @@ std::vector<std::string> Command::List()
 	return GetTable()->tableList();
 }
 
-Table* Command::GetTable()
+TablePtr Command::GetTable()
 {
 	return Tables::Get()->COMMANDS;
 }

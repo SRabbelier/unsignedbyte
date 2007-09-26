@@ -29,6 +29,9 @@
 class Savable;
 class Table;
 
+typedef SmartPtr<Savable> SavablePtr;
+typedef SmartPtr<Table> TablePtr;
+
 class OLCEditor : public Editor
 {
 public:
@@ -38,8 +41,8 @@ public:
 	virtual std::string lookup(const std::string& action);
 	virtual void dispatch(const std::string& action, const std::string& argument);
 	
-	virtual Savable* getEditing() = 0;
-	virtual Table* getTable() = 0;
+	virtual SavablePtr getEditing() = 0;
+	virtual TablePtr getTable() = 0;
 	virtual long addNew() = 0;
 
 	virtual std::vector<std::string> getList() = 0;

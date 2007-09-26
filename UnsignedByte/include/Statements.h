@@ -22,6 +22,7 @@
 
 #include <string>
 #include <map>
+#include <smart_ptr.h>
 
 class sqlite3_stmt;
 
@@ -61,3 +62,5 @@ private:
 	sqlite3_stmt* m_list;
 	sqlite3_stmt* m_foreach;
 };
+
+typedef SmartPtr<Statements> StatementsPtr;

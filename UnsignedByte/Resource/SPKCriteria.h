@@ -33,7 +33,7 @@ public:
 	SPKCriteria(value_type key) : m_key(key) {}
 	~SPKCriteria() {}
 	
-	bool evaluate(sqlite3_stmt* statement, const Table* table);
+	bool evaluate(sqlite3_stmt* statement, const TablePtr table);
 	
 private:
 	bool evaluate(sqlite3_stmt* statement);

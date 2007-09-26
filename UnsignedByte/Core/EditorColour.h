@@ -40,8 +40,8 @@ public:
 	std::string lookup(const std::string& action);
 	void dispatch(const std::string& action, const std::string& argument);
 	
-	Savable* getEditing();
-	Table* getTable();
+	SavablePtr getEditing();
+	TablePtr getTable();
 	long addNew();
 	std::vector<std::string> getList();
 	std::vector<std::string> getCommands();

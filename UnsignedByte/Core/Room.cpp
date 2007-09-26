@@ -249,7 +249,7 @@ void Room::Close(Room* room)
 	delete room;
 }
 
-Table* Room::GetTable()
+TablePtr Room::GetTable()
 {
 	return Tables::Get()->ROOMS;
 }

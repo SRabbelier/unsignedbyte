@@ -21,8 +21,10 @@
 
 #include <string>
 #include <vector>
+#include <smart_ptr.h>
 
 class Table;
+typedef SmartPtr<Table> TablePtr;
 
 class Savable
 {
@@ -37,7 +39,9 @@ public:
 	virtual std::vector<std::string> Show() = 0;
 	virtual std::string ShowShort() = 0;
 	
-	virtual Table* getTable() const = 0;
+	virtual TablePtr getTable() const = 0;
 private:
 	Savable(const Savable& rhs) {};
 };
+
+typedef SmartPtr<Savable> SavablePtr;

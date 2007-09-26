@@ -78,12 +78,12 @@ void EditorSector::dispatch(const std::string& action, const std::string& argume
 	return;
 }
 
-Savable* EditorSector::getEditing()
+SavablePtr EditorSector::getEditing()
 {
 	return m_sector;
 }
 
-Table* EditorSector::getTable()
+TablePtr EditorSector::getTable()
 {
 	return Tables::Get()->SECTORS;
 }

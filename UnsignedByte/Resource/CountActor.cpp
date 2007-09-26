@@ -25,7 +25,7 @@
 #include "CountActor.h"
 #include "Table.h"
 
-void CountActor::parseRow(sqlite3_stmt* statement, const Table* table)
+void CountActor::parseRow(sqlite3_stmt* statement, TablePtr table)
 { 
 	if(m_criteria->evaluate(statement, table))
 		m_count++;

@@ -34,7 +34,7 @@ public:
 	ListActor() {}
 	~ListActor() {}
 	
-	void parseRow(sqlite3_stmt* statement, const Table* table);
+	void parseRow(sqlite3_stmt* statement, TablePtr table);
 	const Strings& getList() const;
 	
 private:

@@ -21,8 +21,10 @@
 #pragma once
 
 #include <sqlite3.h>
+#include <smart_ptr.h>
 
 class Table;
+typedef SmartPtr<Table> TablePtr;
 
 class Criteria
 {
@@ -30,8 +32,10 @@ public:
 	Criteria() {}
 	virtual ~Criteria() {}
 
-	virtual bool evaluate(sqlite3_stmt* statement, const Table* table) { return evaluate(statement); }
+	virtual bool evaluate(sqlite3_stmt* statement, TablePtr table) { return evaluate(statement); }
 	
 private:
 	virtual bool evaluate(sqlite3_stmt* statement) = 0;
 };
+
+typedef SmartPtr<Criteria> CriteriaPtr;

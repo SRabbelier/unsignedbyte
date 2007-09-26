@@ -151,7 +151,7 @@ void Accounts::parseLookup(sqlite3_stmt* stmt)
 	m_accountid = sqlite3_column_int64(stmt, 0);
 }
 
-Table* Accounts::getTable() const
+TablePtr Accounts::getTable() const
 {
 	return Tables::Get()->ACCOUNTS;
 }
@@ -314,7 +314,7 @@ void Areas::parseLookup(sqlite3_stmt* stmt)
 	m_areaid = sqlite3_column_int64(stmt, 0);
 }
 
-Table* Areas::getTable() const
+TablePtr Areas::getTable() const
 {
 	return Tables::Get()->AREAS;
 }
@@ -498,7 +498,7 @@ void Branches::parseLookup(sqlite3_stmt* stmt)
 	m_branchid = sqlite3_column_int64(stmt, 0);
 }
 
-Table* Branches::getTable() const
+TablePtr Branches::getTable() const
 {
 	return Tables::Get()->BRANCHES;
 }
@@ -648,7 +648,7 @@ void CharacterAccount::parseLookup(sqlite3_stmt* stmt)
 	m_fkCharacters = sqlite3_column_int64(stmt, 1);
 }
 
-Table* CharacterAccount::getTable() const
+TablePtr CharacterAccount::getTable() const
 {
 	return Tables::Get()->CHARACTERACCOUNT;
 }
@@ -762,7 +762,7 @@ void CharacterBranch::parseLookup(sqlite3_stmt* stmt)
 	m_fkCharacters = sqlite3_column_int64(stmt, 1);
 }
 
-Table* CharacterBranch::getTable() const
+TablePtr CharacterBranch::getTable() const
 {
 	return Tables::Get()->CHARACTERBRANCH;
 }
@@ -887,7 +887,7 @@ void CharacterCluster::parseLookup(sqlite3_stmt* stmt)
 	m_fkClusters = sqlite3_column_int64(stmt, 1);
 }
 
-Table* CharacterCluster::getTable() const
+TablePtr CharacterCluster::getTable() const
 {
 	return Tables::Get()->CHARACTERCLUSTER;
 }
@@ -1044,7 +1044,7 @@ void Characters::parseLookup(sqlite3_stmt* stmt)
 	m_characterid = sqlite3_column_int64(stmt, 0);
 }
 
-Table* Characters::getTable() const
+TablePtr Characters::getTable() const
 {
 	return Tables::Get()->CHARACTERS;
 }
@@ -1197,7 +1197,7 @@ void CharacterSkill::parseLookup(sqlite3_stmt* stmt)
 	m_fkCharacters = sqlite3_column_int64(stmt, 1);
 }
 
-Table* CharacterSkill::getTable() const
+TablePtr CharacterSkill::getTable() const
 {
 	return Tables::Get()->CHARACTERSKILL;
 }
@@ -1322,7 +1322,7 @@ void CharacterStat::parseLookup(sqlite3_stmt* stmt)
 	m_fkStats = sqlite3_column_int64(stmt, 1);
 }
 
-Table* CharacterStat::getTable() const
+TablePtr CharacterStat::getTable() const
 {
 	return Tables::Get()->CHARACTERSTAT;
 }
@@ -1447,7 +1447,7 @@ void CharacterTree::parseLookup(sqlite3_stmt* stmt)
 	m_fkTrees = sqlite3_column_int64(stmt, 1);
 }
 
-Table* CharacterTree::getTable() const
+TablePtr CharacterTree::getTable() const
 {
 	return Tables::Get()->CHARACTERTREE;
 }
@@ -1594,7 +1594,7 @@ void Clusters::parseLookup(sqlite3_stmt* stmt)
 	m_clusterid = sqlite3_column_int64(stmt, 0);
 }
 
-Table* Clusters::getTable() const
+TablePtr Clusters::getTable() const
 {
 	return Tables::Get()->CLUSTERS;
 }
@@ -1768,7 +1768,7 @@ void Colours::parseLookup(sqlite3_stmt* stmt)
 	m_colourid = sqlite3_column_int64(stmt, 0);
 }
 
-Table* Colours::getTable() const
+TablePtr Colours::getTable() const
 {
 	return Tables::Get()->COLOURS;
 }
@@ -1955,7 +1955,7 @@ void Commands::parseLookup(sqlite3_stmt* stmt)
 	m_commandid = sqlite3_column_int64(stmt, 0);
 }
 
-Table* Commands::getTable() const
+TablePtr Commands::getTable() const
 {
 	return Tables::Get()->COMMANDS;
 }
@@ -2115,7 +2115,7 @@ void Exits::parseLookup(sqlite3_stmt* stmt)
 	m_exitid = sqlite3_column_int64(stmt, 0);
 }
 
-Table* Exits::getTable() const
+TablePtr Exits::getTable() const
 {
 	return Tables::Get()->EXITS;
 }
@@ -2263,7 +2263,7 @@ void GrantGroups::parseLookup(sqlite3_stmt* stmt)
 	m_grantgroupid = sqlite3_column_int64(stmt, 0);
 }
 
-Table* GrantGroups::getTable() const
+TablePtr GrantGroups::getTable() const
 {
 	return Tables::Get()->GRANTGROUPS;
 }
@@ -2405,7 +2405,7 @@ void Permissions::parseLookup(sqlite3_stmt* stmt)
 	m_fkGrantGroups = sqlite3_column_int64(stmt, 1);
 }
 
-Table* Permissions::getTable() const
+TablePtr Permissions::getTable() const
 {
 	return Tables::Get()->PERMISSIONS;
 }
@@ -2552,7 +2552,7 @@ void Races::parseLookup(sqlite3_stmt* stmt)
 	m_raceid = sqlite3_column_int64(stmt, 0);
 }
 
-Table* Races::getTable() const
+TablePtr Races::getTable() const
 {
 	return Tables::Get()->RACES;
 }
@@ -2689,7 +2689,7 @@ void Rooms::parseLookup(sqlite3_stmt* stmt)
 	m_roomid = sqlite3_column_int64(stmt, 0);
 }
 
-Table* Rooms::getTable() const
+TablePtr Rooms::getTable() const
 {
 	return Tables::Get()->ROOMS;
 }
@@ -2907,7 +2907,7 @@ void Sectors::parseLookup(sqlite3_stmt* stmt)
 	m_sectorid = sqlite3_column_int64(stmt, 0);
 }
 
-Table* Sectors::getTable() const
+TablePtr Sectors::getTable() const
 {
 	return Tables::Get()->SECTORS;
 }
@@ -3085,7 +3085,7 @@ void Skills::parseLookup(sqlite3_stmt* stmt)
 	m_skillid = sqlite3_column_int64(stmt, 0);
 }
 
-Table* Skills::getTable() const
+TablePtr Skills::getTable() const
 {
 	return Tables::Get()->SKILLS;
 }
@@ -3263,7 +3263,7 @@ void Stats::parseLookup(sqlite3_stmt* stmt)
 	m_statid = sqlite3_column_int64(stmt, 0);
 }
 
-Table* Stats::getTable() const
+TablePtr Stats::getTable() const
 {
 	return Tables::Get()->STATS;
 }
@@ -3425,7 +3425,7 @@ void Trees::parseLookup(sqlite3_stmt* stmt)
 	m_treeid = sqlite3_column_int64(stmt, 0);
 }
 
-Table* Trees::getTable() const
+TablePtr Trees::getTable() const
 {
 	return Tables::Get()->TREES;
 }
@@ -3585,7 +3585,7 @@ void Version::parseLookup(sqlite3_stmt* stmt)
 	m_versionid = sqlite3_column_int64(stmt, 0);
 }
 
-Table* Version::getTable() const
+TablePtr Version::getTable() const
 {
 	return Tables::Get()->VERSION;
 }

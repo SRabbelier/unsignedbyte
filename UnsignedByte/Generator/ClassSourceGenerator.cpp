@@ -29,7 +29,7 @@
 
 using std::endl;
 
-ClassSourceGenerator::ClassSourceGenerator(Table* table, std::ofstream* file) :
+ClassSourceGenerator::ClassSourceGenerator(TablePtr table, std::ofstream* file) :
 m_tabs("\t"),
 m_table(table),
 m_file(file),
@@ -424,7 +424,7 @@ void ClassSourceGenerator::AppendGetTable()
 	if(!m_file)
 		throw std::logic_error("Source file is not open for writing.\n");
 	
-	(*m_file) << "Table* " << m_name << "::getTable() const" << endl;
+	(*m_file) << "TablePtr " << m_name << "::getTable() const" << endl;
 	(*m_file) << "{" << endl;
 	(*m_file) << m_tabs << "return Tables::Get()->";
 	(*m_file) << String::Get()->toupper(m_name);
@@ -450,7 +450,7 @@ void ClassSourceGenerator::AppendGetSet()
 	// Getters
 	for(Fields::const_iterator it = m_table->begin(); it != m_table->end(); it++)
 	{
-		Field* field = *it;
+		FieldPtr field = *it;
 		if(field->isText())
 			(*m_file) << "const std::string& " << m_name <<"::get" << field->getName() << "() const" << endl;
 		else
@@ -465,7 +465,7 @@ void ClassSourceGenerator::AppendGetSet()
 	// Setters
 	for(Fields::const_iterator it = m_table->begin(); it != m_table->end(); it++)
 	{
-		Field* field = *it;
+		FieldPtr field = *it;
 		if(field->isText())
 			(*m_file) << "void " << m_name << "::set" << field->getName() << "(const std::string& value)" << endl;
 		else

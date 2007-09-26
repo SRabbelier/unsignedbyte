@@ -21,8 +21,11 @@
 #pragma once
 
 #include <sqlite3.h>
+#include <smart_ptr.h>
 
 class Table;
+
+typedef SmartPtr<Table> TablePtr;
 typedef unsigned long value_type;
 
 class Actor
@@ -31,5 +34,7 @@ public:
 	Actor() {}
 	virtual ~Actor() {}
 	
-	virtual void parseRow(sqlite3_stmt* statement, const Table* table) = 0;
+	virtual void parseRow(sqlite3_stmt* statement, TablePtr table) = 0;
 };
+
+typedef SmartPtr<Actor> ActorPtr;

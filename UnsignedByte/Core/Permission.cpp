@@ -159,7 +159,7 @@ std::vector<std::string> Permission::List()
 	return GetTable()->tableList();
 }
 
-Table* Permission::GetTable()
+TablePtr Permission::GetTable()
 {
 	return Tables::Get()->PERMISSIONS;
 }

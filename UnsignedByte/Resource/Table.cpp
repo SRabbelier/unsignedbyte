@@ -49,10 +49,7 @@ m_spkey(false)
 
 Table::~Table()
 {
-	for(Fields::iterator it = m_fields.begin(); it != m_fields.end(); it++)
-	{
-		delete (*it);
-	}
+
 }
 
 void Table::addPK(const std::string& name)
@@ -65,7 +62,7 @@ void Table::addPK(const std::string& name)
 		m_spkey = false;
 }
 
-void Table::addFPK(Table* table)
+void Table::addFPK(TablePtr table)
 {
 	std::string name;
 	name.append(table->tableForeignName());
@@ -107,19 +104,19 @@ void Table::addTextField(const std::string& name, const std::string& defaulttext
 
 void Table::addField(const std::string& name, bool text, const std::string& defaulttext, bool providelookup)
 {
-	Field* field = new Field(name, text, defaulttext);
+	FieldPtr field = new Field(name, text, defaulttext);
 	m_fields.push_back(field);
 	
 	if(providelookup)
 		m_lookupfields.push_back(field);
 }
 
-void Table::addFK(Table* table)
+void Table::addFK(TablePtr table)
 {
 	addFK(table, Global::Get()->EmptyString);
 }
 
-void Table::addFK(Table* table, const std::string& suffix)
+void Table::addFK(TablePtr table, const std::string& suffix)
 {	
 	std::string name;
 	name.append(table->tableForeignName());

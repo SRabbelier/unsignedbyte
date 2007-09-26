@@ -93,7 +93,7 @@ std::vector<std::string> GrantGroup::List()
 	return GetTable()->tableList();
 }
 
-Table* GrantGroup::GetTable()
+TablePtr GrantGroup::GetTable()
 {
 	return Tables::Get()->GRANTGROUPS;
 }

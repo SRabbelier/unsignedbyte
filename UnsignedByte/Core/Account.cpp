@@ -99,7 +99,7 @@ void Account::Close(Account* account)
 	delete account;
 }
 
-Table* Account::getTable() const
+TablePtr Account::getTable() const
 {
 	return Tables::Get()->ACCOUNTS;
 }

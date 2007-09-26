@@ -25,26 +25,29 @@
 #include <sqlite3.h>
 #include <Database.h>
 #include <Bindable.h>
+#include <smart_ptr.h>
+#include <singleton.h>
 
 class Table;
 class Statements;
 class Actor;
 
-typedef std::map<Table*, Statements*>  TableStatements;
+typedef SmartPtr<Actor> ActorPtr;
+typedef SmartPtr<Table> TablePtr;
+typedef SmartPtr<Statements> StatementsPtr;
+
+typedef std::map<TablePtr, StatementsPtr>  TableStatements;
 typedef unsigned long value_type;	
 
-class SqliteMgr
+class SqliteMgr : public Singleton<SqliteMgr>
 {
 	public:
-		static SqliteMgr* Get();
-		static void Free();
-	
-		void doInsert(Bindable* bindable);
-		void doErase(Bindable* bindable);
-		void doUpdate(Bindable* bindable);
-		void doSelect(Bindable* bindable);
-		void doLookup(Bindable* bindable, const std::string& field);
-		void doForEach(const Table* table, Actor* act);
+		void doInsert(BindablePtr bindable);
+		void doErase(BindablePtr bindable);
+		void doUpdate(BindablePtr bindable);
+		void doSelect(BindablePtr bindable);
+		void doLookup(BindablePtr bindable, const std::string& field);
+		void doForEach(const TablePtr table, ActorPtr act);
 	
 	private:
 		Database* m_db;
@@ -53,16 +56,16 @@ class SqliteMgr
 		
 		TableStatements m_statements;
 		
-		Statements* getStatements(const Table* table);
-		sqlite3_stmt* getInsertStmt(const Table* table);
-		sqlite3_stmt* getEraseStmt(const Table* table);
-		sqlite3_stmt* getUpdateStmt(const Table* table);
-		sqlite3_stmt* getSelectStmt(const Table* table);
-		sqlite3_stmt* getLookupStmt(const Table* table, const std::string& field);
-		sqlite3_stmt* getForEachStmt(const Table* table);		
-	
+		StatementsPtr getStatements(const TablePtr table);
+		sqlite3_stmt* getInsertStmt(const TablePtr table);
+		sqlite3_stmt* getEraseStmt(const TablePtr table);
+		sqlite3_stmt* getUpdateStmt(const TablePtr table);
+		sqlite3_stmt* getSelectStmt(const TablePtr table);
+		sqlite3_stmt* getLookupStmt(const TablePtr table, const std::string& field);
+		sqlite3_stmt* getForEachStmt(const TablePtr table);		
+		
+		friend class Singleton<SqliteMgr>;
 		SqliteMgr();
 		~SqliteMgr();
 		bool doStatement(sqlite3_stmt* stmt);
-		static SqliteMgr* m_instance;
 };

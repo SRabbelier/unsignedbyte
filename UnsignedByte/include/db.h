@@ -56,7 +56,7 @@ namespace db
 		void parseInsert(sqlite3* db);
 		void parseSelect(sqlite3_stmt* stmt);
 		void parseLookup(sqlite3_stmt* stmt);
-		Table* getTable() const;
+		TablePtr getTable() const;
 
 		// Getters
 		value_type getaccountid() const;
@@ -114,7 +114,7 @@ namespace db
 		void parseInsert(sqlite3* db);
 		void parseSelect(sqlite3_stmt* stmt);
 		void parseLookup(sqlite3_stmt* stmt);
-		Table* getTable() const;
+		TablePtr getTable() const;
 
 		// Getters
 		value_type getareaid() const;
@@ -178,7 +178,7 @@ namespace db
 		void parseInsert(sqlite3* db);
 		void parseSelect(sqlite3_stmt* stmt);
 		void parseLookup(sqlite3_stmt* stmt);
-		Table* getTable() const;
+		TablePtr getTable() const;
 
 		// Getters
 		value_type getbranchid() const;
@@ -239,7 +239,7 @@ namespace db
 		void parseInsert(sqlite3* db);
 		void parseSelect(sqlite3_stmt* stmt);
 		void parseLookup(sqlite3_stmt* stmt);
-		Table* getTable() const;
+		TablePtr getTable() const;
 
 		// Getters
 		value_type getfkAccounts() const;
@@ -286,7 +286,7 @@ namespace db
 		void parseInsert(sqlite3* db);
 		void parseSelect(sqlite3_stmt* stmt);
 		void parseLookup(sqlite3_stmt* stmt);
-		Table* getTable() const;
+		TablePtr getTable() const;
 
 		// Getters
 		value_type getfkBranches() const;
@@ -338,7 +338,7 @@ namespace db
 		void parseInsert(sqlite3* db);
 		void parseSelect(sqlite3_stmt* stmt);
 		void parseLookup(sqlite3_stmt* stmt);
-		Table* getTable() const;
+		TablePtr getTable() const;
 
 		// Getters
 		value_type getfkCharacters() const;
@@ -393,7 +393,7 @@ namespace db
 		void parseInsert(sqlite3* db);
 		void parseSelect(sqlite3_stmt* stmt);
 		void parseLookup(sqlite3_stmt* stmt);
-		Table* getTable() const;
+		TablePtr getTable() const;
 
 		// Getters
 		value_type getcharacterid() const;
@@ -454,7 +454,7 @@ namespace db
 		void parseInsert(sqlite3* db);
 		void parseSelect(sqlite3_stmt* stmt);
 		void parseLookup(sqlite3_stmt* stmt);
-		Table* getTable() const;
+		TablePtr getTable() const;
 
 		// Getters
 		value_type getfkBranches() const;
@@ -506,7 +506,7 @@ namespace db
 		void parseInsert(sqlite3* db);
 		void parseSelect(sqlite3_stmt* stmt);
 		void parseLookup(sqlite3_stmt* stmt);
-		Table* getTable() const;
+		TablePtr getTable() const;
 
 		// Getters
 		value_type getfkCharacters() const;
@@ -558,7 +558,7 @@ namespace db
 		void parseInsert(sqlite3* db);
 		void parseSelect(sqlite3_stmt* stmt);
 		void parseLookup(sqlite3_stmt* stmt);
-		Table* getTable() const;
+		TablePtr getTable() const;
 
 		// Getters
 		value_type getfkCharacters() const;
@@ -613,7 +613,7 @@ namespace db
 		void parseInsert(sqlite3* db);
 		void parseSelect(sqlite3_stmt* stmt);
 		void parseLookup(sqlite3_stmt* stmt);
-		Table* getTable() const;
+		TablePtr getTable() const;
 
 		// Getters
 		value_type getclusterid() const;
@@ -670,7 +670,7 @@ namespace db
 		void parseInsert(sqlite3* db);
 		void parseSelect(sqlite3_stmt* stmt);
 		void parseLookup(sqlite3_stmt* stmt);
-		Table* getTable() const;
+		TablePtr getTable() const;
 
 		// Getters
 		value_type getcolourid() const;
@@ -734,7 +734,7 @@ namespace db
 		void parseInsert(sqlite3* db);
 		void parseSelect(sqlite3_stmt* stmt);
 		void parseLookup(sqlite3_stmt* stmt);
-		Table* getTable() const;
+		TablePtr getTable() const;
 
 		// Getters
 		value_type getcommandid() const;
@@ -799,7 +799,7 @@ namespace db
 		void parseInsert(sqlite3* db);
 		void parseSelect(sqlite3_stmt* stmt);
 		void parseLookup(sqlite3_stmt* stmt);
-		Table* getTable() const;
+		TablePtr getTable() const;
 
 		// Getters
 		value_type getexitid() const;
@@ -851,7 +851,7 @@ namespace db
 		void parseInsert(sqlite3* db);
 		void parseSelect(sqlite3_stmt* stmt);
 		void parseLookup(sqlite3_stmt* stmt);
-		Table* getTable() const;
+		TablePtr getTable() const;
 
 		// Getters
 		value_type getgrantgroupid() const;
@@ -909,7 +909,7 @@ namespace db
 		void parseInsert(sqlite3* db);
 		void parseSelect(sqlite3_stmt* stmt);
 		void parseLookup(sqlite3_stmt* stmt);
-		Table* getTable() const;
+		TablePtr getTable() const;
 
 		// Getters
 		value_type getfkAccounts() const;
@@ -964,7 +964,7 @@ namespace db
 		void parseInsert(sqlite3* db);
 		void parseSelect(sqlite3_stmt* stmt);
 		void parseLookup(sqlite3_stmt* stmt);
-		Table* getTable() const;
+		TablePtr getTable() const;
 
 		// Getters
 		value_type getraceid() const;
@@ -1017,7 +1017,7 @@ namespace db
 		void parseInsert(sqlite3* db);
 		void parseSelect(sqlite3_stmt* stmt);
 		void parseLookup(sqlite3_stmt* stmt);
-		Table* getTable() const;
+		TablePtr getTable() const;
 
 		// Getters
 		value_type getroomid() const;
@@ -1087,7 +1087,7 @@ namespace db
 		void parseInsert(sqlite3* db);
 		void parseSelect(sqlite3_stmt* stmt);
 		void parseLookup(sqlite3_stmt* stmt);
-		Table* getTable() const;
+		TablePtr getTable() const;
 
 		// Getters
 		value_type getsectorid() const;
@@ -1151,7 +1151,7 @@ namespace db
 		void parseInsert(sqlite3* db);
 		void parseSelect(sqlite3_stmt* stmt);
 		void parseLookup(sqlite3_stmt* stmt);
-		Table* getTable() const;
+		TablePtr getTable() const;
 
 		// Getters
 		value_type getskillid() const;
@@ -1211,7 +1211,7 @@ namespace db
 		void parseInsert(sqlite3* db);
 		void parseSelect(sqlite3_stmt* stmt);
 		void parseLookup(sqlite3_stmt* stmt);
-		Table* getTable() const;
+		TablePtr getTable() const;
 
 		// Getters
 		value_type getstatid() const;
@@ -1269,7 +1269,7 @@ namespace db
 		void parseInsert(sqlite3* db);
 		void parseSelect(sqlite3_stmt* stmt);
 		void parseLookup(sqlite3_stmt* stmt);
-		Table* getTable() const;
+		TablePtr getTable() const;
 
 		// Getters
 		value_type gettreeid() const;
@@ -1331,7 +1331,7 @@ namespace db
 		void parseInsert(sqlite3* db);
 		void parseSelect(sqlite3_stmt* stmt);
 		void parseLookup(sqlite3_stmt* stmt);
-		Table* getTable() const;
+		TablePtr getTable() const;
 
 		// Getters
 		value_type getversionid() const;

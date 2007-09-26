@@ -76,12 +76,12 @@ void EditorMobile::dispatch(const std::string& action, const std::string& argume
 	return;
 }
 
-Savable* EditorMobile::getEditing()
+SavablePtr EditorMobile::getEditing()
 {
 	return m_mobile;
 }
 
-Table* EditorMobile::getTable()
+TablePtr EditorMobile::getTable()
 {
 	return Tables::Get()->CHARACTERS;
 }
