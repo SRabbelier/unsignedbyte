@@ -47,6 +47,7 @@ private:
 	void AppendBindLookup();
 	void AppendParseInsert();
 	void AppendParseSelect();
+	void AppendParseLookup();
 	void AppendGetTable();
 	void AppendGetSet();
 	void AppendFooter();

@@ -142,7 +142,7 @@ void EditorAccount::Login::Run(UBSocket* sock, const std::string &argument)
 void EditorAccount::List::Run(UBSocket* sock, const std::string &argument)
 {
 	mud::Account* account = sock->GetAccount();
-	if(!account || !account->Exists())
+	if(!account->Exists())
 	{
 		sock->Send("For some reason your account does not exist?!");
 		sock->Send("Closing your connection now.\n");

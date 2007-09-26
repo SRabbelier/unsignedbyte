@@ -55,6 +55,7 @@ namespace db
 		void bindLookup(sqlite3_stmt* stmt) const;
 		void parseInsert(sqlite3* db);
 		void parseSelect(sqlite3_stmt* stmt);
+		void parseLookup(sqlite3_stmt* stmt);
 		Table* getTable() const;
 
 		// Getters
@@ -112,6 +113,7 @@ namespace db
 		void bindLookup(sqlite3_stmt* stmt) const;
 		void parseInsert(sqlite3* db);
 		void parseSelect(sqlite3_stmt* stmt);
+		void parseLookup(sqlite3_stmt* stmt);
 		Table* getTable() const;
 
 		// Getters
@@ -175,6 +177,7 @@ namespace db
 		void bindLookup(sqlite3_stmt* stmt) const;
 		void parseInsert(sqlite3* db);
 		void parseSelect(sqlite3_stmt* stmt);
+		void parseLookup(sqlite3_stmt* stmt);
 		Table* getTable() const;
 
 		// Getters
@@ -235,6 +238,7 @@ namespace db
 		void bindLookup(sqlite3_stmt* stmt) const;
 		void parseInsert(sqlite3* db);
 		void parseSelect(sqlite3_stmt* stmt);
+		void parseLookup(sqlite3_stmt* stmt);
 		Table* getTable() const;
 
 		// Getters
@@ -281,6 +285,7 @@ namespace db
 		void bindLookup(sqlite3_stmt* stmt) const;
 		void parseInsert(sqlite3* db);
 		void parseSelect(sqlite3_stmt* stmt);
+		void parseLookup(sqlite3_stmt* stmt);
 		Table* getTable() const;
 
 		// Getters
@@ -332,6 +337,7 @@ namespace db
 		void bindLookup(sqlite3_stmt* stmt) const;
 		void parseInsert(sqlite3* db);
 		void parseSelect(sqlite3_stmt* stmt);
+		void parseLookup(sqlite3_stmt* stmt);
 		Table* getTable() const;
 
 		// Getters
@@ -386,6 +392,7 @@ namespace db
 		void bindLookup(sqlite3_stmt* stmt) const;
 		void parseInsert(sqlite3* db);
 		void parseSelect(sqlite3_stmt* stmt);
+		void parseLookup(sqlite3_stmt* stmt);
 		Table* getTable() const;
 
 		// Getters
@@ -446,6 +453,7 @@ namespace db
 		void bindLookup(sqlite3_stmt* stmt) const;
 		void parseInsert(sqlite3* db);
 		void parseSelect(sqlite3_stmt* stmt);
+		void parseLookup(sqlite3_stmt* stmt);
 		Table* getTable() const;
 
 		// Getters
@@ -497,6 +505,7 @@ namespace db
 		void bindLookup(sqlite3_stmt* stmt) const;
 		void parseInsert(sqlite3* db);
 		void parseSelect(sqlite3_stmt* stmt);
+		void parseLookup(sqlite3_stmt* stmt);
 		Table* getTable() const;
 
 		// Getters
@@ -548,6 +557,7 @@ namespace db
 		void bindLookup(sqlite3_stmt* stmt) const;
 		void parseInsert(sqlite3* db);
 		void parseSelect(sqlite3_stmt* stmt);
+		void parseLookup(sqlite3_stmt* stmt);
 		Table* getTable() const;
 
 		// Getters
@@ -602,6 +612,7 @@ namespace db
 		void bindLookup(sqlite3_stmt* stmt) const;
 		void parseInsert(sqlite3* db);
 		void parseSelect(sqlite3_stmt* stmt);
+		void parseLookup(sqlite3_stmt* stmt);
 		Table* getTable() const;
 
 		// Getters
@@ -658,6 +669,7 @@ namespace db
 		void bindLookup(sqlite3_stmt* stmt) const;
 		void parseInsert(sqlite3* db);
 		void parseSelect(sqlite3_stmt* stmt);
+		void parseLookup(sqlite3_stmt* stmt);
 		Table* getTable() const;
 
 		// Getters
@@ -721,6 +733,7 @@ namespace db
 		void bindLookup(sqlite3_stmt* stmt) const;
 		void parseInsert(sqlite3* db);
 		void parseSelect(sqlite3_stmt* stmt);
+		void parseLookup(sqlite3_stmt* stmt);
 		Table* getTable() const;
 
 		// Getters
@@ -785,6 +798,7 @@ namespace db
 		void bindLookup(sqlite3_stmt* stmt) const;
 		void parseInsert(sqlite3* db);
 		void parseSelect(sqlite3_stmt* stmt);
+		void parseLookup(sqlite3_stmt* stmt);
 		Table* getTable() const;
 
 		// Getters
@@ -836,6 +850,7 @@ namespace db
 		void bindLookup(sqlite3_stmt* stmt) const;
 		void parseInsert(sqlite3* db);
 		void parseSelect(sqlite3_stmt* stmt);
+		void parseLookup(sqlite3_stmt* stmt);
 		Table* getTable() const;
 
 		// Getters
@@ -893,6 +908,7 @@ namespace db
 		void bindLookup(sqlite3_stmt* stmt) const;
 		void parseInsert(sqlite3* db);
 		void parseSelect(sqlite3_stmt* stmt);
+		void parseLookup(sqlite3_stmt* stmt);
 		Table* getTable() const;
 
 		// Getters
@@ -947,6 +963,7 @@ namespace db
 		void bindLookup(sqlite3_stmt* stmt) const;
 		void parseInsert(sqlite3* db);
 		void parseSelect(sqlite3_stmt* stmt);
+		void parseLookup(sqlite3_stmt* stmt);
 		Table* getTable() const;
 
 		// Getters
@@ -999,6 +1016,7 @@ namespace db
 		void bindLookup(sqlite3_stmt* stmt) const;
 		void parseInsert(sqlite3* db);
 		void parseSelect(sqlite3_stmt* stmt);
+		void parseLookup(sqlite3_stmt* stmt);
 		Table* getTable() const;
 
 		// Getters
@@ -1068,6 +1086,7 @@ namespace db
 		void bindLookup(sqlite3_stmt* stmt) const;
 		void parseInsert(sqlite3* db);
 		void parseSelect(sqlite3_stmt* stmt);
+		void parseLookup(sqlite3_stmt* stmt);
 		Table* getTable() const;
 
 		// Getters
@@ -1131,6 +1150,7 @@ namespace db
 		void bindLookup(sqlite3_stmt* stmt) const;
 		void parseInsert(sqlite3* db);
 		void parseSelect(sqlite3_stmt* stmt);
+		void parseLookup(sqlite3_stmt* stmt);
 		Table* getTable() const;
 
 		// Getters
@@ -1190,6 +1210,7 @@ namespace db
 		void bindLookup(sqlite3_stmt* stmt) const;
 		void parseInsert(sqlite3* db);
 		void parseSelect(sqlite3_stmt* stmt);
+		void parseLookup(sqlite3_stmt* stmt);
 		Table* getTable() const;
 
 		// Getters
@@ -1247,6 +1268,7 @@ namespace db
 		void bindLookup(sqlite3_stmt* stmt) const;
 		void parseInsert(sqlite3* db);
 		void parseSelect(sqlite3_stmt* stmt);
+		void parseLookup(sqlite3_stmt* stmt);
 		Table* getTable() const;
 
 		// Getters
@@ -1308,6 +1330,7 @@ namespace db
 		void bindLookup(sqlite3_stmt* stmt) const;
 		void parseInsert(sqlite3* db);
 		void parseSelect(sqlite3_stmt* stmt);
+		void parseLookup(sqlite3_stmt* stmt);
 		Table* getTable() const;
 
 		// Getters

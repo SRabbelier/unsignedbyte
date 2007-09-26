@@ -100,8 +100,11 @@ void SqliteMgr::doSelect(Bindable* bindable)
 	sqlite3_reset(select);
 	
 	bindable->bindKeys(select);
-	doStatement(select);
-	bindable->parseSelect(select);
+	bool row = doStatement(select);
+	if(row)
+		bindable->parseSelect(select);
+	else
+		throw std::runtime_error("SqliteMgr::doSelect(), no row.");
 }
 
 void SqliteMgr::doLookup(Bindable* bindable, const std::string& field)
@@ -113,9 +116,12 @@ void SqliteMgr::doLookup(Bindable* bindable, const std::string& field)
 	bindable->bindLookup(lookup);
 	bool row = doStatement(lookup);
 	if(row)
-		bindable->parseSelect(lookup);
+	{
+		bindable->parseLookup(lookup);
+		doSelect(bindable);
+	}
 	else
-		throw new std::runtime_error("SqliteMgr::doLookup(), no row returned.");
+		throw bindable;
 }
 
 void SqliteMgr::doForEach(const Table* table, Actor* act)
@@ -344,14 +350,13 @@ sqlite3_stmt* SqliteMgr::getLookupStmt(const Table* table, const std::string& fi
 		
 	std::string sql;
 	sql.append("SELECT ");
-	for(Fields::const_iterator it = table->begin(); it != table->end(); it++)
+	for(TableMap::const_iterator it = table->keybegin(); it != table->keyend(); it++)
 	{
-		if(it != table->begin())
+		if(it != table->keybegin())
 			sql.append(", ");
 
-		sql.append((*it)->getName());
+		sql.append(it->first);
 	}
-	 
 	sql.append(" FROM ");
 	sql.append(table->tableName());
 	sql.append(" WHERE ");

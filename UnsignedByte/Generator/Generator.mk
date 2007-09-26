@@ -41,7 +41,7 @@ Objects=$(IntermediateDirectory)/main$(ObjectSuffix) $(IntermediateDirectory)/Cl
 ##
 all: $(OutputFile)
 
-$(OutputFile): makeDirStep $(Objects)
+$(OutputFile): makeDirStep PrePreBuild $(Objects)
 	$(LinkerName) $(OutputSwitch)$(OutputFile) $(LinkOptions) $(Objects) $(LibPath) $(Libs)
 	@echo Executing Post Build commands ...
 	../bin/Generator
@@ -52,6 +52,7 @@ $(OutputFile): makeDirStep $(Objects)
 makeDirStep:
 	@test -d ./Debug || mkdir ./Debug
 
+PrePreBuild: 
 PreBuild:
 
 

@@ -72,8 +72,12 @@ value_type Accounts::lookupname(const std::string& value)
 {
 	Accounts result;
 	result.m_lookupvalue = value;
-	SqliteMgr::Get()->doLookup(&result, "name");
-	value_type key = result.getaccountid();
+	value_type key = 0;
+	try {
+		SqliteMgr::Get()->doLookup(&result, "name");
+		key = result.getaccountid();
+	} catch(Bindable* result) {	}
+
 	return key;
 }
 
@@ -139,6 +143,12 @@ void Accounts::parseSelect(sqlite3_stmt* stmt)
 	m_name = std::string((const char *)text);
 	text = sqlite3_column_text(stmt, 1);
 	m_password = std::string((const char *)text);
+	m_newentry = false;
+}
+
+void Accounts::parseLookup(sqlite3_stmt* stmt)
+{
+	m_accountid = sqlite3_column_int64(stmt, 0);
 }
 
 Table* Accounts::getTable() const
@@ -221,8 +231,12 @@ value_type Areas::lookupname(const std::string& value)
 {
 	Areas result;
 	result.m_lookupvalue = value;
-	SqliteMgr::Get()->doLookup(&result, "name");
-	value_type key = result.getareaid();
+	value_type key = 0;
+	try {
+		SqliteMgr::Get()->doLookup(&result, "name");
+		key = result.getareaid();
+	} catch(Bindable* result) {	}
+
 	return key;
 }
 
@@ -292,6 +306,12 @@ void Areas::parseSelect(sqlite3_stmt* stmt)
 	m_description = std::string((const char *)text);
 	m_height = sqlite3_column_int64(stmt, 2);
 	m_width = sqlite3_column_int64(stmt, 3);
+	m_newentry = false;
+}
+
+void Areas::parseLookup(sqlite3_stmt* stmt)
+{
+	m_areaid = sqlite3_column_int64(stmt, 0);
 }
 
 Table* Areas::getTable() const
@@ -396,8 +416,12 @@ value_type Branches::lookupname(const std::string& value)
 {
 	Branches result;
 	result.m_lookupvalue = value;
-	SqliteMgr::Get()->doLookup(&result, "name");
-	value_type key = result.getbranchid();
+	value_type key = 0;
+	try {
+		SqliteMgr::Get()->doLookup(&result, "name");
+		key = result.getbranchid();
+	} catch(Bindable* result) {	}
+
 	return key;
 }
 
@@ -466,6 +490,12 @@ void Branches::parseSelect(sqlite3_stmt* stmt)
 	m_fkTrees = sqlite3_column_int64(stmt, 1);
 	m_fkStatsPrimary = sqlite3_column_int64(stmt, 2);
 	m_fkStatsSecondary = sqlite3_column_int64(stmt, 3);
+	m_newentry = false;
+}
+
+void Branches::parseLookup(sqlite3_stmt* stmt)
+{
+	m_branchid = sqlite3_column_int64(stmt, 0);
 }
 
 Table* Branches::getTable() const
@@ -612,6 +642,12 @@ void CharacterAccount::parseSelect(sqlite3_stmt* stmt)
 	// Do nothing
 }
 
+void CharacterAccount::parseLookup(sqlite3_stmt* stmt)
+{
+	m_fkAccounts = sqlite3_column_int64(stmt, 0);
+	m_fkCharacters = sqlite3_column_int64(stmt, 1);
+}
+
 Table* CharacterAccount::getTable() const
 {
 	return Tables::Get()->CHARACTERACCOUNT;
@@ -717,6 +753,13 @@ void CharacterBranch::parseInsert(sqlite3* db)
 void CharacterBranch::parseSelect(sqlite3_stmt* stmt)
 {
 	m_xp = sqlite3_column_int64(stmt, 0);
+	m_newentry = false;
+}
+
+void CharacterBranch::parseLookup(sqlite3_stmt* stmt)
+{
+	m_fkBranches = sqlite3_column_int64(stmt, 0);
+	m_fkCharacters = sqlite3_column_int64(stmt, 1);
 }
 
 Table* CharacterBranch::getTable() const
@@ -835,6 +878,13 @@ void CharacterCluster::parseInsert(sqlite3* db)
 void CharacterCluster::parseSelect(sqlite3_stmt* stmt)
 {
 	m_xp = sqlite3_column_int64(stmt, 0);
+	m_newentry = false;
+}
+
+void CharacterCluster::parseLookup(sqlite3_stmt* stmt)
+{
+	m_fkCharacters = sqlite3_column_int64(stmt, 0);
+	m_fkClusters = sqlite3_column_int64(stmt, 1);
 }
 
 Table* CharacterCluster::getTable() const
@@ -911,8 +961,12 @@ value_type Characters::lookupname(const std::string& value)
 {
 	Characters result;
 	result.m_lookupvalue = value;
-	SqliteMgr::Get()->doLookup(&result, "name");
-	value_type key = result.getcharacterid();
+	value_type key = 0;
+	try {
+		SqliteMgr::Get()->doLookup(&result, "name");
+		key = result.getcharacterid();
+	} catch(Bindable* result) {	}
+
 	return key;
 }
 
@@ -982,6 +1036,12 @@ void Characters::parseSelect(sqlite3_stmt* stmt)
 	m_name = std::string((const char *)text);
 	text = sqlite3_column_text(stmt, 3);
 	m_description = std::string((const char *)text);
+	m_newentry = false;
+}
+
+void Characters::parseLookup(sqlite3_stmt* stmt)
+{
+	m_characterid = sqlite3_column_int64(stmt, 0);
 }
 
 Table* Characters::getTable() const
@@ -1128,6 +1188,13 @@ void CharacterSkill::parseInsert(sqlite3* db)
 void CharacterSkill::parseSelect(sqlite3_stmt* stmt)
 {
 	m_xp = sqlite3_column_int64(stmt, 0);
+	m_newentry = false;
+}
+
+void CharacterSkill::parseLookup(sqlite3_stmt* stmt)
+{
+	m_fkBranches = sqlite3_column_int64(stmt, 0);
+	m_fkCharacters = sqlite3_column_int64(stmt, 1);
 }
 
 Table* CharacterSkill::getTable() const
@@ -1246,6 +1313,13 @@ void CharacterStat::parseInsert(sqlite3* db)
 void CharacterStat::parseSelect(sqlite3_stmt* stmt)
 {
 	m_xp = sqlite3_column_int64(stmt, 0);
+	m_newentry = false;
+}
+
+void CharacterStat::parseLookup(sqlite3_stmt* stmt)
+{
+	m_fkCharacters = sqlite3_column_int64(stmt, 0);
+	m_fkStats = sqlite3_column_int64(stmt, 1);
 }
 
 Table* CharacterStat::getTable() const
@@ -1364,6 +1438,13 @@ void CharacterTree::parseInsert(sqlite3* db)
 void CharacterTree::parseSelect(sqlite3_stmt* stmt)
 {
 	m_xp = sqlite3_column_int64(stmt, 0);
+	m_newentry = false;
+}
+
+void CharacterTree::parseLookup(sqlite3_stmt* stmt)
+{
+	m_fkCharacters = sqlite3_column_int64(stmt, 0);
+	m_fkTrees = sqlite3_column_int64(stmt, 1);
 }
 
 Table* CharacterTree::getTable() const
@@ -1437,8 +1518,12 @@ value_type Clusters::lookupname(const std::string& value)
 {
 	Clusters result;
 	result.m_lookupvalue = value;
-	SqliteMgr::Get()->doLookup(&result, "name");
-	value_type key = result.getclusterid();
+	value_type key = 0;
+	try {
+		SqliteMgr::Get()->doLookup(&result, "name");
+		key = result.getclusterid();
+	} catch(Bindable* result) {	}
+
 	return key;
 }
 
@@ -1501,6 +1586,12 @@ void Clusters::parseSelect(sqlite3_stmt* stmt)
 	const unsigned char * text;
 	text = sqlite3_column_text(stmt, 0);
 	m_name = std::string((const char *)text);
+	m_newentry = false;
+}
+
+void Clusters::parseLookup(sqlite3_stmt* stmt)
+{
+	m_clusterid = sqlite3_column_int64(stmt, 0);
 }
 
 Table* Clusters::getTable() const
@@ -1580,8 +1671,12 @@ value_type Colours::lookupname(const std::string& value)
 {
 	Colours result;
 	result.m_lookupvalue = value;
-	SqliteMgr::Get()->doLookup(&result, "name");
-	value_type key = result.getcolourid();
+	value_type key = 0;
+	try {
+		SqliteMgr::Get()->doLookup(&result, "name");
+		key = result.getcolourid();
+	} catch(Bindable* result) {	}
+
 	return key;
 }
 
@@ -1589,8 +1684,12 @@ value_type Colours::lookupcode(const std::string& value)
 {
 	Colours result;
 	result.m_lookupvalue = value;
-	SqliteMgr::Get()->doLookup(&result, "code");
-	value_type key = result.getcolourid();
+	value_type key = 0;
+	try {
+		SqliteMgr::Get()->doLookup(&result, "code");
+		key = result.getcolourid();
+	} catch(Bindable* result) {	}
+
 	return key;
 }
 
@@ -1661,6 +1760,12 @@ void Colours::parseSelect(sqlite3_stmt* stmt)
 	text = sqlite3_column_text(stmt, 2);
 	m_colourstring = std::string((const char *)text);
 	m_ansi = sqlite3_column_int64(stmt, 3);
+	m_newentry = false;
+}
+
+void Colours::parseLookup(sqlite3_stmt* stmt)
+{
+	m_colourid = sqlite3_column_int64(stmt, 0);
 }
 
 Table* Colours::getTable() const
@@ -1766,8 +1871,12 @@ value_type Commands::lookupname(const std::string& value)
 {
 	Commands result;
 	result.m_lookupvalue = value;
-	SqliteMgr::Get()->doLookup(&result, "name");
-	value_type key = result.getcommandid();
+	value_type key = 0;
+	try {
+		SqliteMgr::Get()->doLookup(&result, "name");
+		key = result.getcommandid();
+	} catch(Bindable* result) {	}
+
 	return key;
 }
 
@@ -1838,6 +1947,12 @@ void Commands::parseSelect(sqlite3_stmt* stmt)
 	m_highforce = sqlite3_column_int64(stmt, 2);
 	m_force = sqlite3_column_int64(stmt, 3);
 	m_lowforce = sqlite3_column_int64(stmt, 4);
+	m_newentry = false;
+}
+
+void Commands::parseLookup(sqlite3_stmt* stmt)
+{
+	m_commandid = sqlite3_column_int64(stmt, 0);
 }
 
 Table* Commands::getTable() const
@@ -1992,6 +2107,12 @@ void Exits::parseInsert(sqlite3* db)
 void Exits::parseSelect(sqlite3_stmt* stmt)
 {
 	m_dir = sqlite3_column_int64(stmt, 0);
+	m_newentry = false;
+}
+
+void Exits::parseLookup(sqlite3_stmt* stmt)
+{
+	m_exitid = sqlite3_column_int64(stmt, 0);
 }
 
 Table* Exits::getTable() const
@@ -2062,8 +2183,12 @@ value_type GrantGroups::lookupname(const std::string& value)
 {
 	GrantGroups result;
 	result.m_lookupvalue = value;
-	SqliteMgr::Get()->doLookup(&result, "name");
-	value_type key = result.getgrantgroupid();
+	value_type key = 0;
+	try {
+		SqliteMgr::Get()->doLookup(&result, "name");
+		key = result.getgrantgroupid();
+	} catch(Bindable* result) {	}
+
 	return key;
 }
 
@@ -2130,6 +2255,12 @@ void GrantGroups::parseSelect(sqlite3_stmt* stmt)
 	m_name = std::string((const char *)text);
 	m_defaultgrant = sqlite3_column_int64(stmt, 1);
 	m_implies = sqlite3_column_int64(stmt, 2);
+	m_newentry = false;
+}
+
+void GrantGroups::parseLookup(sqlite3_stmt* stmt)
+{
+	m_grantgroupid = sqlite3_column_int64(stmt, 0);
 }
 
 Table* GrantGroups::getTable() const
@@ -2265,6 +2396,13 @@ void Permissions::parseInsert(sqlite3* db)
 void Permissions::parseSelect(sqlite3_stmt* stmt)
 {
 	m_grant = sqlite3_column_int64(stmt, 0);
+	m_newentry = false;
+}
+
+void Permissions::parseLookup(sqlite3_stmt* stmt)
+{
+	m_fkAccounts = sqlite3_column_int64(stmt, 0);
+	m_fkGrantGroups = sqlite3_column_int64(stmt, 1);
 }
 
 Table* Permissions::getTable() const
@@ -2338,8 +2476,12 @@ value_type Races::lookupname(const std::string& value)
 {
 	Races result;
 	result.m_lookupvalue = value;
-	SqliteMgr::Get()->doLookup(&result, "name");
-	value_type key = result.getraceid();
+	value_type key = 0;
+	try {
+		SqliteMgr::Get()->doLookup(&result, "name");
+		key = result.getraceid();
+	} catch(Bindable* result) {	}
+
 	return key;
 }
 
@@ -2402,6 +2544,12 @@ void Races::parseSelect(sqlite3_stmt* stmt)
 	const unsigned char * text;
 	text = sqlite3_column_text(stmt, 0);
 	m_name = std::string((const char *)text);
+	m_newentry = false;
+}
+
+void Races::parseLookup(sqlite3_stmt* stmt)
+{
+	m_raceid = sqlite3_column_int64(stmt, 0);
 }
 
 Table* Races::getTable() const
@@ -2533,6 +2681,12 @@ void Rooms::parseSelect(sqlite3_stmt* stmt)
 	m_width = sqlite3_column_int64(stmt, 4);
 	m_length = sqlite3_column_int64(stmt, 5);
 	m_height = sqlite3_column_int64(stmt, 6);
+	m_newentry = false;
+}
+
+void Rooms::parseLookup(sqlite3_stmt* stmt)
+{
+	m_roomid = sqlite3_column_int64(stmt, 0);
 }
 
 Table* Rooms::getTable() const
@@ -2670,8 +2824,12 @@ value_type Sectors::lookupname(const std::string& value)
 {
 	Sectors result;
 	result.m_lookupvalue = value;
-	SqliteMgr::Get()->doLookup(&result, "name");
-	value_type key = result.getsectorid();
+	value_type key = 0;
+	try {
+		SqliteMgr::Get()->doLookup(&result, "name");
+		key = result.getsectorid();
+	} catch(Bindable* result) {	}
+
 	return key;
 }
 
@@ -2741,6 +2899,12 @@ void Sectors::parseSelect(sqlite3_stmt* stmt)
 	m_symbol = std::string((const char *)text);
 	m_movecost = sqlite3_column_int64(stmt, 2);
 	m_water = sqlite3_column_int64(stmt, 3);
+	m_newentry = false;
+}
+
+void Sectors::parseLookup(sqlite3_stmt* stmt)
+{
+	m_sectorid = sqlite3_column_int64(stmt, 0);
 }
 
 Table* Sectors::getTable() const
@@ -2843,8 +3007,12 @@ value_type Skills::lookupname(const std::string& value)
 {
 	Skills result;
 	result.m_lookupvalue = value;
-	SqliteMgr::Get()->doLookup(&result, "name");
-	value_type key = result.getskillid();
+	value_type key = 0;
+	try {
+		SqliteMgr::Get()->doLookup(&result, "name");
+		key = result.getskillid();
+	} catch(Bindable* result) {	}
+
 	return key;
 }
 
@@ -2909,6 +3077,12 @@ void Skills::parseSelect(sqlite3_stmt* stmt)
 	text = sqlite3_column_text(stmt, 0);
 	m_name = std::string((const char *)text);
 	m_fkBranches = sqlite3_column_int64(stmt, 1);
+	m_newentry = false;
+}
+
+void Skills::parseLookup(sqlite3_stmt* stmt)
+{
+	m_skillid = sqlite3_column_int64(stmt, 0);
 }
 
 Table* Skills::getTable() const
@@ -2997,8 +3171,12 @@ value_type Stats::lookupname(const std::string& value)
 {
 	Stats result;
 	result.m_lookupvalue = value;
-	SqliteMgr::Get()->doLookup(&result, "name");
-	value_type key = result.getstatid();
+	value_type key = 0;
+	try {
+		SqliteMgr::Get()->doLookup(&result, "name");
+		key = result.getstatid();
+	} catch(Bindable* result) {	}
+
 	return key;
 }
 
@@ -3006,8 +3184,12 @@ value_type Stats::lookupshortname(const std::string& value)
 {
 	Stats result;
 	result.m_lookupvalue = value;
-	SqliteMgr::Get()->doLookup(&result, "shortname");
-	value_type key = result.getstatid();
+	value_type key = 0;
+	try {
+		SqliteMgr::Get()->doLookup(&result, "shortname");
+		key = result.getstatid();
+	} catch(Bindable* result) {	}
+
 	return key;
 }
 
@@ -3073,6 +3255,12 @@ void Stats::parseSelect(sqlite3_stmt* stmt)
 	m_name = std::string((const char *)text);
 	text = sqlite3_column_text(stmt, 1);
 	m_shortname = std::string((const char *)text);
+	m_newentry = false;
+}
+
+void Stats::parseLookup(sqlite3_stmt* stmt)
+{
+	m_statid = sqlite3_column_int64(stmt, 0);
 }
 
 Table* Stats::getTable() const
@@ -3155,8 +3343,12 @@ value_type Trees::lookupname(const std::string& value)
 {
 	Trees result;
 	result.m_lookupvalue = value;
-	SqliteMgr::Get()->doLookup(&result, "name");
-	value_type key = result.gettreeid();
+	value_type key = 0;
+	try {
+		SqliteMgr::Get()->doLookup(&result, "name");
+		key = result.gettreeid();
+	} catch(Bindable* result) {	}
+
 	return key;
 }
 
@@ -3225,6 +3417,12 @@ void Trees::parseSelect(sqlite3_stmt* stmt)
 	m_fkClusters = sqlite3_column_int64(stmt, 1);
 	m_fkStatsPrimary = sqlite3_column_int64(stmt, 2);
 	m_fkStatsSecondary = sqlite3_column_int64(stmt, 3);
+	m_newentry = false;
+}
+
+void Trees::parseLookup(sqlite3_stmt* stmt)
+{
+	m_treeid = sqlite3_column_int64(stmt, 0);
 }
 
 Table* Trees::getTable() const
@@ -3379,6 +3577,12 @@ void Version::parseSelect(sqlite3_stmt* stmt)
 	m_major = sqlite3_column_int64(stmt, 1);
 	m_minor = sqlite3_column_int64(stmt, 2);
 	m_micro = sqlite3_column_int64(stmt, 3);
+	m_newentry = false;
+}
+
+void Version::parseLookup(sqlite3_stmt* stmt)
+{
+	m_versionid = sqlite3_column_int64(stmt, 0);
 }
 
 Table* Version::getTable() const

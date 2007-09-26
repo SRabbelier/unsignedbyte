@@ -24,14 +24,14 @@
 
 #include <sqlite3.h>
 #include <Database.h>
+#include <Bindable.h>
 
 class Table;
-class Bindable;
 class Statements;
 class Actor;
 
 typedef std::map<Table*, Statements*>  TableStatements;
-typedef unsigned long value_type;
+typedef unsigned long value_type;	
 
 class SqliteMgr
 {

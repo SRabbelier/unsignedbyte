@@ -90,6 +90,7 @@ void ClassHeaderGenerator::AppendCtor()
 	(*m_file) << m_tabs << m_tabs << "~" << name << "();" << endl;
 	(*m_file) << endl;
 		
+	// Factories
 	(*m_file) << m_tabs << m_tabs << "// Factories" << endl;
 	(*m_file) << m_tabs << m_tabs << "static " << name << "* bykey" << "(";
 	for(TableMap::const_iterator it = m_table->keybegin(); it != m_table->keyend(); it++)
@@ -110,6 +111,7 @@ void ClassHeaderGenerator::AppendCtor()
 			(*m_file) << "value_type value);" << endl;
 	}
 	
+	// Lookup
 	if(m_table->hasSinglularPrimaryKey())
 	{
 		for(Fields::const_iterator it = m_table->lookupbegin(); it != m_table->lookupend(); it++)
@@ -119,7 +121,7 @@ void ClassHeaderGenerator::AppendCtor()
 			if((*it)->isText())
 				(*m_file) << "const std::string& value);" << endl;
 			else
-				(*m_file) << "value_type value);" << endl;
+				(*m_file) << "value_type value);" << endl;;
 		}
 	}
 	(*m_file) << endl;
@@ -144,6 +146,7 @@ void ClassHeaderGenerator::AppendBody()
 	(*m_file) << m_tabs << m_tabs << "void bindLookup(sqlite3_stmt* stmt) const;" << endl;
 	(*m_file) << m_tabs << m_tabs << "void parseInsert(sqlite3* db);" << endl;
 	(*m_file) << m_tabs << m_tabs << "void parseSelect(sqlite3_stmt* stmt);" << endl;
+	(*m_file) << m_tabs << m_tabs << "void parseLookup(sqlite3_stmt* stmt);" << endl;
 	(*m_file) << m_tabs << m_tabs << "Table* getTable() const;" << endl;
 	(*m_file) << endl;
 

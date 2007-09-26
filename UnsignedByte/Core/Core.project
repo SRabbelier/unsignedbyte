@@ -98,6 +98,10 @@
         <CleanCommand/>
         <BuildCommand/>
       </CustomBuild>
+      <AdditionalRules>
+        <CustomPostBuild/>
+        <CustomPreBuild/>
+      </AdditionalRules>
     </Configuration>
   </Settings>
   <Dependencies/>

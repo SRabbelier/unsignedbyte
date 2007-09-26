@@ -36,6 +36,7 @@ public:
 	
 	virtual void parseInsert(sqlite3* db) = 0;
 	virtual void parseSelect(sqlite3_stmt* stmt) = 0;
+	virtual void parseLookup(sqlite3_stmt* stmt) = 0;
 	
 	virtual Table* getTable() const = 0;
 	

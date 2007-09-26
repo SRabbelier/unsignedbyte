@@ -61,6 +61,7 @@ void ClassSourceGenerator::GenerateClass()
 		AppendBindLookup();
 		AppendParseInsert();
 		AppendParseSelect();
+		AppendParseLookup();
 		AppendGetTable();
 		AppendGetSet();
 		AppendFooter();
@@ -189,12 +190,25 @@ void ClassSourceGenerator::AppendCtorFactory()
 			if((*it)->isText())
 				(*m_file) << "const std::string& value)" << endl;
 			else
-				(*m_file) << "value_type value);" << endl;
+				(*m_file) << "value_type value)" << endl;
 			(*m_file) << "{" << endl;
+			
+			/*
+				value_type key = 0;
+				try {
+					SqliteMgr::Get()->doLookup(&result, "name");
+					key = result.getaccountid();
+				} catch(Accounts* result) {	}
+	*/
+			
 			(*m_file) << m_tabs << m_name << " result;" << endl;
 			(*m_file) << m_tabs << "result.m_lookupvalue = value;" << endl;
-			(*m_file) << m_tabs << "SqliteMgr::Get()->doLookup(&result, \"" << (*it)->getName() << "\");" << endl;
-			(*m_file) << m_tabs << "value_type key = result.get" << m_table->firstKey() << "();" << endl;
+			(*m_file) << m_tabs << "value_type key = 0;" << endl;
+			(*m_file) << m_tabs << "try {" << endl;
+			(*m_file) << m_tabs << m_tabs << "SqliteMgr::Get()->doLookup(&result, \"" << (*it)->getName() << "\");" << endl;
+			(*m_file) << m_tabs << m_tabs << "key = result.get" << m_table->firstKey() << "();" << endl;
+			(*m_file) << m_tabs << "} catch(Bindable* result) {	}" << endl;
+			(*m_file) << endl;
 			(*m_file) << m_tabs << "return key;" << endl;
 			(*m_file) << "}" << endl;
 			(*m_file) << endl;
@@ -374,13 +388,37 @@ void ClassSourceGenerator::AppendParseSelect()
 		count++;
 	}
 	
-	if(!count)
+	if(count)
+		(*m_file) << m_tabs << "m_newentry = false;" << endl;
+	else
 		(*m_file) << m_tabs << "// Do nothing" << endl;
 		
 	(*m_file) << "}" << endl;
 	(*m_file) << endl;
 }
 	
+void ClassSourceGenerator::AppendParseLookup()
+{
+	if(!m_file)
+		throw std::logic_error("Source file is not open for writing.\n");
+		
+	(*m_file) << "void " << m_name << "::parseLookup(sqlite3_stmt* stmt)" << endl;
+	(*m_file) << "{" << endl;
+	
+	int count = 0;
+	for(TableMap::const_iterator it = m_table->keybegin(); it != m_table->keyend(); it++)
+	{
+		(*m_file) << m_tabs << "m_" << it->first << " = sqlite3_column_int64(stmt, " << count << ");" << endl; 
+		count++;
+	}
+	
+	if(!count)
+		(*m_file) << m_tabs << "// Do nothing" << endl;
+		
+	(*m_file) << "}" << endl;
+	(*m_file) << endl;
+}	
+		
 void ClassSourceGenerator::AppendGetTable()
 {
 	if(!m_file)

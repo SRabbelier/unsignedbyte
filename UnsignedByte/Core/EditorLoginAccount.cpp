@@ -60,7 +60,7 @@ void EditorLoginAccount::OnLine(const std::string &line)
 		m_sock->SetEditor(new EditorNewAccount(m_sock));
 		return;
 	}
-
+	
 	int id = db::Accounts::lookupname(line);
 	if(id == 0)
 	{
