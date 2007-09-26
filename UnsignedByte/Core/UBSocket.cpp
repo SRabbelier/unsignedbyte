@@ -164,6 +164,7 @@ void UBSocket::SwitchEditors()
 	m_editor = m_nexteditor;
 	m_nexteditor = NULL;
 	SetPrompt(m_editor->prompt());
+	SendPrompt();
 }
 
 void UBSocket::Send(const std::string& msg)
