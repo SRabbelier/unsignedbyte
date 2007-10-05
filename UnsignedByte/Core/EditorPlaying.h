@@ -43,8 +43,8 @@ public:
 
 private:
 	mud::PCharacter* m_char; // current active PCharacter
-	EditorPlaying(const EditorPlaying& rhs) : Editor(rhs.m_sock) {};
-	EditorPlaying operator=(const EditorPlaying& rhs) {return *this;};
+	EditorPlaying(const EditorPlaying& rhs);
+	EditorPlaying operator=(const EditorPlaying& rhs);
 
 	typedef EditorAction<UBSocket, mud::PCharacter> PlayingAction;
 	

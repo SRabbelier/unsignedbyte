@@ -40,8 +40,8 @@ public:
 	void Send(const std::string& msg);
 	
 private:
-	SQLSocket(const SQLSocket& rhs) : TcpSocket(rhs) {};
-	SQLSocket operator=(const SQLSocket& rhs) { return *this; };
+	SQLSocket(const SQLSocket& rhs);
+	SQLSocket operator=(const SQLSocket& rhs);
 	
 };
 

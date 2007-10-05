@@ -49,8 +49,8 @@ public:
 
 private:
 	mud::MCharacter* m_mobile;
-	EditorMobile(const EditorMobile& rhs) : OLCEditor(rhs.m_sock) {};
-	EditorMobile operator=(const EditorMobile& rhs) { return *this; };
+	EditorMobile(const EditorMobile& rhs);
+	EditorMobile operator=(const EditorMobile& rhs);
 
 	typedef EditorAction<UBSocket, mud::MCharacter> MobileAction;
 

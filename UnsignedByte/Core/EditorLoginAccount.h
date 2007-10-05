@@ -34,6 +34,6 @@ public:
 	std::string name() { return "AccountLogin"; };
 	
 private:
-	EditorLoginAccount(const EditorLoginAccount& rhs) : Editor(rhs.m_sock) {};
-	EditorLoginAccount operator=(const EditorLoginAccount& rhs) { return *this; };
+	EditorLoginAccount(const EditorLoginAccount& rhs);
+	EditorLoginAccount operator=(const EditorLoginAccount& rhs);
 };

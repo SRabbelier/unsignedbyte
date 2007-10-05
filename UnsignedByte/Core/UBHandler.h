@@ -34,8 +34,8 @@ public:
 
 private:
 	UBHandler(void) {};
-	UBHandler(const UBHandler& rhs) {};
-	UBHandler operator=(const UBHandler& rhs) { return *this;};
+	UBHandler(const UBHandler& rhs);
+	UBHandler operator=(const UBHandler& rhs);
 	~UBHandler(void) {};
 
 public:

@@ -34,8 +34,8 @@ public:
 	std::string name() { return "AccountCreation"; };
 
 private:
-	EditorNewAccount(const EditorNewAccount& rhs) : Editor(rhs.m_sock) { };
-	EditorNewAccount operator=(const EditorNewAccount& rhs) { return *this; };
+	EditorNewAccount(const EditorNewAccount& rhs);
+	EditorNewAccount operator=(const EditorNewAccount& rhs);
 
 	enum E_STATE
 	{

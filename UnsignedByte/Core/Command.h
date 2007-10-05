@@ -81,8 +81,8 @@ namespace mud
 		db::Commands* m_command;
 
 		Command(db::Commands* Command);
-		Command(const Command& rhs) {};
-		Command operator=(const Command& rhs) { return *this; };
+		Command(const Command& rhs);
+		Command operator=(const Command& rhs);
 		~Command(void);
 		friend class Cache;
 	};

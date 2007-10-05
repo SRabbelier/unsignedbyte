@@ -40,8 +40,8 @@ public:
 	void dispatch(const std::string& action, const std::string& argument);
 
 private:
-	EditorOLC(const EditorOLC& rhs) : Editor(rhs.m_sock) {};
-	EditorOLC operator=(const EditorOLC& rhs) { return *this; };
+	EditorOLC(const EditorOLC& rhs);
+	EditorOLC operator=(const EditorOLC& rhs);
 
 	class OLCInterpreter : public Interpreter<UBAction>, public Singleton<OLCInterpreter> {
 	private:

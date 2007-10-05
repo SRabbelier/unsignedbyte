@@ -50,8 +50,8 @@ public:
 private:
 	mud::Command* m_command;
 	
-	EditorCommand(const EditorCommand& rhs) : OLCEditor(rhs.m_sock) {};
-	EditorCommand operator=(const EditorCommand& rhs) { return *this; };
+	EditorCommand(const EditorCommand& rhs);
+	EditorCommand operator=(const EditorCommand& rhs);
 
 	typedef EditorAction<UBSocket, mud::Command> CommandAction;
 

@@ -50,8 +50,8 @@ public:
 private:
 	mud::Area* m_area;
 
-	EditorArea(const EditorArea& rhs) : OLCEditor(rhs.m_sock) {};
-	EditorArea operator=(const EditorArea& rhs) {return *this;};
+	EditorArea(const EditorArea& rhs);
+	EditorArea operator=(const EditorArea& rhs);
 
 	typedef Action<EditorArea> GeneralAction;
 	typedef EditorAction<UBSocket, mud::Area> AreaAction;

@@ -74,8 +74,8 @@ namespace mud
 		 * \brief Ctors
 		 */ 
 		GrantGroup(db::GrantGroups* GrantGroup);
-		GrantGroup(const GrantGroup& rhs) {};
-		GrantGroup operator=(const GrantGroup& rhs) { return *this;};
+		GrantGroup(const GrantGroup& rhs);
+		GrantGroup operator=(const GrantGroup& rhs);
 		~GrantGroup(void);
 		
 		friend class Cache;

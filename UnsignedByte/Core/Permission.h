@@ -70,8 +70,8 @@ namespace mud
 		db::Permissions* m_permission;
 
 		Permission(db::Permissions* Permission);
-		Permission(const Permission& rhs) {};
-		Permission operator=(const Permission& rhs) { return *this; };
+		Permission(const Permission& rhs);
+		Permission operator=(const Permission& rhs);
 		~Permission(void);
 		
 		friend class Cache;

@@ -60,8 +60,8 @@ namespace mud
 		 * \brief Ctors
 		 */ 
 		Race(db::Races* race);
-		Race(const Race& rhs) {};
-		Race operator=(const Race& rhs) { return *this; };
+		Race(const Race& rhs);
+		Race operator=(const Race& rhs);
 		~Race(void);
 		
 		friend class Cache;

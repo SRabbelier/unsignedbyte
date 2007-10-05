@@ -38,7 +38,7 @@ public:
 	std::string name() { return "String"; };
 	
 private:
-	EditorString(const EditorString& rhs) : Editor(rhs.m_sock) {};
-	EditorString operator=(const EditorString& rhs) { return *this; };
+	EditorString(const EditorString& rhs);
+	EditorString operator=(const EditorString& rhs);
 	std::vector<std::string> m_strings;
 };

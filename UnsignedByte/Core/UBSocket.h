@@ -87,8 +87,8 @@ private:
 	/**
 	 * \brief Ctors
 	 */ 
-	UBSocket(const UBSocket& rhs) : TcpSocket(rhs) {};
-	UBSocket operator=(const UBSocket& rhs) { return *this; };
+	UBSocket(const UBSocket& rhs);
+	UBSocket operator=(const UBSocket& rhs);
 
 	/**
 	 * \brief Variables

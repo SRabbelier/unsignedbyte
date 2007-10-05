@@ -43,8 +43,8 @@ protected:
 	std::map<std::string, T*> m_words; // table for command lookup
 	
 private:
-	Interpreter(const Interpreter& rhs) {};
-	Interpreter operator=(const Interpreter& rhs) { return *this; };
+	Interpreter(const Interpreter& rhs);
+	Interpreter operator=(const Interpreter& rhs);
 };
 
 template <class T>

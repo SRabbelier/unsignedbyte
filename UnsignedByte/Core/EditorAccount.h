@@ -40,8 +40,8 @@ public:
 	void dispatch(const std::string& action, const std::string& argument);
 
 private: 
-	EditorAccount(const EditorAccount& rhs) : Editor(rhs.m_sock) {};
-	EditorAccount operator=(const EditorAccount& rhs) { return *this; };
+	EditorAccount(const EditorAccount& rhs);
+	EditorAccount operator=(const EditorAccount& rhs);
 
 	class AccountInterpreter : public Interpreter<UBAction>, public Singleton<AccountInterpreter> {
 	private:

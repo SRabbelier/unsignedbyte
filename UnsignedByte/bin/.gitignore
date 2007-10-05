@@ -3,3 +3,5 @@ hp.*
 Initialize 
 UnsignedByte
 db.*
+Generator
+Initialize

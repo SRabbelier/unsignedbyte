@@ -49,8 +49,8 @@ public:
 
 private:
 	mud::Sector* m_sector;
-	EditorSector(const EditorSector& rhs) : OLCEditor(rhs.m_sock) {};
-	EditorSector operator=(const EditorSector& rhs) { return *this; };
+	EditorSector(const EditorSector& rhs);
+	EditorSector operator=(const EditorSector& rhs);
 
 private:
 	typedef EditorAction<UBSocket, mud::Sector> SectorAction;

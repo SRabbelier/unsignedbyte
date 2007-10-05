@@ -50,8 +50,8 @@ public:
 private:
 	mud::Colour* m_colour;
 	
-	EditorColour(const EditorColour& rhs) : OLCEditor(rhs.m_sock) {};
-	EditorColour operator=(const EditorColour& rhs) {return *this;};
+	EditorColour(const EditorColour& rhs);
+	EditorColour operator=(const EditorColour& rhs);
 
 private:
 	typedef EditorAction<UBSocket, mud::Colour> ColourAction;

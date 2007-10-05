@@ -48,8 +48,8 @@ public:
 	void setEditing(long id);
 
 private:
-	EditorRoom(const EditorRoom& rhs) : OLCEditor(rhs.m_sock) {};
-	EditorRoom operator=(const EditorRoom& rhs) { return *this; };
+	EditorRoom(const EditorRoom& rhs);
+	EditorRoom operator=(const EditorRoom& rhs);
 
 	long m_area;
 	long m_xpos;

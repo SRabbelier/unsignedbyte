@@ -34,8 +34,8 @@ public:
 	std::string name() { return "CharacterCreation"; };
 
 private:
-	EditorNewCharacter(const EditorNewCharacter& rhs) : Editor(rhs.m_sock) {};
-	EditorNewCharacter operator=(const EditorNewCharacter& rhs) { return *this; };
+	EditorNewCharacter(const EditorNewCharacter& rhs);
+	EditorNewCharacter operator=(const EditorNewCharacter& rhs);
 
 	enum E_STATE
 	{

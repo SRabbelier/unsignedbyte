@@ -81,8 +81,8 @@ namespace mud
 		Characters m_charactersInRoom;
 
 		Room(db::Rooms* room);
-		Room(const Room& rhs) {};
-		Room operator=(const Room& rhs) { return *this; };
+		Room(const Room& rhs);
+		Room operator=(const Room& rhs);
 		~Room(void);
 
 		friend class Cache; // constructor

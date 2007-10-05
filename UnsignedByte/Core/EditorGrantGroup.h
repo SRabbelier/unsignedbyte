@@ -49,8 +49,8 @@ public:
 
 private:
 	mud::GrantGroup* m_grantgroup;
-	EditorGrantGroup(const EditorGrantGroup& rhs) : OLCEditor(rhs.m_sock) {};
-	EditorGrantGroup operator=(const EditorGrantGroup& rhs) { return *this; };
+	EditorGrantGroup(const EditorGrantGroup& rhs);
+	EditorGrantGroup operator=(const EditorGrantGroup& rhs);
 
 	typedef EditorAction<UBSocket, mud::GrantGroup> GrantGroupAction;
 
