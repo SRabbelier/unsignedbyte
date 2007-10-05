@@ -139,13 +139,13 @@ bool SqliteMgr::doStatement(sqlite3_stmt* stmt)
 
 StatementsPtr SqliteMgr::getStatements(TablePtr table)
 {
-	StatementsPtr statements = m_statements[table];
+	StatementsPtr statements = m_statements[table.Get()];
 	if(statements)
 		return statements;
 	
 	statements = new Statements();
 	
-	m_statements[table] = statements;
+	m_statements[table.Get()] = statements;
 	return statements;
 }
 
