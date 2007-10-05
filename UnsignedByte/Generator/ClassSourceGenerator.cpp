@@ -193,20 +193,13 @@ void ClassSourceGenerator::AppendCtorFactory()
 				(*m_file) << "value_type value)" << endl;
 			(*m_file) << "{" << endl;
 			
-			/*
-				value_type key = 0;
-				try {
-					SqliteMgr::Get()->doLookup(&result, "name");
-					key = result.getaccountid();
-				} catch(Accounts* result) {	}
-	*/
-			
-			(*m_file) << m_tabs << m_name << " result;" << endl;
-			(*m_file) << m_tabs << "result.m_lookupvalue = value;" << endl;
+			(*m_file) << m_tabs <<  m_name << "* result = new " << m_name << "();" << endl;
+			(*m_file) << m_tabs << "SmartPtr<Bindable> bindableresult(result); // will handle deletion of ptr" << endl;
+			(*m_file) << m_tabs << "result->m_lookupvalue = value;" << endl;
 			(*m_file) << m_tabs << "value_type key = 0;" << endl;
 			(*m_file) << m_tabs << "try {" << endl;
-			(*m_file) << m_tabs << m_tabs << "SqliteMgr::Get()->doLookup(&result, \"" << (*it)->getName() << "\");" << endl;
-			(*m_file) << m_tabs << m_tabs << "key = result.get" << m_table->firstKey() << "();" << endl;
+			(*m_file) << m_tabs << m_tabs << "SqliteMgr::Get()->doLookup(bindableresult, \"" << (*it)->getName() << "\");" << endl;
+			(*m_file) << m_tabs << m_tabs << "key = result->get" << m_table->firstKey() << "();" << endl;
 			(*m_file) << m_tabs << "} catch(Bindable* result) {	}" << endl;
 			(*m_file) << endl;
 			(*m_file) << m_tabs << "return key;" << endl;

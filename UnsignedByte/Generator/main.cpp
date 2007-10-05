@@ -37,7 +37,8 @@ void exitfunc()
 	printf("Freeing global...\n");
 	Global::Free();
 	printf("Freeing tables...\n");
-	//Tables::Free(); // Uncommenting this will cause circular deletion -> SEGFAULT
+	
+	Tables::Free();
 	printf("Exiting...\n");
 	// std::cin.get();
 	return;

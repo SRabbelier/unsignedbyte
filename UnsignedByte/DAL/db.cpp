@@ -70,12 +70,13 @@ Accounts* Accounts::byname(const std::string& value)
 
 value_type Accounts::lookupname(const std::string& value)
 {
-	Accounts result;
-	result.m_lookupvalue = value;
+	Accounts* result = new Accounts();
+	SmartPtr<Bindable> bindableresult(result); // will handle deletion of ptr
+	result->m_lookupvalue = value;
 	value_type key = 0;
 	try {
-		SqliteMgr::Get()->doLookup(&result, "name");
-		key = result.getaccountid();
+		SqliteMgr::Get()->doLookup(bindableresult, "name");
+		key = result->getaccountid();
 	} catch(Bindable* result) {	}
 
 	return key;
@@ -229,12 +230,13 @@ Areas* Areas::byname(const std::string& value)
 
 value_type Areas::lookupname(const std::string& value)
 {
-	Areas result;
-	result.m_lookupvalue = value;
+	Areas* result = new Areas();
+	SmartPtr<Bindable> bindableresult(result); // will handle deletion of ptr
+	result->m_lookupvalue = value;
 	value_type key = 0;
 	try {
-		SqliteMgr::Get()->doLookup(&result, "name");
-		key = result.getareaid();
+		SqliteMgr::Get()->doLookup(bindableresult, "name");
+		key = result->getareaid();
 	} catch(Bindable* result) {	}
 
 	return key;
@@ -414,12 +416,13 @@ Branches* Branches::byname(const std::string& value)
 
 value_type Branches::lookupname(const std::string& value)
 {
-	Branches result;
-	result.m_lookupvalue = value;
+	Branches* result = new Branches();
+	SmartPtr<Bindable> bindableresult(result); // will handle deletion of ptr
+	result->m_lookupvalue = value;
 	value_type key = 0;
 	try {
-		SqliteMgr::Get()->doLookup(&result, "name");
-		key = result.getbranchid();
+		SqliteMgr::Get()->doLookup(bindableresult, "name");
+		key = result->getbranchid();
 	} catch(Bindable* result) {	}
 
 	return key;
@@ -959,12 +962,13 @@ Characters* Characters::byname(const std::string& value)
 
 value_type Characters::lookupname(const std::string& value)
 {
-	Characters result;
-	result.m_lookupvalue = value;
+	Characters* result = new Characters();
+	SmartPtr<Bindable> bindableresult(result); // will handle deletion of ptr
+	result->m_lookupvalue = value;
 	value_type key = 0;
 	try {
-		SqliteMgr::Get()->doLookup(&result, "name");
-		key = result.getcharacterid();
+		SqliteMgr::Get()->doLookup(bindableresult, "name");
+		key = result->getcharacterid();
 	} catch(Bindable* result) {	}
 
 	return key;
@@ -1516,12 +1520,13 @@ Clusters* Clusters::byname(const std::string& value)
 
 value_type Clusters::lookupname(const std::string& value)
 {
-	Clusters result;
-	result.m_lookupvalue = value;
+	Clusters* result = new Clusters();
+	SmartPtr<Bindable> bindableresult(result); // will handle deletion of ptr
+	result->m_lookupvalue = value;
 	value_type key = 0;
 	try {
-		SqliteMgr::Get()->doLookup(&result, "name");
-		key = result.getclusterid();
+		SqliteMgr::Get()->doLookup(bindableresult, "name");
+		key = result->getclusterid();
 	} catch(Bindable* result) {	}
 
 	return key;
@@ -1669,12 +1674,13 @@ Colours* Colours::bycode(const std::string& value)
 
 value_type Colours::lookupname(const std::string& value)
 {
-	Colours result;
-	result.m_lookupvalue = value;
+	Colours* result = new Colours();
+	SmartPtr<Bindable> bindableresult(result); // will handle deletion of ptr
+	result->m_lookupvalue = value;
 	value_type key = 0;
 	try {
-		SqliteMgr::Get()->doLookup(&result, "name");
-		key = result.getcolourid();
+		SqliteMgr::Get()->doLookup(bindableresult, "name");
+		key = result->getcolourid();
 	} catch(Bindable* result) {	}
 
 	return key;
@@ -1682,12 +1688,13 @@ value_type Colours::lookupname(const std::string& value)
 
 value_type Colours::lookupcode(const std::string& value)
 {
-	Colours result;
-	result.m_lookupvalue = value;
+	Colours* result = new Colours();
+	SmartPtr<Bindable> bindableresult(result); // will handle deletion of ptr
+	result->m_lookupvalue = value;
 	value_type key = 0;
 	try {
-		SqliteMgr::Get()->doLookup(&result, "code");
-		key = result.getcolourid();
+		SqliteMgr::Get()->doLookup(bindableresult, "code");
+		key = result->getcolourid();
 	} catch(Bindable* result) {	}
 
 	return key;
@@ -1869,12 +1876,13 @@ Commands* Commands::byname(const std::string& value)
 
 value_type Commands::lookupname(const std::string& value)
 {
-	Commands result;
-	result.m_lookupvalue = value;
+	Commands* result = new Commands();
+	SmartPtr<Bindable> bindableresult(result); // will handle deletion of ptr
+	result->m_lookupvalue = value;
 	value_type key = 0;
 	try {
-		SqliteMgr::Get()->doLookup(&result, "name");
-		key = result.getcommandid();
+		SqliteMgr::Get()->doLookup(bindableresult, "name");
+		key = result->getcommandid();
 	} catch(Bindable* result) {	}
 
 	return key;
@@ -2181,12 +2189,13 @@ GrantGroups* GrantGroups::byname(const std::string& value)
 
 value_type GrantGroups::lookupname(const std::string& value)
 {
-	GrantGroups result;
-	result.m_lookupvalue = value;
+	GrantGroups* result = new GrantGroups();
+	SmartPtr<Bindable> bindableresult(result); // will handle deletion of ptr
+	result->m_lookupvalue = value;
 	value_type key = 0;
 	try {
-		SqliteMgr::Get()->doLookup(&result, "name");
-		key = result.getgrantgroupid();
+		SqliteMgr::Get()->doLookup(bindableresult, "name");
+		key = result->getgrantgroupid();
 	} catch(Bindable* result) {	}
 
 	return key;
@@ -2474,12 +2483,13 @@ Races* Races::byname(const std::string& value)
 
 value_type Races::lookupname(const std::string& value)
 {
-	Races result;
-	result.m_lookupvalue = value;
+	Races* result = new Races();
+	SmartPtr<Bindable> bindableresult(result); // will handle deletion of ptr
+	result->m_lookupvalue = value;
 	value_type key = 0;
 	try {
-		SqliteMgr::Get()->doLookup(&result, "name");
-		key = result.getraceid();
+		SqliteMgr::Get()->doLookup(bindableresult, "name");
+		key = result->getraceid();
 	} catch(Bindable* result) {	}
 
 	return key;
@@ -2822,12 +2832,13 @@ Sectors* Sectors::byname(const std::string& value)
 
 value_type Sectors::lookupname(const std::string& value)
 {
-	Sectors result;
-	result.m_lookupvalue = value;
+	Sectors* result = new Sectors();
+	SmartPtr<Bindable> bindableresult(result); // will handle deletion of ptr
+	result->m_lookupvalue = value;
 	value_type key = 0;
 	try {
-		SqliteMgr::Get()->doLookup(&result, "name");
-		key = result.getsectorid();
+		SqliteMgr::Get()->doLookup(bindableresult, "name");
+		key = result->getsectorid();
 	} catch(Bindable* result) {	}
 
 	return key;
@@ -3005,12 +3016,13 @@ Skills* Skills::byname(const std::string& value)
 
 value_type Skills::lookupname(const std::string& value)
 {
-	Skills result;
-	result.m_lookupvalue = value;
+	Skills* result = new Skills();
+	SmartPtr<Bindable> bindableresult(result); // will handle deletion of ptr
+	result->m_lookupvalue = value;
 	value_type key = 0;
 	try {
-		SqliteMgr::Get()->doLookup(&result, "name");
-		key = result.getskillid();
+		SqliteMgr::Get()->doLookup(bindableresult, "name");
+		key = result->getskillid();
 	} catch(Bindable* result) {	}
 
 	return key;
@@ -3169,12 +3181,13 @@ Stats* Stats::byshortname(const std::string& value)
 
 value_type Stats::lookupname(const std::string& value)
 {
-	Stats result;
-	result.m_lookupvalue = value;
+	Stats* result = new Stats();
+	SmartPtr<Bindable> bindableresult(result); // will handle deletion of ptr
+	result->m_lookupvalue = value;
 	value_type key = 0;
 	try {
-		SqliteMgr::Get()->doLookup(&result, "name");
-		key = result.getstatid();
+		SqliteMgr::Get()->doLookup(bindableresult, "name");
+		key = result->getstatid();
 	} catch(Bindable* result) {	}
 
 	return key;
@@ -3182,12 +3195,13 @@ value_type Stats::lookupname(const std::string& value)
 
 value_type Stats::lookupshortname(const std::string& value)
 {
-	Stats result;
-	result.m_lookupvalue = value;
+	Stats* result = new Stats();
+	SmartPtr<Bindable> bindableresult(result); // will handle deletion of ptr
+	result->m_lookupvalue = value;
 	value_type key = 0;
 	try {
-		SqliteMgr::Get()->doLookup(&result, "shortname");
-		key = result.getstatid();
+		SqliteMgr::Get()->doLookup(bindableresult, "shortname");
+		key = result->getstatid();
 	} catch(Bindable* result) {	}
 
 	return key;
@@ -3341,12 +3355,13 @@ Trees* Trees::byname(const std::string& value)
 
 value_type Trees::lookupname(const std::string& value)
 {
-	Trees result;
-	result.m_lookupvalue = value;
+	Trees* result = new Trees();
+	SmartPtr<Bindable> bindableresult(result); // will handle deletion of ptr
+	result->m_lookupvalue = value;
 	value_type key = 0;
 	try {
-		SqliteMgr::Get()->doLookup(&result, "name");
-		key = result.gettreeid();
+		SqliteMgr::Get()->doLookup(bindableresult, "name");
+		key = result->gettreeid();
 	} catch(Bindable* result) {	}
 
 	return key;

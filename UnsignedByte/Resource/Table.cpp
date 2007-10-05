@@ -54,7 +54,7 @@ Table::~Table()
 
 void Table::addPK(const std::string& name)
 {
-	m_primarykeys[name] = this;
+	m_primarykeys[name] = NULL; // TODO - maybe this needs fixing?
 	
 	if(m_primarykeys.size() == 1)
 		m_spkey = true;
