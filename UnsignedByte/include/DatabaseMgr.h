@@ -37,7 +37,7 @@ class DatabaseMgr : public Singleton<DatabaseMgr>
 {
 public:
 	// allow to set a specific path
-	static void Initialize(std::string path);
+	static void Initialize(const std::string& path);
 	friend class Singleton<DatabaseMgr>;
 	Database* DB();
 	Database& DBref();

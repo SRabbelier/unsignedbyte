@@ -69,7 +69,6 @@
       </AdditionalRules>
     </Configuration>
   </Settings>
-  <Dependencies/>
   <VirtualDirectory Name="Editors">
     <File Name="EditorOLC.cpp"/>
     <File Name="Editor.cpp"/>
@@ -109,4 +108,5 @@
     <File Name="Editor.h"/>
     <File Name="OLCEditor.h"/>
   </VirtualDirectory>
+  <Dependencies/>
 </CodeLite_Project>

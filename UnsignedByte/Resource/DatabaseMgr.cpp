@@ -34,7 +34,7 @@
 
 std::string DatabaseMgr::m_staticpath = Global::Get()->EmptyString;
 
-void DatabaseMgr::Initialize(std::string path)
+void DatabaseMgr::Initialize(const std::string& path)
 {
 	Free();
 	m_staticpath = path;
