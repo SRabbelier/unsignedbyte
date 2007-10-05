@@ -200,7 +200,7 @@ void ClassSourceGenerator::AppendCtorFactory()
 			(*m_file) << m_tabs << "try {" << endl;
 			(*m_file) << m_tabs << m_tabs << "SqliteMgr::Get()->doLookup(bindableresult, \"" << (*it)->getName() << "\");" << endl;
 			(*m_file) << m_tabs << m_tabs << "key = result->get" << m_table->firstKey() << "();" << endl;
-			(*m_file) << m_tabs << "} catch(Bindable* result) {	}" << endl;
+			(*m_file) << m_tabs << "} catch(SmartPtr<Bindable> result) {	}" << endl;
 			(*m_file) << endl;
 			(*m_file) << m_tabs << "return key;" << endl;
 			(*m_file) << "}" << endl;

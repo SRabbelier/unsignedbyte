@@ -77,7 +77,7 @@ value_type Accounts::lookupname(const std::string& value)
 	try {
 		SqliteMgr::Get()->doLookup(bindableresult, "name");
 		key = result->getaccountid();
-	} catch(Bindable* result) {	}
+	} catch(SmartPtr<Bindable> result) {	}
 
 	return key;
 }
@@ -237,7 +237,7 @@ value_type Areas::lookupname(const std::string& value)
 	try {
 		SqliteMgr::Get()->doLookup(bindableresult, "name");
 		key = result->getareaid();
-	} catch(Bindable* result) {	}
+	} catch(SmartPtr<Bindable> result) {	}
 
 	return key;
 }
@@ -423,7 +423,7 @@ value_type Branches::lookupname(const std::string& value)
 	try {
 		SqliteMgr::Get()->doLookup(bindableresult, "name");
 		key = result->getbranchid();
-	} catch(Bindable* result) {	}
+	} catch(SmartPtr<Bindable> result) {	}
 
 	return key;
 }
@@ -969,7 +969,7 @@ value_type Characters::lookupname(const std::string& value)
 	try {
 		SqliteMgr::Get()->doLookup(bindableresult, "name");
 		key = result->getcharacterid();
-	} catch(Bindable* result) {	}
+	} catch(SmartPtr<Bindable> result) {	}
 
 	return key;
 }
@@ -1527,7 +1527,7 @@ value_type Clusters::lookupname(const std::string& value)
 	try {
 		SqliteMgr::Get()->doLookup(bindableresult, "name");
 		key = result->getclusterid();
-	} catch(Bindable* result) {	}
+	} catch(SmartPtr<Bindable> result) {	}
 
 	return key;
 }
@@ -1681,7 +1681,7 @@ value_type Colours::lookupname(const std::string& value)
 	try {
 		SqliteMgr::Get()->doLookup(bindableresult, "name");
 		key = result->getcolourid();
-	} catch(Bindable* result) {	}
+	} catch(SmartPtr<Bindable> result) {	}
 
 	return key;
 }
@@ -1695,7 +1695,7 @@ value_type Colours::lookupcode(const std::string& value)
 	try {
 		SqliteMgr::Get()->doLookup(bindableresult, "code");
 		key = result->getcolourid();
-	} catch(Bindable* result) {	}
+	} catch(SmartPtr<Bindable> result) {	}
 
 	return key;
 }
@@ -1883,7 +1883,7 @@ value_type Commands::lookupname(const std::string& value)
 	try {
 		SqliteMgr::Get()->doLookup(bindableresult, "name");
 		key = result->getcommandid();
-	} catch(Bindable* result) {	}
+	} catch(SmartPtr<Bindable> result) {	}
 
 	return key;
 }
@@ -2196,7 +2196,7 @@ value_type GrantGroups::lookupname(const std::string& value)
 	try {
 		SqliteMgr::Get()->doLookup(bindableresult, "name");
 		key = result->getgrantgroupid();
-	} catch(Bindable* result) {	}
+	} catch(SmartPtr<Bindable> result) {	}
 
 	return key;
 }
@@ -2490,7 +2490,7 @@ value_type Races::lookupname(const std::string& value)
 	try {
 		SqliteMgr::Get()->doLookup(bindableresult, "name");
 		key = result->getraceid();
-	} catch(Bindable* result) {	}
+	} catch(SmartPtr<Bindable> result) {	}
 
 	return key;
 }
@@ -2839,7 +2839,7 @@ value_type Sectors::lookupname(const std::string& value)
 	try {
 		SqliteMgr::Get()->doLookup(bindableresult, "name");
 		key = result->getsectorid();
-	} catch(Bindable* result) {	}
+	} catch(SmartPtr<Bindable> result) {	}
 
 	return key;
 }
@@ -3023,7 +3023,7 @@ value_type Skills::lookupname(const std::string& value)
 	try {
 		SqliteMgr::Get()->doLookup(bindableresult, "name");
 		key = result->getskillid();
-	} catch(Bindable* result) {	}
+	} catch(SmartPtr<Bindable> result) {	}
 
 	return key;
 }
@@ -3188,7 +3188,7 @@ value_type Stats::lookupname(const std::string& value)
 	try {
 		SqliteMgr::Get()->doLookup(bindableresult, "name");
 		key = result->getstatid();
-	} catch(Bindable* result) {	}
+	} catch(SmartPtr<Bindable> result) {	}
 
 	return key;
 }
@@ -3202,7 +3202,7 @@ value_type Stats::lookupshortname(const std::string& value)
 	try {
 		SqliteMgr::Get()->doLookup(bindableresult, "shortname");
 		key = result->getstatid();
-	} catch(Bindable* result) {	}
+	} catch(SmartPtr<Bindable> result) {	}
 
 	return key;
 }
@@ -3362,7 +3362,7 @@ value_type Trees::lookupname(const std::string& value)
 	try {
 		SqliteMgr::Get()->doLookup(bindableresult, "name");
 		key = result->gettreeid();
-	} catch(Bindable* result) {	}
+	} catch(SmartPtr<Bindable> result) {	}
 
 	return key;
 }

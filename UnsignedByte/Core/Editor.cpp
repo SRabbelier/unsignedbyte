@@ -99,8 +99,8 @@ void Editor::OnLine(const std::string& line)
 	bool isNormalForced = m_sock->isForced();
 	bool isHighForced = m_sock->isHighForced();
 	bool isForced = isLowForced || isNormalForced || isHighForced;
-	
-	long id = db::Commands::lookupname(actionname);
+
+	long id = mud::Cache::Get()->lookupCommandByName(actionname);
 	if(id)
 	{
 		Command* cmd = mud::Cache::Get()->GetCommandByKey(id);
