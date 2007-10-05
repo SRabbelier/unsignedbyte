@@ -72,8 +72,8 @@ namespace mud
 		 * \brief Ctors
 		 */ 
 		Sector(db::Sectors* Sector);
-		Sector(const Sector& rhs) {};
-		Sector operator=(const Sector& rhs) {return *this;};
+		Sector(const Sector& rhs);
+		Sector operator=(const Sector& rhs);
 		~Sector(void);
 		
 		friend class Cache;

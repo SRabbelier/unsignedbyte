@@ -152,7 +152,7 @@ void ClassSourceGenerator::AppendKeyFactory()
 	for(TableMap::const_iterator it = m_table->keybegin(); it != m_table->keyend(); it++)
 		(*m_file) << m_tabs << "result->m_" << it->first << " = " << it->first<< ";" << endl;
 	
-	(*m_file) << m_tabs << "SqliteMgr::Get()->doSelect(result);" << endl;
+	(*m_file) << m_tabs << "SqliteMgr::Get()->doSelect(SmartPtr<Bindable>(result,true));" << endl;
 	(*m_file) << m_tabs << "return result;" << endl;
 	(*m_file) << "}" << endl;
 	(*m_file) << endl;
@@ -217,7 +217,7 @@ void ClassSourceGenerator::AppendBody()
 	(*m_file) << "void " << m_name <<  "::erase()" << endl;
 	(*m_file) << "{" << endl;
 	(*m_file) << m_tabs << "if(!m_newentry)" << endl;	
-	(*m_file) << m_tabs << m_tabs << "SqliteMgr::Get()->doErase(this);" << endl;
+	(*m_file) << m_tabs << m_tabs << "SqliteMgr::Get()->doErase(SmartPtr<Bindable>(this,true));" << endl;
 	(*m_file) << "}" << endl;
 	(*m_file) << endl;
 		
@@ -225,13 +225,13 @@ void ClassSourceGenerator::AppendBody()
 	(*m_file) << "{" << endl;
 	(*m_file) << m_tabs << "if(m_newentry)" << endl;
 	(*m_file) << m_tabs << "{" << endl;
-	(*m_file) << m_tabs << m_tabs << "SqliteMgr::Get()->doInsert(this);" << endl;
+	(*m_file) << m_tabs << m_tabs << "SqliteMgr::Get()->doInsert(SmartPtr<Bindable>(this,true));" << endl;
 	(*m_file) << m_tabs << m_tabs << "m_newentry = false;" << endl;
 	(*m_file) << m_tabs << "}" << endl;
 	(*m_file) << endl;
 	(*m_file) << m_tabs << "if(m_dirty)" << endl;
 	(*m_file) << m_tabs << "{" << endl;
-	(*m_file) << m_tabs << m_tabs << "SqliteMgr::Get()->doUpdate(this);" << endl;
+	(*m_file) << m_tabs << m_tabs << "SqliteMgr::Get()->doUpdate(SmartPtr<Bindable>(this,true));" << endl;
 	(*m_file) << m_tabs << m_tabs << "getTable()->modify();" << endl;
 	(*m_file) << m_tabs << m_tabs << "m_dirty = false;" << endl;
 	(*m_file) << m_tabs << "}" << endl;

@@ -52,9 +52,6 @@ $(OutputFile): PrePreBuild $(Objects)
 	@test -d ./Debug || mkdir ./Debug
 
 PrePreBuild: 
-
-
-
 PreBuild:
 
 

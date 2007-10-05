@@ -64,8 +64,8 @@ namespace mud
 		 * \brief Ctors
 		 */ 
 		Colour(db::Colours* object);
-		Colour(const Colour& rhs) {};
-		Colour operator=(const Colour& rhs) { return *this;};
+		Colour(const Colour& rhs);
+		Colour operator=(const Colour& rhs);
 		~Colour(void);
 		
 		friend class Cache;

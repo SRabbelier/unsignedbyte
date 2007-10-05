@@ -97,7 +97,7 @@ namespace mud
 		friend class Cache; // for constructor
 		
 	private:
-		Character(const Character& rhs) { };
-		Character operator=(const Character& rhs) { return *this; };
+		Character(const Character& rhs);
+		Character operator=(const Character& rhs);
 	};
 }

@@ -56,7 +56,7 @@ Accounts* Accounts::bykey(value_type accountid)
 {
 	Accounts* result = new Accounts();
 	result->m_accountid = accountid;
-	SqliteMgr::Get()->doSelect(result);
+	SqliteMgr::Get()->doSelect(SmartPtr<Bindable>(result,true));
 	return result;
 }
 
@@ -85,20 +85,20 @@ value_type Accounts::lookupname(const std::string& value)
 void Accounts::erase()
 {
 	if(!m_newentry)
-		SqliteMgr::Get()->doErase(this);
+		SqliteMgr::Get()->doErase(SmartPtr<Bindable>(this,true));
 }
 
 void Accounts::save()
 {
 	if(m_newentry)
 	{
-		SqliteMgr::Get()->doInsert(this);
+		SqliteMgr::Get()->doInsert(SmartPtr<Bindable>(this,true));
 		m_newentry = false;
 	}
 
 	if(m_dirty)
 	{
-		SqliteMgr::Get()->doUpdate(this);
+		SqliteMgr::Get()->doUpdate(SmartPtr<Bindable>(this,true));
 		getTable()->modify();
 		m_dirty = false;
 	}
@@ -216,7 +216,7 @@ Areas* Areas::bykey(value_type areaid)
 {
 	Areas* result = new Areas();
 	result->m_areaid = areaid;
-	SqliteMgr::Get()->doSelect(result);
+	SqliteMgr::Get()->doSelect(SmartPtr<Bindable>(result,true));
 	return result;
 }
 
@@ -245,20 +245,20 @@ value_type Areas::lookupname(const std::string& value)
 void Areas::erase()
 {
 	if(!m_newentry)
-		SqliteMgr::Get()->doErase(this);
+		SqliteMgr::Get()->doErase(SmartPtr<Bindable>(this,true));
 }
 
 void Areas::save()
 {
 	if(m_newentry)
 	{
-		SqliteMgr::Get()->doInsert(this);
+		SqliteMgr::Get()->doInsert(SmartPtr<Bindable>(this,true));
 		m_newentry = false;
 	}
 
 	if(m_dirty)
 	{
-		SqliteMgr::Get()->doUpdate(this);
+		SqliteMgr::Get()->doUpdate(SmartPtr<Bindable>(this,true));
 		getTable()->modify();
 		m_dirty = false;
 	}
@@ -402,7 +402,7 @@ Branches* Branches::bykey(value_type branchid)
 {
 	Branches* result = new Branches();
 	result->m_branchid = branchid;
-	SqliteMgr::Get()->doSelect(result);
+	SqliteMgr::Get()->doSelect(SmartPtr<Bindable>(result,true));
 	return result;
 }
 
@@ -431,20 +431,20 @@ value_type Branches::lookupname(const std::string& value)
 void Branches::erase()
 {
 	if(!m_newentry)
-		SqliteMgr::Get()->doErase(this);
+		SqliteMgr::Get()->doErase(SmartPtr<Bindable>(this,true));
 }
 
 void Branches::save()
 {
 	if(m_newentry)
 	{
-		SqliteMgr::Get()->doInsert(this);
+		SqliteMgr::Get()->doInsert(SmartPtr<Bindable>(this,true));
 		m_newentry = false;
 	}
 
 	if(m_dirty)
 	{
-		SqliteMgr::Get()->doUpdate(this);
+		SqliteMgr::Get()->doUpdate(SmartPtr<Bindable>(this,true));
 		getTable()->modify();
 		m_dirty = false;
 	}
@@ -584,27 +584,27 @@ CharacterAccount* CharacterAccount::bykey(value_type fkAccounts, value_type fkCh
 	CharacterAccount* result = new CharacterAccount();
 	result->m_fkAccounts = fkAccounts;
 	result->m_fkCharacters = fkCharacters;
-	SqliteMgr::Get()->doSelect(result);
+	SqliteMgr::Get()->doSelect(SmartPtr<Bindable>(result,true));
 	return result;
 }
 
 void CharacterAccount::erase()
 {
 	if(!m_newentry)
-		SqliteMgr::Get()->doErase(this);
+		SqliteMgr::Get()->doErase(SmartPtr<Bindable>(this,true));
 }
 
 void CharacterAccount::save()
 {
 	if(m_newentry)
 	{
-		SqliteMgr::Get()->doInsert(this);
+		SqliteMgr::Get()->doInsert(SmartPtr<Bindable>(this,true));
 		m_newentry = false;
 	}
 
 	if(m_dirty)
 	{
-		SqliteMgr::Get()->doUpdate(this);
+		SqliteMgr::Get()->doUpdate(SmartPtr<Bindable>(this,true));
 		getTable()->modify();
 		m_dirty = false;
 	}
@@ -696,27 +696,27 @@ CharacterBranch* CharacterBranch::bykey(value_type fkBranches, value_type fkChar
 	CharacterBranch* result = new CharacterBranch();
 	result->m_fkBranches = fkBranches;
 	result->m_fkCharacters = fkCharacters;
-	SqliteMgr::Get()->doSelect(result);
+	SqliteMgr::Get()->doSelect(SmartPtr<Bindable>(result,true));
 	return result;
 }
 
 void CharacterBranch::erase()
 {
 	if(!m_newentry)
-		SqliteMgr::Get()->doErase(this);
+		SqliteMgr::Get()->doErase(SmartPtr<Bindable>(this,true));
 }
 
 void CharacterBranch::save()
 {
 	if(m_newentry)
 	{
-		SqliteMgr::Get()->doInsert(this);
+		SqliteMgr::Get()->doInsert(SmartPtr<Bindable>(this,true));
 		m_newentry = false;
 	}
 
 	if(m_dirty)
 	{
-		SqliteMgr::Get()->doUpdate(this);
+		SqliteMgr::Get()->doUpdate(SmartPtr<Bindable>(this,true));
 		getTable()->modify();
 		m_dirty = false;
 	}
@@ -821,27 +821,27 @@ CharacterCluster* CharacterCluster::bykey(value_type fkCharacters, value_type fk
 	CharacterCluster* result = new CharacterCluster();
 	result->m_fkCharacters = fkCharacters;
 	result->m_fkClusters = fkClusters;
-	SqliteMgr::Get()->doSelect(result);
+	SqliteMgr::Get()->doSelect(SmartPtr<Bindable>(result,true));
 	return result;
 }
 
 void CharacterCluster::erase()
 {
 	if(!m_newentry)
-		SqliteMgr::Get()->doErase(this);
+		SqliteMgr::Get()->doErase(SmartPtr<Bindable>(this,true));
 }
 
 void CharacterCluster::save()
 {
 	if(m_newentry)
 	{
-		SqliteMgr::Get()->doInsert(this);
+		SqliteMgr::Get()->doInsert(SmartPtr<Bindable>(this,true));
 		m_newentry = false;
 	}
 
 	if(m_dirty)
 	{
-		SqliteMgr::Get()->doUpdate(this);
+		SqliteMgr::Get()->doUpdate(SmartPtr<Bindable>(this,true));
 		getTable()->modify();
 		m_dirty = false;
 	}
@@ -948,7 +948,7 @@ Characters* Characters::bykey(value_type characterid)
 {
 	Characters* result = new Characters();
 	result->m_characterid = characterid;
-	SqliteMgr::Get()->doSelect(result);
+	SqliteMgr::Get()->doSelect(SmartPtr<Bindable>(result,true));
 	return result;
 }
 
@@ -977,20 +977,20 @@ value_type Characters::lookupname(const std::string& value)
 void Characters::erase()
 {
 	if(!m_newentry)
-		SqliteMgr::Get()->doErase(this);
+		SqliteMgr::Get()->doErase(SmartPtr<Bindable>(this,true));
 }
 
 void Characters::save()
 {
 	if(m_newentry)
 	{
-		SqliteMgr::Get()->doInsert(this);
+		SqliteMgr::Get()->doInsert(SmartPtr<Bindable>(this,true));
 		m_newentry = false;
 	}
 
 	if(m_dirty)
 	{
-		SqliteMgr::Get()->doUpdate(this);
+		SqliteMgr::Get()->doUpdate(SmartPtr<Bindable>(this,true));
 		getTable()->modify();
 		m_dirty = false;
 	}
@@ -1132,27 +1132,27 @@ CharacterSkill* CharacterSkill::bykey(value_type fkBranches, value_type fkCharac
 	CharacterSkill* result = new CharacterSkill();
 	result->m_fkBranches = fkBranches;
 	result->m_fkCharacters = fkCharacters;
-	SqliteMgr::Get()->doSelect(result);
+	SqliteMgr::Get()->doSelect(SmartPtr<Bindable>(result,true));
 	return result;
 }
 
 void CharacterSkill::erase()
 {
 	if(!m_newentry)
-		SqliteMgr::Get()->doErase(this);
+		SqliteMgr::Get()->doErase(SmartPtr<Bindable>(this,true));
 }
 
 void CharacterSkill::save()
 {
 	if(m_newentry)
 	{
-		SqliteMgr::Get()->doInsert(this);
+		SqliteMgr::Get()->doInsert(SmartPtr<Bindable>(this,true));
 		m_newentry = false;
 	}
 
 	if(m_dirty)
 	{
-		SqliteMgr::Get()->doUpdate(this);
+		SqliteMgr::Get()->doUpdate(SmartPtr<Bindable>(this,true));
 		getTable()->modify();
 		m_dirty = false;
 	}
@@ -1257,27 +1257,27 @@ CharacterStat* CharacterStat::bykey(value_type fkCharacters, value_type fkStats)
 	CharacterStat* result = new CharacterStat();
 	result->m_fkCharacters = fkCharacters;
 	result->m_fkStats = fkStats;
-	SqliteMgr::Get()->doSelect(result);
+	SqliteMgr::Get()->doSelect(SmartPtr<Bindable>(result,true));
 	return result;
 }
 
 void CharacterStat::erase()
 {
 	if(!m_newentry)
-		SqliteMgr::Get()->doErase(this);
+		SqliteMgr::Get()->doErase(SmartPtr<Bindable>(this,true));
 }
 
 void CharacterStat::save()
 {
 	if(m_newentry)
 	{
-		SqliteMgr::Get()->doInsert(this);
+		SqliteMgr::Get()->doInsert(SmartPtr<Bindable>(this,true));
 		m_newentry = false;
 	}
 
 	if(m_dirty)
 	{
-		SqliteMgr::Get()->doUpdate(this);
+		SqliteMgr::Get()->doUpdate(SmartPtr<Bindable>(this,true));
 		getTable()->modify();
 		m_dirty = false;
 	}
@@ -1382,27 +1382,27 @@ CharacterTree* CharacterTree::bykey(value_type fkCharacters, value_type fkTrees)
 	CharacterTree* result = new CharacterTree();
 	result->m_fkCharacters = fkCharacters;
 	result->m_fkTrees = fkTrees;
-	SqliteMgr::Get()->doSelect(result);
+	SqliteMgr::Get()->doSelect(SmartPtr<Bindable>(result,true));
 	return result;
 }
 
 void CharacterTree::erase()
 {
 	if(!m_newentry)
-		SqliteMgr::Get()->doErase(this);
+		SqliteMgr::Get()->doErase(SmartPtr<Bindable>(this,true));
 }
 
 void CharacterTree::save()
 {
 	if(m_newentry)
 	{
-		SqliteMgr::Get()->doInsert(this);
+		SqliteMgr::Get()->doInsert(SmartPtr<Bindable>(this,true));
 		m_newentry = false;
 	}
 
 	if(m_dirty)
 	{
-		SqliteMgr::Get()->doUpdate(this);
+		SqliteMgr::Get()->doUpdate(SmartPtr<Bindable>(this,true));
 		getTable()->modify();
 		m_dirty = false;
 	}
@@ -1506,7 +1506,7 @@ Clusters* Clusters::bykey(value_type clusterid)
 {
 	Clusters* result = new Clusters();
 	result->m_clusterid = clusterid;
-	SqliteMgr::Get()->doSelect(result);
+	SqliteMgr::Get()->doSelect(SmartPtr<Bindable>(result,true));
 	return result;
 }
 
@@ -1535,20 +1535,20 @@ value_type Clusters::lookupname(const std::string& value)
 void Clusters::erase()
 {
 	if(!m_newentry)
-		SqliteMgr::Get()->doErase(this);
+		SqliteMgr::Get()->doErase(SmartPtr<Bindable>(this,true));
 }
 
 void Clusters::save()
 {
 	if(m_newentry)
 	{
-		SqliteMgr::Get()->doInsert(this);
+		SqliteMgr::Get()->doInsert(SmartPtr<Bindable>(this,true));
 		m_newentry = false;
 	}
 
 	if(m_dirty)
 	{
-		SqliteMgr::Get()->doUpdate(this);
+		SqliteMgr::Get()->doUpdate(SmartPtr<Bindable>(this,true));
 		getTable()->modify();
 		m_dirty = false;
 	}
@@ -1652,7 +1652,7 @@ Colours* Colours::bykey(value_type colourid)
 {
 	Colours* result = new Colours();
 	result->m_colourid = colourid;
-	SqliteMgr::Get()->doSelect(result);
+	SqliteMgr::Get()->doSelect(SmartPtr<Bindable>(result,true));
 	return result;
 }
 
@@ -1703,20 +1703,20 @@ value_type Colours::lookupcode(const std::string& value)
 void Colours::erase()
 {
 	if(!m_newentry)
-		SqliteMgr::Get()->doErase(this);
+		SqliteMgr::Get()->doErase(SmartPtr<Bindable>(this,true));
 }
 
 void Colours::save()
 {
 	if(m_newentry)
 	{
-		SqliteMgr::Get()->doInsert(this);
+		SqliteMgr::Get()->doInsert(SmartPtr<Bindable>(this,true));
 		m_newentry = false;
 	}
 
 	if(m_dirty)
 	{
-		SqliteMgr::Get()->doUpdate(this);
+		SqliteMgr::Get()->doUpdate(SmartPtr<Bindable>(this,true));
 		getTable()->modify();
 		m_dirty = false;
 	}
@@ -1862,7 +1862,7 @@ Commands* Commands::bykey(value_type commandid)
 {
 	Commands* result = new Commands();
 	result->m_commandid = commandid;
-	SqliteMgr::Get()->doSelect(result);
+	SqliteMgr::Get()->doSelect(SmartPtr<Bindable>(result,true));
 	return result;
 }
 
@@ -1891,20 +1891,20 @@ value_type Commands::lookupname(const std::string& value)
 void Commands::erase()
 {
 	if(!m_newentry)
-		SqliteMgr::Get()->doErase(this);
+		SqliteMgr::Get()->doErase(SmartPtr<Bindable>(this,true));
 }
 
 void Commands::save()
 {
 	if(m_newentry)
 	{
-		SqliteMgr::Get()->doInsert(this);
+		SqliteMgr::Get()->doInsert(SmartPtr<Bindable>(this,true));
 		m_newentry = false;
 	}
 
 	if(m_dirty)
 	{
-		SqliteMgr::Get()->doUpdate(this);
+		SqliteMgr::Get()->doUpdate(SmartPtr<Bindable>(this,true));
 		getTable()->modify();
 		m_dirty = false;
 	}
@@ -2057,27 +2057,27 @@ Exits* Exits::bykey(value_type exitid)
 {
 	Exits* result = new Exits();
 	result->m_exitid = exitid;
-	SqliteMgr::Get()->doSelect(result);
+	SqliteMgr::Get()->doSelect(SmartPtr<Bindable>(result,true));
 	return result;
 }
 
 void Exits::erase()
 {
 	if(!m_newentry)
-		SqliteMgr::Get()->doErase(this);
+		SqliteMgr::Get()->doErase(SmartPtr<Bindable>(this,true));
 }
 
 void Exits::save()
 {
 	if(m_newentry)
 	{
-		SqliteMgr::Get()->doInsert(this);
+		SqliteMgr::Get()->doInsert(SmartPtr<Bindable>(this,true));
 		m_newentry = false;
 	}
 
 	if(m_dirty)
 	{
-		SqliteMgr::Get()->doUpdate(this);
+		SqliteMgr::Get()->doUpdate(SmartPtr<Bindable>(this,true));
 		getTable()->modify();
 		m_dirty = false;
 	}
@@ -2175,7 +2175,7 @@ GrantGroups* GrantGroups::bykey(value_type grantgroupid)
 {
 	GrantGroups* result = new GrantGroups();
 	result->m_grantgroupid = grantgroupid;
-	SqliteMgr::Get()->doSelect(result);
+	SqliteMgr::Get()->doSelect(SmartPtr<Bindable>(result,true));
 	return result;
 }
 
@@ -2204,20 +2204,20 @@ value_type GrantGroups::lookupname(const std::string& value)
 void GrantGroups::erase()
 {
 	if(!m_newentry)
-		SqliteMgr::Get()->doErase(this);
+		SqliteMgr::Get()->doErase(SmartPtr<Bindable>(this,true));
 }
 
 void GrantGroups::save()
 {
 	if(m_newentry)
 	{
-		SqliteMgr::Get()->doInsert(this);
+		SqliteMgr::Get()->doInsert(SmartPtr<Bindable>(this,true));
 		m_newentry = false;
 	}
 
 	if(m_dirty)
 	{
-		SqliteMgr::Get()->doUpdate(this);
+		SqliteMgr::Get()->doUpdate(SmartPtr<Bindable>(this,true));
 		getTable()->modify();
 		m_dirty = false;
 	}
@@ -2345,27 +2345,27 @@ Permissions* Permissions::bykey(value_type fkAccounts, value_type fkGrantGroups)
 	Permissions* result = new Permissions();
 	result->m_fkAccounts = fkAccounts;
 	result->m_fkGrantGroups = fkGrantGroups;
-	SqliteMgr::Get()->doSelect(result);
+	SqliteMgr::Get()->doSelect(SmartPtr<Bindable>(result,true));
 	return result;
 }
 
 void Permissions::erase()
 {
 	if(!m_newentry)
-		SqliteMgr::Get()->doErase(this);
+		SqliteMgr::Get()->doErase(SmartPtr<Bindable>(this,true));
 }
 
 void Permissions::save()
 {
 	if(m_newentry)
 	{
-		SqliteMgr::Get()->doInsert(this);
+		SqliteMgr::Get()->doInsert(SmartPtr<Bindable>(this,true));
 		m_newentry = false;
 	}
 
 	if(m_dirty)
 	{
-		SqliteMgr::Get()->doUpdate(this);
+		SqliteMgr::Get()->doUpdate(SmartPtr<Bindable>(this,true));
 		getTable()->modify();
 		m_dirty = false;
 	}
@@ -2469,7 +2469,7 @@ Races* Races::bykey(value_type raceid)
 {
 	Races* result = new Races();
 	result->m_raceid = raceid;
-	SqliteMgr::Get()->doSelect(result);
+	SqliteMgr::Get()->doSelect(SmartPtr<Bindable>(result,true));
 	return result;
 }
 
@@ -2498,20 +2498,20 @@ value_type Races::lookupname(const std::string& value)
 void Races::erase()
 {
 	if(!m_newentry)
-		SqliteMgr::Get()->doErase(this);
+		SqliteMgr::Get()->doErase(SmartPtr<Bindable>(this,true));
 }
 
 void Races::save()
 {
 	if(m_newentry)
 	{
-		SqliteMgr::Get()->doInsert(this);
+		SqliteMgr::Get()->doInsert(SmartPtr<Bindable>(this,true));
 		m_newentry = false;
 	}
 
 	if(m_dirty)
 	{
-		SqliteMgr::Get()->doUpdate(this);
+		SqliteMgr::Get()->doUpdate(SmartPtr<Bindable>(this,true));
 		getTable()->modify();
 		m_dirty = false;
 	}
@@ -2618,27 +2618,27 @@ Rooms* Rooms::bykey(value_type roomid)
 {
 	Rooms* result = new Rooms();
 	result->m_roomid = roomid;
-	SqliteMgr::Get()->doSelect(result);
+	SqliteMgr::Get()->doSelect(SmartPtr<Bindable>(result,true));
 	return result;
 }
 
 void Rooms::erase()
 {
 	if(!m_newentry)
-		SqliteMgr::Get()->doErase(this);
+		SqliteMgr::Get()->doErase(SmartPtr<Bindable>(this,true));
 }
 
 void Rooms::save()
 {
 	if(m_newentry)
 	{
-		SqliteMgr::Get()->doInsert(this);
+		SqliteMgr::Get()->doInsert(SmartPtr<Bindable>(this,true));
 		m_newentry = false;
 	}
 
 	if(m_dirty)
 	{
-		SqliteMgr::Get()->doUpdate(this);
+		SqliteMgr::Get()->doUpdate(SmartPtr<Bindable>(this,true));
 		getTable()->modify();
 		m_dirty = false;
 	}
@@ -2818,7 +2818,7 @@ Sectors* Sectors::bykey(value_type sectorid)
 {
 	Sectors* result = new Sectors();
 	result->m_sectorid = sectorid;
-	SqliteMgr::Get()->doSelect(result);
+	SqliteMgr::Get()->doSelect(SmartPtr<Bindable>(result,true));
 	return result;
 }
 
@@ -2847,20 +2847,20 @@ value_type Sectors::lookupname(const std::string& value)
 void Sectors::erase()
 {
 	if(!m_newentry)
-		SqliteMgr::Get()->doErase(this);
+		SqliteMgr::Get()->doErase(SmartPtr<Bindable>(this,true));
 }
 
 void Sectors::save()
 {
 	if(m_newentry)
 	{
-		SqliteMgr::Get()->doInsert(this);
+		SqliteMgr::Get()->doInsert(SmartPtr<Bindable>(this,true));
 		m_newentry = false;
 	}
 
 	if(m_dirty)
 	{
-		SqliteMgr::Get()->doUpdate(this);
+		SqliteMgr::Get()->doUpdate(SmartPtr<Bindable>(this,true));
 		getTable()->modify();
 		m_dirty = false;
 	}
@@ -3002,7 +3002,7 @@ Skills* Skills::bykey(value_type skillid)
 {
 	Skills* result = new Skills();
 	result->m_skillid = skillid;
-	SqliteMgr::Get()->doSelect(result);
+	SqliteMgr::Get()->doSelect(SmartPtr<Bindable>(result,true));
 	return result;
 }
 
@@ -3031,20 +3031,20 @@ value_type Skills::lookupname(const std::string& value)
 void Skills::erase()
 {
 	if(!m_newentry)
-		SqliteMgr::Get()->doErase(this);
+		SqliteMgr::Get()->doErase(SmartPtr<Bindable>(this,true));
 }
 
 void Skills::save()
 {
 	if(m_newentry)
 	{
-		SqliteMgr::Get()->doInsert(this);
+		SqliteMgr::Get()->doInsert(SmartPtr<Bindable>(this,true));
 		m_newentry = false;
 	}
 
 	if(m_dirty)
 	{
-		SqliteMgr::Get()->doUpdate(this);
+		SqliteMgr::Get()->doUpdate(SmartPtr<Bindable>(this,true));
 		getTable()->modify();
 		m_dirty = false;
 	}
@@ -3159,7 +3159,7 @@ Stats* Stats::bykey(value_type statid)
 {
 	Stats* result = new Stats();
 	result->m_statid = statid;
-	SqliteMgr::Get()->doSelect(result);
+	SqliteMgr::Get()->doSelect(SmartPtr<Bindable>(result,true));
 	return result;
 }
 
@@ -3210,20 +3210,20 @@ value_type Stats::lookupshortname(const std::string& value)
 void Stats::erase()
 {
 	if(!m_newentry)
-		SqliteMgr::Get()->doErase(this);
+		SqliteMgr::Get()->doErase(SmartPtr<Bindable>(this,true));
 }
 
 void Stats::save()
 {
 	if(m_newentry)
 	{
-		SqliteMgr::Get()->doInsert(this);
+		SqliteMgr::Get()->doInsert(SmartPtr<Bindable>(this,true));
 		m_newentry = false;
 	}
 
 	if(m_dirty)
 	{
-		SqliteMgr::Get()->doUpdate(this);
+		SqliteMgr::Get()->doUpdate(SmartPtr<Bindable>(this,true));
 		getTable()->modify();
 		m_dirty = false;
 	}
@@ -3341,7 +3341,7 @@ Trees* Trees::bykey(value_type treeid)
 {
 	Trees* result = new Trees();
 	result->m_treeid = treeid;
-	SqliteMgr::Get()->doSelect(result);
+	SqliteMgr::Get()->doSelect(SmartPtr<Bindable>(result,true));
 	return result;
 }
 
@@ -3370,20 +3370,20 @@ value_type Trees::lookupname(const std::string& value)
 void Trees::erase()
 {
 	if(!m_newentry)
-		SqliteMgr::Get()->doErase(this);
+		SqliteMgr::Get()->doErase(SmartPtr<Bindable>(this,true));
 }
 
 void Trees::save()
 {
 	if(m_newentry)
 	{
-		SqliteMgr::Get()->doInsert(this);
+		SqliteMgr::Get()->doInsert(SmartPtr<Bindable>(this,true));
 		m_newentry = false;
 	}
 
 	if(m_dirty)
 	{
-		SqliteMgr::Get()->doUpdate(this);
+		SqliteMgr::Get()->doUpdate(SmartPtr<Bindable>(this,true));
 		getTable()->modify();
 		m_dirty = false;
 	}
@@ -3526,27 +3526,27 @@ Version* Version::bykey(value_type versionid)
 {
 	Version* result = new Version();
 	result->m_versionid = versionid;
-	SqliteMgr::Get()->doSelect(result);
+	SqliteMgr::Get()->doSelect(SmartPtr<Bindable>(result,true));
 	return result;
 }
 
 void Version::erase()
 {
 	if(!m_newentry)
-		SqliteMgr::Get()->doErase(this);
+		SqliteMgr::Get()->doErase(SmartPtr<Bindable>(this,true));
 }
 
 void Version::save()
 {
 	if(m_newentry)
 	{
-		SqliteMgr::Get()->doInsert(this);
+		SqliteMgr::Get()->doInsert(SmartPtr<Bindable>(this,true));
 		m_newentry = false;
 	}
 
 	if(m_dirty)
 	{
-		SqliteMgr::Get()->doUpdate(this);
+		SqliteMgr::Get()->doUpdate(SmartPtr<Bindable>(this,true));
 		getTable()->modify();
 		m_dirty = false;
 	}

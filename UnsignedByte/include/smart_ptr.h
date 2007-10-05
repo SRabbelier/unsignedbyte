@@ -34,6 +34,7 @@ class SmartPtr
 	{
 		T* m_data;
 		int m_refCount;
+		bool m_delete;
 
 	public:
 		/**
@@ -51,8 +52,14 @@ class SmartPtr
 		 */
 		virtual ~SmartPtrRef()
 		{
-			delete m_data;
+			if(m_delete)
+				delete m_data;
 		}
+		
+		/**
+		 * Disables deleting m_data in destructor
+		 */ 
+		void SetNoDelete() { m_delete = false; }
 
 		/**
 		 * \return Pointer to the row data 
@@ -83,10 +90,12 @@ public:
 	 * Construct smart pointer from ptr
 	 * \param ptr pointer
 	 */
-	SmartPtr(T* ptr)
+	SmartPtr(T* ptr, bool disableDelete = false)
 	{
 		// create a fresh copy
 		CreateFresh( ptr );
+		if(disableDelete)
+			SetNoDelete();
 	}
 	
 	/**
@@ -194,6 +203,14 @@ public:
 	operator bool() const
 	{
 		return m_ref && m_ref->GetData();
+	}
+	
+	/**
+	 * Disables deletion functionality
+	 */ 
+	void SetNoDelete()
+	{
+		m_ref->SetNoDelete();
 	}
 
 private:

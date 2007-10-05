@@ -77,7 +77,7 @@ namespace mud
 		Area(db::Areas* area);
 		
 		Area(const Area& rhs);
-		Area operator=(const Area& rhs) { return *this; };
+		Area operator=(const Area& rhs);
 			
 		/**
 		 * \brief Default destructor
