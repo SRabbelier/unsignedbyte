@@ -25,7 +25,7 @@ CompilerName=g++
 RcCompilerName=windres
 OutputFile=../lib/libubdal.a
 Preprocessors=
-CmpOptions=-g $(Preprocessors)
+CmpOptions=-g -Wall $(Preprocessors)
 RcCmpOptions=
 LinkOptions=-O0
 IncludePath=$(IncludeSwitch). $(IncludeSwitch)../include 
@@ -48,6 +48,9 @@ $(OutputFile): PrePreBuild $(Objects)
 	@test -d ./Debug || mkdir ./Debug
 
 PrePreBuild: 
+
+
+
 PreBuild:
 
 

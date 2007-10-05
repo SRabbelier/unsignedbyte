@@ -123,9 +123,15 @@
       <PreBuild/>
       <PostBuild/>
       <CustomBuild Enabled="no">
-        <CleanCommand/>
-        <BuildCommand/>
+        <CleanCommand></CleanCommand>
+        <BuildCommand></BuildCommand>
       </CustomBuild>
+      <AdditionalRules>
+        <CustomPostBuild></CustomPostBuild>
+        <CustomPreBuild>
+
+</CustomPreBuild>
+      </AdditionalRules>
     </Configuration>
   </Settings>
   <Dependencies/>

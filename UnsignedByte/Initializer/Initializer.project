@@ -27,9 +27,15 @@
       <PreBuild/>
       <PostBuild/>
       <CustomBuild Enabled="no">
-        <CleanCommand/>
-        <BuildCommand/>
+        <CleanCommand></CleanCommand>
+        <BuildCommand></BuildCommand>
       </CustomBuild>
+      <AdditionalRules>
+        <CustomPostBuild></CustomPostBuild>
+        <CustomPreBuild>
+
+</CustomPreBuild>
+      </AdditionalRules>
     </Configuration>
     <Configuration Name="Release" CompilerType="GNU g++" DebuggerType="">
       <General OutputFile="./Release/HelloWorld" IntermediateDirectory="./Release" Command="HelloWorld" CommandArguments="" WorkingDirectory="./Release"/>
@@ -44,9 +50,13 @@
       <PreBuild/>
       <PostBuild/>
       <CustomBuild Enabled="no">
-        <CleanCommand/>
-        <BuildCommand/>
+        <CleanCommand></CleanCommand>
+        <BuildCommand></BuildCommand>
       </CustomBuild>
+      <AdditionalRules>
+        <CustomPostBuild></CustomPostBuild>
+        <CustomPreBuild></CustomPreBuild>
+      </AdditionalRules>
     </Configuration>
   </Settings>
   <Dependencies>
