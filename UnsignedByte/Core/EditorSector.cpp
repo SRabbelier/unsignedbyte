@@ -45,7 +45,6 @@ m_sector(NULL)
 {
 	GeneralAction* act = Commands::Get();
 	act->Run(this, Global::Get()->EmptyString);
-	OnLine(Global::Get()->EmptyString);
 }
 
 EditorSector::~EditorSector(void)

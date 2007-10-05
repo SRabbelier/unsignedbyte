@@ -43,7 +43,6 @@ m_mobile(NULL)
 {
 	GeneralAction* act = Commands::Get();
 	act->Run(this, Global::Get()->EmptyString);
-	OnLine(Global::Get()->EmptyString);
 }
 
 EditorMobile::~EditorMobile(void)

@@ -44,7 +44,6 @@ m_area(NULL)
 {
 	Action<OLCEditor>* act = Commands::Get();
 	act->Run(this, Global::Get()->EmptyString);
-	OnLine(Global::Get()->EmptyString);
 }
 
 EditorArea::~EditorArea(void)

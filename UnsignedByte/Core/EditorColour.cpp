@@ -46,7 +46,6 @@ m_colour(NULL)
 {
 	GeneralAction* act = Commands::Get();
 	act->Run(this, Global::Get()->EmptyString);
-	OnLine(Global::Get()->EmptyString);
 }
 
 EditorColour::~EditorColour(void)

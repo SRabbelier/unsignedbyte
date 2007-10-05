@@ -51,7 +51,6 @@ m_room(NULL)
 {
 	Action<OLCEditor>* act = Commands::Get();
 	act->Run(this, Global::Get()->EmptyString);
-	OnLine(Global::Get()->EmptyString);
 }
 
 EditorRoom::~EditorRoom(void)

@@ -46,7 +46,6 @@ m_permission(NULL)
 {
 	GeneralAction* act = Commands::Get();
 	act->Run(this, Global::Get()->EmptyString);
-	OnLine(Global::Get()->EmptyString);
 }
 
 EditorPermission::~EditorPermission(void)
