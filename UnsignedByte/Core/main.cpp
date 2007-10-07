@@ -93,6 +93,9 @@ int main(int argc, char** argv)
 	UBHandler::Get()->Shutdown();
 	UBHandler::Get()->Select();
 	UBHandler::Free(); 
+	
+	SqliteMgr::Free();
+	DatabaseMgr::Free();
 
 	printf("End of program.\n");
 	exitfunc();
