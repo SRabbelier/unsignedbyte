@@ -69,7 +69,7 @@ bool Initializer::VerifyDatabaseVersion()
 		equal = false;
 	}
 	
-	if(!ver->getversiontext().compare(game::vstring))
+	if(ver->getversiontext().compare(game::vstring))
 	{
 		Global::Get()->logf("Versiontext / Vstring mismatch.");
 		equal = false;

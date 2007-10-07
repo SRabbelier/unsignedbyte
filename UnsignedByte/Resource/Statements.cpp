@@ -38,4 +38,8 @@ Statements::~Statements()
 	sqlite3_finalize(m_erase);
 	sqlite3_finalize(m_update);
 	sqlite3_finalize(m_select);
+	sqlite3_finalize(m_list);
+	sqlite3_finalize(m_foreach);
+	for(fieldmap::iterator it = m_lookup.begin(); it != m_lookup.end(); it++)
+		sqlite3_finalize(it->second);
 }
