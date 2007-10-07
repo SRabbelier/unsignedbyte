@@ -32,11 +32,15 @@
 #include "Parse.h"
 #include "StringUtilities.h"
 
-#include "Action.h"
-
 #include "Account.h"
 #include "Area.h"
-#include "Area.h"
+
+EditorArea::AreaCommand EditorArea::m_name("Name", &EditorArea::editName);
+EditorArea::AreaCommand EditorArea::m_description("Description", &EditorArea::editDescription);
+EditorArea::AreaCommand EditorArea::m_height("Height", &EditorArea::editHeight);
+EditorArea::AreaCommand EditorArea::m_width("Width", &EditorArea::editWidth);
+EditorArea::AreaCommand EditorArea::m_show("Show", &EditorArea::showArea);
+EditorArea::AreaCommand EditorArea::m_save("Save", &EditorArea::saveArea);
 
 EditorArea::EditorArea(UBSocket* sock) :
 OLCEditor(sock),
@@ -57,7 +61,7 @@ std::string EditorArea::lookup(const std::string& action)
 	if(name.size() != 0)
 		return name;
 		
-	AreaAction* act = AreaInterpreter::Get()->translate(action);
+	AreaCommand* act = AreaInterpreter::Get()->translate(action);
 	if(act)
 		return act->getName();
 		
@@ -66,10 +70,10 @@ std::string EditorArea::lookup(const std::string& action)
 
 void EditorArea::dispatch(const std::string& action, const std::string& argument)
 {
-	AreaAction* act = AreaInterpreter::Get()->translate(action);
+	AreaCommand* act = AreaInterpreter::Get()->translate(action);
 	
 	if(act)
-		act->Run(m_sock, argument, m_area);
+		act->Run(this, argument);
 	else
 		OLCEditor::dispatch(action, argument);
 		
@@ -115,105 +119,101 @@ std::vector<std::string> EditorArea::getCommands()
 
 EditorArea::AreaInterpreter::AreaInterpreter(void)
 {
-	addWord("name", Name::Get());
-	addWord("description", Description::Get());
-	addWord("height", Height::Get());
-	addWord("width", Width::Get());
-	addWord("show", Show::Get());
-	addWord("save", Save::Get());
+	addWord("name", &m_name);
+	addWord("description", &m_description);
+	addWord("height", &m_height);
+	addWord("width", &m_width);
+	addWord("show", &m_show);
+	addWord("save", &m_save);
 }
 
 EditorArea::AreaInterpreter::~AreaInterpreter(void)
 {
-	Name::Free();
-	Description::Free();
-	Height::Free();
-	Width::Free();
-	Show::Free();
-	Save::Free();
+
 }
 
-void EditorArea::Name::Run(UBSocket* sock, const std::string& argument, mud::Area* area)
+void EditorArea::editName(const std::string& argument)
 {
 	if(argument.size() == 0)
 	{
-		sock->Send("Area name can't be zero length!\n");
+		m_sock->Send("Area name can't be zero length!\n");
 		return;
 	}
 
-	sock->Sendf("Area name changed from '%s' to '%s'.\n", area->getName().c_str(), argument.c_str());
-	area->setName(argument);
+	m_sock->Sendf("Area name changed from '%s' to '%s'.\n", m_area->getName().c_str(), argument.c_str());
+	m_area->setName(argument);
 	return;
 }
 
-void EditorArea::Description::Run(UBSocket* sock, const std::string& argument, mud::Area* area)
+void EditorArea::editDescription(const std::string& argument)
 {
-	if(!area->Exists())
+	if(!m_area->Exists())
 	{
-		sock->Send("For some reason the area you are editing does not exist.\n");
+		m_sock->Send("For some reason the area you are editing does not exist.\n");
 		return;
 	}
 
 	if(argument.size() == 0)
 	{
-		sock->Send("No argument, dropping you into the string editor!\n");
+		m_sock->Send("No argument, dropping you into the string editor!\n");
 		return;
 	}
 
-	sock->Sendf("Area description changed from '%s' to '%s'.\n", area->getDescription().c_str(), argument.c_str());
-	area->setDescription(argument);
+	m_sock->Sendf("Area description changed from '%s' to '%s'.\n", m_area->getDescription().c_str(), argument.c_str());
+	m_area->setDescription(argument);
 	return;
 }
 
-void EditorArea::Height::Run(UBSocket* sock, const std::string& argument, mud::Area* area)
+void EditorArea::editHeight(const std::string& argument)
 {
 	if(argument.size() == 0)
 	{
-		sock->Send("Please specify the area's height!\n");
+		m_sock->Send("Please specify the area's height!\n");
 		return;
 	}
 
 	int height = atoi(argument.c_str());
 	if(height <= 0)
 	{
-		sock->Sendf("Please specify a height > 0!\n");
+		m_sock->Sendf("Please specify a height > 0!\n");
 		return;
 	}
 
-	sock->Sendf("Area height changed from '%d' to '%d'.\n", area->getHeight(), height);
-	area->setHeight(height);
+	m_sock->Sendf("Area height changed from '%d' to '%d'.\n", m_area->getHeight(), height);
+	m_area->setHeight(height);
 	return;
 }
 
-void EditorArea::Width::Run(UBSocket* sock, const std::string& argument, mud::Area* area)
+void EditorArea::editWidth(const std::string& argument)
 {
 	if(argument.size() == 0)
 	{
-		sock->Send("Please specify the area's width!\n");
+		m_sock->Send("Please specify the area's width!\n");
 		return;
 	}
 
 	int width = atoi(argument.c_str());
 	if(width <= 0)
 	{
-		sock->Sendf("Please specify a width > 0!\n");
+		m_sock->Sendf("Please specify a width > 0!\n");
 		return;
 	}
 
-	sock->Sendf("Area width changed from '%d' to '%d'.\n", area->getWidth(), width);
-	area->setWidth(width);
+	m_sock->Sendf("Area width changed from '%d' to '%d'.\n", m_area->getWidth(), width);
+	m_area->setWidth(width);
 	return;
 }
 
-void EditorArea::Show::Run(UBSocket* sock, const std::string& argument, mud::Area* area)
+void EditorArea::showArea(const std::string& argument)
 {
-	sock->Send(String::Get()->box(area->Show(), "Area"));
+	m_sock->Send(String::Get()->box(m_area->Show(), "Area"));
 }
 
-void EditorArea::Save::Run(UBSocket* sock, const std::string& argument, mud::Area* area)
+void EditorArea::saveArea(const std::string& argument)
 {
-	sock->Sendf("Saving area '%s'.\n", area->getName().c_str());
-	area->Save();
-	sock->Send("Saved.\n");
+	m_sock->Sendf("Saving area '%s'.\n", m_area->getName().c_str());
+	m_area->Save();
+	m_sock->Send("Saved.\n");
 	return;
 }
+

@@ -53,25 +53,26 @@ bool Initializer::VerifyDatabaseVersion()
 
 	if(ver->getmajor() != game::major)
 	{
-		Global::Get()->logf("Major / Major mismatch.");
+		Global::Get()->logf("Major / Major mismatch.\n");
 		equal = false;
 	}
 	
 	if(ver->getminor() != game::minor)
 	{
-		Global::Get()->logf("Minor / Minor mismatch.");
+		Global::Get()->logf("Minor / Minor mismatch.\n");
 		equal = false;
 	}
 	
 	if(ver->getmicro() != game::micro)
 	{
-		Global::Get()->logf("Micro / Micro mismatch.");
+		Global::Get()->logf("Micro / Micro mismatch.\n");
 		equal = false;
 	}
 	
-	if(!ver->getversiontext().compare(game::vstring))
+	if(ver->getversiontext().compare(game::vstring))
 	{
-		Global::Get()->logf("Versiontext / Vstring mismatch.");
+		Global::Get()->logf("Versiontext / Vstring mismatch.\n");
+		Global::Get()->logf("dbversion is: '%s', ours is '%s'\n", ver->getversiontext().c_str(), game::vstring);
 		equal = false;
 	}
 
@@ -135,6 +136,9 @@ void Initializer::InitDatabase()
 	acc.setname(game::vname);
 	acc.setpassword("qq");
 	acc.save();
+	
+	db::Rooms room;
+	room.save();
 }
 
 void Initializer::InitColours()

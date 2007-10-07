@@ -17,27 +17,62 @@
  *   Free Software Foundation, Inc.,                                       *
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
+#pragma once
 
-#include <iostream>
-#include <sstream>
-#include <stdexcept>
+#include <string>
+#include <smart_ptr.h>
 
-#include "SPKCriteria.h"
-#include "Table.h"
+class UBSocket;
 
-bool SPKCriteria::evaluate(sqlite3_stmt* statement)
+template <class T>
+class CommandObject
 {
-	value_type key = sqlite3_column_int64(statement, 0);
-	if(key == m_key)
-		return true;
+    public:
+		typedef void (T::*CommandFunction)(const std::string& argument);
 		
-	return false;
+		CommandObject(const std::string& name, CommandFunction command, bool fullname = false);
+		~CommandObject();
+        void Run(T* owner, const std::string& argument);
+		const std::string& getName() const;
+		bool fullName() const; // only add the full name
+
+    protected:
+		CommandObject(const CommandObject& rhs);
+		
+		std::string m_name;
+		CommandFunction m_command;
+		bool m_fullName;
+};
+
+template <class T> 
+const std::string& CommandObject<T>::getName() const
+{ 
+	return m_name; 
 }
 
-bool SPKCriteria::evaluate(sqlite3_stmt* statement, const TablePtr table)
+template <class T> 
+bool CommandObject<T>::fullName() const
+{ 
+	return m_fullName; 
+}
+
+template <class T> 
+CommandObject<T>::CommandObject(const std::string& name, CommandFunction command, bool fullname) :
+m_name(name),
+m_command(command),
+m_fullName(fullname)
 {
-	if(!table->hasSinglularPrimaryKey())
-		throw new std::logic_error("SPKCriteria::evaluate(), table doesn't have a singular primary key.");
-		
-	return evaluate(statement);
+	
+}
+
+template <class T> 
+CommandObject<T>::~CommandObject()
+{
+	
+}
+
+template <class T> 
+void CommandObject<T>::Run(T* owner, const std::string& argument)
+{ 
+	(owner->*m_command)(argument);
 }

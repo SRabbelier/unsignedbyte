@@ -80,7 +80,7 @@ void OLCEditor::New::Run(OLCEditor* editor, const std::string& argument)
 		return;
 	}
 
-	editor->Sendf("%s created!\n", editor->name().c_str());
+	editor->Sendf("%s created (%d)!\n", editor->name().c_str(), id);
 	editor->setEditing(id);
 	return;
 }
@@ -101,7 +101,7 @@ void OLCEditor::Edit::Run(OLCEditor* editor, const std::string& argument)
 	if(!count)
 	{
 		editor->Send("Please specify an id to edit.\n");
-		editor->Sendf("'%s' is not a valid id!\n", argument.c_str());
+		editor->Sendf("'%s' (%d) is not a valid id!\n", argument.c_str(), id);
 		return;
 	}
 
@@ -117,6 +117,7 @@ void OLCEditor::Edit::Run(OLCEditor* editor, const std::string& argument)
 	editor->setEditing(id);
 	editor->m_sock->Sendf("You are now editing id %d> ", id);
 	editor->m_sock->Send(editor->getEditing()->ShowShort());
+	editor->m_sock->Send("\n");
 	return;
 }
 

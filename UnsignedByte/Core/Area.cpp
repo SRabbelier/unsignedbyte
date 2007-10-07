@@ -60,10 +60,10 @@ std::vector<std::string> Area::Show()
 {
 	std::vector<std::string> result;
 	
-	result.push_back(Global::Get()->sprintf("Name: '%s'.\n", getName().c_str()));
-	result.push_back(Global::Get()->sprintf("Description: '%s'.\n", getDescription().c_str()));
-	result.push_back(Global::Get()->sprintf("Height: %d.\n", getHeight()));
-	result.push_back(Global::Get()->sprintf("Width: %d.\n", getWidth()));
+	result.push_back(Global::Get()->sprintf("Name: '%s'.", getName().c_str()));
+	result.push_back(Global::Get()->sprintf("Description: '%s'.", getDescription().c_str()));
+	result.push_back(Global::Get()->sprintf("Height: %d.", getHeight()));
+	result.push_back(Global::Get()->sprintf("Width: %d.", getWidth()));
 	
 	return result;
 }

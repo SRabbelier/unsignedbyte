@@ -44,7 +44,9 @@ void SqliteMgr::doInsert(BindablePtr bindable)
 	sqlite3_stmt* insert = getInsertStmt(table);
 	sqlite3_reset(insert);
 	
-	bindable->bindKeys(insert);	
+	if(!table->hasSinglularPrimaryKey())
+		bindable->bindKeys(insert);	
+		
 	doStatement(insert);
 	bindable->parseInsert(m_odb->db);
 }
@@ -363,12 +365,22 @@ sqlite3_stmt* SqliteMgr::getForEachStmt(const TablePtr table)
 		
 	std::string sql;
 	sql.append("Select ");
+	bool comspace = false;
+	for(TableMap::const_iterator it = table->keybegin(); it != table->keyend(); it++)
+	{
+		if(comspace)
+			sql.append(", ");
+
+		sql.append(it->first);
+		comspace = true;
+	}
 	for(Fields::const_iterator it = table->begin(); it != table->end(); it++)
 	{
-		if(it != table->begin())
+		if(comspace)
 			sql.append(", ");
 
 		sql.append((*it)->getName());
+		comspace = true;
 	}
 	 
 	sql.append(" from ");
