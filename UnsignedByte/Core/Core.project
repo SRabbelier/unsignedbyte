@@ -107,7 +107,6 @@
     <File Name="EditorAccount.h"/>
     <File Name="Editor.h"/>
     <File Name="OLCEditor.h"/>
-    <File Name="CommandObject.h"/>
   </VirtualDirectory>
   <Dependencies/>
 </CodeLite_Project>

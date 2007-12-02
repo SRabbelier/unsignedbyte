@@ -58,7 +58,6 @@
     </Configuration>
   </Settings>
   <Dependencies>
-    <Project Name="Sqlite3"/>
     <Project Name="Resource"/>
     <Project Name="Generator"/>
     <Project Name="DAL"/>

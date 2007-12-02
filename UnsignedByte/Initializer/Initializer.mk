@@ -14,7 +14,7 @@ LinkerName=g++
 ArchiveTool=ar rcu
 SharedObjectLinkerName=g++ -shared -fPIC
 ObjectSuffix=.o
-DebugSwitch=-g 
+DebugSwitch=-gstabs 
 IncludeSwitch=-I
 LibrarySwitch=-l
 OutputSwitch=-o 
@@ -41,13 +41,13 @@ Objects=$(IntermediateDirectory)/main$(ObjectSuffix) $(IntermediateDirectory)/In
 ##
 all: $(OutputFile)
 
-$(OutputFile): makeDirStep PrePreBuild $(Objects)
+$(OutputFile): makeDirStep  $(Objects)
 	$(LinkerName) $(OutputSwitch)$(OutputFile) $(LinkOptions) $(Objects) $(LibPath) $(Libs)
 
 makeDirStep:
 	@test -d Intermediate || mkdir Intermediate
 
-PrePreBuild: 
+
 PreBuild:
 
 

@@ -1,30 +1,33 @@
 ##
 ## Auto Generated makefile, please do not edit
 ##
-WorkspaceName=MUD Development
-WorkspacePath=/home/sverre/code/UBSVN/Trunk
+WorkspaceName=UnsignedByte
+WorkspacePath=/home/sverre/code/ub
+ProjectName=Sqlite3
 
-## ReleaseANSI
-ifeq ($(type), ReleaseANSI)
+## Debug
+ifeq ($(type),Debug)
+ConfigurationName=Debug
+IntermediateDirectory=./Debug
+OutDir=$(IntermediateDirectory)
 LinkerName=gcc
 ArchiveTool=ar rcu
-SharedObjectLinkerName=gcc -shared
+SharedObjectLinkerName=gcc -shared -fPIC
 ObjectSuffix=.o
-DebugSwitch=-g
+DebugSwitch=-g 
 IncludeSwitch=-I
 LibrarySwitch=-l
-OutputSwitch=-o
+OutputSwitch=-o 
 LibraryPathSwitch=-L
 PreprocessorSwitch=-D
-SourceSwitch=-c
+SourceSwitch=-c 
 CompilerName=gcc
-RcCompilerName=
-OutputFile=../libmysqlite3.a
-IntermediateDirectory=./Release
+RcCompilerName=windres
+OutputFile=../lib/libMySqlite3.a
 Preprocessors=
-CmpOptions=-O2 $(Preprocessors)
+CmpOptions=-g $(Preprocessors)
 RcCmpOptions=
-LinkOptions= 
+LinkOptions=
 IncludePath=$(IncludeSwitch). 
 RcIncludePath=
 Libs=
@@ -38,12 +41,13 @@ Objects=$(IntermediateDirectory)/sqlite3$(ObjectSuffix)
 ##
 all: $(IntermediateDirectory) $(OutputFile)
 
-$(OutputFile): $(Objects)
+$(OutputFile): PrePreBuild $(Objects)
 	$(ArchiveTool) $(OutputFile) $(Objects)
 
-$(IntermediateDirectory):
-	@test -d ./Release || mkdir ./Release
+./Debug:
+	@test -d ./Debug || mkdir ./Debug
 
+PrePreBuild: 
 PreBuild:
 
 
@@ -51,7 +55,7 @@ PreBuild:
 ## Objects
 ##
 $(IntermediateDirectory)/sqlite3$(ObjectSuffix): sqlite3.c $(IntermediateDirectory)/sqlite3$(ObjectSuffix).d
-	$(CompilerName) $(SourceSwitch) sqlite3.c $(CmpOptions)   $(OutputSwitch) $(IntermediateDirectory)/sqlite3$(ObjectSuffix) $(IncludePath)
+	$(CompilerName) $(SourceSwitch)sqlite3.c $(CmpOptions)   $(OutputSwitch)$(IntermediateDirectory)/sqlite3$(ObjectSuffix) $(IncludePath)
 $(IntermediateDirectory)/sqlite3$(ObjectSuffix).d:
 	@$(CompilerName) $(CmpOptions) $(IncludePath) -MT$(IntermediateDirectory)/sqlite3$(ObjectSuffix) -MF$(IntermediateDirectory)/sqlite3$(ObjectSuffix).d -MM sqlite3.c
 
