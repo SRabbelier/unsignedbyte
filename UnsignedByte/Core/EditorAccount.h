@@ -21,15 +21,17 @@
 
 #include <string>
 #include "Editor.h"
-#include "Action.h"
 #include "singleton.h"
 #include "Interpreter.h"
+#include "CommandObject.h"
 
 class UBSocket;
 
 class EditorAccount : public Editor
 {
 public:
+	typedef CommandObject<EditorAccount> AccountCommand;
+
 	EditorAccount(UBSocket* sock);
 	~EditorAccount(void);
 	
@@ -38,85 +40,33 @@ public:
 	
 	std::string lookup(const std::string& action);
 	void dispatch(const std::string& action, const std::string& argument);
+	
+	void listCommands(const std::string& argument);
+	void beginLogin(const std::string& argument);
+	void beginOLC(const std::string& argument);
+	void beginCreation(const std::string& argument);
+	void quitEditor(const std::string& argument);
+	void shutdownGame(const std::string& argument);
+	void listCharacters(const std::string& argument);
+	
 
 private: 
 	EditorAccount(const EditorAccount& rhs);
 	EditorAccount operator=(const EditorAccount& rhs);
 
-	class AccountInterpreter : public Interpreter<UBAction>, public Singleton<AccountInterpreter> {
+	class AccountInterpreter : public Interpreter<AccountCommand>, public Singleton<AccountInterpreter> {
 	private:
 		AccountInterpreter(void);
 		~AccountInterpreter(void);
 		friend class Singleton<AccountInterpreter>;
 	};
-
-	class Commands: public UBAction, public Singleton<Commands> {
-	private:
-		Commands(void) {};
-		~Commands(void) {};
-		friend class Singleton<Commands>;
-	public:
-		void Run(UBSocket* ch, const std::string& argument);
-		std::string getName() { return "Commands"; };
-	};
-
-	class Login : public UBAction, public Singleton<Login> {
-	private:
-		Login(void) {};
-		~Login(void) {};
-		friend class Singleton<Login>;
-	public:
-		void Run(UBSocket* ch, const std::string& argument);
-		std::string getName() { return "Login"; };
-	};
-
-	class OLC : public UBAction, public Singleton<OLC> {
-	private:
-		OLC(void) {};
-		~OLC(void) {};
-		friend class Singleton<OLC>;
-	public:
-		void Run(UBSocket* ch, const std::string& argument);
-		std::string getName() { return "OLC"; };
-	};
-
-	class New : public UBAction, public Singleton<New> {
-	private:
-		New(void) {};
-		~New(void) {};
-		friend class Singleton<New>;
-	public:
-		void Run(UBSocket* ch, const std::string& argument);
-		std::string getName() { return "New"; };
-	};
-
-	class Quit : public UBAction, public Singleton<Quit> {
-	private:
-		Quit(void) {};
-		~Quit(void) {};
-		friend class Singleton<Quit>;
-	public:
-		void Run(UBSocket* ch, const std::string& argument);
-		std::string getName() { return "Quit"; };		
-	};
-
-	class Shutdown : public UBAction, public Singleton<Shutdown> {
-	private:
-		Shutdown(void) {};
-		~Shutdown(void) {};
-		friend class Singleton<Shutdown>;
-		void Run(UBSocket* ch, const std::string& argument);
-		std::string getName() { return "Shutdown"; };
-	};
-
-	class List : public UBAction, public Singleton<List> {
-	private:
-		List(void) {};
-		~List(void) {};
-		friend class Singleton<List>;
-	public:
-		void Run(UBSocket* ch, const std::string& argument);
-		std::string getName() { return "List"; };
-	};
+	
+	static AccountCommand m_listCommands;
+	static AccountCommand m_beginLogin;
+	static AccountCommand m_beginOLC;
+	static AccountCommand m_beginCreation;
+	static AccountCommand m_quitEditor;
+	static AccountCommand m_shutdownGame;
+	static AccountCommand m_listCharacters;
 
 };

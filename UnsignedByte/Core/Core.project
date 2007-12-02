@@ -39,6 +39,7 @@
     <File Name="Command.h"/>
     <File Name="GrantGroup.h"/>
     <File Name="Permission.h"/>
+    <File Name="CommandObject.h"/>
   </VirtualDirectory>
   <Settings Type="Executable">
     <Configuration Name="Debug" CompilerType="gnu g++" DebuggerType="GNU gdb debugger">

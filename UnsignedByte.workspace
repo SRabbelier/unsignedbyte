@@ -7,10 +7,6 @@
   <Project Name="Core" Path="UnsignedByte/Core/Core.project" Active="No"/>
   <Project Name="Initializer" Path="UnsignedByte/Initializer/Initializer.project" Active="No"/>
   <Project Name="sqlite3" Path="UnsignedByte/Sqlite3/sqlite3.project" Active="No"/>
-  <Environment>
-    <Variable Name="WorkspaceName" Value="UnsignedByte"/>
-    <Variable Name="WorkspacePath" Value="/home/sverre/code/ub"/>
-  </Environment>
   <BuildMatrix>
     <WorkspaceConfiguration Name="Debug" Selected="yes">
       <Project Name="Resource" ConfigName="Debug"/>
@@ -20,4 +16,8 @@
       <Project Name="Initializer" ConfigName="Debug"/>
     </WorkspaceConfiguration>
   </BuildMatrix>
+  <Environment>
+    <Variable Name="WorkspaceName" Value="UnsignedByte"/>
+    <Variable Name="WorkspacePath" Value="/home/sverre/code/ub"/>
+  </Environment>
 </CodeLite_Workspace>

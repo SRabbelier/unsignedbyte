@@ -42,10 +42,18 @@ using mud::Cache;
 
 extern bool m_quit;
 
+EditorAccount::AccountCommand EditorAccount::m_listCommands("Commands", &EditorAccount::listCommands);
+EditorAccount::AccountCommand EditorAccount::m_beginLogin("Login", &EditorAccount::beginLogin);
+EditorAccount::AccountCommand EditorAccount::m_beginOLC("OLC", &EditorAccount::beginOLC);
+EditorAccount::AccountCommand EditorAccount::m_beginCreation("New", &EditorAccount::beginCreation);
+EditorAccount::AccountCommand EditorAccount::m_quitEditor("Quit", &EditorAccount::quitEditor);
+EditorAccount::AccountCommand EditorAccount::m_shutdownGame("Shutdown", &EditorAccount::shutdownGame);
+EditorAccount::AccountCommand EditorAccount::m_listCharacters("List", &EditorAccount::listCharacters);
+
 EditorAccount::EditorAccount(UBSocket* sock) :
 Editor(sock)
 {
-	Commands::Get()->Run(sock, Global::Get()->EmptyString);
+	this->m_listCommands.Run(this, Global::Get()->EmptyString);
 }
 
 EditorAccount::~EditorAccount(void)
@@ -55,7 +63,7 @@ EditorAccount::~EditorAccount(void)
 
 std::string EditorAccount::lookup(const std::string& action)
 {
-	UBAction* act = AccountInterpreter::Get()->translate(action);
+	AccountCommand* act = AccountInterpreter::Get()->translate(action);
 	if(act)
 		return act->getName();
 		
@@ -64,10 +72,10 @@ std::string EditorAccount::lookup(const std::string& action)
 
 void EditorAccount::dispatch(const std::string& action, const std::string& argument)
 {
-	UBAction* act = AccountInterpreter::Get()->translate(action);
+	AccountCommand* act = AccountInterpreter::Get()->translate(action);
 	
 	if(act)
-		act->Run(m_sock, argument);
+		act->Run(this, argument);
 	else
 		Global::Get()->bugf("EditorAccount::dispatch(), action '%s' not found (argument '%s')!\n", action.c_str(), argument.c_str());
 		
@@ -76,77 +84,65 @@ void EditorAccount::dispatch(const std::string& action, const std::string& argum
 
 EditorAccount::AccountInterpreter::AccountInterpreter(void)
 {
-	addWord("new", New::Get());
-	addWord("login", Login::Get());
-	addWord("commands", Commands::Get());
-	addWord("quit", Quit::Get());
-	addWord("shutdown", Shutdown::Get());
-	addWord("list", List::Get());
-	addWord("olc", OLC::Get());
-
-	/*
-	addWord("ooc", DoOOC::Get());
-	addWord("note", DoNote::Get());
-	addWord("help", DoHelp::Get());
-	*/
+	addWord("new", &m_beginCreation);
+	addWord("login", &m_beginLogin);
+	addWord("commands", &m_listCommands);
+	addWord("quit", &m_quitEditor);
+	addWord("shutdown", &m_shutdownGame);
+	addWord("list", &m_listCharacters);
+	addWord("olc", &m_beginOLC);
 }
 
 EditorAccount::AccountInterpreter::~AccountInterpreter(void)
 {
-	New::Free();
-	Login::Free();
-	Commands::Free();
-	Quit::Free();
-	Shutdown::Free();
-	List::Free();
-	OLC::Free();
+
 }
 
-void EditorAccount::Login::Run(UBSocket* sock, const std::string &argument)
+void EditorAccount::beginLogin(const std::string &argument)
 {
 	if(argument.size() == 0)
 	{
-		sock->Send("Please choose a character:\n");
-		EditorAccount::List::Get()->Run(sock,"");
+		m_sock->Send("Please choose a character:\n");
+		this->m_listCharacters.Run(this, Global::Get()->EmptyString);
 		return;
 	}
 
 	if(Cache::Get()->isActive(argument))
 	{
-		sock->Send("You are already playing that character!\n");
+		m_sock->Send("You are already playing that character!\n");
 		return;
 	}
 
 	int id = mud::Cache::Get()->lookupCharacterByName(argument);
 	if(id <= 0)
 	{
-		sock->Send("No such character.\n");
-		Run(sock, Global::Get()->EmptyString);
+		m_sock->Send("No such character.\n");
+		this->m_beginLogin.Run(this, Global::Get()->EmptyString);
 		return;
 	}
 	
-	bool hasAccount = mud::Cache::Get()->existsCharacterWithAccount(id, sock->GetAccount()->getID());
+	bool hasAccount = mud::Cache::Get()->existsCharacterWithAccount(id, m_sock->GetAccount()->getID());
 	if(hasAccount)
 	{
-		sock->Sendf("You don't have a character named '%s'!\n", argument.c_str());
-		Run(sock, Global::Get()->EmptyString);
+		m_sock->Sendf("You don't have a character named '%s'!\n", argument.c_str());
+		this->m_beginLogin.Run(this, Global::Get()->EmptyString);
 		return;
 	}
 
-	mud::PCharacter* Ch = Cache::Get()->LoadPCharacterByKey(sock, id);
-	sock->Sendf("Welcome back, %s\n", argument.c_str());
-	sock->SetEditor(new EditorPlaying(sock, Ch));
+	mud::PCharacter* Ch = Cache::Get()->LoadPCharacterByKey(m_sock, id);
+	m_sock->Sendf("Welcome back, %s\n", argument.c_str());
+	m_sock->SetEditor(new EditorPlaying(m_sock, Ch));
 	return;
 }
 
-void EditorAccount::List::Run(UBSocket* sock, const std::string &argument)
+void EditorAccount::listCharacters(const std::string &argument)
 {
-	mud::Account* account = sock->GetAccount();
+	mud::Account* account = m_sock->GetAccount();
 	if(!account->Exists())
 	{
-		sock->Send("For some reason your account does not exist?!");
-		sock->Send("Closing your connection now.\n");
-		sock->SetCloseAndDelete();
+		m_sock->Send("For some reason your account does not exist?!");
+		m_sock->Send("Closing your connection now.\n");
+		m_sock->SetCloseAndDelete();
 		return;
 	}
 	
@@ -164,43 +160,43 @@ void EditorAccount::List::Run(UBSocket* sock, const std::string &argument)
 	
 	sock->Send(String::Get()->box(characters));
 	*/
-	sock->Send("Not yet implemented!");
-	sock->Send("\n");
+	m_sock->Send("Not yet implemented!");
+	m_sock->Send("\n");
 	return;
 }
 
-void EditorAccount::Commands::Run(UBSocket* sock, const std::string &argument)
+void EditorAccount::listCommands(const std::string &argument)
 {
-	sock->Send(String::Get()->box(AccountInterpreter::Get()->getWords(), "Account"));
-	sock->Send("\n");
+	m_sock->Send(String::Get()->box(AccountInterpreter::Get()->getWords(), "Account"));
+	m_sock->Send("\n");
 	return;
 }
 
-void EditorAccount::OLC::Run(UBSocket* sock, const std::string &argument)
+void EditorAccount::beginOLC(const std::string &argument)
 {
-	sock->Send("Dropping you into OLC mode!\n");
-	sock->SetEditor(new EditorOLC(sock));
+	m_sock->Send("Dropping you into OLC mode!\n");
+	m_sock->SetEditor(new EditorOLC(m_sock));
 	return;
 }
 
-void EditorAccount::New::Run(UBSocket* sock, const std::string &argument)
+void EditorAccount::beginCreation(const std::string &argument)
 {
-	sock->Send("Dropping you into Character Creation mode!\n");
-	sock->SetEditor(new EditorNewCharacter(sock));
+	m_sock->Send("Dropping you into Character Creation mode!\n");
+	m_sock->SetEditor(new EditorNewCharacter(m_sock));
 	return;
 }
 
-void EditorAccount::Quit::Run(UBSocket* sock, const std::string &argument)
+void EditorAccount::quitEditor(const std::string &argument)
 {
-	sock->Send("Thank you for visiting.\n");
-	sock->SetCloseAndDelete();
+	m_sock->Send("Thank you for visiting.\n");
+	m_sock->SetCloseAndDelete();
 	return;
 }
 
-void EditorAccount::Shutdown::Run(UBSocket* sock, const std::string &argument)
+void EditorAccount::shutdownGame(const std::string &argument)
 {
-	sock->Send("Shutting down...\n");
+	m_sock->Send("Shutting down...\n");
 	m_quit = true;
-	sock->Send("Game will shut down after this loop!\n");
+	m_sock->Send("Game will shut down after this loop!\n");
 	return;
 }
