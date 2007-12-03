@@ -23,7 +23,7 @@
 #include "OLCEditor.h"
 #include "singleton.h"
 #include "Interpreter.h"
-#include "Action.h"
+#include "CommandObject.h"
 
 class UBSocket;
 namespace mud { class MCharacter; }
@@ -31,6 +31,8 @@ namespace mud { class MCharacter; }
 class EditorMobile : public OLCEditor
 {
 public:
+	typedef CommandObject<EditorMobile> MobileCommand;
+	
 	EditorMobile(UBSocket* sock);
 	~EditorMobile(void);
 
@@ -46,58 +48,26 @@ public:
 	std::vector<std::string> getList();
 	std::vector<std::string> getCommands();
 	void setEditing(long id);
+	
+	void editName(const std::string& argument);
+	void editDescription(const std::string& argument);
+	void showMobile(const std::string& argument);
+	void saveMobile(const std::string& argument);
 
 private:
 	mud::MCharacter* m_mobile;
 	EditorMobile(const EditorMobile& rhs);
 	EditorMobile operator=(const EditorMobile& rhs);
 
-	typedef EditorAction<UBSocket, mud::MCharacter> MobileAction;
-
-	class MobileInterpreter : public Interpreter<MobileAction>, public Singleton<MobileInterpreter> {
+	class MobileInterpreter : public Interpreter<MobileCommand>, public Singleton<MobileInterpreter> {
 	private:
 		MobileInterpreter(void);
 		~MobileInterpreter(void);
 		friend class Singleton<MobileInterpreter>;
 	};
 	
-	class Name : public MobileAction, public Singleton<Name>{
-	private:
-		Name(void) {};
-		~Name(void) {};
-		friend class Singleton<Name>;
-	public:
-		void Run(UBSocket* sock, const std::string& argument, mud::MCharacter* area);
-		std::string getName() { return "Name"; };
-	};
-
-	class Description : public MobileAction, public Singleton<Description>{
-	private:
-		Description(void) {};
-		~Description(void) {};
-		friend class Singleton<Description>;
-	public:
-		void Run(UBSocket* sock, const std::string& argument, mud::MCharacter* area);
-		std::string getName() { return "Description"; };
-	};
-
-	class Show : public MobileAction, public Singleton<Show> {
-	private:
-		Show(void) {};
-		~Show(void) {};
-		friend class Singleton<Show>;
-	public:
-		void Run(UBSocket* sock, const std::string& argument, mud::MCharacter* area);
-		std::string getName() { return "Show"; };
-	};
-
-	class Save : public MobileAction, public Singleton<Save> {
-	private:
-		Save(void) {};
-		~Save(void) {};
-		friend class Singleton<Save>;
-	public:
-		void Run(UBSocket* sock, const std::string& argument, mud::MCharacter* area);
-		std::string getName() { return "Save"; };
-	};
+	static MobileCommand m_editName;
+	static MobileCommand m_editDescription;
+	static MobileCommand m_showMobile;
+	static MobileCommand m_saveMobile;
 };

@@ -64,7 +64,7 @@ bool Cache::isActive(cstring value)
  * 
  */ 
 
-value_type mud::Cache::AddAccount()
+value_type Cache::AddAccount()
 {
 	db::Accounts d;
 	d.save();
@@ -75,7 +75,7 @@ value_type mud::Cache::AddAccount()
 	return id;
 }
 
-value_type mud::Cache::AddArea()
+value_type Cache::AddArea()
 {
 	db::Areas d;
 	d.save();
@@ -86,7 +86,7 @@ value_type mud::Cache::AddArea()
 	return id;
 }
 
-value_type mud::Cache::AddCharacter()
+value_type Cache::AddCharacter()
 {
 	db::Characters d;
 	d.save();
@@ -97,7 +97,7 @@ value_type mud::Cache::AddCharacter()
 	return id;
 }
 
-value_type mud::Cache::AddColour()
+value_type Cache::AddColour()
 {
 	db::Colours d;
 	d.save();
@@ -108,7 +108,7 @@ value_type mud::Cache::AddColour()
 	return id;
 }
 
-value_type mud::Cache::AddCommand()
+value_type Cache::AddCommand()
 {
 	db::Commands d;
 	d.save();
@@ -119,7 +119,7 @@ value_type mud::Cache::AddCommand()
 	return id;
 }
 
-value_type mud::Cache::AddGrantGroup()
+value_type Cache::AddGrantGroup()
 {
 	db::GrantGroups d;
 	d.save();
@@ -130,7 +130,7 @@ value_type mud::Cache::AddGrantGroup()
 	return id;
 }
 
-value_type mud::Cache::AddRace()
+value_type Cache::AddRace()
 {
 	db::Races d;
 	d.save();
@@ -141,7 +141,7 @@ value_type mud::Cache::AddRace()
 	return id;
 }
 
-value_type mud::Cache::AddRoom()
+value_type Cache::AddRoom()
 {
 	db::Rooms d;
 	d.save();
@@ -152,7 +152,7 @@ value_type mud::Cache::AddRoom()
 	return id;
 }
 
-value_type mud::Cache::AddSector()
+value_type Cache::AddSector()
 {	
 	db::Sectors d;
 	d.save();
@@ -455,7 +455,7 @@ mud::Sector* Cache::GetSectorByName(cstring value)
  *
  */ 
 
-bool mud::Cache::existsCharacterWithAccount(value_type characterid, value_type accountid)
+bool Cache::existsCharacterWithAccount(value_type characterid, value_type accountid)
 {
 	twoValueKey key(accountid, characterid);
 	db::CharacterAccount* d = m_characteraccountByKey[key];
@@ -476,7 +476,7 @@ bool mud::Cache::existsCharacterWithAccount(value_type characterid, value_type a
  *
  */ 
 
-value_type mud::Cache::lookupAccountByName(cstring value)
+value_type Cache::lookupAccountByName(cstring value)
 {
 	reverseStringKey::iterator it = m_lookupAccountByName.find(value);
 	if(it != m_lookupAccountByName.end())
@@ -487,7 +487,7 @@ value_type mud::Cache::lookupAccountByName(cstring value)
 	return id;
 }
 
-value_type mud::Cache::lookupCharacterByName(cstring value)
+value_type Cache::lookupCharacterByName(cstring value)
 {
 	reverseStringKey::iterator it = m_lookupCharacterByName.find(value);
 	if(it != m_lookupCharacterByName.end())
@@ -498,7 +498,7 @@ value_type mud::Cache::lookupCharacterByName(cstring value)
 	return id;
 }
 
-value_type mud::Cache::lookupColourByCode(cstring value)
+value_type Cache::lookupColourByCode(cstring value)
 {
 	reverseStringKey::iterator it = m_lookupColourByCode.find(value);
 	if(it != m_lookupColourByCode.end())
@@ -509,7 +509,7 @@ value_type mud::Cache::lookupColourByCode(cstring value)
 	return id;
 }
 
-value_type mud::Cache::lookupColourByName(cstring value)
+value_type Cache::lookupColourByName(cstring value)
 {
 	reverseStringKey::iterator it = m_lookupColourByName.find(value);
 	if(it != m_lookupColourByName.end())
@@ -520,7 +520,7 @@ value_type mud::Cache::lookupColourByName(cstring value)
 	return id;
 }
 
-value_type mud::Cache::lookupCommandByName(cstring value)
+value_type Cache::lookupCommandByName(cstring value)
 {
 	reverseStringKey::iterator it = m_lookupCommandByName.find(value);
 	if(it != m_lookupCommandByName.end())
@@ -531,7 +531,7 @@ value_type mud::Cache::lookupCommandByName(cstring value)
 	return id;
 }
 
-value_type mud::Cache::lookupGrantGroupByName(cstring value)
+value_type Cache::lookupGrantGroupByName(cstring value)
 {
 	reverseStringKey::iterator it = m_lookupGrantGroupByName.find(value);
 	if(it != m_lookupGrantGroupByName.end())
@@ -542,7 +542,7 @@ value_type mud::Cache::lookupGrantGroupByName(cstring value)
 	return id;
 }
 
-value_type mud::Cache::lookupRaceByName(cstring value)
+value_type Cache::lookupRaceByName(cstring value)
 {
 	reverseStringKey::iterator it = m_lookupRaceByName.find(value);
 	if(it != m_lookupRaceByName.end())
@@ -553,7 +553,7 @@ value_type mud::Cache::lookupRaceByName(cstring value)
 	return id;
 }
 
-value_type mud::Cache::lookupSectorByName(cstring value)
+value_type Cache::lookupSectorByName(cstring value)
 {
 	reverseStringKey::iterator it = m_lookupSectorByName.find(value);
 	if(it != m_lookupSectorByName.end())
@@ -687,7 +687,7 @@ Character* Cache::cacheCharacter(db::Characters *d)
 	return p;
 }
 
-Colour* mud::Cache::cacheColour(db::Colours* d)
+Colour* Cache::cacheColour(db::Colours* d)
 {
 	Colour* p = new Colour(d);
 	m_colourByKey[d->getcolourid()] = p;

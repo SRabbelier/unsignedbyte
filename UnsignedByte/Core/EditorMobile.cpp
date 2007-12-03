@@ -37,6 +37,11 @@
 #include "Account.h"
 #include "MCharacter.h"
 
+EditorMobile::MobileCommand EditorMobile::m_editName("Name", &EditorMobile::editName);
+EditorMobile::MobileCommand EditorMobile::m_editDescription("Description", &EditorMobile::editDescription);
+EditorMobile::MobileCommand EditorMobile::m_showMobile("Show", &EditorMobile::showMobile);
+EditorMobile::MobileCommand EditorMobile::m_saveMobile("Save", &EditorMobile::saveMobile);
+
 EditorMobile::EditorMobile(UBSocket* sock) :
 OLCEditor(sock),
 m_mobile(NULL)
@@ -56,7 +61,7 @@ std::string EditorMobile::lookup(const std::string& action)
 	if(name.size() != 0)
 		return name;
 		
-	MobileAction* act = MobileInterpreter::Get()->translate(action);
+	MobileCommand* act = MobileInterpreter::Get()->translate(action);
 	if(act)
 		return act->getName();
 		
@@ -65,10 +70,10 @@ std::string EditorMobile::lookup(const std::string& action)
 
 void EditorMobile::dispatch(const std::string& action, const std::string& argument)
 {
-	MobileAction* act = MobileInterpreter::Get()->translate(action);
+	MobileCommand* act = MobileInterpreter::Get()->translate(action);
 	
 	if(act)
-		act->Run(m_sock, argument, m_mobile);
+		act->Run(this, argument);
 	else
 		OLCEditor::dispatch(action, argument);
 		
@@ -114,62 +119,59 @@ std::vector<std::string> EditorMobile::getCommands()
 
 EditorMobile::MobileInterpreter::MobileInterpreter(void)
 {
-	addWord("name", Name::Get());
-	addWord("description", Description::Get());
-	addWord("show", Show::Get());
-	addWord("save", Save::Get());
+	addWord("name", &m_editName);
+	addWord("description", &m_editDescription);
+	addWord("show", &m_showMobile);
+	addWord("save", &m_saveMobile);
 }
 
 EditorMobile::MobileInterpreter::~MobileInterpreter(void)
 {
-	Name::Free();
-	Description::Free();
-	Show::Free();
-	Save::Free();
+
 }
 
-void EditorMobile::Name::Run(UBSocket* sock, const std::string& argument, mud::MCharacter* mobile)
+void EditorMobile::editName(const std::string& argument)
 {
 	if(argument.size() == 0)
 	{
-		sock->Send("Mobile name can't be zero length!\n");
+		m_sock->Send("Mobile name can't be zero length!\n");
 		return;
 	}
 
-	sock->Sendf("Mobile name changed from '%s' to '%s'.\n", mobile->getName().c_str(), argument.c_str());
-	mobile->setName(argument);
+	m_sock->Sendf("Mobile name changed from '%s' to '%s'.\n", m_mobile->getName().c_str(), argument.c_str());
+	m_mobile->setName(argument);
 	return;
 }
 
-void EditorMobile::Description::Run(UBSocket* sock, const std::string& argument, mud::MCharacter* mobile)
+void EditorMobile::editDescription(const std::string& argument)
 {
-	if(!mobile->Exists())
+	if(!m_mobile->Exists())
 	{
-		sock->Send("For some reason the mobile you are editing does not exist.\n");
+		m_sock->Send("For some reason the mobile you are editing does not exist.\n");
 		return;
 	}
 
 	if(argument.size() == 0)
 	{
-		sock->Send("No argument, dropping you into the string editor!\n");
+		m_sock->Send("No argument, dropping you into the string editor!\n");
 		return;
 	}
 
-	sock->Sendf("Mobile description changed from '%s' to '%s'.\n", mobile->getDescription().c_str(), argument.c_str());
-	mobile->setDescription(argument);
+	m_sock->Sendf("Mobile description changed from '%s' to '%s'.\n", m_mobile->getDescription().c_str(), argument.c_str());
+	m_mobile->setDescription(argument);
 	return;
 }
 
-void EditorMobile::Show::Run(UBSocket* sock, const std::string& argument, mud::MCharacter* mobile)
+void EditorMobile::showMobile(const std::string& argument)
 {
-	sock->Send(String::Get()->box(mobile->Show(), "Mobile"));
+	m_sock->Send(String::Get()->box(m_mobile->Show(), "Mobile"));
 	return;
 }
 
-void EditorMobile::Save::Run(UBSocket* sock, const std::string& argument, mud::MCharacter* mobile)
+void EditorMobile::saveMobile(const std::string& argument)
 {
-	sock->Sendf("Saving mobile '%s'.\n", mobile->getName().c_str());
-	mobile->Save();
-	sock->Send("Saved.\n");
+	m_sock->Sendf("Saving mobile '%s'.\n", m_mobile->getName().c_str());
+	m_mobile->Save();
+	m_sock->Send("Saved.\n");
 	return;
 }
