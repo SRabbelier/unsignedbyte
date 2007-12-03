@@ -51,7 +51,7 @@ EditorPermission::EditorPermission(UBSocket* sock) :
 OLCEditor(sock),
 m_permission(NULL)
 {
-	GeneralAction* act = Commands::Get();
+	SavableCommand* act = &OLCEditor::m_listCommands;
 	act->Run(this, Global::Get()->EmptyString);
 }
 

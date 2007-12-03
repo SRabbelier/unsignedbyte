@@ -30,29 +30,31 @@
 #include "Parse.h"
 #include "Cache.h"
 
+OLCEditor::SavableCommand OLCEditor::m_listCommands("Commands", &OLCEditor::listCommands);
+OLCEditor::SavableCommand OLCEditor::m_newSavable("New", &OLCEditor::newSavable);
+OLCEditor::SavableCommand OLCEditor::m_editSavable("Edit", &OLCEditor::editSavable);
+OLCEditor::SavableCommand OLCEditor::m_quitEditor("Quit", &OLCEditor::quitEditor);
+OLCEditor::SavableCommand OLCEditor::m_doneEditing("Done", &OLCEditor::doneEditing);
+OLCEditor::SavableCommand OLCEditor::m_listSavable("List", &OLCEditor::listSavable);
+
 OLCEditor::GeneralInterpreter::GeneralInterpreter(void)
 {
-	addWord("new", New::Get());
-	addWord("edit", Edit::Get());
-	addWord("list", List::Get());
-	addWord("commands", Commands::Get());
-	addWord("quit", Quit::Get());
-	addWord("done", Done::Get());
+	addWord("new", &m_newSavable);
+	addWord("edit", &m_editSavable);
+	addWord("list", &m_listSavable);
+	addWord("commands", &m_listCommands);
+	addWord("quit", &m_quitEditor);
+	addWord("done", &m_doneEditing);
 }
 
 OLCEditor::GeneralInterpreter::~GeneralInterpreter(void)
 {
-	New::Free();
-	Edit::Free();
-	List::Free();
-	Commands::Free();
-	Quit::Free();
-	Done::Get();
+
 }
 
 std::string OLCEditor::lookup(const std::string& action)
 {
-	GeneralAction* act = GeneralInterpreter::Get()->translate(action);
+	SavableCommand* act = GeneralInterpreter::Get()->translate(action);
 	if(act)
 		return act->getName();
 		
@@ -61,7 +63,7 @@ std::string OLCEditor::lookup(const std::string& action)
 
 void OLCEditor::dispatch(const std::string& action, const std::string& argument)
 {
-	GeneralAction* act = GeneralInterpreter::Get()->translate(action);
+	SavableCommand* act = GeneralInterpreter::Get()->translate(action);
 	
 	if(act)
 		act->Run(this, argument);
@@ -71,89 +73,89 @@ void OLCEditor::dispatch(const std::string& action, const std::string& argument)
 	return;
 }
 
-void OLCEditor::New::Run(OLCEditor* editor, const std::string& argument)
+void OLCEditor::newSavable(const std::string& argument)
 {
-	long id = editor->addNew();
+	long id = addNew();
 	if(!id)
 	{
-		editor->Sendf("Could not create a new %s!\n", editor->name().c_str());
+		Sendf("Could not create a new %s!\n", name().c_str());
 		return;
 	}
 
-	editor->Sendf("%s created (%d)!\n", editor->name().c_str(), id);
-	editor->setEditing(id);
+	Sendf("%s created (%d)!\n", name().c_str(), id);
+	setEditing(id);
 	return;
 }
 
-void OLCEditor::Edit::Run(OLCEditor* editor, const std::string& argument)
+void OLCEditor::editSavable(const std::string& argument)
 {
 	if(argument.size() == 0)
 	{
-		editor->Send("Please specify an id to edit.\n");
-		editor->Send("Type 'list' to see a list of available id's.\n");
-		editor->Sendf("Type 'new' to create a new %s!\n", editor->name().c_str());
+		Send("Please specify an id to edit.\n");
+		Send("Type 'list' to see a list of available id's.\n");
+		Sendf("Type 'new' to create a new %s!\n", name().c_str());
 		return;
 	}
 
 	int id = atoi(argument.c_str());
-	int count = DatabaseMgr::Get()->CountSavable(editor->getTable(), id);
+	int count = DatabaseMgr::Get()->CountSavable(getTable(), id);
 
 	if(!count)
 	{
-		editor->Send("Please specify an id to edit.\n");
-		editor->Sendf("'%s' (%d) is not a valid id!\n", argument.c_str(), id);
+		Send("Please specify an id to edit.\n");
+		Sendf("'%s' (%d) is not a valid id!\n", argument.c_str(), id);
 		return;
 	}
 
 	if(count >= 2)
 	{
 		Global::Get()->bugf("OLCEditor::Edit::Run(), count for id '%d' is '%d'!\n", id, count);
-		editor->Sendf("For some reason there are more than two copy's of id %d known!\n", id);
-		editor->Send("Disconnecting you now.\n");
-		editor->Disconnect();
+		Sendf("For some reason there are more than two copy's of id %d known!\n", id);
+		Send("Disconnecting you now.\n");
+		Disconnect();
 		return;
 	}
 
-	editor->setEditing(id);
-	editor->m_sock->Sendf("You are now editing id %d> ", id);
-	editor->m_sock->Send(editor->getEditing()->ShowShort());
-	editor->m_sock->Send("\n");
+	setEditing(id);
+	m_sock->Sendf("You are now editing id %d> ", id);
+	m_sock->Send(getEditing()->ShowShort());
+	m_sock->Send("\n");
 	return;
 }
 
-void OLCEditor::List::Run(OLCEditor* editor, const std::string& argument)
+void OLCEditor::listSavable(const std::string& argument)
 {
-	std::string name = editor->name();
+	std::string name = this->name();
 	name.append("s");
-	editor->m_sock->Send(String::Get()->box(editor->getList(),name));
+	m_sock->Send(String::Get()->box(getList(),name));
 	return;
 }
 
-void OLCEditor::Commands::Run(OLCEditor* editor, const std::string& argument)
+void OLCEditor::listCommands(const std::string& argument)
 {
-	editor->m_sock->Send(String::Get()->box(GeneralInterpreter::Get()->getWords(), editor->name()));
-	std::string name = editor->name();
+	m_sock->Send(String::Get()->box(GeneralInterpreter::Get()->getWords(), name()));
+	std::string name = this->name();
 	name.append("Editing");
-	editor->m_sock->Send(String::Get()->box(editor->getCommands(), name));
-	editor->m_sock->Send("\n");
+	m_sock->Send(String::Get()->box(getCommands(), name));
+	m_sock->Send("\n");
 	return;
 }
 
-void OLCEditor::Quit::Run(OLCEditor* editor, const std::string& argument)
+void OLCEditor::quitEditor(const std::string& argument)
 {
-	editor->m_sock->Send("Ok.\n");
-	editor->m_sock->SetEditor(new EditorOLC(editor->m_sock));
+	m_sock->Send("Ok.\n");
+	m_sock->SetEditor(new EditorOLC(m_sock));
 	return;
 }
 
-void OLCEditor::Done::Run(OLCEditor* editor, const std::string& argument)
+void OLCEditor::doneEditing(const std::string& argument)
 {
-	editor->m_sock->Send("Ok.\n");
+	m_sock->Send("Ok.\n");
 	
-	SavablePtr editing = editor->getEditing();
+	SavablePtr editing = getEditing();
 	if(editing)
 		editing->Save();
 
-	editor->setEditing(0);
+	setEditing(0);
 	return;
 }

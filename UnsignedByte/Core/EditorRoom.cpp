@@ -72,7 +72,7 @@ m_xpos(1),
 m_ypos(1),
 m_room(NULL)
 {
-	Action<OLCEditor>* act = Commands::Get();
+	SavableCommand* act = &OLCEditor::m_listCommands;
 	act->Run(this, Global::Get()->EmptyString);
 }
 

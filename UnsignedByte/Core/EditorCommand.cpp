@@ -52,7 +52,7 @@ EditorCommand::EditorCommand(UBSocket* sock) :
 OLCEditor(sock),
 m_command(NULL)
 {
-	GeneralAction* act = Commands::Get();
+	SavableCommand* act = &OLCEditor::m_listCommands;
 	act->Run(this, Global::Get()->EmptyString);
 }
 
