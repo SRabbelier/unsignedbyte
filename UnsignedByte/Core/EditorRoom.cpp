@@ -42,6 +42,29 @@
 
 using mud::Room;
 
+EditorRoom::RoomCommand EditorRoom::m_showMap("Map", &EditorRoom::showMap);
+EditorRoom::RoomCommand EditorRoom::m_activateRoom("Activate", &EditorRoom::activateRoom);
+EditorRoom::RoomCommand EditorRoom::m_deactivateRoom("Deactivate", &EditorRoom::deactivateRoom);
+
+/*
+EditorRoom::RoomCommand EditorRoom::m_goNorth("North", &EditorRoom::goNorth);
+EditorRoom::RoomCommand EditorRoom::m_goNorthEast("NorthEast", &EditorRoom::goNorthEast);
+EditorRoom::RoomCommand EditorRoom::m_goEast("East", &EditorRoom::goEast);
+EditorRoom::RoomCommand EditorRoom::m_goSouthEast("SouthEast", &EditorRoom::goSouthEast);
+EditorRoom::RoomCommand EditorRoom::m_goSouth("South", &EditorRoom::goSouth);
+EditorRoom::RoomCommand EditorRoom::m_goSouthWest("SouthWest", &EditorRoom::goSouthWest);
+EditorRoom::RoomCommand EditorRoom::m_goWest("West", &EditorRoom::goWest);
+EditorRoom::RoomCommand EditorRoom::m_goNorthWest("NorthWest", &EditorRoom::goNorthWest);
+*/
+
+EditorRoom::RoomCommand EditorRoom::m_listAreas("Areas", &EditorRoom::listAreas);
+EditorRoom::RoomCommand EditorRoom::m_editName("Name", &EditorRoom::editName);
+EditorRoom::RoomCommand EditorRoom::m_editDescription("Description", &EditorRoom::editDescription);
+EditorRoom::RoomCommand EditorRoom::m_editSector("Sector", &EditorRoom::editSector);
+EditorRoom::RoomCommand EditorRoom::m_saveRoom("Room", &EditorRoom::saveRoom);
+EditorRoom::RoomCommand EditorRoom::m_closeExit("Close", &EditorRoom::closeExit);
+EditorRoom::RoomCommand EditorRoom::m_openExit("Open", &EditorRoom::openExit);
+
 EditorRoom::EditorRoom(UBSocket* sock) :
 OLCEditor(sock),
 m_area(1),
@@ -65,7 +88,7 @@ std::string EditorRoom::lookup(const std::string& action)
 		return name;
 		
 	/*
-	PermissionAction* act = PermissionInterpreter::Get()->translate(action);
+	RoomCommand* act = PermissionInterpreter::Get()->translate(action);
 	if(act)
 		return act->getName();
 	*/
@@ -77,7 +100,7 @@ std::string EditorRoom::lookup(const std::string& action)
 void EditorRoom::dispatch(const std::string& action, const std::string& argument)
 {
 	/*
-	PermissionAction* act = PermissionInterpreter::Get()->translate(action);
+	RoomCommand* act = PermissionInterpreter::Get()->translate(action);
 	
 	if(act)
 		act->Run(m_sock, argument, m_permission);
@@ -128,30 +151,24 @@ std::vector<std::string> EditorRoom::getCommands()
 
 EditorRoom::RoomInterpreter::RoomInterpreter(void)
 {
-	addWord("name", Name::Get());
-	addWord("description", Description::Get());
-	addWord("sectors", Sectors::Get());
-	addWord("save", Save::Get());
-	addWord("deactivate", Deactivate::Get());
-	addWord("open", Open::Get());
-	addWord("close", Close::Get());
+	addWord("name", &m_editName);
+	addWord("description", &m_editDescription);
+	addWord("sectors", &m_editSector);
+	addWord("save", &m_saveRoom);
+	addWord("deactivate", &m_deactivateRoom);
+	addWord("open", &m_openExit);
+	addWord("close", &m_closeExit);
 }
 
 EditorRoom::RoomInterpreter::~RoomInterpreter(void)
 {
-	Name::Free();
-	Description::Free();
-	Sectors::Free();
-	Save::Free();
-	Deactivate::Free();
-	Open::Free();
-	Close::Free();
+
 }
 
 EditorRoom::DirectionInterpreter::DirectionInterpreter(void)
 {
 	// addWord("activate", Activate::Get());
-	addWord("area", AreaList::Get());
+	addWord("area", &m_listAreas);
 /*	addWord("north", North::Get());
 	addWord("northeast", NorthEast::Get());
 	addWord("ne", NorthEast::Get());
@@ -164,126 +181,104 @@ EditorRoom::DirectionInterpreter::DirectionInterpreter(void)
 	addWord("west", West::Get());
 	addWord("northwest", NorthWest::Get());
 	addWord("nw", NorthWest::Get());*/
-	addWord("map", Map::Get());
+	addWord("map", &m_showMap);
 }
 
 EditorRoom::DirectionInterpreter::~DirectionInterpreter(void)
 {
-	// Activate::Free();
-	AreaList::Free();
-	/*North::Free();
-	NorthEast::Free();
-	East::Free();
-	SouthEast::Free();
-	South::Free();
-	SouthWest::Free();
-	West::Free();
-	NorthWest::Free();*/
-	Map::Free();
+
 }
 
-/*
-void EditorRoom::getRoom(const std::string&)
-{
-	long id = Cache::Get()->GetRoomID(m_area, m_xpos, m_ypos);
-	if(id)
-		m_room = Cache::Get()->GetRoom(id);
-	else
-		m_room = NULL;
-	return;
-}
-*/
-
-void EditorRoom::Name::Run(UBSocket* sock, const std::string& argument, Room* room)
+void EditorRoom::editName(const std::string& argument)
 {
 	if(argument.size() == 0)
 	{
-		sock->Send("Room name can't be zero length!\n");
+		m_sock->Send("Room name can't be zero length!\n");
 		return;
 	}
 
-	sock->Sendf("Room name changed from '%s' to '%s'.\n", room->getName().c_str(), argument.c_str());
-	room->setName(argument);
+	m_sock->Sendf("Room name changed from '%s' to '%s'.\n", m_room->getName().c_str(), argument.c_str());
+	m_room->setName(argument);
 	return;
 }
 
-void EditorRoom::Description::Run(UBSocket* sock, const std::string& argument, Room* room)
+void EditorRoom::editDescription(const std::string& argument)
 {
-	if(!room->Exists())
+	if(!m_room->Exists())
 	{
-		sock->Send("For some reason the room you are editing does not exist.\n");
+		m_sock->Send("For some reason the room you are editing does not exist.\n");
 		return;
 	}
 
 	if(argument.size() == 0)
 	{
-		sock->Send("No argument, dropping you into the string editor!\n");
+		m_sock->Send("No argument, dropping you into the string editor!\n");
 		return;
 	}
 
-	sock->Sendf("Room description changed from '%s' to '%s'.\n", room->getDescription().c_str(), argument.c_str());
-	room->setDescription(argument);
+	m_sock->Sendf("Room description changed from '%s' to '%s'.\n", m_room->getDescription().c_str(), argument.c_str());
+	m_room->setDescription(argument);
 	return;
 }
 
-void EditorRoom::Sectors::Run(UBSocket* sock, const std::string& argument, Room* room)
+void EditorRoom::editSector(const std::string& argument)
 {
 	if(argument.size() == 0)
 	{
-		sock->Send("Please specify a sector type!\n");
+		m_sock->Send("Please specify a sector type!\n");
 		return;
 	}
 
 	long id = db::Sectors::lookupname(argument);
 	if(!id)
 	{
-		sock->Sendf("'%s' is not a valid sector type!\n", argument.c_str());
-		sock->Send(String::Get()->box(mud::Sector::List(), "Sectors"));
+		m_sock->Sendf("'%s' is not a valid sector type!\n", argument.c_str());
+		m_sock->Send(String::Get()->box(mud::Sector::List(), "Sectors"));
 		return;
 	}
 	
 	mud::Sector* sector = mud::Cache::Get()->GetSectorByKey(id);
-	sock->Sendf("Sector type changed from '%s' to '%s'.\n", sector->getName().c_str(), argument.c_str());
+	m_sock->Sendf("Sector type changed from '%s' to '%s'.\n", sector->getName().c_str(), argument.c_str());
 		
-	room->setSector(id);
+	m_room->setSector(id);
 	return;
 }
 
-void EditorRoom::Save::Run(UBSocket* sock, const std::string&, Room* room)
+void EditorRoom::saveRoom(const std::string& argument)
 {
-	sock->Sendf("Saving room '%s'.\n", room->getName().c_str());
-	room->Save();
-	sock->Send("Saved.\n");
+	m_sock->Sendf("Saving room '%s'.\n", m_room->getName().c_str());
+	m_room->Save();
+	m_sock->Send("Saved.\n");
 	return;
 }
 
-void EditorRoom::Deactivate::Run(UBSocket* sock, const std::string&, Room* room)
+void EditorRoom::deactivateRoom(const std::string& argument)
 {
-	sock->Sendf("Deleting room '%s'.\n", room->getName().c_str());
-	room->Delete();
-	Room::Close(room);
-	room = NULL;
-	sock->Send("Deleted.\n");
+	m_sock->Sendf("Deleting room '%s'.\n", m_room->getName().c_str());
+	m_room->Delete();
+	Room::Close(m_room);
+	m_room = NULL;
+	m_sock->Send("Deleted.\n");
 	return;
 }
 
-void EditorRoom::Close::Run(UBSocket* sock, const std::string& argument, Room* room)
+void EditorRoom::closeExit(const std::string& argument)
 {
-	sock->Send("Temporarily disabled untill the Exit system is implemented.\n");
-	sock->Send("- Alturin, 17-08-2007\n");
+	m_sock->Send("Temporarily disabled untill the Exit system is implemented.\n");
+	m_sock->Send("- Alturin, 17-08-2007\n");
 	return;
 }
 
-void EditorRoom::Open::Run(UBSocket* sock, const std::string& argument, Room* room)
+void EditorRoom::openExit(const std::string& argument)
 {
-	sock->Send("Temporarily disabled untill the Exit system is implemented.\n");
-	sock->Send("- Alturin, 17-08-2007\n");
+	m_sock->Send("Temporarily disabled untill the Exit system is implemented.\n");
+	m_sock->Send("- Alturin, 17-08-2007\n");
 }
 
-void EditorRoom::Map::Run(EditorRoom* editor, const std::string&)
+void EditorRoom::showMap(const std::string& argument)
 {
-	editor->m_sock->Send("Temporarily disabled untill the Exit system is implemented.\n");
-	editor->m_sock->Send("- Alturin, 17-08-2007\n");
+	m_sock->Send("Temporarily disabled untill the Exit system is implemented.\n");
+	m_sock->Send("- Alturin, 17-08-2007\n");
 }
 
 /*
@@ -291,12 +286,12 @@ void EditorRoom::North::Run(EditorRoom* editor, const std::string&)
 {
 	if(editor->m_ypos <= 1)
 	{
-		editor->m_sock->Send("You can't go further north!\n");
+		editor->m_m_sock->Send("You can't go further north!\n");
 		return;
 	}
 	editor->m_ypos--;
 	editor->getRoom(Global::Get()->EmptyString);
-	editor->m_sock->Send(Room::CreateMap(editor->m_area, editor->m_xpos, editor-> m_ypos));
+	editor->m_m_sock->Send(Room::CreateMap(editor->m_area, editor->m_xpos, editor-> m_ypos));
 }
 
 void EditorRoom::NorthEast::Run(EditorRoom* editor, const std::string& argument)
@@ -304,24 +299,24 @@ void EditorRoom::NorthEast::Run(EditorRoom* editor, const std::string& argument)
 	long count = DatabaseMgr::Get()->CountSavable(Tables::Get()->AREAS, editor->m_area);
 	if(count <= 0) {
 		Global::Get()->bug("EditorMap::NorthEast::Run() with areacount <= 0!\n");
-		editor->m_sock->Send("For some reason the area number of the room you are belongs to, does not correspond with anything in the database?!\n");
+		editor->m_m_sock->Send("For some reason the area number of the room you are belongs to, does not correspond with anything in the database?!\n");
 		return;
 	}
 	if(count >= 2) {
 		Global::Get()->bugf("EditorMap::NorthEast::Run() with areacount '%d'!\n", count);
-		editor->m_sock->Sendf("For some reason the area the room you are in exists multiple times in the database?!n");
+		editor->m_m_sock->Sendf("For some reason the area the room you are in exists multiple times in the database?!n");
 		return;
 	}
 	Area* area = Cache::Get()->GetArea(editor->m_area);
 	if(editor->m_ypos <= 1 || editor->m_xpos+1 > area->getWidth())
 	{
-		editor->m_sock->Send("You can't go further northeast!\n");
+		editor->m_m_sock->Send("You can't go further northeast!\n");
 		return;
 	}
 	editor->m_ypos--;
 	editor->m_xpos++;
 	editor->getRoom(Global::Get()->EmptyString);
-	editor->m_sock->Send(Room::CreateMap(editor->m_area, editor->m_xpos, editor->m_ypos));
+	editor->m_m_sock->Send(Room::CreateMap(editor->m_area, editor->m_xpos, editor->m_ypos));
 }
 
 void EditorRoom::East::Run(EditorRoom* editor, const std::string& argument)
@@ -329,23 +324,23 @@ void EditorRoom::East::Run(EditorRoom* editor, const std::string& argument)
 	long count = DatabaseMgr::Get()->CountSavable(Tables::Get()->AREAS, editor->m_area);
 	if(count <= 0) {
 		Global::Get()->bug("EditorMap::East::Run() with areacount <= 0!\n");
-		editor->m_sock->Send("For some reason the area number of the room you are belongs to, does not correspond with anything in the database?!\n");
+		editor->m_m_sock->Send("For some reason the area number of the room you are belongs to, does not correspond with anything in the database?!\n");
 		return;
 	}
 	if(count >= 2) {
 		Global::Get()->bugf("EditorMap::East::Run() with areacount '%d'!\n", count);
-		editor->m_sock->Sendf("For some reason the area the room you are in exists multiple times in the database?!n");
+		editor->m_m_sock->Sendf("For some reason the area the room you are in exists multiple times in the database?!n");
 		return;
 	}
 	Area* area = Cache::Get()->GetArea(editor->m_area);
 	if(editor->m_xpos+1 > area->getWidth())
 	{
-		editor->m_sock->Send("You can't go further east!\n");
+		editor->m_m_sock->Send("You can't go further east!\n");
 		return;
 	}
 	editor->m_xpos++;
 	editor->getRoom(Global::Get()->EmptyString);
-	editor->m_sock->Send(Room::CreateMap(editor->m_area, editor->m_xpos, editor->m_ypos));
+	editor->m_m_sock->Send(Room::CreateMap(editor->m_area, editor->m_xpos, editor->m_ypos));
 }
 
 void EditorRoom::SouthEast::Run(EditorRoom* editor, const std::string& argument)
@@ -353,24 +348,24 @@ void EditorRoom::SouthEast::Run(EditorRoom* editor, const std::string& argument)
 	long count = DatabaseMgr::Get()->CountSavable(Tables::Get()->AREAS, editor->m_area);
 	if(count <= 0) {
 		Global::Get()->bug("EditorMap::SouthEast::Run() with areacount <= 0!\n");
-		editor->m_sock->Send("For some reason the area number of the room you are belongs to, does not correspond with anything in the database?!\n");
+		editor->m_m_sock->Send("For some reason the area number of the room you are belongs to, does not correspond with anything in the database?!\n");
 		return;
 	}
 	if(count >= 2) {
 		Global::Get()->bugf("EditorMap::SouthEast::Run() with areacount '%d'!\n", count);
-		editor->m_sock->Sendf("For some reason the area the room you are in exists multiple times in the database?!n");
+		editor->m_m_sock->Sendf("For some reason the area the room you are in exists multiple times in the database?!n");
 		return;
 	}
 	Area* area = Cache::Get()->GetArea(editor->m_area);
 	if(editor->m_ypos+1 > area->getHeight() || editor->m_xpos+1 > area->getWidth())
 	{
-		editor->m_sock->Send("You can't go further southeast!\n");
+		editor->m_m_sock->Send("You can't go further southeast!\n");
 		return;
 	}
 	editor->m_ypos++;
 	editor->m_xpos++;
 	editor->getRoom(Global::Get()->EmptyString);
-	editor->m_sock->Send(Room::CreateMap(editor->m_area, editor->m_xpos, editor->m_ypos));
+	editor->m_m_sock->Send(Room::CreateMap(editor->m_area, editor->m_xpos, editor->m_ypos));
 }
 
 void EditorRoom::South::Run(EditorRoom* editor, const std::string& argument)
@@ -378,23 +373,23 @@ void EditorRoom::South::Run(EditorRoom* editor, const std::string& argument)
 	long count = DatabaseMgr::Get()->CountSavable(Tables::Get()->AREAS, editor->m_area);
 	if(count <= 0) {
 		Global::Get()->bug("EditorMap::South::Run() with areacount <= 0!\n");
-		editor->m_sock->Send("For some reason the area number of the room you are belongs to, does not correspond with anything in the database?!\n");
+		editor->m_m_sock->Send("For some reason the area number of the room you are belongs to, does not correspond with anything in the database?!\n");
 		return;
 	}
 	if(count >= 2) {
 		Global::Get()->bugf("EditorMap::South::Run() with areacount '%d'!\n", count);
-		editor->m_sock->Sendf("For some reason the area the room you are in exists multiple times in the database?!n");
+		editor->m_m_sock->Sendf("For some reason the area the room you are in exists multiple times in the database?!n");
 		return;
 	}
 	Area* area = Cache::Get()->GetArea(editor->m_area);
 	if(editor->m_ypos+1 > area->getHeight())
 	{
-		editor->m_sock->Send("You can't go further south!\n");
+		editor->m_m_sock->Send("You can't go further south!\n");
 		return;
 	}
 	editor->m_ypos++;
 	editor->getRoom(Global::Get()->EmptyString);
-	editor->m_sock->Send(Room::CreateMap(editor->m_area, editor->m_xpos, editor->m_ypos));
+	editor->m_m_sock->Send(Room::CreateMap(editor->m_area, editor->m_xpos, editor->m_ypos));
 }
 
 void EditorRoom::SouthWest::Run(EditorRoom* editor, const std::string& argument)
@@ -402,97 +397,71 @@ void EditorRoom::SouthWest::Run(EditorRoom* editor, const std::string& argument)
 	long count = DatabaseMgr::Get()->CountSavable(Tables::Get()->AREAS, editor->m_area);
 	if(count <= 0) {
 		Global::Get()->bug("EditorMap::SouthWest::Run() with areacount <= 0!\n");
-		editor->m_sock->Send("For some reason the area number of the room you are belongs to, does not correspond with anything in the database?!\n");
+		editor->m_m_sock->Send("For some reason the area number of the room you are belongs to, does not correspond with anything in the database?!\n");
 		return;
 	}
 	if(count >= 2) {
 		Global::Get()->bugf("EditorMap::SouthWest::Run() with areacount '%d'!\n", count);
-		editor->m_sock->Sendf("For some reason the area the room you are in exists multiple times in the database?!n");
+		editor->m_m_sock->Sendf("For some reason the area the room you are in exists multiple times in the database?!n");
 		return;
 	}
 	Area* area = Cache::Get()->GetArea(editor->m_area);
 	if(editor->m_xpos <= 1 || editor->m_ypos+1 > area->getHeight())
 	{
-		editor->m_sock->Send("You can't go further southwest!\n");
+		editor->m_m_sock->Send("You can't go further southwest!\n");
 		return;
 	}
 	editor->m_xpos--;
 	editor->m_ypos++;
 	editor->getRoom(Global::Get()->EmptyString);
-	editor->m_sock->Send(Room::CreateMap(editor->m_area, editor->m_xpos, editor->m_ypos));
+	editor->m_m_sock->Send(Room::CreateMap(editor->m_area, editor->m_xpos, editor->m_ypos));
 }
 
 void EditorRoom::West::Run(EditorRoom* editor, const std::string& argument)
 {
 	if(editor->m_xpos <= 1)
 	{
-		editor->m_sock->Send("You can't go further west!\n");
+		editor->m_m_sock->Send("You can't go further west!\n");
 		return;
 	}
 	editor->m_xpos--;	
 	editor->getRoom(Global::Get()->EmptyString);
-	editor->m_sock->Send(Room::CreateMap(editor->m_area, editor->m_xpos, editor->m_ypos));
+	editor->m_m_sock->Send(Room::CreateMap(editor->m_area, editor->m_xpos, editor->m_ypos));
 }
 
 void EditorRoom::NorthWest::Run(EditorRoom* editor, const std::string& argument)
 {
 	if(editor->m_ypos <= 1 || editor->m_xpos <= 1)
 	{
-		editor->m_sock->Send("You can't go further northwest!\n");
+		editor->m_m_sock->Send("You can't go further northwest!\n");
 		return;
 	}
 	editor->m_xpos--;	
 	editor->m_ypos--;
 	editor->getRoom(Global::Get()->EmptyString);
-	editor->m_sock->Send(Room::CreateMap(editor->m_area, editor->m_xpos, editor->m_ypos));
+	editor->m_m_sock->Send(Room::CreateMap(editor->m_area, editor->m_xpos, editor->m_ypos));
 }
 */
 
-void EditorRoom::AreaList::Run(EditorRoom* editor, const std::string& argument)
+void EditorRoom::listAreas(const std::string& argument)
 {
 	int area = atoi(argument.c_str());
 	if(area <= 0)
 	{
-		editor->m_sock->Send("Please specify an area id to change to.\n");
-		editor->m_sock->Sendf("'%s' is not a valid area.\n", argument.c_str());
-		editor->m_sock->Send(String::Get()->box(mud::Area::List(), "Areas"));
+		m_sock->Send("Please specify an area id to change to.\n");
+		m_sock->Sendf("'%s' is not a valid area.\n", argument.c_str());
+		m_sock->Send(String::Get()->box(mud::Area::List(), "Areas"));
 		return;
 	}
-	editor->m_area = area;	
-	editor->m_xpos = 1;
-	editor->m_ypos = 1;
+	m_area = area;	
+	m_xpos = 1;
+	m_ypos = 1;
 	// editor->getRoom(Global::Get()->EmptyString);
 }
 
-/*
-void EditorRoom::Activate::Run(EditorRoom* editor, const std::string&)
+void EditorRoom::activateRoom(const std::string& argument)
 {
-	long id = Cache::Get()->GetRoomID(editor->m_area, editor->m_xpos, editor->m_ypos);
-	if(id)
-	{
-		editor->m_sock->Send("The room you are in is already active.\n");
-		return;
-	}
-
-	id = Cache::Get()->AddRoom();
-	if(!id)
-	{
-		editor->m_sock->Send("Could not activate this room!\n");
-		return;
-	}
-	
-	Room* room = Cache::Get()->GetRoom(id);
-	if(!room)
-	{
-		editor->Send("Could not activate this room!\n");
-		return;
-	}
-	
-	// TODO, set coordinates
-
-	editor->Send("Room activated! Please give it at least a name!\n");
-	editor->getRoom(Global::Get()->EmptyString);
-	editor->Send(Room::CreateMap(editor->m_area, editor->m_xpos, editor->m_ypos));
+	m_sock->Send("Temporarily disabled untill the Exit system is implemented.\n");
+	m_sock->Send("- Alturin, 17-08-2007\n");	
 	return;
 }
-*/

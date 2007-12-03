@@ -23,7 +23,7 @@
 #include "OLCEditor.h"
 #include "singleton.h"
 #include "Interpreter.h"
-#include "Action.h"
+#include "CommandObject.h"
 
 class UBSocket;
 namespace mud { class Room; }
@@ -31,6 +31,8 @@ namespace mud { class Room; }
 class EditorRoom : public OLCEditor
 {
 public:
+	typedef CommandObject<EditorRoom> RoomCommand;
+	
 	EditorRoom(UBSocket* sock);
 	~EditorRoom(void);
 
@@ -46,6 +48,25 @@ public:
 	std::vector<std::string> getList();
 	std::vector<std::string> getCommands();
 	void setEditing(long id);
+	
+	void showMap(const std::string& argument);
+	void activateRoom(const std::string& argument);
+	void deactivateRoom(const std::string& argument);
+	void goNorth(const std::string& argument);
+	void goNorthEast(const std::string& argument);
+	void goEast(const std::string& argument);
+	void goSouthEast(const std::string& argument);
+	void goSouth(const std::string& argument);
+	void goSouthWest(const std::string& argument);
+	void goWest(const std::string& argument);
+	void goNorthWest(const std::string& argument);
+	void listAreas(const std::string& argument);
+	void editName(const std::string& argument);
+	void editDescription(const std::string& argument);
+	void editSector(const std::string& argument);
+	void saveRoom(const std::string& argument);
+	void closeExit(const std::string& argument);
+	void openExit(const std::string& argument);
 
 private:
 	EditorRoom(const EditorRoom& rhs);
@@ -55,206 +76,37 @@ private:
 	long m_xpos;
 	long m_ypos;
 	mud::Room* m_room;
-	// void getRoom(const std::string&);
 
-	typedef Action<EditorRoom> GeneralAction;
-	typedef EditorAction<UBSocket, mud::Room> RoomAction;
-
-	class RoomInterpreter : public Interpreter<RoomAction>, public Singleton<RoomInterpreter> {
+	class RoomInterpreter : public Interpreter<RoomCommand>, public Singleton<RoomInterpreter> {
 	private:
 		RoomInterpreter(void);
 		~RoomInterpreter(void);
 		friend class Singleton<RoomInterpreter>;
 	};
 
-	class DirectionInterpreter : public Interpreter<GeneralAction>, public Singleton<DirectionInterpreter> {
+	class DirectionInterpreter : public Interpreter<RoomCommand>, public Singleton<DirectionInterpreter> {
 	private:
 		DirectionInterpreter(void);
 		~DirectionInterpreter(void);
 		friend class Singleton<DirectionInterpreter>;
 	};
-
-	/*
-	class Activate : public GeneralAction, public Singleton<Activate> {
-	private:
-		Activate(void) {};
-		~Activate(void) {};
-		friend class Singleton<Activate>;
-	public: 
-		void Run(Editormud::Room* editor, const std::string& argument);
-		std::string getName() { return "Activate"; };
-	};
-	*/
-
-	class Map : public GeneralAction, public Singleton<Map> {
-	private:
-		Map(void) {};
-		~Map(void) {};
-		friend class Singleton<Map>;
-	public: 
-		void Run(EditorRoom* editor, const std::string& argument);
-		std::string getName() { return "Map"; };
-	};
-
-	/*
-	class North : public GeneralAction, public Singleton<North> {
-	private:
-		North(void) {};
-		~North(void) {};
-		friend class Singleton<North>;
-	public: 
-		void Run(Editormud::Room* editor, const std::string& argument);
-		std::string getName() { return "North"; };
-	};
 	
-	class NorthEast : public GeneralAction, public Singleton<NorthEast> {
-	private:
-		NorthEast(void) {};
-		~NorthEast(void) {};
-		friend class Singleton<NorthEast>;
-	public: 
-		void Run(Editormud::Room* editor, const std::string& argument);
-		std::string getName() { return "NorthEast"; };
-	};
-
-	class East : public GeneralAction, public Singleton<East> {
-	private:
-		East(void) {};
-		~East(void) {};
-		friend class Singleton<East>;
-	public: 
-		void Run(Editormud::Room* editor, const std::string& argument);
-		std::string getName() { return "East"; };
-	};
-
-	class SouthEast : public GeneralAction, public Singleton<SouthEast> {
-	private:
-		SouthEast(void) {};
-		~SouthEast(void) {};
-		friend class Singleton<SouthEast>;
-	public: 
-		void Run(Editormud::Room* editor, const std::string& argument);
-		std::string getName() { return "SouthEast"; };
-	}; 
-
-	class South : public GeneralAction, public Singleton<South> {
-	private:
-		South(void) {};
-		~South(void) {};
-		friend class Singleton<South>;
-	public: 
-		void Run(Editormud::Room* editor, const std::string& argument);
-		std::string getName() { return "South"; };
-	};
-	
-	class SouthWest : public GeneralAction, public Singleton<SouthWest> {
-	private:
-		SouthWest(void) {};
-		~SouthWest(void) {};
-		friend class Singleton<SouthWest>;
-	public: 
-		void Run(Editormud::Room* editor, const std::string& argument);
-		std::string getName() { return "SouthWest"; };
-	};
-
-	class West : public GeneralAction, public Singleton<West> {
-	private:
-		West(void) {};
-		~West(void) {};
-		friend class Singleton<West>;
-	public: 
-		void Run(Editormud::Room* editor, const std::string& argument);
-		std::string getName() { return "West"; };
-	};	
-	
-	class NorthWest : public GeneralAction, public Singleton<NorthWest> {
-	private:
-		NorthWest(void) {};
-		~NorthWest(void) {};
-		friend class Singleton<NorthWest>;
-	public: 
-		void Run(Editormud::Room* editor, const std::string& argument);
-		std::string getName() { return "NorthWest"; };
-	};
-	*/
-	
-	class AreaList : public GeneralAction, public Singleton<AreaList> {
-	private:
-		AreaList(void) {};
-		~AreaList(void) {};
-		friend class Singleton<AreaList>;
-	public: 
-		void Run(EditorRoom* editor, const std::string& argument);
-		std::string getName() { return "Areas"; };
-	};
-	class Name : public RoomAction, public Singleton<Name>{
-	private:
-		Name(void) {};
-		~Name(void) {};
-		friend class Singleton<Name>;
-	public: 
-		void Run(UBSocket* sock, const std::string& argument, mud::Room* room);
-		std::string getName() { return "Name"; };
-	};
-
-	class Description : public RoomAction, public Singleton<Description>{
-	private:
-		Description(void) {};
-		~Description(void) {};
-		friend class Singleton<Description>;
-	public: 
-		void Run(UBSocket* sock, const std::string& argument, mud::Room* room);
-		std::string getName() { return "Description"; };
-	};
-
-	class Sectors : public RoomAction, public Singleton<Sectors> {
-	private:
-		Sectors(void) {};
-		~Sectors(void) {};
-		friend class Singleton<Sectors>;
-	public: 
-		void Run(UBSocket* sock, const std::string& argument, mud::Room* room);
-		std::string getName() { return ":Sectors"; };
-	};
-
-	class Save : public RoomAction, public Singleton<Save> {
-	private:
-		Save(void) {};
-		~Save(void) {};
-		friend class Singleton<Save>;
-	public: 
-		void Run(UBSocket* sock, const std::string& argument, mud::Room* room);
-		std::string getName() { return "Save"; };
-	};
-
-	class Close : public RoomAction, public Singleton<Close> {
-	private:
-		Close(void) {};
-		~Close(void) {};
-		friend class Singleton<Close>;
-	public: 
-		void Run(UBSocket* sock, const std::string& argument, mud::Room* room);
-		std::string getName() { return "Close"; };
-	};
-
-	class Open : public RoomAction, public Singleton<Open> {
-	private:
-		Open(void) {};
-		~Open(void) {};
-		friend class Singleton<Open>;
-	public: 
-		void Run(UBSocket* sock, const std::string& argument, mud::Room* room);
-		std::string getName() { return "Open"; };
-	};
-
-	class Deactivate : public RoomAction, public Singleton<Deactivate> {
-	private:
-		Deactivate(void) {};
-		~Deactivate(void) {};
-		friend class Singleton<Deactivate>;
-	public:
-		void Run(UBSocket* sock, const std::string& argument, mud::Room* room);
-		std::string getName() { return "Deactivate"; };
-	};
-
+	static RoomCommand m_showMap;
+	static RoomCommand m_activateRoom;
+	static RoomCommand m_deactivateRoom;
+	static RoomCommand m_goNorth;
+	static RoomCommand m_goNorthEast;
+	static RoomCommand m_goEast;
+	static RoomCommand m_goSouthEast;
+	static RoomCommand m_goSouth;
+	static RoomCommand m_goSouthWest;
+	static RoomCommand m_goWest;
+	static RoomCommand m_goNorthWest;
+	static RoomCommand m_listAreas;
+	static RoomCommand m_editName;
+	static RoomCommand m_editDescription;
+	static RoomCommand m_editSector;
+	static RoomCommand m_saveRoom;
+	static RoomCommand m_closeExit;
+	static RoomCommand m_openExit;
 };
