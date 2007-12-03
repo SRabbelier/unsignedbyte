@@ -39,6 +39,11 @@
 
 using mud::GrantGroup;
 
+EditorGrantGroup::GrantGroupCommand EditorGrantGroup::m_editName("Name", &EditorGrantGroup::editName);
+EditorGrantGroup::GrantGroupCommand EditorGrantGroup::m_editImplication("Description", &EditorGrantGroup::editImplication);
+EditorGrantGroup::GrantGroupCommand EditorGrantGroup::m_showGrantGroup("Show", &EditorGrantGroup::showGrantGroup);
+EditorGrantGroup::GrantGroupCommand EditorGrantGroup::m_saveGrantGroup("Save", &EditorGrantGroup::saveGrantGroup);
+
 EditorGrantGroup::EditorGrantGroup(UBSocket* sock) :
 OLCEditor(sock),
 m_grantgroup(NULL)
@@ -58,7 +63,7 @@ std::string EditorGrantGroup::lookup(const std::string& action)
 	if(name.size() != 0)
 		return name;
 		
-	GrantGroupAction* act = GrantGroupInterpreter::Get()->translate(action);
+	GrantGroupCommand* act = GrantGroupInterpreter::Get()->translate(action);
 	if(act)
 		return act->getName();
 		
@@ -67,10 +72,10 @@ std::string EditorGrantGroup::lookup(const std::string& action)
 
 void EditorGrantGroup::dispatch(const std::string& action, const std::string& argument)
 {
-	GrantGroupAction* act = GrantGroupInterpreter::Get()->translate(action);
+	GrantGroupCommand* act = GrantGroupInterpreter::Get()->translate(action);
 	
 	if(act)
-		act->Run(m_sock, argument, m_grantgroup);
+		act->Run(this, argument);
 	else
 		OLCEditor::dispatch(action, argument);
 		
@@ -116,41 +121,59 @@ std::vector<std::string> EditorGrantGroup::getCommands()
 
 EditorGrantGroup::GrantGroupInterpreter::GrantGroupInterpreter(void)
 {
-	addWord("name", Name::Get());
-	addWord("show", Show::Get());
-	addWord("save", Save::Get());
+	addWord("name", &m_editName);
+	addWord("implication", &m_editImplication);
+	addWord("show", &m_showGrantGroup);
+	addWord("save", &m_saveGrantGroup);
 }
 
 EditorGrantGroup::GrantGroupInterpreter::~GrantGroupInterpreter(void)
 {
-	Name::Free();
-	Show::Free();
-	Save::Free();
+
 }
 
-void EditorGrantGroup::Name::Run(UBSocket* sock, const std::string& argument, GrantGroup* grantgroup)
+void EditorGrantGroup::editName(const std::string& argument)
 {
 	if(argument.size() == 0)
 	{
-		sock->Send("GrantGroup name can't be zero length!\n");
+		m_sock->Send("GrantGroup name can't be zero length!\n");
 		return;
 	}
 
-	sock->Sendf("GrantGroup name changed from '%s' to '%s'.\n", grantgroup->getName().c_str(), argument.c_str());
-	grantgroup->setName(argument);
+	m_sock->Sendf("GrantGroup name changed from '%s' to '%s'.\n", m_grantgroup->getName().c_str(), argument.c_str());
+	m_grantgroup->setName(argument);
 	return;
 }
 
-void EditorGrantGroup::Show::Run(UBSocket* sock, const std::string& argument, GrantGroup* grantgroup)
+void EditorGrantGroup::editImplication(const std::string& argument)
 {
-	sock->Send(String::Get()->box(grantgroup->Show(),"GrantGroup"));
+	if(argument.size() == 0)
+	{
+		m_sock->Send("Please specify the implicated grantgroup!\n");
+		return;
+	}
+
+	int implication = atoi(argument.c_str());
+	if(implication <= 0)
+	{
+		m_sock->Sendf("Please specify an implication > 0!\n");
+		return;
+	}
+
+	m_sock->Sendf("GrantGroup implication changed from '%d' to '%d'.\n", m_grantgroup->getImplication(), implication);
+	m_grantgroup->setImplication(implication);
+}
+
+void EditorGrantGroup::showGrantGroup(const std::string& argument)
+{
+	m_sock->Send(String::Get()->box(m_grantgroup->Show(),"GrantGroup"));
 	return;
 }
 
-void EditorGrantGroup::Save::Run(UBSocket* sock, const std::string& argument, GrantGroup* grantgroup)
+void EditorGrantGroup::saveGrantGroup(const std::string& argument)
 {
-	sock->Sendf("Saving grantgroup '%s'.\n", grantgroup->getName().c_str());
-	grantgroup->Save();
-	sock->Send("Saved.\n");
+	m_sock->Sendf("Saving grantgroup '%s'.\n", m_grantgroup->getName().c_str());
+	m_grantgroup->Save();
+	m_sock->Send("Saved.\n");
 	return;
 }

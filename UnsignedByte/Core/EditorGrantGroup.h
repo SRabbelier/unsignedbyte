@@ -23,7 +23,7 @@
 #include "OLCEditor.h"
 #include "singleton.h"
 #include "Interpreter.h"
-#include "Action.h"
+#include "CommandObject.h"
 
 class UBSocket;
 namespace mud { class GrantGroup; }
@@ -31,6 +31,8 @@ namespace mud { class GrantGroup; }
 class EditorGrantGroup : public OLCEditor
 {
 public:
+	typedef CommandObject<EditorGrantGroup> GrantGroupCommand;
+	
 	EditorGrantGroup(UBSocket* sock);
 	~EditorGrantGroup(void);
 
@@ -46,59 +48,26 @@ public:
 	std::vector<std::string> getList();
 	std::vector<std::string> getCommands();
 	void setEditing(long id);
+	
+	void editName(const std::string& argument);
+	void editImplication(const std::string& argument);
+	void showGrantGroup(const std::string& argument);
+	void saveGrantGroup(const std::string& argument);
 
 private:
 	mud::GrantGroup* m_grantgroup;
 	EditorGrantGroup(const EditorGrantGroup& rhs);
 	EditorGrantGroup operator=(const EditorGrantGroup& rhs);
 
-	typedef EditorAction<UBSocket, mud::GrantGroup> GrantGroupAction;
-
-	class GrantGroupInterpreter : public Interpreter<GrantGroupAction>, public Singleton<GrantGroupInterpreter> {
+	class GrantGroupInterpreter : public Interpreter<GrantGroupCommand>, public Singleton<GrantGroupInterpreter> {
 	private:
 		GrantGroupInterpreter(void);
 		~GrantGroupInterpreter(void);
 		friend class Singleton<GrantGroupInterpreter>;
 	};
 
-	class Name : public GrantGroupAction, public Singleton<Name>{
-	private:
-		Name(void) {};
-		~Name(void) {};
-		friend class Singleton<Name>;
-	public:
-		void Run(UBSocket* sock, const std::string& argument, mud::GrantGroup* area);
-		std::string getName() { return "Name"; };
-	};
-		
-	class Implication : public GrantGroupAction, public Singleton<Implication>{
-	private:
-		Implication(void) {};
-		~Implication(void) {};
-		friend class Singleton<Implication>;
-	public:
-		void Run(UBSocket* sock, const std::string& argument, mud::GrantGroup* area);
-		std::string getName() { return "Implication"; };
-	};
-
-	class Show : public GrantGroupAction, public Singleton<Show> {
-	private:
-		Show(void) {};
-		~Show(void) {};
-		friend class Singleton<Show>;
-	public:
-		void Run(UBSocket* sock, const std::string& argument, mud::GrantGroup* area);
-		std::string getName() { return "Show"; };
-	};
-
-	class Save : public GrantGroupAction, public Singleton<Save> {
-	private:
-		Save(void) {};
-		~Save(void) {};
-		friend class Singleton<Save>;
-	public:
-		void Run(UBSocket* sock, const std::string& argument, mud::GrantGroup* area);
-		std::string getName() { return "Save"; };
-	};
-	
+	static GrantGroupCommand m_editName;
+	static GrantGroupCommand m_editImplication;
+	static GrantGroupCommand m_showGrantGroup;
+	static GrantGroupCommand m_saveGrantGroup;
 };
