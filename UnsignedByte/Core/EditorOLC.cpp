@@ -22,7 +22,7 @@
 #include "EditorArea.h"
 #include "EditorRoom.h"
 #include "EditorMobile.h"
-#include "EditorAccount.h"
+#include "EditorOLC.h"
 #include "EditorSector.h"
 #include "EditorColour.h"
 #include "EditorCommand.h"
@@ -36,11 +36,20 @@
 #include "Action.h"
 #include "StringUtilities.h"
 
+EditorOLC::OLCCommand EditorOLC::m_startAreas("Areas", &EditorOLC::startAreas);
+EditorOLC::OLCCommand EditorOLC::m_startRooms("Rooms", &EditorOLC::startRooms);
+EditorOLC::OLCCommand EditorOLC::m_startScripts("Scripts", &EditorOLC::startScripts);
+EditorOLC::OLCCommand EditorOLC::m_startMobiles("Mobiles", &EditorOLC::startMobiles);
+EditorOLC::OLCCommand EditorOLC::m_startSectors("Sectors", &EditorOLC::startSectors);
+EditorOLC::OLCCommand EditorOLC::m_startColours("Colours", &EditorOLC::startColours);
+EditorOLC::OLCCommand EditorOLC::m_startCommands("OLC", &EditorOLC::startCommands);
+EditorOLC::OLCCommand EditorOLC::m_listCommands("Commands", &EditorOLC::listCommands);
+EditorOLC::OLCCommand EditorOLC::m_quitEditor("Quit", &EditorOLC::quitEditor);
+
 EditorOLC::EditorOLC(UBSocket* sock) :
 Editor(sock)
 {
-	UBAction* act = Commands::Get();
-	act->Run(sock, Global::Get()->EmptyString);
+	m_listCommands.Run(this, Global::Get()->EmptyString);
 }
 
 EditorOLC::~EditorOLC(void)
@@ -50,7 +59,7 @@ EditorOLC::~EditorOLC(void)
 
 std::string EditorOLC::lookup(const std::string& action)
 {
-	UBAction* act = OLCInterpreter::Get()->translate(action);
+	OLCCommand* act = OLCInterpreter::Get()->translate(action);
 	if(act)
 		return act->getName();
 		
@@ -59,109 +68,95 @@ std::string EditorOLC::lookup(const std::string& action)
 
 void EditorOLC::dispatch(const std::string& action, const std::string& argument)
 {
-	UBAction* act = OLCInterpreter::Get()->translate(action);
+	OLCCommand* act = OLCInterpreter::Get()->translate(action);
 	
 	if(act)
-		act->Run(m_sock, argument);
+		act->Run(this, argument);
 	else
 		Global::Get()->bugf("EditorOLC::dispatch(), action '%s' not found (argument '%s')!\n", action.c_str(), argument.c_str());
 		
 	return;
 }
-
+	
 EditorOLC::OLCInterpreter::OLCInterpreter(void)
 {
-	addWord("areas", Areas::Get());
-	addWord("rooms", Rooms::Get());
-	addWord("mobiles", Mobiles::Get());
-	addWord("scripts", Scripts::Get());
-	addWord("sectors", Sectors::Get());
-	addWord("colour", Colours::Get());
-	addWord("comedit", ComEdit::Get());
-	addWord("commands", Commands::Get());
-	addWord("quit", Quit::Get());
-
-	/*
-	addWord("ooc", DoOOC::Get());
-	addWord("note", DoNote::Get());
-	addWord("help", DoHelp::Get());
-	*/
+	addWord("areas", &m_startAreas);
+	addWord("rooms", &m_startRooms);
+	addWord("scripts", &m_startScripts);
+	addWord("mobiles", &m_startMobiles);
+	addWord("sectors", &m_startSectors);
+	addWord("colour", &m_startColours);
+	addWord("commands", &m_startCommands);
+	addWord("?", &m_listCommands);
+	addWord("quit", &m_quitEditor);
 }
 
 EditorOLC::OLCInterpreter::~OLCInterpreter(void)
 {
-	Areas::Free();
-	Commands::Free();
-	Rooms::Free();
-	Mobiles::Free();
-	Scripts::Free();
-	Sectors::Free();
-	Colours::Free();
-	ComEdit::Free();
-	Quit::Free();
+
 }
 
-void EditorOLC::Areas::Run(UBSocket* sock, const std::string &argument)
+void EditorOLC::startAreas(const std::string& argument)
 {
-	sock->Send("Dropping you into Area Edit mode!\n");
-	sock->SetEditor(new EditorArea(sock));
+	m_sock->Send("Dropping you into Area Edit mode!\n");
+	m_sock->SetEditor(new EditorArea(m_sock));
 	return;
 }
 
 
-void EditorOLC::Rooms::Run(UBSocket* sock, const std::string &argument)
+void EditorOLC::startRooms(const std::string& argument)
 {
-	sock->Send("Dropping you into Room Edit mode!\n");
-	sock->SetEditor(new EditorRoom(sock));
+	m_sock->Send("Dropping you into Room Edit mode!\n");
+	m_sock->SetEditor(new EditorRoom(m_sock));
 	return;
 }
 
-void EditorOLC::Mobiles::Run(UBSocket* sock, const std::string &argument)
+void EditorOLC::startMobiles(const std::string& argument)
 {
-	sock->Send("Dropping you into Mobile Edit mode!\n");
-	sock->SetEditor(new EditorMobile(sock));
+	m_sock->Send("Dropping you into Mobile Edit mode!\n");
+	m_sock->SetEditor(new EditorMobile(m_sock));
 	return;
 }
 
-void EditorOLC::Sectors::Run(UBSocket* sock, const std::string &argument)
+void EditorOLC::startSectors(const std::string& argument)
 {
-	sock->Send("Dropping you into Sector Edit mode!\n");
-	sock->SetEditor(new EditorSector(sock));
+	m_sock->Send("Dropping you into Sector Edit mode!\n");
+	m_sock->SetEditor(new EditorSector(m_sock));
 	return;
 }
 
-void EditorOLC::Colours::Run(UBSocket* sock, const std::string &argument)
+void EditorOLC::startColours(const std::string& argument)
 {
-	sock->Send("Dropping you into Colours Edit mode!\n");
-	sock->SetEditor(new EditorColour(sock));
+	m_sock->Send("Dropping you into Colours Edit mode!\n");
+	m_sock->SetEditor(new EditorColour(m_sock));
 	return;
 }
 
-void EditorOLC::ComEdit::Run(UBSocket* sock, const std::string &argument)
+void EditorOLC::startCommands(const std::string& argument)
 {
-	sock->Send("Dropping you into Command Edit mode!\n");
-	sock->SetEditor(new EditorCommand(sock));
+	m_sock->Send("Dropping you into Command Edit mode!\n");
+	m_sock->SetEditor(new EditorCommand(m_sock));
 	return;
 }
 
-void EditorOLC::Scripts::Run(UBSocket* sock, const std::string &argument)
+void EditorOLC::startScripts(const std::string& argument)
 {
-	sock->Send("Dropping you into Script Edit mode!\n");
-	sock->Send("Scripting is not yet implemented, sorry.\n");
-	// sock->SetEditor(new EditorScript(sock));
+	m_sock->Send("Dropping you into Script Edit mode!\n");
+	m_sock->Send("Scripting is not yet implemented, sorry.\n");
+	// m_sock->SetEditor(new EditorScript(m_sock));
 	return;
 }
 
-void EditorOLC::Commands::Run(UBSocket* sock, const std::string &argument)
+void EditorOLC::listCommands(const std::string& argument)
 {
-	sock->Send(String::Get()->box(OLCInterpreter::Get()->getWords(), "OLC"));
-	sock->Send("\n");
+	m_sock->Send(String::Get()->box(OLCInterpreter::Get()->getWords(), "OLC"));
+	m_sock->Send("\n");
 	return;
 }
 
-void EditorOLC::Quit::Run(UBSocket* sock, const std::string &argument)
+void EditorOLC::quitEditor(const std::string& argument)
 {
-	sock->Send("Ok.\n");
-	sock->SetEditor(new EditorAccount(sock));
+	m_sock->Send("Ok.\n");
+	m_sock->SetEditor(new EditorOLC(m_sock));
 	return;
 }

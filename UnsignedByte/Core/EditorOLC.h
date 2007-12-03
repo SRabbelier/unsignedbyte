@@ -21,15 +21,17 @@
 
 #include <string>
 #include "Editor.h"
-#include "Action.h"
 #include "singleton.h"
 #include "Interpreter.h"
+#include "CommandObject.h"
 
 class UBSocket;
 
 class EditorOLC : public Editor
 {
 public:
+	typedef CommandObject<EditorOLC> OLCCommand;
+
 	EditorOLC(UBSocket* sock);
 	~EditorOLC(void);
 
@@ -38,106 +40,35 @@ public:
 	
 	std::string lookup(const std::string& action);
 	void dispatch(const std::string& action, const std::string& argument);
+	
+	void startAreas(const std::string& argument);
+	void startRooms(const std::string& argument);
+	void startScripts(const std::string& argument);
+	void startMobiles(const std::string& argument);
+	void startSectors(const std::string& argument);
+	void startColours(const std::string& argument);
+	void startCommands(const std::string& argument);
+	void listCommands(const std::string& argument);
+	void quitEditor(const std::string& argument);
 
 private:
 	EditorOLC(const EditorOLC& rhs);
 	EditorOLC operator=(const EditorOLC& rhs);
 
-	class OLCInterpreter : public Interpreter<UBAction>, public Singleton<OLCInterpreter> {
+	class OLCInterpreter : public Interpreter<OLCCommand>, public Singleton<OLCInterpreter> {
 	private:
 		OLCInterpreter(void);
 		~OLCInterpreter(void);
 		friend class Singleton<OLCInterpreter>;
 	};
-
-	class Areas : public UBAction, public Singleton<Areas>{
-	private:
-		Areas(void) {};
-		~Areas(void) {};
-		friend class Singleton<Areas>;
-	public:
-		void Run(UBSocket* ch, const std::string& argument);
-		std::string getName() { return "Areas"; };
-	};
-
-	class Rooms : public UBAction, public Singleton<Rooms>{
-	private:
-		Rooms(void) {};
-		~Rooms(void) {};
-		friend class Singleton<Rooms>;
-	public:
-		void Run(UBSocket* ch, const std::string& argument);
-		std::string getName() { return "Rooms"; };
-	};
-
-	class Scripts : public UBAction, public Singleton<Scripts> {
-	private:
-		Scripts(void) {};
-		~Scripts(void) {};
-		friend class Singleton<Scripts>;
-	public:
-		void Run(UBSocket* ch, const std::string& argument);
-		std::string getName() { return "Scripts"; };
-	};
-
-	class Mobiles : public UBAction, public Singleton<Mobiles> {
-	private:
-		Mobiles(void) {};
-		~Mobiles(void) {};
-		friend class Singleton<Mobiles>;
-	public:
-		void Run(UBSocket* ch, const std::string& argument);
-		std::string getName() { return "Mobiles"; };
-	};
-
-	class Sectors : public UBAction, public Singleton<Sectors> {
-	private:
-		Sectors(void) {};
-		~Sectors(void) {};
-		friend class Singleton<Sectors>;
-	public:
-		void Run(UBSocket* ch, const std::string& argument);
-		std::string getName() { return "Sectors"; };
-	};
-
-	class Colours : public UBAction, public Singleton<Colours> {
-	private:
-		Colours(void) {};
-		~Colours(void) {};
-		friend class Singleton<Colours>;
-	public:
-		void Run(UBSocket* ch, const std::string& argument);
-		std::string getName() { return "Colours"; };
-	};
-
-	class Commands : public UBAction, public Singleton<Commands> {
-	private:
-		Commands(void) {};
-		~Commands(void) {};
-		friend class Singleton<Commands>;
-	public:
-		void Run(UBSocket* ch, const std::string& argument);
-		std::string getName() { return "Commands"; };
-	};
 	
-	class ComEdit : public UBAction, public Singleton<ComEdit> {
-	private:
-		ComEdit(void) {};
-		~ComEdit(void) {};
-		friend class Singleton<ComEdit>;
-	public:
-		void Run(UBSocket* ch, const std::string& argument);
-		std::string getName() { return "ComEdit"; };
-	};
-
-	class Quit : public UBAction, public Singleton<Quit> {
-	private:
-		Quit(void) {};
-		~Quit(void) {};
-		friend class Singleton<Quit>;
-	public:
-		void Run(UBSocket* ch, const std::string& argument);
-		std::string getName() { return "Quit"; };
-	};
-
+	static OLCCommand m_startAreas;
+	static OLCCommand m_startRooms;
+	static OLCCommand m_startScripts;
+	static OLCCommand m_startMobiles;
+	static OLCCommand m_startSectors;
+	static OLCCommand m_startColours;
+	static OLCCommand m_startCommands;
+	static OLCCommand m_listCommands;
+	static OLCCommand m_quitEditor;
 };
