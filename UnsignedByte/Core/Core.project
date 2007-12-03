@@ -26,7 +26,6 @@
     <File Name="Cache.h"/>
     <File Name="Character.h"/>
     <File Name="Colour.h"/>
-    <File Name="EditorSector.h"/>
     <File Name="Interpreter.h"/>
     <File Name="MCharacter.h"/>
     <File Name="PCharacter.h"/>
@@ -108,6 +107,7 @@
     <File Name="Editor.h"/>
     <File Name="OLCEditor.h"/>
     <File Name="EditorAccountLogin.h"/>
+    <File Name="EditorSector.h"/>
   </VirtualDirectory>
   <Dependencies/>
 </CodeLite_Project>

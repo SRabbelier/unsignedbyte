@@ -39,6 +39,13 @@
 
 using mud::Sector;
 
+EditorSector::SectorCommand EditorSector::m_editName("Name", &EditorSector::editName);
+EditorSector::SectorCommand EditorSector::m_editSymbol("Description", &EditorSector::editSymbol);
+EditorSector::SectorCommand EditorSector::m_editMoveCost("Height", &EditorSector::editMoveCost);
+EditorSector::SectorCommand EditorSector::m_editWater("Width", &EditorSector::editWater);
+EditorSector::SectorCommand EditorSector::m_showSector("Show", &EditorSector::showSector);
+EditorSector::SectorCommand EditorSector::m_saveSector("Save", &EditorSector::saveSector);
+
 EditorSector::EditorSector(UBSocket* sock) :
 OLCEditor(sock),
 m_sector(NULL)
@@ -58,7 +65,7 @@ std::string EditorSector::lookup(const std::string& action)
 	if(name.size() != 0)
 		return name;
 		
-	SectorAction* act = SectorInterpreter::Get()->translate(action);
+	SectorCommand* act = SectorInterpreter::Get()->translate(action);
 	if(act)
 		return act->getName();
 		
@@ -67,10 +74,10 @@ std::string EditorSector::lookup(const std::string& action)
 
 void EditorSector::dispatch(const std::string& action, const std::string& argument)
 {
-	SectorAction* act = SectorInterpreter::Get()->translate(action);
+	SectorCommand* act = SectorInterpreter::Get()->translate(action);
 	
 	if(act)
-		act->Run(m_sock, argument, m_sector);
+		act->Run(this, argument);
 	else
 		OLCEditor::dispatch(action, argument);
 		
@@ -117,107 +124,102 @@ std::vector<std::string> EditorSector::getCommands()
 
 EditorSector::SectorInterpreter::SectorInterpreter(void)
 {
-	addWord("name", Name::Get());
-	addWord("symbol", Symbol::Get());
-	addWord("movecost", MoveCost::Get());
-	addWord("water", Water::Get());
-	addWord("show", Show::Get());
-	addWord("save", Save::Get());
+	addWord("name", &m_editName);
+	addWord("symbol", &m_editSymbol);
+	addWord("movecost", &m_editMoveCost);
+	addWord("water", &m_editWater);
+	addWord("show", &m_showSector);
+	addWord("save", &m_saveSector);
 }
 
 EditorSector::SectorInterpreter::~SectorInterpreter(void)
 {
-	Name::Free();
-	Symbol::Free();
-	MoveCost::Free();
-	Water::Free();
-	Show::Free();
-	Save::Free();
+
 }
 
-void EditorSector::Name::Run(UBSocket* sock, const std::string& argument, Sector* sector)
+void EditorSector::editName(const std::string& argument)
 {
 	if(argument.size() == 0)
 	{
-		sock->Send("Sector name can't be zero length!\n");
+		m_sock->Send("Sector name can't be zero length!\n");
 		return;
 	}
 
-	sock->Sendf("Sector name changed from '%s' to '%s'.\n", sector->getName().c_str(), argument.c_str());
-	sector->setName(argument);
+	m_sock->Sendf("Sector name changed from '%s' to '%s'.\n", m_sector->getName().c_str(), argument.c_str());
+	m_sector->setName(argument);
 	return;
 }
 
-void EditorSector::MoveCost::Run(UBSocket* sock, const std::string& argument, Sector* sector)
+void EditorSector::editMoveCost(const std::string& argument)
 {
 	long movecost = atoi(argument.c_str());
 
 	if(movecost < 0)
 	{
-		sock->Sendf("%s is not a valid movecost!", argument.c_str());
+		m_sock->Sendf("%s is not a valid movecost!", argument.c_str());
 		return;
 	}
 
-	sock->Sendf("Sector movecost changed from '%d' to '%d'.\n", sector->getMoveCost(), movecost);
-	sector->setMoveCost(movecost);
+	m_sock->Sendf("Sector movecost changed from '%d' to '%d'.\n", m_sector->getMoveCost(), movecost);
+	m_sector->setMoveCost(movecost);
 	return;
 }
 
-void EditorSector::Water::Run(UBSocket* sock, const std::string& argument, Sector* sector)
+void EditorSector::editWater(const std::string& argument)
 {
-	sock->Sendf("Sector water flag toggled.\n");
-	if(sector->isWater())
-		sector->setWater(false);
+	m_sock->Sendf("Sector water flag toggled.\n");
+	if(m_sector->isWater())
+		m_sector->setWater(false);
 	else
-		sector->setWater(true);
+		m_sector->setWater(true);
 	return;
 }
 
 
-void EditorSector::Symbol::Run(UBSocket* sock, const std::string& argument, Sector* sector)
+void EditorSector::editSymbol(const std::string& argument)
 {
-	if(!sector->Exists())
+	if(!m_sector->Exists())
 	{
-		sock->Send("For some reason the sector you are editing does not exist.\n");
+		m_sock->Send("For some reason the sector you are editing does not exist.\n");
 		return;
 	}
 
 	if(argument.size() != 1)
 	{
-		sock->Send("Please provide one character to set as symbol!");
+		m_sock->Send("Please provide one character to set as symbol!");
 		return;
 	}
 
-	sock->Sendf("Sector symbol changed from '%s' to '%s'.\n", sector->getSymbol().c_str(), argument.c_str());
-	sector->setSymbol(argument);
+	m_sock->Sendf("Sector symbol changed from '%s' to '%s'.\n", m_sector->getSymbol().c_str(), argument.c_str());
+	m_sector->setSymbol(argument);
 	return;
 }
 
-void EditorSector::Show::Run(UBSocket* sock, const std::string& argument, Sector* sector)
+void EditorSector::showSector(const std::string& argument)
 {
 	if(!argument.compare("compact"))
 	{
-		sock->Sendf("%s(%s): %d%s", 
-			sector->getName().c_str(),
-			sector->getSymbol().c_str(),
-			sector->getMoveCost(),
-			(sector->isWater() ? " (water)\n" : "\n"));
+		m_sock->Sendf("%s(%s): %d%s", 
+			m_sector->getName().c_str(),
+			m_sector->getSymbol().c_str(),
+			m_sector->getMoveCost(),
+			(m_sector->isWater() ? " (water)\n" : "\n"));
 	}
 	else
 	{
-		sock->Sendf("Name: '%s'.\n", sector->getName().c_str());
-		sock->Sendf("Symbol: '%s'.\n", sector->getSymbol().c_str());
-		sock->Sendf("Movecost: '%d'.\n", sector->getMoveCost());
-		if(sector->isWater())
-			sock->Send("Sector is water type.\n");
+		m_sock->Sendf("Name: '%s'.\n", m_sector->getName().c_str());
+		m_sock->Sendf("Symbol: '%s'.\n", m_sector->getSymbol().c_str());
+		m_sock->Sendf("Movecost: '%d'.\n", m_sector->getMoveCost());
+		if(m_sector->isWater())
+			m_sock->Send("Sector is water type.\n");
 	}
 	return;
 }
 
-void EditorSector::Save::Run(UBSocket* sock, const std::string& argument, Sector* sector)
+void EditorSector::saveSector(const std::string& argument)
 {
-	sock->Sendf("Saving sector '%s'.\n", sector->getName().c_str());
-	sector->Save();
-	sock->Send("Saved.\n");
+	m_sock->Sendf("Saving sector '%s'.\n", m_sector->getName().c_str());
+	m_sector->Save();
+	m_sock->Send("Saved.\n");
 	return;
 }

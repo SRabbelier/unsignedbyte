@@ -23,7 +23,7 @@
 #include "OLCEditor.h"
 #include "singleton.h"
 #include "Interpreter.h"
-#include "Action.h"
+#include "CommandObject.h"
 
 class UBSocket;
 namespace mud { class Sector; }
@@ -31,6 +31,8 @@ namespace mud { class Sector; }
 class EditorSector : public OLCEditor
 {
 public:
+	typedef CommandObject<EditorSector> SectorCommand;
+
 	EditorSector(UBSocket* sock);
 	~EditorSector(void);
 
@@ -46,6 +48,13 @@ public:
 	std::vector<std::string> getList();
 	std::vector<std::string> getCommands();
 	void setEditing(long id);
+	
+	void editName(const std::string& argument);
+	void editSymbol(const std::string& argument);
+	void editMoveCost(const std::string& argument);
+	void editWater(const std::string& argument);
+	void showSector(const std::string& argument);
+	void saveSector(const std::string& argument);
 
 private:
 	mud::Sector* m_sector;
@@ -53,73 +62,18 @@ private:
 	EditorSector operator=(const EditorSector& rhs);
 
 private:
-	typedef EditorAction<UBSocket, mud::Sector> SectorAction;
 
-	class SectorInterpreter : public Interpreter<SectorAction>, public Singleton<SectorInterpreter> {
+	class SectorInterpreter : public Interpreter<SectorCommand>, public Singleton<SectorInterpreter> {
 	private:
 		SectorInterpreter(void);
 		~SectorInterpreter(void);
 		friend class Singleton<SectorInterpreter>;
 	};
 	
-	class Name : public SectorAction, public Singleton<Name>{
-	private:
-		Name(void) {};
-		~Name(void) {};
-		friend class Singleton<Name>;
-	public:
-		void Run(UBSocket* sock, const std::string& argument, mud::Sector* area);
-		std::string getName() { return "Name"; };
-	};
-
-	class Symbol : public SectorAction, public Singleton<Symbol>{
-	private:
-		Symbol(void) {};
-		~Symbol(void) {};
-		friend class Singleton<Symbol>;
-	public:
-		void Run(UBSocket* sock, const std::string& argument, mud::Sector* area);
-		std::string getName() { return "Symbol"; };
-	};
-
-	class MoveCost : public SectorAction, public Singleton<MoveCost>{
-	private:
-		MoveCost(void) {};
-		~MoveCost(void) {};
-		friend class Singleton<MoveCost>;
-	public:
-		void Run(UBSocket* sock, const std::string& argument, mud::Sector* area);
-		std::string getName() { return "MoveCost"; };
-	};
-
-	class Water : public SectorAction, public Singleton<Water>{
-	private:
-		Water(void) {};
-		~Water(void) {};
-		friend class Singleton<Water>;
-	public:
-		void Run(UBSocket* sock, const std::string& argument, mud::Sector* area);
-		std::string getName() { return "Water"; };
-	};
-
-	class Show : public SectorAction, public Singleton<Show> {
-	private:
-		Show(void) {};
-		~Show(void) {};
-		friend class Singleton<Show>;
-	public:
-		void Run(UBSocket* sock, const std::string& argument, mud::Sector* area);
-		std::string getName() { return "Show"; };
-	};
-
-	class Save : public SectorAction, public Singleton<Save> {
-	private:
-		Save(void) {};
-		~Save(void) {};
-		friend class Singleton<Save>;
-	public:
-		void Run(UBSocket* sock, const std::string& argument, mud::Sector* area);
-		std::string getName() { return "Save"; };
-	};
-	
+	static SectorCommand m_editName;
+	static SectorCommand m_editSymbol;
+	static SectorCommand m_editMoveCost;
+	static SectorCommand m_editWater;
+	static SectorCommand m_showSector;
+	static SectorCommand m_saveSector;
 };

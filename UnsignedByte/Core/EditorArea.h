@@ -25,7 +25,6 @@
 #include "Interpreter.h"
 #include "CommandObject.h"
 
-
 class UBSocket;
 namespace mud { class Area; };
 
