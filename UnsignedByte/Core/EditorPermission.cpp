@@ -39,6 +39,13 @@
 #include "GrantGroup.h"
 
 using mud::Permission;
+		
+EditorPermission::PermissionCommand EditorPermission::m_editAccount("Account", &EditorPermission::editAccount);
+EditorPermission::PermissionCommand EditorPermission::m_editGrantGroup("GrantGroup", &EditorPermission::editGrantGroup);
+EditorPermission::PermissionCommand EditorPermission::m_editGrant("Grant", &EditorPermission::editGrant);
+EditorPermission::PermissionCommand EditorPermission::m_editLogging("Logging", &EditorPermission::editLogging);
+EditorPermission::PermissionCommand EditorPermission::m_showPermission("Show", &EditorPermission::showPermission);
+EditorPermission::PermissionCommand EditorPermission::m_savePermission("Save", &EditorPermission::savePermission);
 
 EditorPermission::EditorPermission(UBSocket* sock) :
 OLCEditor(sock),
@@ -59,7 +66,7 @@ std::string EditorPermission::lookup(const std::string& action)
 	if(name.size() != 0)
 		return name;
 		
-	PermissionAction* act = PermissionInterpreter::Get()->translate(action);
+	PermissionCommand* act = PermissionInterpreter::Get()->translate(action);
 	if(act)
 		return act->getName();
 		
@@ -68,10 +75,10 @@ std::string EditorPermission::lookup(const std::string& action)
 
 void EditorPermission::dispatch(const std::string& action, const std::string& argument)
 {
-	PermissionAction* act = PermissionInterpreter::Get()->translate(action);
+	PermissionCommand* act = PermissionInterpreter::Get()->translate(action);
 	
 	if(act)
-		act->Run(m_sock, argument, m_permission);
+		act->Run(this, argument);
 	else
 		OLCEditor::dispatch(action, argument);
 		
@@ -118,113 +125,110 @@ std::vector<std::string> EditorPermission::getCommands()
 
 EditorPermission::PermissionInterpreter::PermissionInterpreter(void)
 {
-	addWord("account", Accounts::Get());
-	addWord("grantgroup", GrantGroups::Get());
-	addWord("grant", Grants::Get());
-	addWord("show", Show::Get());
-	addWord("save", Save::Get());
+	addWord("account", &m_editAccount);
+	addWord("grantgroup", &m_editGrantGroup);
+	addWord("grant", &m_editGrant);
+	addWord("logging", &m_editLogging);
+	addWord("show", &m_showPermission);
+	addWord("save", &m_savePermission);
 }
 
 EditorPermission::PermissionInterpreter::~PermissionInterpreter(void)
 {
-	Accounts::Free();
-	GrantGroups::Free();
-	Grants::Free();
-	Show::Free();
-	Save::Free();
+	
 }
 
-void EditorPermission::Accounts::Run(UBSocket* sock, const std::string& argument, Permission* permission)
+void EditorPermission::editAccount(const std::string& argument)
 {
 	if(argument.size() == 0)
 	{
-		sock->Send("Please specify an account!\n");
+		m_sock->Send("Please specify an account!\n");
 		return;
 	}
 
 	long id = db::Accounts::lookupname(argument);
 	if(!id)
 	{
-		sock->Sendf("'%s' is not a valid account!\n", argument.c_str());
-		sock->Send(String::Get()->box(mud::Account::List(), "Accounts"));
+		m_sock->Sendf("'%s' is not a valid account!\n", argument.c_str());
+		m_sock->Send(String::Get()->box(mud::Account::List(), "Accounts"));
 		return;
 	}
 
-	sock->Sendf("Preparing to edit permission with account '%d'.\n", id);
+	m_sock->Sendf("Preparing to edit permission with account '%d'.\n", id);
 	// m_account = id;
 	// TODO - find some way to pass the Editor to Run()
 	return;
 }
 
-void EditorPermission::GrantGroups::Run(UBSocket* sock, const std::string& argument, Permission* permission)
+void EditorPermission::editGrantGroup(const std::string& argument)
 {
 	if(argument.size() == 0)
 	{
-		sock->Send("Please specify a grantgroup!\n");
+		m_sock->Send("Please specify a grantgroup!\n");
 		return;
 	}
 
 	long id = db::GrantGroups::lookupname(argument);
 	if(!id)
 	{
-		sock->Sendf("'%s' is not a valid grantgroup!\n", argument.c_str());
-		sock->Send(String::Get()->box(mud::GrantGroup::List(), "GrantGroups"));
+		m_sock->Sendf("'%s' is not a valid grantgroup!\n", argument.c_str());
+		m_sock->Send(String::Get()->box(mud::GrantGroup::List(), "GrantGroups"));
 		return;
 	}
 
-	sock->Sendf("Preparing to edit permission with grangroup '%d'.\n", id);
+	m_sock->Sendf("Preparing to edit permission with grangroup '%d'.\n", id);
 	// m_grantgroup = id;
 	// TODO - find some way to pass the Editor to Run()
 	return;
 }
 
-void EditorPermission::Grants::Run(UBSocket* sock, const std::string& argument, Permission* permission)
+void EditorPermission::editGrant(const std::string& argument)
 {
 	if(!argument.compare("Enable"))
 	{
-		permission->setGrant(true);
+		m_permission->setGrant(true);
 		return;
 	}
 	
 	if(!argument.compare("Disable"))
 	{
-		permission->setGrant(false);
+		m_permission->setGrant(false);
 		return;
 	}
 
-	sock->Send("Please specify a grant level!\n");
-	sock->Send("Choose between 'Enable' and 'Disable'.\n");
+	m_sock->Send("Please specify a grant level!\n");
+	m_sock->Send("Choose between 'Enable' and 'Disable'.\n");
 	return;
 }
 
-void EditorPermission::Logging::Run(UBSocket* sock, const std::string& argument, Permission* permission)
+void EditorPermission::editLogging(const std::string& argument)
 {
 	if(!argument.compare("Enable"))
 	{
-		permission->setLog(true);
+		m_permission->setLog(true);
 		return;
 	}
 	
 	if(!argument.compare("Disable"))
 	{
-		permission->setLog(false);
+		m_permission->setLog(false);
 		return;
 	}
 	
-	sock->Send("Please specify a log level!\n");
-	sock->Send("Choose bewteen 'Enable' and 'Disable'.\n");
+	m_sock->Send("Please specify a log level!\n");
+	m_sock->Send("Choose bewteen 'Enable' and 'Disable'.\n");
 	return;
 }
 
-void EditorPermission::Save::Run(UBSocket* sock, const std::string& argument, Permission* permission)
+void EditorPermission::savePermission(const std::string& argument)
 {
-	sock->Send("Saving...\n");
-	permission->Save();
-	sock->Send("Saved.\n");
+	m_sock->Send("Saving...\n");
+	m_permission->Save();
+	m_sock->Send("Saved.\n");
 	return;
 }
 
-void EditorPermission::Show::Run(UBSocket* sock, const std::string& argument, Permission* permission)
+void EditorPermission::showPermission(const std::string& argument)
 {
-	sock->Send(String::Get()->box(permission->Show(), "Permission"));
+	m_sock->Send(String::Get()->box(m_permission->Show(), "Permission"));
 }

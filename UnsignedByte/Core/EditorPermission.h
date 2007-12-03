@@ -23,7 +23,7 @@
 #include "OLCEditor.h"
 #include "singleton.h"
 #include "Interpreter.h"
-#include "Action.h"
+#include "CommandObject.h"
 
 class UBSocket;
 namespace mud { class Permission; }
@@ -31,6 +31,8 @@ namespace mud { class Permission; }
 class EditorPermission : public OLCEditor
 {
 public:
+	typedef CommandObject<EditorPermission> PermissionCommand;
+	
 	EditorPermission(UBSocket* sock);
 	~EditorPermission(void);
 
@@ -46,6 +48,13 @@ public:
 	std::vector<std::string> getList();
 	std::vector<std::string> getCommands();
 	void setEditing(long id);
+	
+	void editAccount(const std::string& argument);
+	void editGrantGroup(const std::string& argument);
+	void editGrant(const std::string& argument);
+	void editLogging(const std::string& argument);
+	void showPermission(const std::string& argument);
+	void savePermission(const std::string& argument);
 
 private:
 	mud::Permission* m_permission;
@@ -55,73 +64,17 @@ private:
 	EditorPermission(const EditorPermission& rhs);
 	EditorPermission operator=(const EditorPermission& rhs);
 
-	typedef EditorAction<UBSocket, mud::Permission> PermissionAction;
-
-	class PermissionInterpreter : public Interpreter<PermissionAction>, public Singleton<PermissionInterpreter> {
+	class PermissionInterpreter : public Interpreter<PermissionCommand>, public Singleton<PermissionInterpreter> {
 	private:
 		PermissionInterpreter(void);
 		~PermissionInterpreter(void);
 		friend class Singleton<PermissionInterpreter>;
 	};
 	
-	class Accounts : public PermissionAction, public Singleton<Accounts>{
-	private:
-		Accounts(void) {};
-		~Accounts(void) {};
-		friend class Singleton<Accounts>;
-	public:
-		void Run(UBSocket* sock, const std::string& argument, mud::Permission* area);
-		std::string getName() { return "Account"; };
-	};
-	
-	class GrantGroups : public PermissionAction, public Singleton<GrantGroups>{
-	private:
-		GrantGroups(void) {};
-		~GrantGroups(void) {};
-		friend class Singleton<GrantGroups>;
-	public:
-		void Run(UBSocket* sock, const std::string& argument, mud::Permission* area);
-		std::string getName() { return "GrantGroup"; };
-	};
-	
-	class Grants : public PermissionAction, public Singleton<Grants>{
-	private:
-		Grants(void) {};
-		~Grants(void) {};
-		friend class Singleton<Grants>;
-	public:
-		void Run(UBSocket* sock, const std::string& argument, mud::Permission* area);
-		std::string getName() { return "Grant"; };
-	};
-	
-	class Logging : public PermissionAction, public Singleton<Logging>{
-	private:
-		Logging(void) {};
-		~Logging(void) {};
-		friend class Singleton<Logging>;
-	public:
-		void Run(UBSocket* sock, const std::string& argument, mud::Permission* area);
-		std::string getName() { return "Logging"; };
-	};
-
-	class Show : public PermissionAction, public Singleton<Show> {
-	private:
-		Show(void) {};
-		~Show(void) {};
-		friend class Singleton<Show>;
-	public:
-		void Run(UBSocket* sock, const std::string& argument, mud::Permission* permission);
-		std::string getName() { return "Show"; };
-	};
-
-	class Save : public PermissionAction, public Singleton<Save> {
-	private:
-		Save(void) {};
-		~Save(void) {};
-		friend class Singleton<Save>;
-	public:
-		void Run(UBSocket* sock, const std::string& argument, mud::Permission* area);
-		std::string getName() { return "Save"; };
-	};
-
+	static PermissionCommand m_editAccount;
+	static PermissionCommand m_editGrantGroup;
+	static PermissionCommand m_editGrant;
+	static PermissionCommand m_editLogging;
+	static PermissionCommand m_showPermission;
+	static PermissionCommand m_savePermission;
 };
