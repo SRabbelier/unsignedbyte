@@ -53,7 +53,7 @@ EditorAccount::AccountCommand EditorAccount::m_listCharacters("List", &EditorAcc
 EditorAccount::EditorAccount(UBSocket* sock) :
 Editor(sock)
 {
-	this->m_listCommands.Run(this, Global::Get()->EmptyString);
+	m_listCommands.Run(this, Global::Get()->EmptyString);
 }
 
 EditorAccount::~EditorAccount(void)
@@ -103,7 +103,7 @@ void EditorAccount::beginLogin(const std::string &argument)
 	if(argument.size() == 0)
 	{
 		m_sock->Send("Please choose a character:\n");
-		this->m_listCharacters.Run(this, Global::Get()->EmptyString);
+		m_listCharacters.Run(this, Global::Get()->EmptyString);
 		return;
 	}
 
@@ -117,7 +117,7 @@ void EditorAccount::beginLogin(const std::string &argument)
 	if(id <= 0)
 	{
 		m_sock->Send("No such character.\n");
-		this->m_beginLogin.Run(this, Global::Get()->EmptyString);
+		m_beginLogin.Run(this, Global::Get()->EmptyString);
 		return;
 	}
 	
@@ -125,7 +125,7 @@ void EditorAccount::beginLogin(const std::string &argument)
 	if(hasAccount)
 	{
 		m_sock->Sendf("You don't have a character named '%s'!\n", argument.c_str());
-		this->m_beginLogin.Run(this, Global::Get()->EmptyString);
+		m_beginLogin.Run(this, Global::Get()->EmptyString);
 		return;
 	}
 

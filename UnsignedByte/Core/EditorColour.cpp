@@ -40,6 +40,11 @@
 
 using mud::Colour;
 
+EditorColour::ColourCommand EditorColour::m_editName("Name", &EditorColour::editName);
+EditorColour::ColourCommand EditorColour::m_editColourString("ColourString", &EditorColour::editColourString);
+EditorColour::ColourCommand EditorColour::m_saveColour("Save", &EditorColour::saveColour);
+EditorColour::ColourCommand EditorColour::m_showColour("Show", &EditorColour::showColour);
+
 EditorColour::EditorColour(UBSocket* sock) :
 OLCEditor(sock),
 m_colour(NULL)
@@ -59,7 +64,7 @@ std::string EditorColour::lookup(const std::string& action)
 	if(name.size() != 0)
 		return name;
 		
-	ColourAction* act = ColourInterpreter::Get()->translate(action);
+	ColourCommand* act = ColourInterpreter::Get()->translate(action);
 	if(act)
 		return act->getName();
 		
@@ -68,10 +73,10 @@ std::string EditorColour::lookup(const std::string& action)
 
 void EditorColour::dispatch(const std::string& action, const std::string& argument)
 {
-	ColourAction* act = ColourInterpreter::Get()->translate(action);
+	ColourCommand* act = ColourInterpreter::Get()->translate(action);
 	
 	if(act)
-		act->Run(m_sock, argument, m_colour);
+		act->Run(this, argument);
 	else
 		OLCEditor::dispatch(action, argument);
 		
@@ -118,61 +123,59 @@ std::vector<std::string> EditorColour::getCommands()
 
 EditorColour::ColourInterpreter::ColourInterpreter(void)
 {
-	addWord("name", Name::Get());
-	addWord("colourstring", ColourString::Get());
-	addWord("show", Show::Get());
-	addWord("save", Save::Get());
+	addWord("name", &m_editName);
+	addWord("colourstring", &m_editColourString);
+	addWord("show", &m_showColour);
+	addWord("save", &m_saveColour);
 }
 
 EditorColour::ColourInterpreter::~ColourInterpreter(void)
 {
-	Name::Free();
-	ColourString::Free();
-	Show::Free();
+
 }
 
-void EditorColour::Name::Run(UBSocket* sock, const std::string& argument, Colour* colour)
+void EditorColour::editName(const std::string& argument)
 {
 	if(argument.size() == 0)
 	{
-		sock->Send("Colour name can't be zero length!\n");
+		m_sock->Send("Colour name can't be zero length!\n");
 		return;
 	}
 
-	sock->Sendf("Colour name changed from '%s' to '%s'.\n", colour->getName().c_str(), argument.c_str());
-	colour->setName(argument);
+	m_sock->Sendf("Colour name changed from '%s' to '%s'.\n", m_colour->getName().c_str(), argument.c_str());
+	m_colour->setName(argument);
 	return;
 }
 
-void EditorColour::ColourString::Run(UBSocket* sock, const std::string& argument, Colour* colour)
+void EditorColour::editColourString(const std::string& argument)
 {
-	if(!colour->Exists())
+	if(!m_colour->Exists())
 	{
-		sock->Send("For some reason the colour you are editing does not exist.\n");
+		m_sock->Send("For some reason the colour you are editing does not exist.\n");
 		return;
 	}
 
 	if(argument.size() == 0)
 	{
-		sock->Send("No argument, dropping you into the string editor!\n");
+		m_sock->Send("No argument, dropping you into the string editor!\n");
 		return;
 	}
 
-	sock->Sendf("Colour ColourString changed from '%s' to '%s'.\n", colour->getColourString().c_str(), argument.c_str());
-	colour->setColourString(argument);
+	m_sock->Sendf("Colour ColourString changed from '%s' to '%s'.\n", m_colour->getColourString().c_str(), argument.c_str());
+	m_colour->setColourString(argument);
 	return;
 }
 
-void EditorColour::Save::Run(UBSocket* sock, const std::string& argument, Colour* colour)
+void EditorColour::saveColour(const std::string& argument)
 {
-	sock->Send("Saving...\n");
-	colour->Save();
-	sock->Send("Saved.\n");
+	m_sock->Send("Saving...\n");
+	m_colour->Save();
+	m_sock->Send("Saved.\n");
 	return;
 }
 
-void EditorColour::Show::Run(UBSocket* sock, const std::string& argument, Colour* colour)
+void EditorColour::showColour(const std::string& argument)
 {
-	sock->Send(String::Get()->box(colour->Show(), "Colour"));
+	m_sock->Send(String::Get()->box(m_colour->Show(), "Colour"));
 	return;
 }

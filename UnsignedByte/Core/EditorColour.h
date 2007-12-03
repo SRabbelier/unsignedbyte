@@ -23,7 +23,7 @@
 #include "OLCEditor.h"
 #include "singleton.h"
 #include "Interpreter.h"
-#include "Action.h"
+#include "CommandObject.h"
 
 class UBSocket;
 namespace mud { class Colour; }
@@ -31,6 +31,8 @@ namespace mud { class Colour; }
 class EditorColour : public OLCEditor
 {
 public:
+	typedef CommandObject<EditorColour> ColourCommand;
+
 	EditorColour(UBSocket* sock);
 	~EditorColour(void);
 
@@ -46,6 +48,11 @@ public:
 	std::vector<std::string> getList();
 	std::vector<std::string> getCommands();
 	void setEditing(long id);
+	
+	void editName(const std::string& argument);
+	void editColourString(const std::string& argument);
+	void saveColour(const std::string& argument);
+	void showColour(const std::string& argument);
 
 private:
 	mud::Colour* m_colour;
@@ -54,52 +61,16 @@ private:
 	EditorColour operator=(const EditorColour& rhs);
 
 private:
-	typedef EditorAction<UBSocket, mud::Colour> ColourAction;
-
-	class ColourInterpreter : public Interpreter<ColourAction>, public Singleton<ColourInterpreter> {
+	class ColourInterpreter : public Interpreter<ColourCommand>, public Singleton<ColourInterpreter> {
 	private:
 		ColourInterpreter(void);
 		~ColourInterpreter(void);
 		friend class Singleton<ColourInterpreter>;
 	};
 	
-	class Name : public ColourAction, public Singleton<Name>{
-	private:
-		Name(void) {};
-		~Name(void) {};
-		friend class Singleton<Name>;
-	public:
-		void Run(UBSocket* sock, const std::string& argument, mud::Colour* colour);
-		std::string getName() { return "Name"; };
-	};
+	static ColourCommand m_editName;
+	static ColourCommand m_editColourString;
+	static ColourCommand m_saveColour;
+	static ColourCommand m_showColour;
 
-	class ColourString : public ColourAction, public Singleton<ColourString>{
-	private:
-		ColourString(void) {};
-		~ColourString(void) {};
-		friend class Singleton<ColourString>;
-	public:
-		void Run(UBSocket* sock, const std::string& argument, mud::Colour* colour);
-		std::string getName() { return "ColourString"; };
-	};
-	
-	class Save : public ColourAction, public Singleton<Save> {
-	private:
-		Save(void) {};
-		~Save(void) {};
-		friend class Singleton<Save>;
-	public:
-		void Run(UBSocket* sock, const std::string& argument, mud::Colour* colour);
-		std::string getName() { return "Save"; };
-	};
-	
-	class Show : public ColourAction, public Singleton<Show> {
-	private:
-		Show(void) {};
-		~Show(void) {};
-		friend class Singleton<Show>;
-	public:
-		void Run(UBSocket* sock, const std::string& argument, mud::Colour* colour);
-		std::string getName() { return "Show"; };
-	};
 };
