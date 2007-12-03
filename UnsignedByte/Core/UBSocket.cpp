@@ -29,7 +29,7 @@
 #include "PCharacter.h"
 
 #include "DatabaseMgr.h"
-#include "EditorLoginAccount.h"
+#include "EditorAccountLogin.h"
 #include "Global.h"
 #include "Account.h"
 #include "Cache.h"
@@ -71,7 +71,7 @@ void UBSocket::OnAccept()
 {
 	Global::Get()->logf("Login from: %s\n", GetRemoteAddress().c_str());
 	Sendf("Welcome to %s.\n", game::vname);
-	Editor* p = new EditorLoginAccount(this);
+	Editor* p = new EditorAccountLogin(this);
 	if(m_editor != NULL)
 		throw std::logic_error("UBSocket::OnAccept(), m_editor != NULL!");
 

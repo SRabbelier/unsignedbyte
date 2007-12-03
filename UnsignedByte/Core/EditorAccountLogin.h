@@ -24,16 +24,16 @@
 
 class UBSocket;
 
-class EditorLoginAccount : public Editor
+class EditorAccountLogin : public Editor
 {
 public:
-	EditorLoginAccount(UBSocket* sock);
-	~EditorLoginAccount(void);
+	EditorAccountLogin(UBSocket* sock);
+	~EditorAccountLogin(void);
 
 	void OnLine(const std::string& line);
 	std::string name() { return "AccountLogin"; };
 	
 private:
-	EditorLoginAccount(const EditorLoginAccount& rhs);
-	EditorLoginAccount operator=(const EditorLoginAccount& rhs);
+	EditorAccountLogin(const EditorAccountLogin& rhs);
+	EditorAccountLogin operator=(const EditorAccountLogin& rhs);
 };

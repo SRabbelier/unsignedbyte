@@ -36,8 +36,8 @@ endif
 
 Objects=$(IntermediateDirectory)/Account$(ObjectSuffix) $(IntermediateDirectory)/Area$(ObjectSuffix) $(IntermediateDirectory)/Cache$(ObjectSuffix) $(IntermediateDirectory)/Character$(ObjectSuffix) $(IntermediateDirectory)/Colour$(ObjectSuffix) $(IntermediateDirectory)/main$(ObjectSuffix) $(IntermediateDirectory)/MCharacter$(ObjectSuffix) $(IntermediateDirectory)/PCharacter$(ObjectSuffix) $(IntermediateDirectory)/Race$(ObjectSuffix) $(IntermediateDirectory)/Room$(ObjectSuffix) \
 	$(IntermediateDirectory)/Sector$(ObjectSuffix) $(IntermediateDirectory)/UBHandler$(ObjectSuffix) $(IntermediateDirectory)/UBSocket$(ObjectSuffix) $(IntermediateDirectory)/SQLSocket$(ObjectSuffix) $(IntermediateDirectory)/Command$(ObjectSuffix) $(IntermediateDirectory)/GrantGroup$(ObjectSuffix) $(IntermediateDirectory)/Permission$(ObjectSuffix) $(IntermediateDirectory)/EditorOLC$(ObjectSuffix) $(IntermediateDirectory)/Editor$(ObjectSuffix) $(IntermediateDirectory)/EditorPermission$(ObjectSuffix) \
-	$(IntermediateDirectory)/EditorGrantGroup$(ObjectSuffix) $(IntermediateDirectory)/EditorString$(ObjectSuffix) $(IntermediateDirectory)/EditorCommand$(ObjectSuffix) $(IntermediateDirectory)/EditorScript$(ObjectSuffix) $(IntermediateDirectory)/EditorSector$(ObjectSuffix) $(IntermediateDirectory)/EditorRoom$(ObjectSuffix) $(IntermediateDirectory)/EditorPlaying$(ObjectSuffix) $(IntermediateDirectory)/EditorNewCharacter$(ObjectSuffix) $(IntermediateDirectory)/EditorNewAccount$(ObjectSuffix) $(IntermediateDirectory)/EditorLoginAccount$(ObjectSuffix) \
-	$(IntermediateDirectory)/EditorAccount$(ObjectSuffix) $(IntermediateDirectory)/EditorMobile$(ObjectSuffix) $(IntermediateDirectory)/EditorArea$(ObjectSuffix) $(IntermediateDirectory)/EditorColour$(ObjectSuffix) $(IntermediateDirectory)/OLCEditor$(ObjectSuffix) 
+	$(IntermediateDirectory)/EditorGrantGroup$(ObjectSuffix) $(IntermediateDirectory)/EditorString$(ObjectSuffix) $(IntermediateDirectory)/EditorCommand$(ObjectSuffix) $(IntermediateDirectory)/EditorScript$(ObjectSuffix) $(IntermediateDirectory)/EditorSector$(ObjectSuffix) $(IntermediateDirectory)/EditorRoom$(ObjectSuffix) $(IntermediateDirectory)/EditorPlaying$(ObjectSuffix) $(IntermediateDirectory)/EditorNewCharacter$(ObjectSuffix) $(IntermediateDirectory)/EditorNewAccount$(ObjectSuffix) $(IntermediateDirectory)/EditorAccount$(ObjectSuffix) \
+	$(IntermediateDirectory)/EditorMobile$(ObjectSuffix) $(IntermediateDirectory)/EditorArea$(ObjectSuffix) $(IntermediateDirectory)/EditorColour$(ObjectSuffix) $(IntermediateDirectory)/OLCEditor$(ObjectSuffix) $(IntermediateDirectory)/EditorAccountLogin$(ObjectSuffix) 
 
 ##
 ## Main Build Tragets 
@@ -202,11 +202,6 @@ $(IntermediateDirectory)/EditorNewAccount$(ObjectSuffix): EditorNewAccount.cpp $
 $(IntermediateDirectory)/EditorNewAccount$(ObjectSuffix).d:
 	@$(CompilerName) $(CmpOptions) $(IncludePath) -MT$(IntermediateDirectory)/EditorNewAccount$(ObjectSuffix) -MF$(IntermediateDirectory)/EditorNewAccount$(ObjectSuffix).d -MM EditorNewAccount.cpp
 
-$(IntermediateDirectory)/EditorLoginAccount$(ObjectSuffix): EditorLoginAccount.cpp $(IntermediateDirectory)/EditorLoginAccount$(ObjectSuffix).d
-	$(CompilerName) $(SourceSwitch)EditorLoginAccount.cpp $(CmpOptions)   $(OutputSwitch)$(IntermediateDirectory)/EditorLoginAccount$(ObjectSuffix) $(IncludePath)
-$(IntermediateDirectory)/EditorLoginAccount$(ObjectSuffix).d:
-	@$(CompilerName) $(CmpOptions) $(IncludePath) -MT$(IntermediateDirectory)/EditorLoginAccount$(ObjectSuffix) -MF$(IntermediateDirectory)/EditorLoginAccount$(ObjectSuffix).d -MM EditorLoginAccount.cpp
-
 $(IntermediateDirectory)/EditorAccount$(ObjectSuffix): EditorAccount.cpp $(IntermediateDirectory)/EditorAccount$(ObjectSuffix).d
 	$(CompilerName) $(SourceSwitch)EditorAccount.cpp $(CmpOptions)   $(OutputSwitch)$(IntermediateDirectory)/EditorAccount$(ObjectSuffix) $(IncludePath)
 $(IntermediateDirectory)/EditorAccount$(ObjectSuffix).d:
@@ -231,6 +226,11 @@ $(IntermediateDirectory)/OLCEditor$(ObjectSuffix): OLCEditor.cpp $(IntermediateD
 	$(CompilerName) $(SourceSwitch)OLCEditor.cpp $(CmpOptions)   $(OutputSwitch)$(IntermediateDirectory)/OLCEditor$(ObjectSuffix) $(IncludePath)
 $(IntermediateDirectory)/OLCEditor$(ObjectSuffix).d:
 	@$(CompilerName) $(CmpOptions) $(IncludePath) -MT$(IntermediateDirectory)/OLCEditor$(ObjectSuffix) -MF$(IntermediateDirectory)/OLCEditor$(ObjectSuffix).d -MM OLCEditor.cpp
+
+$(IntermediateDirectory)/EditorAccountLogin$(ObjectSuffix): EditorAccountLogin.cpp $(IntermediateDirectory)/EditorAccountLogin$(ObjectSuffix).d
+	$(CompilerName) $(SourceSwitch)EditorAccountLogin.cpp $(CmpOptions)   $(OutputSwitch)$(IntermediateDirectory)/EditorAccountLogin$(ObjectSuffix) $(IncludePath)
+$(IntermediateDirectory)/EditorAccountLogin$(ObjectSuffix).d:
+	@$(CompilerName) $(CmpOptions) $(IncludePath) -MT$(IntermediateDirectory)/EditorAccountLogin$(ObjectSuffix) -MF$(IntermediateDirectory)/EditorAccountLogin$(ObjectSuffix).d -MM EditorAccountLogin.cpp
 
 ##
 ## Clean
@@ -294,8 +294,6 @@ clean:
 	$(RM) $(IntermediateDirectory)/EditorNewCharacter$(ObjectSuffix).d
 	$(RM) $(IntermediateDirectory)/EditorNewAccount$(ObjectSuffix)
 	$(RM) $(IntermediateDirectory)/EditorNewAccount$(ObjectSuffix).d
-	$(RM) $(IntermediateDirectory)/EditorLoginAccount$(ObjectSuffix)
-	$(RM) $(IntermediateDirectory)/EditorLoginAccount$(ObjectSuffix).d
 	$(RM) $(IntermediateDirectory)/EditorAccount$(ObjectSuffix)
 	$(RM) $(IntermediateDirectory)/EditorAccount$(ObjectSuffix).d
 	$(RM) $(IntermediateDirectory)/EditorMobile$(ObjectSuffix)
@@ -306,6 +304,8 @@ clean:
 	$(RM) $(IntermediateDirectory)/EditorColour$(ObjectSuffix).d
 	$(RM) $(IntermediateDirectory)/OLCEditor$(ObjectSuffix)
 	$(RM) $(IntermediateDirectory)/OLCEditor$(ObjectSuffix).d
+	$(RM) $(IntermediateDirectory)/EditorAccountLogin$(ObjectSuffix)
+	$(RM) $(IntermediateDirectory)/EditorAccountLogin$(ObjectSuffix).d
 	$(RM) $(OutputFile)
 
 -include $(IntermediateDirectory)/*.d

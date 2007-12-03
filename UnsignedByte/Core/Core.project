@@ -83,19 +83,18 @@
     <File Name="EditorPlaying.cpp"/>
     <File Name="EditorNewCharacter.cpp"/>
     <File Name="EditorNewAccount.cpp"/>
-    <File Name="EditorLoginAccount.cpp"/>
     <File Name="EditorAccount.cpp"/>
     <File Name="EditorMobile.cpp"/>
     <File Name="EditorArea.cpp"/>
     <File Name="EditorColour.cpp"/>
     <File Name="OLCEditor.cpp"/>
+    <File Name="EditorAccountLogin.cpp"/>
   </VirtualDirectory>
   <VirtualDirectory Name="Editor Header">
     <File Name="EditorPermission.h"/>
     <File Name="EditorString.h"/>
     <File Name="EditorGrantGroup.h"/>
     <File Name="EditorCommand.h"/>
-    <File Name="EditorLoginAccount.h"/>
     <File Name="EditorScript.h"/>
     <File Name="EditorRoom.h"/>
     <File Name="EditorPlaying.h"/>
@@ -108,6 +107,7 @@
     <File Name="EditorAccount.h"/>
     <File Name="Editor.h"/>
     <File Name="OLCEditor.h"/>
+    <File Name="EditorAccountLogin.h"/>
   </VirtualDirectory>
   <Dependencies/>
 </CodeLite_Project>

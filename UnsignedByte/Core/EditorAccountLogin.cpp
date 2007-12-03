@@ -19,7 +19,7 @@
  ***************************************************************************/
 
 #include "EditorNewAccount.h"
-#include "EditorLoginAccount.h"
+#include "EditorAccountLogin.h"
 #include "EditorAccount.h"
 #include "UBSocket.h"
 #include "Account.h"
@@ -29,17 +29,17 @@
 
 class DoCmd;
 
-EditorLoginAccount::EditorLoginAccount(UBSocket* sock) :
+EditorAccountLogin::EditorAccountLogin(UBSocket* sock) :
 Editor(sock)
 {
 	OnLine(Global::Get()->EmptyString);
 }
 
-EditorLoginAccount::~EditorLoginAccount(void)
+EditorAccountLogin::~EditorAccountLogin(void)
 {
 }
 
-void EditorLoginAccount::OnLine(const std::string &line)
+void EditorAccountLogin::OnLine(const std::string &line)
 {
 	if(line.size() == 0)
 	{
