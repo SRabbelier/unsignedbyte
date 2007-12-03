@@ -35,12 +35,12 @@
 #include "Account.h"
 #include "Area.h"
 
-EditorArea::AreaCommand EditorArea::m_name("Name", &EditorArea::editName);
-EditorArea::AreaCommand EditorArea::m_description("Description", &EditorArea::editDescription);
-EditorArea::AreaCommand EditorArea::m_height("Height", &EditorArea::editHeight);
-EditorArea::AreaCommand EditorArea::m_width("Width", &EditorArea::editWidth);
-EditorArea::AreaCommand EditorArea::m_show("Show", &EditorArea::showArea);
-EditorArea::AreaCommand EditorArea::m_save("Save", &EditorArea::saveArea);
+EditorArea::AreaCommand EditorArea::m_editName("Name", &EditorArea::editName);
+EditorArea::AreaCommand EditorArea::m_editDescription("Description", &EditorArea::editDescription);
+EditorArea::AreaCommand EditorArea::m_editHeight("Height", &EditorArea::editHeight);
+EditorArea::AreaCommand EditorArea::m_editWidth("Width", &EditorArea::editWidth);
+EditorArea::AreaCommand EditorArea::m_showArea("Show", &EditorArea::showArea);
+EditorArea::AreaCommand EditorArea::m_saveArea("Save", &EditorArea::saveArea);
 
 EditorArea::EditorArea(UBSocket* sock) :
 OLCEditor(sock),
@@ -119,12 +119,12 @@ std::vector<std::string> EditorArea::getCommands()
 
 EditorArea::AreaInterpreter::AreaInterpreter(void)
 {
-	addWord("name", &m_name);
-	addWord("description", &m_description);
-	addWord("height", &m_height);
-	addWord("width", &m_width);
-	addWord("show", &m_show);
-	addWord("save", &m_save);
+	addWord("name", &m_editName);
+	addWord("description", &m_editDescription);
+	addWord("height", &m_editHeight);
+	addWord("width", &m_editWidth);
+	addWord("show", &m_showArea);
+	addWord("save", &m_saveArea);
 }
 
 EditorArea::AreaInterpreter::~AreaInterpreter(void)

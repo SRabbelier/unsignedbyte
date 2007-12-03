@@ -70,11 +70,10 @@ private:
 		friend class Singleton<AreaInterpreter>;
 	};
 
-	static AreaCommand m_name;
-	static AreaCommand m_description;
-	static AreaCommand m_height;
-	static AreaCommand m_width;
-	static AreaCommand m_show;
-	static AreaCommand m_save;
-	
+	static AreaCommand m_editName;
+	static AreaCommand m_editDescription;
+	static AreaCommand m_editHeight;
+	static AreaCommand m_editWidth;
+	static AreaCommand m_showArea;
+	static AreaCommand m_saveArea;
 };

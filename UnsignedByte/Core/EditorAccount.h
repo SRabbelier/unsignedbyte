@@ -68,5 +68,4 @@ private:
 	static AccountCommand m_quitEditor;
 	static AccountCommand m_shutdownGame;
 	static AccountCommand m_listCharacters;
-
 };

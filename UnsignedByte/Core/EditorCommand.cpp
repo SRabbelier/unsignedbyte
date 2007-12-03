@@ -40,6 +40,14 @@
 
 using mud::Command;
 
+EditorCommand::CommandCommand EditorCommand::m_editName("Name", &EditorCommand::editName);
+EditorCommand::CommandCommand EditorCommand::m_editGrantGroups("GrantGroup", &EditorCommand::editGrantGroups);
+EditorCommand::CommandCommand EditorCommand::m_editHighForce("HighForce", &EditorCommand::editHighForce);
+EditorCommand::CommandCommand EditorCommand::m_editForce("Force", &EditorCommand::editForce);
+EditorCommand::CommandCommand EditorCommand::m_editLowForce("LowForce", &EditorCommand::editLowForce);
+EditorCommand::CommandCommand EditorCommand::m_showCommand("Show", &EditorCommand::showCommand);
+EditorCommand::CommandCommand EditorCommand::m_saveCommand("Save", &EditorCommand::saveCommand);
+
 EditorCommand::EditorCommand(UBSocket* sock) :
 OLCEditor(sock),
 m_command(NULL)
@@ -59,7 +67,7 @@ std::string EditorCommand::lookup(const std::string& action)
 	if(name.size() != 0)
 		return name;
 		
-	CommandAction* act = CommandInterpreter::Get()->translate(action);
+	CommandCommand* act = CommandInterpreter::Get()->translate(action);
 	if(act)
 		return act->getName();
 		
@@ -68,10 +76,10 @@ std::string EditorCommand::lookup(const std::string& action)
 
 void EditorCommand::dispatch(const std::string& action, const std::string& argument)
 {
-	CommandAction* act = CommandInterpreter::Get()->translate(action);
+	CommandCommand* act = CommandInterpreter::Get()->translate(action);
 	
 	if(act)
-		act->Run(m_sock, argument, m_command);
+		act->Run(this, argument);
 	else
 		OLCEditor::dispatch(action, argument);
 		
@@ -117,128 +125,122 @@ std::vector<std::string> EditorCommand::getCommands()
 
 EditorCommand::CommandInterpreter::CommandInterpreter(void)
 {
-	addWord("name", Name::Get());
-	addWord("grantgroup", GrantGroups::Get());
-	addWord("highforce", HighForce::Get());
-	addWord("force", Force::Get());
-	addWord("lowforce", LowForce::Get());
-	addWord("show", Show::Get());
-	addWord("save", Save::Get());
+	addWord("name", &m_editName);
+	addWord("grantgroup", &m_editGrantGroups);
+	addWord("highforce", &m_editHighForce);
+	addWord("force", &m_editForce);
+	addWord("lowforce", &m_editLowForce);
+	addWord("show", &m_showCommand);
+	addWord("save", &m_saveCommand);
 }
 
 EditorCommand::CommandInterpreter::~CommandInterpreter(void)
 {
-	Name::Free();
-	GrantGroups::Free();
-	HighForce::Get();
-	Force::Get();
-	LowForce::Get();
-	Show::Free();
-	Save::Free();
+
 }
 
-void EditorCommand::Name::Run(UBSocket* sock, const std::string& argument, Command* command)
+void EditorCommand::editName(const std::string& argument)
 {
 	if(argument.size() == 0)
 	{
-		sock->Send("Command name can't be zero length!\n");
+		m_sock->Send("Command name can't be zero length!\n");
 		return;
 	}
 
-	sock->Sendf("Command name changed from '%s' to '%s'.\n", command->getName().c_str(), argument.c_str());
-	command->setName(argument);
+	m_sock->Sendf("Command name changed from '%s' to '%s'.\n", m_command->getName().c_str(), argument.c_str());
+	m_command->setName(argument);
 	return;
 }
 
-void EditorCommand::GrantGroups::Run(UBSocket* sock, const std::string& argument, Command* command)
+void EditorCommand::editGrantGroups(const std::string& argument)
 {
-	if(!command->Exists())
+	if(!m_command->Exists())
 	{
-		sock->Send("For some reason the command you are editing does not exist.\n");
+		m_sock->Send("For some reason the command you are editing does not exist.\n");
 		return;
 	}
 
 	long id = db::GrantGroups::lookupname(argument);
 	if(!id)
 	{
-		sock->Sendf("'%s' is not a valid grantgroup!\n", argument.c_str());
-		sock->Send(String::Get()->box(mud::GrantGroup::List(), "GrantGroups"));
+		m_sock->Sendf("'%s' is not a valid grantgroup!\n", argument.c_str());
+		m_sock->Send(String::Get()->box(mud::GrantGroup::List(), "GrantGroups"));
 		return;
 	}
 
-	sock->Sendf("Grantgroup changed from '%d' to '%d'.\n", command->getGrantGroup(), id);
-	command->setGrantGroup(id);
+	m_sock->Sendf("Grantgroup changed from '%d' to '%d'.\n", m_command->getGrantGroup(), id);
+	m_command->setGrantGroup(id);
 	return;
 }
 
-void EditorCommand::HighForce::Run(UBSocket* sock, const std::string& argument, Command* command)
+void EditorCommand::editHighForce(const std::string& argument)
 {
 	if(!argument.compare("Enable"))
 	{
-		command->setHighForce(true);
+		m_command->setHighForce(true);
 		return;
 	}
 	
 	if(!argument.compare("Disable"))
 	{
-		command->setHighForce(false);
+		m_command->setHighForce(false);
 		return;
 	}
 
-	sock->Send("Please specify a force level!\n");
-	sock->Send("Choose between 'Enable' and 'Disable'.\n");
+	m_sock->Send("Please specify a force level!\n");
+	m_sock->Send("Choose between 'Enable' and 'Disable'.\n");
 	return;
 }
 
-void EditorCommand::Force::Run(UBSocket* sock, const std::string& argument, Command* command)
+void EditorCommand::editForce(const std::string& argument)
 {
 	if(!argument.compare("Enable"))
 	{
-		command->setForce(true);
+		m_command->setForce(true);
 		return;
 	}
 	
 	if(!argument.compare("Disable"))
 	{
-		command->setForce(false);
+		m_command->setForce(false);
 		return;
 	}
 
-	sock->Send("Please specify a force level!\n");
-	sock->Send("Choose between 'Enable' and 'Disable'.\n");
+	m_sock->Send("Please specify a force level!\n");
+	m_sock->Send("Choose between 'Enable' and 'Disable'.\n");
 	return;
 }
 
-void EditorCommand::LowForce::Run(UBSocket* sock, const std::string& argument, Command* command)
+void EditorCommand::editLowForce(const std::string& argument)
 {
 	if(!argument.compare("Enable"))
 	{
-		command->setLowForce(true);
+		m_command->setLowForce(true);
 		return;
 	}
 	
 	if(!argument.compare("Disable"))
 	{
-		command->setLowForce(false);
+		m_command->setLowForce(false);
 		return;
 	}
 
-	sock->Send("Please specify a force level!\n");
-	sock->Send("Choose between 'Enable' and 'Disable'.\n");
+	m_sock->Send("Please specify a force level!\n");
+	m_sock->Send("Choose between 'Enable' and 'Disable'.\n");
 	return;
 }
 
-void EditorCommand::Show::Run(UBSocket* sock, const std::string& argument, Command* command)
+void EditorCommand::showCommand(const std::string& argument)
 {
-	sock->Send(String::Get()->box(command->Show(),"Command"));
+	m_sock->Send(String::Get()->box(m_command->Show(),"Command"));
 	return;
 }
 
-void EditorCommand::Save::Run(UBSocket* sock, const std::string& argument, Command* command)
+void EditorCommand::saveCommand(const std::string& argument)
 {
-	sock->Sendf("Saving command '%s'.\n", command->getName().c_str());
-	command->Save();
-	sock->Send("Saved.\n");
+	m_sock->Sendf("Saving command '%s'.\n", m_command->getName().c_str());
+	m_command->Save();
+	m_sock->Send("Saved.\n");
 	return;
 }
 
