@@ -36,6 +36,19 @@
 
 using mud::PCharacter;
 
+EditorPlaying::PlayingCommand EditorPlaying::m_listAreas("Areas", &EditorPlaying::listAreas);
+EditorPlaying::PlayingCommand EditorPlaying::m_listColours("Colours", &EditorPlaying::listColours);
+EditorPlaying::PlayingCommand EditorPlaying::m_listCommands("Commands", &EditorPlaying::listCommands);
+EditorPlaying::PlayingCommand EditorPlaying::m_listPlayers("Players", &EditorPlaying::listPlayers);
+EditorPlaying::PlayingCommand EditorPlaying::m_listRaces("Races", &EditorPlaying::listRaces);
+EditorPlaying::PlayingCommand EditorPlaying::m_listRooms("Rooms", &EditorPlaying::listRooms);
+EditorPlaying::PlayingCommand EditorPlaying::m_showScore("Score", &EditorPlaying::showScore);
+EditorPlaying::PlayingCommand EditorPlaying::m_look("Look", &EditorPlaying::look);
+EditorPlaying::PlayingCommand EditorPlaying::m_say("Say", &EditorPlaying::say);
+EditorPlaying::PlayingCommand EditorPlaying::m_deleteCharacter("Delete", &EditorPlaying::deleteCharacter);
+EditorPlaying::PlayingCommand EditorPlaying::m_listOnlinePlayers("Laston", &EditorPlaying::listOnlinePlayers);
+EditorPlaying::PlayingCommand EditorPlaying::m_quitEditor("Quit", &EditorPlaying::quitEditor);
+
 EditorPlaying::EditorPlaying(UBSocket* sock, PCharacter* character) :
 Editor(sock),
 m_char(character)
@@ -70,7 +83,7 @@ EditorPlaying::~EditorPlaying(void)
 
 std::string EditorPlaying::lookup(const std::string& action)
 {
-	PlayingAction* act = PlayingInterpreter::Get()->translate(action);
+	PlayingCommand* act = PlayingInterpreter::Get()->translate(action);
 	if(act)
 		return act->getName();
 		
@@ -79,10 +92,10 @@ std::string EditorPlaying::lookup(const std::string& action)
 
 void EditorPlaying::dispatch(const std::string& action, const std::string& argument)
 {
-	PlayingAction* act = PlayingInterpreter::Get()->translate(action);
+	PlayingCommand* act = PlayingInterpreter::Get()->translate(action);
 	
 	if(act)
-		act->Run(m_sock, argument, m_char);
+		act->Run(this, argument);
 	else
 		Global::Get()->bugf("EditorPlaying::dispatch(), action '%s' not found (argument '%s')!\n", action.c_str(), argument.c_str());
 		
@@ -91,88 +104,77 @@ void EditorPlaying::dispatch(const std::string& action, const std::string& argum
 
 EditorPlaying::PlayingInterpreter::PlayingInterpreter(void)
 {
-	addWord("areas", Areas::Get());
-	addWord("colours", Colours::Get());
-	addWord("commands", Commands::Get());
-	addWord("laston", Laston::Get());
-	addWord("look", Look::Get());
-	addWord("races", Races::Get());
-	addWord("rooms", Rooms::Get());
-	addWord("score", Score::Get());
-	addWord("say", Say::Get());
-	addWord("delete", Delete::Get());
-	addWord("quit", Quit::Get());
-	addWord("who", Who::Get());
+	addWord("areas", &m_listAreas);
+	addWord("colours", &m_listColours);
+	addWord("commands", &m_listCommands);
+	addWord("laston", &m_listPlayers);
+	addWord("look", &m_look);
+	addWord("races", &m_listRaces);
+	addWord("rooms", &m_listRooms);
+	addWord("score", &m_showScore);
+	addWord("say", &m_say);
+	addWord("delete", &m_deleteCharacter);
+	addWord("quit", &m_quitEditor);
+	addWord("who", &m_listOnlinePlayers);
 }
 
 EditorPlaying::PlayingInterpreter::~PlayingInterpreter(void)
 {
-	Areas::Free();
-	Colours::Free();
-	Commands::Free();
-	Laston::Free();
-	Look::Free();
-	Races::Free();
-	Rooms::Free();
-	Score::Free();
-	Say::Free();
-	Delete::Free();
-	Quit::Free();
-	Who::Free();
+
 }
 
-void EditorPlaying::Areas::Run(UBSocket* sock, const std::string &argument, PCharacter* Ch)
+void EditorPlaying::listAreas(const std::string& argument)
 {
-	Ch->OnAreaList(argument);
+	m_char->OnAreaList(argument);
 	return;
 }
 
-void EditorPlaying::Colours::Run(UBSocket* sock, const std::string &argument, PCharacter* Ch)
+void EditorPlaying::listColours(const std::string& argument)
 {
-	Ch->OnColourList(argument);
+	m_char->OnColourList(argument);
 }
 
-void EditorPlaying::Commands::Run(UBSocket* sock, const std::string &argument, PCharacter* Ch)
+void EditorPlaying::listCommands(const std::string& argument)
 {
-	Ch->OnSend(String::Get()->box(PlayingInterpreter::Get()->getWords(), "Playing"));
+	m_char->OnSend(String::Get()->box(PlayingInterpreter::Get()->getWords(), "Playing"));
 	return;
 }
 
-void EditorPlaying::Delete::Run(UBSocket* sock, const std::string &argument, PCharacter* Ch)
+void EditorPlaying::deleteCharacter(const std::string& argument)
 {
 	if(argument.compare("confirm"))
 	{
-		Ch->OnSend("If you really want to delete, please type 'delete confirm'.\n");
+		m_char->OnSend("If you really want to delete, please type 'delete confirm'.\n");
 		return;
 	}
 
-	printf("Deleting PCharacter %s.\n", Ch->getName().c_str());
+	printf("Deleting PCharacter %s.\n", m_char->getName().c_str());
 
-	Ch->OnSend("Goodbye.\n");
-	sock->SetEditor(new EditorAccount(sock));
-	Ch->Delete();
+	m_char->OnSend("Goodbye.\n");
+	m_sock->SetEditor(new EditorAccount(m_sock));
+	m_char->Delete();
 	return;
 }
 
-void EditorPlaying::Laston::Run(UBSocket* sock, const std::string &argument, PCharacter* Ch)
+void EditorPlaying::listPlayers(const std::string& argument)
 {
-	Ch->OnLaston(argument);
+	m_char->OnLaston(argument);
 }
 
-void EditorPlaying::Look::Run(UBSocket* sock, const std::string &argument, PCharacter* Ch)
+void EditorPlaying::look(const std::string& argument)
 {
-	Ch->OnLook(argument);
+	m_char->OnLook(argument);
 }
 
-void EditorPlaying::Quit::Run(UBSocket* sock, const std::string &argument, PCharacter* Ch)
+void EditorPlaying::quitEditor(const std::string& argument)
 {
 	try
 	{
-		Ch->OnSend("Thank you for visiting.\n");
-		long id =Ch->getRoom();
+		m_char->OnSend("Thank you for visiting.\n");
+		long id =m_char->getRoom();
 		mud::Room* room = mud::Cache::Get()->GetRoomByKey(id);
 		
-		room->Sendf("%s fades from the realm.\n", Ch->getName().c_str());	
+		room->Sendf("%s fades from the realm.\n", m_char->getName().c_str());	
 	}
 	catch(std::exception& e)
 	{
@@ -182,8 +184,8 @@ void EditorPlaying::Quit::Run(UBSocket* sock, const std::string &argument, PChar
 	
 	try
 	{
-		sock->SetEditor(new EditorAccount(sock));
-		mud::PCharacter::Close(Ch);
+		m_sock->SetEditor(new EditorAccount(m_sock));
+		mud::PCharacter::Close(m_char);
 	}
 	catch(std::exception& e)
 	{
@@ -192,30 +194,30 @@ void EditorPlaying::Quit::Run(UBSocket* sock, const std::string &argument, PChar
 	}
 }
 
-void EditorPlaying::Races::Run(UBSocket* sock, const std::string &argument, PCharacter* Ch)
+void EditorPlaying::listRaces(const std::string& argument)
 {
-	Ch->OnRaceList(argument);
+	m_char->OnRaceList(argument);
 	return;
 }
 
 
-void EditorPlaying::Rooms::Run(UBSocket* sock, const std::string &argument, PCharacter* Ch)
+void EditorPlaying::listRooms(const std::string& argument)
 {
-	Ch->OnRoomList(argument);
+	m_char->OnRoomList(argument);
 	return;
 }
 
-void EditorPlaying::Score::Run(UBSocket* sock, const std::string &argument, PCharacter* Ch)
+void EditorPlaying::showScore(const std::string& argument)
 {
-	Ch->OnScore(argument);
+	m_char->OnScore(argument);
 }
 
-void EditorPlaying::Say::Run(UBSocket* sock, const std::string &argument, PCharacter* Ch)
+void EditorPlaying::say(const std::string& argument)
 {
-	Ch->OnSay(argument);
+	m_char->OnSay(argument);
 }
 
-void EditorPlaying::Who::Run(UBSocket* sock, const std::string &argument, PCharacter* Ch)
+void EditorPlaying::listOnlinePlayers(const std::string& argument)
 {
-	Ch->OnWho(argument);
+	m_char->OnWho(argument);
 }

@@ -21,9 +21,9 @@
 
 #include <string>
 #include "Editor.h"
-#include "Interpreter.h"
 #include "singleton.h"
-#include "Action.h"
+#include "Interpreter.h"
+#include "CommandObject.h"
 
 class UBSocket;
 
@@ -32,6 +32,8 @@ namespace mud { class PCharacter; };
 class EditorPlaying : public Editor
 {
 public:
+	typedef CommandObject<EditorPlaying> PlayingCommand;
+
 	EditorPlaying(UBSocket* sock, mud::PCharacter* character);
 	~EditorPlaying(void);
 
@@ -40,140 +42,42 @@ public:
 	
 	std::string lookup(const std::string& action);
 	void dispatch(const std::string& action, const std::string& argument);
+	
+	void listAreas(const std::string& argument);
+	void listColours(const std::string& argument);
+	void listCommands(const std::string& argument);
+	void listPlayers(const std::string& argument);
+	void listRooms(const std::string& argument);
+	void listRaces(const std::string& argument);
+	void showScore(const std::string& argument);
+	void look(const std::string& argument);
+	void say(const std::string& argument);
+	void deleteCharacter(const std::string& argument);
+	void quitEditor(const std::string& argument);
+	void listOnlinePlayers(const std::string& argument);
 
 private:
 	mud::PCharacter* m_char; // current active PCharacter
 	EditorPlaying(const EditorPlaying& rhs);
 	EditorPlaying operator=(const EditorPlaying& rhs);
 
-	typedef EditorAction<UBSocket, mud::PCharacter> PlayingAction;
-	
-	class PlayingInterpreter : public Interpreter<PlayingAction>, public Singleton<PlayingInterpreter> {
+	class PlayingInterpreter : public Interpreter<PlayingCommand>, public Singleton<PlayingInterpreter> {
 	private:
 		PlayingInterpreter(void);
 		~PlayingInterpreter(void);
 		friend class Singleton<PlayingInterpreter>;
 	};
 
-	class Areas : public PlayingAction, public Singleton<Areas> {
-	private:
-		Areas(void) {};
-		~Areas(void) {};
-		friend class Singleton<Areas>;
-	public:
-		void Run(UBSocket* sock, const std::string& argument, mud::PCharacter* ch);
-		std::string getName() { return "Areas"; };
-	};
-
-	class Colours : public PlayingAction, public Singleton<Colours> {
-	private:
-		Colours(void) {};
-		~Colours(void) {};
-		friend class Singleton<Colours>;
-	public:
-		void Run(UBSocket* sock, const std::string& argument, mud::PCharacter* ch);
-		std::string getName() { return "Colours"; };
-	};
-
-	class Commands : public PlayingAction, public Singleton<Commands> {
-	private:
-		Commands(void) {};
-		~Commands(void) {};
-		friend class Singleton<Commands>;
-	public:
-		void Run(UBSocket* sock, const std::string& argument, mud::PCharacter* ch);
-		std::string getName() { return "Commands"; };
-	};
-
-	class Laston : public PlayingAction, public Singleton<Laston> {
-	private:
-		Laston(void) {};
-		~Laston(void) {};
-		friend class Singleton<Laston>;
-	public:
-		void Run(UBSocket* sock, const std::string& argument, mud::PCharacter* ch);
-		std::string getName() { return "Laston"; };
-	};
-
-	class Look : public PlayingAction, public Singleton<Look> {
-	private:
-		Look(void) {};
-		~Look(void) {};
-		friend class Singleton<Look>;
-	public:
-		void Run(UBSocket* sock, const std::string& argument, mud::PCharacter* ch);
-		std::string getName() { return "Look"; };
-	};
-
-	class Races : public PlayingAction, public Singleton<Races> {
-	private:
-		Races(void) {};
-		~Races(void) {};
-		friend class Singleton<Races>;
-	public:
-		void Run(UBSocket* sock, const std::string& argument, mud::PCharacter* ch);
-		std::string getName() { return "Races"; };
-	};
-
-	class Rooms : public PlayingAction, public Singleton<Rooms> {
-	private:
-		Rooms(void) {};
-		~Rooms(void) {};
-		friend class Singleton<Rooms>;
-	public:
-		void Run(UBSocket* sock, const std::string& argument, mud::PCharacter* ch);
-		std::string getName() { return "Rooms"; };
-	};
-
-	class Score : public PlayingAction, public Singleton<Score> {
-	private:
-		Score(void) {};
-		~Score(void) {};
-		friend class Singleton<Score>;
-	public:
-		void Run(UBSocket* sock, const std::string& argument, mud::PCharacter* ch);
-		std::string getName() { return "Score"; };
-	};
-
-	class Say : public PlayingAction, public Singleton<Say> {
-	private:
-		Say(void) {};
-		~Say(void) {};
-		friend class Singleton<Say>;
-	public:
-		void Run(UBSocket* sock, const std::string& argument, mud::PCharacter* ch);
-		std::string getName() { return "Say"; };
-	};
-	
-	class Delete : public PlayingAction, public Singleton<Delete> {
-	private:
-		Delete(void) {};
-		~Delete(void) {};
-		friend class Singleton<Delete>;
-		void Run(UBSocket* sock, const std::string& argument, mud::PCharacter* ch);
-	public:
-		bool fullName() { return true; };
-		std::string getName() { return "Delete"; };
-	};
-	
-	class Quit : public PlayingAction, public Singleton<Quit> {
-	private:
-		Quit(void) {};
-		~Quit(void) {};
-		friend class Singleton<Quit>;
-	public:
-		void Run(UBSocket* sock, const std::string& argument, mud::PCharacter* ch);
-		bool fullName() { return true; };
-		std::string getName() { return "Quit"; };
-	};
-
-	class Who : public PlayingAction, public Singleton<Who> {
-	private:
-		Who(void) {};
-		~Who(void) {};
-		friend class Singleton<Who>;
-	public:
-		void Run(UBSocket* sock, const std::string& argument, mud::PCharacter* ch);
-		std::string getName() { return "Who"; };
-	};
+	static PlayingCommand m_listAreas;
+	static PlayingCommand m_listColours;
+	static PlayingCommand m_listCommands;
+	static PlayingCommand m_listPlayers;
+	static PlayingCommand m_listRaces;
+	static PlayingCommand m_listRooms;
+	static PlayingCommand m_showScore;
+	static PlayingCommand m_look;
+	static PlayingCommand m_say;
+	static PlayingCommand m_deleteCharacter;
+	static PlayingCommand m_quitEditor;
+	static PlayingCommand m_listOnlinePlayers;
 };
