@@ -1,24 +1,20 @@
 .PHONY: clean All
 
 All:
-	@echo ----------Building project:[ Sqlite3 - Debug ]----------
-	@cd "UnsignedByte/Sqlite3" && "make" -f "Sqlite3.mk" type=Debug 
 	@echo ----------Building project:[ Resource - Debug ]----------
-	@cd "UnsignedByte/Resource" && "make" -f "Resource.mk" type=Debug 
+	@cd "UnsignedByte/Resource" && "/usr/bin/make" -f "Resource.mk" type=Debug 
 	@echo ----------Building project:[ Generator - Debug ]----------
-	@cd "UnsignedByte/Generator" && "make" -f "Generator.mk" type=Debug 
+	@cd "UnsignedByte/Generator" && "/usr/bin/make" -f "Generator.mk" type=Debug 
 	@echo ----------Building project:[ DAL - Debug ]----------
-	@cd "UnsignedByte/DAL" && "make" -f "DAL.mk" type=Debug 
+	@cd "UnsignedByte/DAL" && "/usr/bin/make" -f "DAL.mk" type=Debug 
 	@echo ----------Building project:[ Initializer - Debug ]----------
-	@cd "UnsignedByte/Initializer" && "make" -f "Initializer.mk" type=Debug 
+	@cd "UnsignedByte/Initializer" && "/usr/bin/make" -f "Initializer.mk" type=Debug 
 clean:
-	@echo ----------Building project:[ Sqlite3 - Debug ]----------
-	@cd "UnsignedByte/Sqlite3" && "make" -f "Sqlite3.mk" type=Debug  clean
 	@echo ----------Building project:[ Resource - Debug ]----------
-	@cd "UnsignedByte/Resource" && "make" -f "Resource.mk" type=Debug  clean
+	@cd "UnsignedByte/Resource" && "/usr/bin/make" -f "Resource.mk" type=Debug  clean
 	@echo ----------Building project:[ Generator - Debug ]----------
-	@cd "UnsignedByte/Generator" && "make" -f "Generator.mk" type=Debug  clean
+	@cd "UnsignedByte/Generator" && "/usr/bin/make" -f "Generator.mk" type=Debug  clean
 	@echo ----------Building project:[ DAL - Debug ]----------
-	@cd "UnsignedByte/DAL" && "make" -f "DAL.mk" type=Debug  clean
+	@cd "UnsignedByte/DAL" && "/usr/bin/make" -f "DAL.mk" type=Debug  clean
 	@echo ----------Building project:[ Initializer - Debug ]----------
-	@cd "UnsignedByte/Initializer" && "make" -f "Initializer.mk" type=Debug  clean
+	@cd "UnsignedByte/Initializer" && "/usr/bin/make" -f "Initializer.mk" type=Debug  clean
