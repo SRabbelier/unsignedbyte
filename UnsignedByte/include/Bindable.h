@@ -30,7 +30,7 @@ class Bindable
 {
 public:
 	Bindable(void) { }
-	~Bindable(void) { }
+	virtual ~Bindable(void) { }
 	
 	virtual void bindKeys(sqlite3_stmt* stmt) const = 0;
 	virtual void bindUpdate(sqlite3_stmt* stmt) const = 0;

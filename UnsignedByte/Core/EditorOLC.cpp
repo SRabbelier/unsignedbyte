@@ -26,6 +26,7 @@
 #include "EditorSector.h"
 #include "EditorColour.h"
 #include "EditorCommand.h"
+#include "EditorAccount.h"
 
 #include "UBSocket.h"
 #include "Account.h"
@@ -157,6 +158,6 @@ void EditorOLC::listCommands(const std::string& argument)
 void EditorOLC::quitEditor(const std::string& argument)
 {
 	m_sock->Send("Ok.\n");
-	m_sock->SetEditor(new EditorOLC(m_sock));
+	m_sock->SetEditor(new EditorAccount(m_sock));
 	return;
 }

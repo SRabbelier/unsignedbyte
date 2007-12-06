@@ -40,6 +40,9 @@ TcpSocket(h),
 m_account(NULL),
 m_editor(NULL),
 m_nexteditor(NULL),
+m_lowforced(false),
+m_forced(false),
+m_highforced(false),
 m_hascolor(true),
 m_colorcode('`')
 {
