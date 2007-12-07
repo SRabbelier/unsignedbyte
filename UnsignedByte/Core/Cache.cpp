@@ -66,11 +66,8 @@ bool Cache::isActive(cstring value)
 
 value_type Cache::AddAccount()
 {
-	printf("Creating new local instance...\n");
 	db::Accounts d;
-	printf("Saving it now...\n");
 	d.save();
-	printf("Requesting account id...\n");
 	value_type id = d.getaccountid();
 	if(id == 0)
 		Global::Get()->bug("Cache::AddAcount(), id = 0");
