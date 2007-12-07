@@ -96,17 +96,18 @@ void ClassSourceGenerator::AppendCtorGeneral()
 	// Empty constructor
 	(*m_file) << "// Ctors" << endl;
 	(*m_file) << m_name << "::" << m_name << "() :" << endl;
-	(*m_file) << "m_" << m_table->firstKey() << "()";
+	(*m_file) << "m_" << m_table->firstKey() << "()," << endl;
 		
 	for(Fields::const_iterator it = m_table->begin(); it != m_table->end(); it++)
 	{
-		(*m_file) << "," << endl;
 		if((*it)->isText())
 			(*m_file) << "m_" << (*it)->getName() << "()";
 		else
 			(*m_file) << "m_" << (*it)->getName() << "(0)";
+			(*m_file) << "," << endl;
 	}
-	(*m_file) << endl;
+	(*m_file) << "m_newentry(true)," << endl;
+	(*m_file) << "m_dirty(false)" << endl;
 	
 	(*m_file) << "{" << endl;
 	(*m_file) << endl;
@@ -369,7 +370,8 @@ void ClassSourceGenerator::AppendParseSelect()
 		if((*it)->isText())
 		{
 			(*m_file) << m_tabs << "text = sqlite3_column_text(stmt, " << count << ");" << endl;
-			(*m_file) << m_tabs << "m_" << (*it)->getName() << " = ";
+			(*m_file) << m_tabs << "if(text != 0)" << endl;
+			(*m_file) << m_tabs << m_tabs << "m_" << (*it)->getName() << " = ";
 			(*m_file) << "std::string((const char *)text);" << endl;
 		}
 		else

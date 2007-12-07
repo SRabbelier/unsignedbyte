@@ -162,7 +162,8 @@ void EditorNewAccount::OnLine(const std::string &line)
 		mud::Account* Acc = mud::Cache::Get()->GetAccountByKey(id);
 		Acc->setName(m_name);
 		Acc->setPassword(m_password);
-
+		Acc->Save();
+		
 		m_sock->Sendf("Account %s created, enjoy!\n", m_name.c_str());
 		m_sock->SetAccount(Acc);
 		m_sock->SetEditor(new EditorAccount(m_sock));
