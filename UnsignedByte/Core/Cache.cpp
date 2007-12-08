@@ -575,9 +575,13 @@ value_type Cache::lookupSectorByName(cstring value)
 void Cache::CloseAccount(value_type id)
 {
 	accounts_m::iterator key = m_accountByKey.find(id);
-	accounts_ms::iterator name = m_accountByName.find(key->second->getName());
-	m_accountByKey.erase(key);
-	m_accountByName.erase(name);
+	if(key != m_accountByKey.end())
+	{
+		m_accountByKey.erase(key);
+		accounts_ms::iterator name = m_accountByName.find(key->second->getName());
+		if(name != m_accountByName.end())
+			m_accountByName.erase(name);
+	}
 }
 
 void Cache::CloseArea(value_type id)
