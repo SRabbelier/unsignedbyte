@@ -49,8 +49,7 @@ EditorColour::EditorColour(UBSocket* sock) :
 OLCEditor(sock),
 m_colour(NULL)
 {
-	SavableCommand* act = &OLCEditor::m_listCommands;
-	act->Run(this, Global::Get()->EmptyString);
+	listCommands(Global::Get()->EmptyString);
 }
 
 EditorColour::~EditorColour(void)

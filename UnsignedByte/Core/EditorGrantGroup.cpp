@@ -48,8 +48,7 @@ EditorGrantGroup::EditorGrantGroup(UBSocket* sock) :
 OLCEditor(sock),
 m_grantgroup(NULL)
 {
-	SavableCommand* act = &OLCEditor::m_listCommands;
-	act->Run(this, Global::Get()->EmptyString);
+	listCommands(Global::Get()->EmptyString);
 }
 
 EditorGrantGroup::~EditorGrantGroup(void)

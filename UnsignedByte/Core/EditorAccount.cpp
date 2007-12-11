@@ -53,7 +53,7 @@ EditorAccount::AccountCommand EditorAccount::m_listCharacters("List", &EditorAcc
 EditorAccount::EditorAccount(UBSocket* sock) :
 Editor(sock)
 {
-	m_listCommands.Run(this, Global::Get()->EmptyString);
+	listCommands(Global::Get()->EmptyString);
 }
 
 EditorAccount::~EditorAccount(void)

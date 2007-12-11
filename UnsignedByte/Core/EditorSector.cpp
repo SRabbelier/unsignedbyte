@@ -50,8 +50,7 @@ EditorSector::EditorSector(UBSocket* sock) :
 OLCEditor(sock),
 m_sector(NULL)
 {
-	SavableCommand* act = &OLCEditor::m_listCommands;
-	act->Run(this, Global::Get()->EmptyString);
+	listCommands(Global::Get()->EmptyString);
 }
 
 EditorSector::~EditorSector(void)

@@ -50,7 +50,7 @@ EditorOLC::OLCCommand EditorOLC::m_quitEditor("Quit", &EditorOLC::quitEditor);
 EditorOLC::EditorOLC(UBSocket* sock) :
 Editor(sock)
 {
-	m_listCommands.Run(this, Global::Get()->EmptyString);
+	listCommands(Global::Get()->EmptyString);
 }
 
 EditorOLC::~EditorOLC(void)

@@ -26,7 +26,6 @@
 #include "Action.h"
 
 class UBSocket;
-class Sector;
 
 class EditorString : public Editor
 {

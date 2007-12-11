@@ -46,8 +46,7 @@ EditorArea::EditorArea(UBSocket* sock) :
 OLCEditor(sock),
 m_area(NULL)
 {
-	SavableCommand* act = &OLCEditor::m_listCommands;
-	act->Run(this, Global::Get()->EmptyString);
+	listCommands(Global::Get()->EmptyString);
 }
 
 EditorArea::~EditorArea(void)

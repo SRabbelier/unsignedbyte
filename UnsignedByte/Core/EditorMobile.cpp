@@ -46,8 +46,7 @@ EditorMobile::EditorMobile(UBSocket* sock) :
 OLCEditor(sock),
 m_mobile(NULL)
 {
-	SavableCommand* act = &OLCEditor::m_listCommands;
-	act->Run(this, Global::Get()->EmptyString);
+	listCommands(Global::Get()->EmptyString);
 }
 
 EditorMobile::~EditorMobile(void)
