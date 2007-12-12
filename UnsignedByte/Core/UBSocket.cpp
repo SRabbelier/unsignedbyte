@@ -142,16 +142,19 @@ void UBSocket::SetEditor(Editor* edit, bool popLast)
 
 	SetPrompt();
 	m_nexteditor = edit;
-	m_popLast = true;
+	m_popLast = popLast;
 	return;
 }
 
 void UBSocket::SwitchEditors()
 {		
+	if(!m_popeditor && !m_nexteditor)
+		return;
+	
 	if(m_popeditor && m_nexteditor)
 	{
 		Global::Get()->bug("UBSocket::SwitchEditors() was called, but we don't have both a new editor and we want to pop one?!");
-		Send("Something went wrong, somehow you are switching to another editor but you're also deleting the top one?!");
+		Send("Something went wrong, somehow you are switching to another editor but you're also deleting the top one?!\n");
 		Send("Closing your connection now.\n");
 		SetCloseAndDelete();
 		return;
@@ -162,7 +165,7 @@ void UBSocket::SwitchEditors()
 		if(m_editors.empty()) // should be always
 		{
 			Global::Get()->bug("UBSocket::SwitchEditors() was called, but we don't have a current editor?!");
-			Send("Something went wrong, somehow you are switching to another editor but you don't have one set?!");
+			Send("Something went wrong, somehow you are switching to another editor but you don't have one set?!\n");
 			Send("Closing your connection now.\n");
 			SetCloseAndDelete();
 			return;
@@ -172,24 +175,16 @@ void UBSocket::SwitchEditors()
 		m_editors.pop();
 		m_popeditor = false;
 		m_popLast = false;
+		SetPrompt(m_editors.top()->prompt());
 	}
-	else
+
+	if(m_nexteditor)
 	{
-		if(!m_nexteditor)
-		{
-			Global::Get()->bug("UBSocket::SwitchEditors() was called, but we don't have a current editor?!");
-			Send("Something went wrong, somehow you are switching to another editor but you don't have one set?!");
-			Send("Closing your connection now.\n");
-			SetCloseAndDelete();
-			return;
-		}
-		
 		m_editors.push(m_nexteditor);
 		m_nexteditor = NULL;
+		SetPrompt(m_editors.top()->prompt());
+		SendPrompt();
 	}
-	
-	SetPrompt(m_editors.top()->prompt());
-	SendPrompt();
 }
 
 void UBSocket::PopEditor()
@@ -197,7 +192,7 @@ void UBSocket::PopEditor()
 	if(m_popeditor)
 	{
 		Global::Get()->bug("UBSocket::PopEditor() was called, but the top editor is already being popped?!");
-		Send("Something went wrong, somehow you are popping the top editor but it was already being popped?!");
+		Send("Something went wrong, somehow you are popping the top editor but it was already being popped?!\n");
 		Send("Closing your connection now.\n");
 		SetCloseAndDelete();
 		return;
