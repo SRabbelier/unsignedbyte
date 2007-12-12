@@ -42,6 +42,8 @@ public:
 	
 	std::string EmptyString;
 	long EmptyLong;
+	
+	char OOCIdentifier;
 
 	std::string sprintf(const char* format, ...);
 	std::string sprint(va_list& args, const char* format);

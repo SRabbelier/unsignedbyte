@@ -33,5 +33,5 @@ EditorOOC::~EditorOOC()
 
 void EditorOOC::OnLine(const std::string& line)
 {
-	
+	m_sock->Sendf("Well waddaya know: '%s'.\n", line.c_str());
 }

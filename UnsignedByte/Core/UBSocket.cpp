@@ -30,6 +30,7 @@
 
 #include "DatabaseMgr.h"
 #include "EditorAccountLogin.h"
+#include "EditorOOC.h"
 #include "Global.h"
 #include "Account.h"
 #include "Cache.h"
@@ -82,7 +83,9 @@ void UBSocket::OnAccept()
 }
 
 void UBSocket::OnLine(const std::string &line)
-{
+{	
+	bool popLast = false;
+	
 	SwitchEditors();
 
 	if(m_editors.empty())
@@ -94,7 +97,17 @@ void UBSocket::OnLine(const std::string &line)
 		return;
 	}
 	
+	if(line.size() && line[0] == Global::Get()->OOCIdentifier)
+	{
+		m_editors.push(new EditorOOC(this));
+		popLast = true;
+	}
+	
 	m_editors.top()->OnLine(line);
+	
+	if(popLast)
+		PopEditor();
+		
 	return;
 }
 

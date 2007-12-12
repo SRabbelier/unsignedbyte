@@ -111,5 +111,7 @@
     <File Name="EditorSector.h"/>
     <File Name="EditorOOC.h"/>
   </VirtualDirectory>
-  <Dependencies/>
+  <Dependencies>
+    <Project Name="Resource"/>
+  </Dependencies>
 </CodeLite_Project>

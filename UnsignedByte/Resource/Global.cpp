@@ -24,7 +24,8 @@
 
 Global::Global() :
 EmptyString(),
-EmptyLong()
+EmptyLong(),
+OOCIdentifier('@')
 {
 	
 }

@@ -27,6 +27,7 @@
 
 class EditorOOC : public Editor
 {
+public:
 	EditorOOC(UBSocket* sock);
 	~EditorOOC(void);
 
