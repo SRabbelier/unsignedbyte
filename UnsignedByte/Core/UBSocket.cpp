@@ -38,9 +38,13 @@
 
 UBSocket::UBSocket(ISocketHandler& h) :
 TcpSocket(h),
+m_prompt(),
 m_account(NULL),
+m_popeditor(false),
+m_popLast(false),
 m_editors(),
 m_nexteditor(NULL),
+m_forcer(NULL),
 m_lowforced(false),
 m_forced(false),
 m_highforced(false),

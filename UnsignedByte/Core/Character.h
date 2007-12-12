@@ -38,13 +38,11 @@ namespace mud
 		 */ 	
 		virtual void OnAreaList(const std::string& msg);
 		virtual void OnColourList(const std::string& msg);
-		virtual void OnLaston(const std::string& msg);
 		virtual void OnLook(const std::string& msg);
 		virtual void OnRaceList(const std::string& msg);
 		virtual void OnRoomList(const std::string& msg);
 		virtual void OnScore(const std::string& msg);
 		virtual void OnSay(const std::string& msg);
-		virtual void OnWho(const std::string& msg);
 		/**
 		 * End of commands
 		 */ 

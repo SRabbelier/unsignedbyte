@@ -46,7 +46,6 @@ public:
 	void listAreas(const std::string& argument);
 	void listColours(const std::string& argument);
 	void listCommands(const std::string& argument);
-	void listPlayers(const std::string& argument);
 	void listRooms(const std::string& argument);
 	void listRaces(const std::string& argument);
 	void showScore(const std::string& argument);
@@ -54,7 +53,6 @@ public:
 	void say(const std::string& argument);
 	void deleteCharacter(const std::string& argument);
 	void quitEditor(const std::string& argument);
-	void listOnlinePlayers(const std::string& argument);
 
 private:
 	mud::PCharacter* m_char; // current active PCharacter

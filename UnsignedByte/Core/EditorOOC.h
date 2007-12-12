@@ -28,13 +28,35 @@
 class EditorOOC : public Editor
 {
 public:
+	typedef CommandObject<EditorOOC> OOCCommand;
+	
 	EditorOOC(UBSocket* sock);
 	~EditorOOC(void);
 
-	void OnLine(const std::string& line);
 	std::string name() { return "OOC"; };
+	std::string prompt() { return "OOC> "; };
+	
+	std::string lookup(const std::string& action);
+	void dispatch(const std::string& action, const std::string& argument);
+	
+	void listCommands(const std::string& argument);
+	void sendOOCMessage(const std::string& argument);
+	void listOnlineCharacters(const std::string& argument);
+	void listCharacters(const std::string& argument);
 	
 private:
 	EditorOOC(const EditorOOC& rhs);
 	EditorOOC operator=(const EditorOOC& rhs);
+	
+	class OOCInterpreter : public Interpreter<OOCCommand>, public Singleton<OOCInterpreter> {
+	private:
+		OOCInterpreter(void);
+		~OOCInterpreter(void);
+		friend class Singleton<OOCInterpreter>;
+	};
+	
+	static OOCCommand m_listCommands;
+	static OOCCommand m_sendOOCMessage;
+	static OOCCommand m_listOnlineCharacters;
+	static OOCCommand m_listCharacters;
 };

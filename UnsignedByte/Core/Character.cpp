@@ -96,12 +96,6 @@ void Character::OnColourList(const std::string& msg)
 	return;
 }
 
-void Character::OnLaston(const std::string& msg)
-{
-	OnSend(String::Get()->box(mud::Character::List(), "Characters"));
-	return;	
-}
-
 void Character::OnLook(const std::string& msg)
 {
 	try 
@@ -168,26 +162,6 @@ void Character::OnSay(const std::string& msg)
 		Global::Get()->bug(e.what());
 		return;
 	}
-}
-
-void Character::OnWho(const std::string& msg)
-{
-	std::map<SOCKET,Socket *> ref = UBHandler::Get()->Sockets();
-	for (std::map<SOCKET,Socket *>::iterator it = ref.begin(); it != ref.end(); it++)
-	{
-		UBSocket* sock = UBSocket::Cast(it->second, false);
-		Character* PCh = NULL;
-		if (sock)
-		{
-			// PCh = sock->GetCharacter();
-		}
-
-		if(PCh)
-		{
-			OnSendf("Player: %s\n", PCh->getName().c_str());
-		}
-	}
-	return;
 }
 	
 /**

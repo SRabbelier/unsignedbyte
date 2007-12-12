@@ -39,14 +39,12 @@ using mud::PCharacter;
 EditorPlaying::PlayingCommand EditorPlaying::m_listAreas("Areas", &EditorPlaying::listAreas);
 EditorPlaying::PlayingCommand EditorPlaying::m_listColours("Colours", &EditorPlaying::listColours);
 EditorPlaying::PlayingCommand EditorPlaying::m_listCommands("Commands", &EditorPlaying::listCommands);
-EditorPlaying::PlayingCommand EditorPlaying::m_listPlayers("Players", &EditorPlaying::listPlayers);
 EditorPlaying::PlayingCommand EditorPlaying::m_listRaces("Races", &EditorPlaying::listRaces);
 EditorPlaying::PlayingCommand EditorPlaying::m_listRooms("Rooms", &EditorPlaying::listRooms);
 EditorPlaying::PlayingCommand EditorPlaying::m_showScore("Score", &EditorPlaying::showScore);
 EditorPlaying::PlayingCommand EditorPlaying::m_look("Look", &EditorPlaying::look);
 EditorPlaying::PlayingCommand EditorPlaying::m_say("Say", &EditorPlaying::say);
 EditorPlaying::PlayingCommand EditorPlaying::m_deleteCharacter("Delete", &EditorPlaying::deleteCharacter);
-EditorPlaying::PlayingCommand EditorPlaying::m_listOnlinePlayers("Laston", &EditorPlaying::listOnlinePlayers);
 EditorPlaying::PlayingCommand EditorPlaying::m_quitEditor("Quit", &EditorPlaying::quitEditor);
 
 EditorPlaying::EditorPlaying(UBSocket* sock, PCharacter* character) :
@@ -107,7 +105,6 @@ EditorPlaying::PlayingInterpreter::PlayingInterpreter(void)
 	addWord("areas", &m_listAreas);
 	addWord("colours", &m_listColours);
 	addWord("commands", &m_listCommands);
-	addWord("laston", &m_listPlayers);
 	addWord("look", &m_look);
 	addWord("races", &m_listRaces);
 	addWord("rooms", &m_listRooms);
@@ -115,7 +112,6 @@ EditorPlaying::PlayingInterpreter::PlayingInterpreter(void)
 	addWord("say", &m_say);
 	addWord("delete", &m_deleteCharacter);
 	addWord("quit", &m_quitEditor);
-	addWord("who", &m_listOnlinePlayers);
 }
 
 EditorPlaying::PlayingInterpreter::~PlayingInterpreter(void)
@@ -154,11 +150,6 @@ void EditorPlaying::deleteCharacter(const std::string& argument)
 	m_sock->SetEditor(new EditorAccount(m_sock));
 	m_char->Delete();
 	return;
-}
-
-void EditorPlaying::listPlayers(const std::string& argument)
-{
-	m_char->OnLaston(argument);
 }
 
 void EditorPlaying::look(const std::string& argument)
@@ -200,7 +191,6 @@ void EditorPlaying::listRaces(const std::string& argument)
 	return;
 }
 
-
 void EditorPlaying::listRooms(const std::string& argument)
 {
 	m_char->OnRoomList(argument);
@@ -215,9 +205,4 @@ void EditorPlaying::showScore(const std::string& argument)
 void EditorPlaying::say(const std::string& argument)
 {
 	m_char->OnSay(argument);
-}
-
-void EditorPlaying::listOnlinePlayers(const std::string& argument)
-{
-	m_char->OnWho(argument);
 }

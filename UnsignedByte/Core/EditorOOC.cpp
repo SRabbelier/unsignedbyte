@@ -19,11 +19,21 @@
  ***************************************************************************/
 
 #include "EditorOOC.h"
+#include "Character.h"
+#include "UBSocket.h"
+#include "UBHandler.h"
+#include "StringUtilities.h"
+#include "Account.h"
+
+EditorOOC::OOCCommand EditorOOC::m_listCommands("Commands", &EditorOOC::listCommands);
+EditorOOC::OOCCommand EditorOOC::m_sendOOCMessage("OOC", &EditorOOC::sendOOCMessage);
+EditorOOC::OOCCommand EditorOOC::m_listOnlineCharacters("Who", &EditorOOC::listOnlineCharacters);
+EditorOOC::OOCCommand EditorOOC::m_listCharacters("Laston", &EditorOOC::listCharacters);
 
 EditorOOC::EditorOOC(UBSocket* sock) :
 Editor(sock)
 {
-	
+
 }
 
 EditorOOC::~EditorOOC()
@@ -31,7 +41,89 @@ EditorOOC::~EditorOOC()
 	
 }
 
-void EditorOOC::OnLine(const std::string& line)
+std::string EditorOOC::lookup(const std::string& action)
+{	
+	OOCCommand* act = OOCInterpreter::Get()->translate(action);
+	if(act)
+		return act->getName();
+
+	std::string actionstripped = action;
+	actionstripped.erase(0, 1);
+	act = OOCInterpreter::Get()->translate(actionstripped);
+	if(act)
+		return act->getName();
+		
+	return Global::Get()->EmptyString;
+}
+
+void EditorOOC::dispatch(const std::string& action, const std::string& argument)
 {
-	m_sock->Sendf("Well waddaya know: '%s'.\n", line.c_str());
+	OOCCommand* act = OOCInterpreter::Get()->translate(action);
+	
+	if(act)
+	{
+		act->Run(this, argument);
+		return;
+	}
+	
+	std::string actionstripped = action;
+	actionstripped.erase(0, 1);
+	act = OOCInterpreter::Get()->translate(actionstripped);
+	if(act)
+	{
+		act->Run(this, argument);
+		return;
+	}
+	
+	Global::Get()->bugf("EditorOOC::dispatch(), action '%s' not found (argument '%s')!\n", action.c_str(), argument.c_str());
+	return;
+}
+
+EditorOOC::OOCInterpreter::OOCInterpreter(void)
+{
+	addWord("Commands", &m_listCommands);
+	addWord("OOC", &m_sendOOCMessage);
+	addWord("Who", &m_listOnlineCharacters);
+	addWord("Laston", &m_listCharacters);
+}
+
+EditorOOC::OOCInterpreter::~OOCInterpreter(void)
+{
+
+}
+
+void EditorOOC::listCommands(const std::string& argument)
+{
+	m_sock->Send(String::Get()->box(OOCInterpreter::Get()->getWords(), "Account"));
+	m_sock->Send("\n");
+	return;
+}
+
+void EditorOOC::sendOOCMessage(const std::string& argument)
+{
+	std::map<SOCKET,Socket *> ref = UBHandler::Get()->Sockets();
+	for (std::map<SOCKET,Socket *>::iterator it = ref.begin(); it != ref.end(); it++)
+	{
+		UBSocket* sock = UBSocket::Cast(it->second, false);
+		if(sock)
+			sock->Sendf("%s ooc> '%s'.\n", m_sock->GetAccount()->getName().c_str(), argument.c_str());
+	}
+	return;
+}
+
+void EditorOOC::listOnlineCharacters(const std::string& argument)
+{
+	std::map<SOCKET,Socket *> ref = UBHandler::Get()->Sockets();
+	for (std::map<SOCKET,Socket *>::iterator it = ref.begin(); it != ref.end(); it++)
+	{
+		UBSocket* sock = UBSocket::Cast(it->second, false);
+		if(sock)
+			m_sock->Sendf("- %s -\n", sock->GetAccount()->getName().c_str());
+	}
+	return;
+}
+
+void EditorOOC::listCharacters(const std::string& argument)
+{
+	m_sock->Send(String::Get()->box(mud::Character::List(), "Characters"));
 }
