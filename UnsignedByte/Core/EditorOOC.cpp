@@ -18,69 +18,20 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#ifdef _WIN32
-#include <winsock2.h>
-#endif
+#include "EditorOOC.h"
 
-#include <string>
-#include <stdexcept>
-
-#include "PCharacter.h"
-#include "UBSocket.h"
-#include "DatabaseMgr.h"
-#include "Cache.h"
-#include "db.h"
-#include "Account.h"
-#include "EditorAccount.h"
-
-using mud::PCharacter;
-
-PCharacter::PCharacter(UBSocket* sock, db::Characters* character) :
-Character(character),
-m_sock(sock)
+EditorOOC::EditorOOC(UBSocket* sock) :
+Editor(sock)
 {
-
-}
-
-PCharacter::~PCharacter(void)
-{
-	//m_sock is deleted by handler
-}
-
-void PCharacter::Quit()
-{
-	// m_sock->SetEditor(new EditorAccount(m_sock));
-	m_sock->PopEditor();
-	return;	
-}
-
-void PCharacter::Save()
-{
-	OnSend("Saving...\n");
-	Character::Save();
-	OnSend("Saved!\n");
-
-	return;
-}
-
-void PCharacter::OnSend(const std::string &msg)
-{
-	/*
-	for(UBSockets::iterator it = m_snooping.begin(); it != m_snooping.end(); it++)
-	{
-		(*it)->Sendf("##%s## %s", getName().c_str(), msg.c_str());
-	}
-	*/
 	
-	m_sock->Send(msg);
-	return;
 }
 
-void PCharacter::Close(PCharacter* Ch)
+EditorOOC::~EditorOOC()
 {
-	if(Ch == NULL)
-		throw std::invalid_argument("PCharacter::Close(), Ch == NULL!");
 	
-	Cache::Get()->ClosePCharacter(Ch->getID());
-	delete Ch;
+}
+
+void EditorOOC::OnLine(const std::string& line)
+{
+	
 }

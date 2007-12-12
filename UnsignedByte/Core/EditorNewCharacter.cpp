@@ -47,7 +47,8 @@ void EditorNewCharacter::OnLine(const std::string &line)
 	if(!line.compare("quit"))
 	{
 		m_sock->Send("Ok\n");
-		m_sock->SetEditor(new EditorAccount(m_sock));
+		// m_sock->SetEditor(new EditorAccount(m_sock));
+		m_sock->PopEditor();
 		return;
 	}
 
@@ -185,7 +186,7 @@ void EditorNewCharacter::OnLine(const std::string &line)
 		//Ch->setAccount(accountid);
 		Ch->Save();
 		m_sock->Sendf("Character %s created, enjoy!\n", m_name.c_str());
-		m_sock->SetEditor(new EditorPlaying(m_sock, Ch));
+		m_sock->SetEditor(new EditorPlaying(m_sock, Ch), true);
 		return;
 	}
 

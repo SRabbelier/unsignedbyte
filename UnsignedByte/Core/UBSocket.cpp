@@ -38,7 +38,7 @@
 UBSocket::UBSocket(ISocketHandler& h) :
 TcpSocket(h),
 m_account(NULL),
-m_editor(NULL),
+m_editors(),
 m_nexteditor(NULL),
 m_lowforced(false),
 m_forced(false),
@@ -51,10 +51,10 @@ m_colorcode('`')
 
 UBSocket::~UBSocket(void)
 {
-	if(m_editor != NULL)
+	while(!m_editors.empty())
 	{
-		delete m_editor;
-		m_editor = NULL;
+		delete m_editors.top();
+		m_editors.pop();
 	}
 
 	if(m_nexteditor != NULL)
@@ -75,17 +75,17 @@ void UBSocket::OnAccept()
 	Global::Get()->logf("Login from: %s\n", GetRemoteAddress().c_str());
 	Sendf("Welcome to %s.\n", game::vname);
 	Editor* p = new EditorAccountLogin(this);
-	if(m_editor != NULL)
+	if(!m_editors.empty())
 		throw std::logic_error("UBSocket::OnAccept(), m_editor != NULL!");
 
-	m_editor = p;
+	m_editors.push(p);
 }
 
 void UBSocket::OnLine(const std::string &line)
 {
 	SwitchEditors();
 
-	if(m_editor == NULL)
+	if(m_editors.empty())
 	{
 		Global::Get()->bugf("UBSocket::OnLine(), m_editor == NULL!");
 		Send("You don't have an editor mode set?\n");
@@ -94,7 +94,7 @@ void UBSocket::OnLine(const std::string &line)
 		return;
 	}
 	
-	m_editor->OnLine(line);
+	m_editors.top()->OnLine(line);
 	return;
 }
 
@@ -129,7 +129,7 @@ void UBSocket::SendPrompt()
 	Send(m_prompt);
 }
 
-void UBSocket::SetEditor(Editor* edit)
+void UBSocket::SetEditor(Editor* edit, bool popLast)
 {
 	if(m_nexteditor)
 	{
@@ -142,32 +142,68 @@ void UBSocket::SetEditor(Editor* edit)
 
 	SetPrompt();
 	m_nexteditor = edit;
+	m_popLast = true;
 	return;
 }
 
 void UBSocket::SwitchEditors()
-{
-	if(!m_nexteditor)
-		return;
-
-	if(m_editor) // should be always
+{		
+	if(m_popeditor && m_nexteditor)
 	{
-		delete m_editor;
-		m_editor = NULL;
-	}
-	else
-	{
-		Global::Get()->bug("UBSocket::SwitchEditors() was called, but we don't have a current editor?!");
-		Send("Something went wrong, somehow you are switching to another editor but you don't have one set?!");
+		Global::Get()->bug("UBSocket::SwitchEditors() was called, but we don't have both a new editor and we want to pop one?!");
+		Send("Something went wrong, somehow you are switching to another editor but you're also deleting the top one?!");
 		Send("Closing your connection now.\n");
 		SetCloseAndDelete();
 		return;
 	}
-
-	m_editor = m_nexteditor;
-	m_nexteditor = NULL;
-	SetPrompt(m_editor->prompt());
+	
+	if(m_popeditor || m_popLast)
+	{
+		if(m_editors.empty()) // should be always
+		{
+			Global::Get()->bug("UBSocket::SwitchEditors() was called, but we don't have a current editor?!");
+			Send("Something went wrong, somehow you are switching to another editor but you don't have one set?!");
+			Send("Closing your connection now.\n");
+			SetCloseAndDelete();
+			return;
+		}
+		
+		delete m_editors.top();
+		m_editors.pop();
+		m_popeditor = false;
+		m_popLast = false;
+	}
+	else
+	{
+		if(!m_nexteditor)
+		{
+			Global::Get()->bug("UBSocket::SwitchEditors() was called, but we don't have a current editor?!");
+			Send("Something went wrong, somehow you are switching to another editor but you don't have one set?!");
+			Send("Closing your connection now.\n");
+			SetCloseAndDelete();
+			return;
+		}
+		
+		m_editors.push(m_nexteditor);
+		m_nexteditor = NULL;
+	}
+	
+	SetPrompt(m_editors.top()->prompt());
 	SendPrompt();
+}
+
+void UBSocket::PopEditor()
+{
+	if(m_popeditor)
+	{
+		Global::Get()->bug("UBSocket::PopEditor() was called, but the top editor is already being popped?!");
+		Send("Something went wrong, somehow you are popping the top editor but it was already being popped?!");
+		Send("Closing your connection now.\n");
+		SetCloseAndDelete();
+		return;
+	}
+	
+	m_popeditor = true;
 }
 
 void UBSocket::Send(const std::string& msg)

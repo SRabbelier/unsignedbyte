@@ -166,7 +166,7 @@ void EditorNewAccount::OnLine(const std::string &line)
 		
 		m_sock->Sendf("Account %s created, enjoy!\n", m_name.c_str());
 		m_sock->SetAccount(Acc);
-		m_sock->SetEditor(new EditorAccount(m_sock));
+		m_sock->SetEditor(new EditorAccount(m_sock), true);
 		return;
 	}
 

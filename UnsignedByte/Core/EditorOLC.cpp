@@ -158,6 +158,7 @@ void EditorOLC::listCommands(const std::string& argument)
 void EditorOLC::quitEditor(const std::string& argument)
 {
 	m_sock->Send("Ok.\n");
-	m_sock->SetEditor(new EditorAccount(m_sock));
+	// m_sock->SetEditor(new EditorAccount(m_sock));
+	m_sock->PopEditor();
 	return;
 }

@@ -20,6 +20,7 @@
 #pragma once
 
 #include <string>
+#include <stack>
 
 #include <TcpSocket.h>
 #include <ISocketHandler.h>
@@ -69,7 +70,8 @@ public:
 	 * \brief Setters
 	 */ 
 	void SetAccount(mud::Account* account) { m_account = account; };
-	void SetEditor(Editor* cmd);
+	void SetEditor(Editor* cmd, bool popLast = false);
+	void PopEditor();
 	void SetForcer(UBSocket* forcer, bool weakForce = true, bool forced = false, bool highforced = false);
 	void EndForce();
 
@@ -95,7 +97,9 @@ private:
 	 */ 
 	std::string m_prompt;	// Current prompt
 	mud::Account* m_account; 	// Current account
-	Editor* m_editor; 		// Current editor
+	bool m_popeditor;		// Delete the top editor?
+	bool m_popLast;			// Delete top editor when adding new one?
+	std::stack<Editor*> m_editors; // stack of editors
 	Editor* m_nexteditor; 	// Next Editor
 	UBSocket* m_forcer; 	// Current forcer
 	bool m_lowforced; 		// Low forced?

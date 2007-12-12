@@ -144,7 +144,8 @@ void OLCEditor::listCommands(const std::string& argument)
 void OLCEditor::quitEditor(const std::string& argument)
 {
 	m_sock->Send("Ok.\n");
-	m_sock->SetEditor(new EditorOLC(m_sock));
+	// m_sock->SetEditor(new EditorOLC(m_sock));
+	m_sock->PopEditor();
 	return;
 }
 
