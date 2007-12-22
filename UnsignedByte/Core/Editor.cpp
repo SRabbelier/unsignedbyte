@@ -28,6 +28,8 @@
 #include "Permission.h"
 #include "Cache.h"
 #include "Command.h"
+#include "UBSocket.h"
+#include "Account.h"
 
 using mud::Permission;
 using mud::Command;

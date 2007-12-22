@@ -23,6 +23,7 @@
 #include "EditorOLC.h"
 #include "EditorNewCharacter.h"
 #include "EditorPlaying.h"
+#include "EditorOOC.h"
 
 #include "UBSocket.h"
 
@@ -45,6 +46,7 @@ extern bool m_quit;
 EditorAccount::AccountCommand EditorAccount::m_listCommands("Commands", &EditorAccount::listCommands);
 EditorAccount::AccountCommand EditorAccount::m_beginLogin("Login", &EditorAccount::beginLogin);
 EditorAccount::AccountCommand EditorAccount::m_beginOLC("OLC", &EditorAccount::beginOLC);
+EditorAccount::AccountCommand EditorAccount::m_beginOOC("OOC", &EditorAccount::beginOOC);
 EditorAccount::AccountCommand EditorAccount::m_beginCreation("New", &EditorAccount::beginCreation);
 EditorAccount::AccountCommand EditorAccount::m_quitEditor("Quit", &EditorAccount::quitEditor);
 EditorAccount::AccountCommand EditorAccount::m_shutdownGame("Shutdown", &EditorAccount::shutdownGame);
@@ -177,6 +179,12 @@ void EditorAccount::beginOLC(const std::string &argument)
 	m_sock->Send("Dropping you into OLC mode!\n");
 	m_sock->SetEditor(new EditorOLC(m_sock));
 	return;
+}
+
+void EditorAccount::beginOOC(const std::string& argument)
+{
+	m_sock->Send("Dropping you into OOC mode!\n");
+	m_sock->SetEditor(new EditorOOC(m_sock));
 }
 
 void EditorAccount::beginCreation(const std::string &argument)

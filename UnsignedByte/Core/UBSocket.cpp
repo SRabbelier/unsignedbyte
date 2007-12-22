@@ -33,6 +33,7 @@
 #include "EditorOOC.h"
 #include "Global.h"
 #include "Account.h"
+#include "AccountManager.h"
 #include "Cache.h"
 #include "Colour.h"
 
@@ -70,7 +71,8 @@ UBSocket::~UBSocket(void)
 
 	if(m_account)
 	{
-		mud::Account::Close(m_account);
+		mud::AccountManager::Get()->Close(m_account);
+		// TODO
 		m_account = NULL;
 	}
 }
@@ -117,10 +119,10 @@ void UBSocket::OnLine(const std::string &line)
 
 mud::Account* UBSocket::GetAccount() const
 {
-	if(m_account == NULL)
+	if(!m_account)
 		throw std::logic_error("UBSocket::GetAccount(), m_account == NULL!");
 	
-	return m_account;
+	return m_account.Get();
 }
 
 UBSocket* UBSocket::GetForcer() const

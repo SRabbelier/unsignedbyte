@@ -35,6 +35,7 @@
 #include "Action.h"
 
 #include "Account.h"
+#include "AccountManager.h"
 #include "Permission.h"
 #include "GrantGroup.h"
 
@@ -149,13 +150,12 @@ void EditorPermission::editAccount(const std::string& argument)
 	if(!id)
 	{
 		m_sock->Sendf("'%s' is not a valid account!\n", argument.c_str());
-		m_sock->Send(String::Get()->box(mud::Account::List(), "Accounts"));
+		m_sock->Send(String::Get()->box(mud::AccountManager::Get()->List(), "Accounts"));
 		return;
 	}
 
 	m_sock->Sendf("Preparing to edit permission with account '%d'.\n", id);
-	// m_account = id;
-	// TODO - find some way to pass the Editor to Run()
+	m_account = id;
 	return;
 }
 

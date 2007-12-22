@@ -141,7 +141,7 @@ const std::vector<std::string>& Table::tableList()
 	if(m_listcache > m_lastchange)
 	{
 		ListActor act;
-		SqliteMgr::Get()->doForEach(this, &act);
+		SqliteMgr::Get()->doForEach(this, ActorPtr(&act, false));
 		m_list = act.getList();
 		m_listcache = time(NULL);
 	}

@@ -21,8 +21,15 @@
 
 #include <string>
 #include "Editor.h"
+#include "smart_ptr.h"
 
 class UBSocket;
+
+namespace mud
+{
+	class Account;
+	typedef SmartPtr<Account> AccountPtr;
+}
 
 class EditorAccountLogin : public Editor
 {
@@ -36,4 +43,17 @@ public:
 private:
 	EditorAccountLogin(const EditorAccountLogin& rhs);
 	EditorAccountLogin operator=(const EditorAccountLogin& rhs);
+	
+	enum E_STATE
+	{
+		M_FIRST,
+		M_NAME,
+		M_NAMECONFIRM,
+		M_PASSWORD,
+		M_PASSWORDCONFIRM,
+		M_DONE,
+	};
+
+	int m_state;
+	mud::AccountPtr m_account;
 };

@@ -25,6 +25,7 @@
 
 #include "singleton.h"
 #include "db.h"
+#include "smart_ptr.h"
 
 namespace mud
 {
@@ -55,7 +56,6 @@ typedef std::pair<value_type, value_type> twoValueKey;
 
 typedef std::map<std::string, value_type> reverseStringKey;
 
-typedef std::map<oneValueKey,mud::Account*> accounts_m;
 typedef std::map<oneValueKey,mud::Area*> areas_m;
 typedef std::map<oneValueKey,mud::MCharacter*> mobiles_m;
 typedef std::map<oneValueKey,mud::Character*> characters_m;
@@ -67,7 +67,6 @@ typedef std::map<oneValueKey,mud::Room*> rooms_m;
 typedef std::map<oneValueKey,mud::Sector*> sectors_m;
 typedef std::map<oneValueKey,mud::PCharacter*> players_m;
 
-typedef std::map<oneStringKey,mud::Account*> accounts_ms;
 typedef std::map<oneStringKey,mud::Area*> areas_ms;
 typedef std::map<oneStringKey,mud::MCharacter*> mobiles_ms;
 typedef std::map<oneStringKey,mud::Character*> characters_ms;
@@ -92,7 +91,6 @@ namespace mud
 		bool isActive(value_type id);
 		bool isActive(cstring name);
 		
-		value_type AddAccount();
 		value_type AddArea();
 		value_type AddCharacter();
 		value_type AddColour();
@@ -101,9 +99,6 @@ namespace mud
 		value_type AddRace();
 		value_type AddRoom();
 		value_type AddSector();
-
-		mud::Account* GetAccountByKey(value_type id);
-		mud::Account* GetAccountByName(cstring name);
 		
 		mud::Area* GetAreaByKey(value_type id);
 		
@@ -141,7 +136,6 @@ namespace mud
 		
 		bool existsCharacterWithAccount(value_type characterid, value_type accountid);
 		
-		value_type lookupAccountByName(cstring value);
 		value_type lookupCharacterByName(cstring value);
 		value_type lookupColourByCode(cstring value);
 		value_type lookupColourByName(cstring value);
@@ -150,7 +144,6 @@ namespace mud
 		value_type lookupRaceByName(cstring value);
 		value_type lookupSectorByName(cstring value);
 
-		void CloseAccount(value_type accountid);
 		void CloseArea(value_type areaid);
 		void CloseCharacter(value_type characterid);
 		void CloseColour(value_type colourid);
@@ -164,7 +157,6 @@ namespace mud
 		void CloseSector(value_type sectorid);
 
 	private:
-		Account* cacheAccount(db::Accounts* d);
 		Area* cacheArea(db::Areas* d);
 		Character* cacheCharacter(db::Characters* d);
 		Colour* cacheColour(db::Colours* d);
@@ -175,9 +167,6 @@ namespace mud
 		Race* cacheRace(db::Races* d);
 		Room* cacheRoom(db::Rooms* d);
 		Sector* cacheSector(db::Sectors* d);
-		
-		accounts_m m_accountByKey;
-		accounts_ms m_accountByName;
 		
 		areas_m m_areaByKey;
 		
@@ -215,7 +204,6 @@ namespace mud
 		valueset m_pcharactersByKey;
 		stringset m_pcharactersByName;
 		
-		reverseStringKey m_lookupAccountByName;
 		reverseStringKey m_lookupCharacterByName;
 		reverseStringKey m_lookupColourByCode;
 		reverseStringKey m_lookupColourByName;

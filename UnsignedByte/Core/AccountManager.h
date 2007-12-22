@@ -17,62 +17,55 @@
  *   Free Software Foundation, Inc.,                                       *
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
+#pragma once
 
 #include <string>
-#include <stdexcept>
+#include <vector>
 
-class UBSocket;
-#include "Cache.h"
-#include "Account.h"
-#include "DatabaseMgr.h"
+#include "singleton.h"
 #include "db.h"
 
-using mud::Account;
-
-Account::Account(db::Accounts* dbaccount) :
-m_account(dbaccount)
-{
-	if(m_account == NULL)
-		throw std::invalid_argument("Account::Account(), m_account == NULL!");
+namespace mud 
+{ 
+	class Account; 
+	typedef SmartPtr<Account> AccountPtr;
 }
 
-Account::~Account(void)
-{
-	delete m_account;
-	m_account = 0;
-}
+typedef const std::string& cstring;
+typedef std::map<value_type,mud::AccountPtr> accounts_m;
+typedef std::map<std::string,mud::AccountPtr> accounts_ms;
+typedef std::map<std::string, value_type> reverseStringKey;
 
-void Account::Delete()
+namespace mud
 {
-	m_account->erase();
-}
+	class AccountManager : public Singleton<mud::AccountManager>
+	{
+	public:
+		std::vector<std::string> List();
+		void Close(AccountPtr account);
+		bool IllegalName(const std::string& name);
+		
+		value_type Add();
+		mud::AccountPtr GetByKey(value_type id);
+		mud::AccountPtr GetByName(cstring name);
+		
+		value_type lookupByName(cstring value);
+		
+		void Close(value_type accountid);
+		
+	private:
+		AccountPtr cacheAccount(db::Accounts* d);
+		
+		accounts_m m_byKey;
+		accounts_ms m_byName;
+		reverseStringKey m_lookupByName;
 
-void Account::Save()
-{
-	m_account->save();
-}
-
-bool Account::Exists()
-{
-	return m_account->exists();
-}
-
-
-std::vector<std::string> Account::Show()
-{
-	std::vector<std::string> result;
-	
-	return result;
-}
-
-std::string Account::ShowShort()
-{
-	std::string result;
-	
-	return result;
-}
-
-TablePtr Account::getTable() const
-{
-	return Tables::Get()->ACCOUNTS;
+	private:
+		AccountManager(void) {};
+		AccountManager(const AccountManager& rhs);
+		AccountManager operator=(const AccountManager& rhs);
+		~AccountManager(void) {};
+		
+		friend class Singleton<mud::AccountManager>;
+	};
 }

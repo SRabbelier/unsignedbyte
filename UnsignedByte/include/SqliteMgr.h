@@ -37,7 +37,7 @@ typedef SmartPtr<Table> TablePtr;
 typedef SmartPtr<Statements> StatementsPtr;
 
 typedef std::map<Table*, StatementsPtr>  TableStatements;
-typedef unsigned long value_type;	
+typedef unsigned long value_type;
 
 class SqliteMgr : public Singleton<SqliteMgr>
 {

@@ -22,11 +22,14 @@
 #include <string>
 #include "Savable.h"
 #include "db.h"
+#include "smart_ptr.h"
 
 class UBSocket;
 
 namespace mud
 {
+	class Account;
+	typedef SmartPtr<Account> AccountPtr;
 	class Account : public Savable
 	{
 	public:
@@ -49,14 +52,7 @@ namespace mud
 		std::vector<std::string> Show();
 		std::string ShowShort();
 		TablePtr getTable() const;
-		
-		/**
-		 * \brief Static operations
-		 */
-		static std::vector<std::string> List();
-		static void Close(Account* account);
-		static bool IllegalName(const std::string& name);
-		
+			
 		/**
 		 * \brief Database operations
 		 */
@@ -75,6 +71,7 @@ namespace mud
 		Account operator=(const Account& rhs);
 		~Account(void);
 		
-		friend class Cache; // for constructor
+		friend class AccountManager; // for constructor
+		friend class SmartPtr<Account>;
 	};
 }

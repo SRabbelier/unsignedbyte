@@ -24,6 +24,7 @@
 #include "SQLSocket.h"
 #include "PCharacter.h"
 #include "Global.h"
+#include "Account.h"
 
 UBHandler* UBHandler::ms_instance = 0;
 

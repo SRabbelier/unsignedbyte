@@ -29,6 +29,7 @@
 #include "Permission.h"
 #include "Parse.h"
 #include "Cache.h"
+#include "Account.h" // needed because we include UBSocket.h
 
 OLCEditor::SavableCommand OLCEditor::m_listCommands("Commands", &OLCEditor::listCommands);
 OLCEditor::SavableCommand OLCEditor::m_newSavable("New", &OLCEditor::newSavable);

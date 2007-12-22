@@ -29,6 +29,7 @@
 #include "SQLSocket.h"
 #include "Cache.h"
 #include "Global.h"
+#include "Account.h" // needed because we include UBSocket.h
 #include <iostream>
 
 void exitfunc()

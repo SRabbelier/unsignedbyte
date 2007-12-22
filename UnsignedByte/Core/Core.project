@@ -111,6 +111,12 @@
     <File Name="EditorSector.h"/>
     <File Name="EditorOOC.h"/>
   </VirtualDirectory>
+  <VirtualDirectory Name="Managers">
+    <File Name="AccountManager.cpp"/>
+  </VirtualDirectory>
+  <VirtualDirectory Name="Manager Header">
+    <File Name="AccountManager.h"/>
+  </VirtualDirectory>
   <Dependencies>
     <Project Name="Resource"/>
   </Dependencies>

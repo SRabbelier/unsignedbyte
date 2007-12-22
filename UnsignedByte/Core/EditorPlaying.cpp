@@ -22,6 +22,7 @@
 
 #include "EditorAccount.h"
 #include "EditorPlaying.h"
+#include "UBSocket.h"
 
 #include "Global.h"
 #include "DatabaseMgr.h"

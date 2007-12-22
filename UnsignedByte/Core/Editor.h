@@ -21,7 +21,8 @@
 
 #include <string>
 #include "Global.h"
-#include "UBSocket.h"
+
+class UBSocket;
 
 class Editor
 {

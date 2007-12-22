@@ -25,8 +25,13 @@
 #include <TcpSocket.h>
 #include <ISocketHandler.h>
 #include "Global.h"
+#include "smart_ptr.h"
 
-namespace mud { class Account; };
+namespace mud { 
+	class Account; 
+	typedef SmartPtr<Account> AccountPtr;
+};
+
 class Editor;
 
 class UBSocket : public TcpSocket
@@ -69,7 +74,7 @@ public:
 	/**
 	 * \brief Setters
 	 */ 
-	void SetAccount(mud::Account* account) { m_account = account; };
+	void SetAccount(mud::AccountPtr account) { m_account = account; };
 	void SetEditor(Editor* cmd, bool popLast = false);
 	void PopEditor();
 	void SetForcer(UBSocket* forcer, bool weakForce = true, bool forced = false, bool highforced = false);
@@ -96,7 +101,7 @@ private:
 	 * \brief Variables
 	 */ 
 	std::string m_prompt;	// Current prompt
-	mud::Account* m_account; 	// Current account
+	mud::AccountPtr m_account; 	// Current account
 	bool m_popeditor;		// Delete the top editor?
 	bool m_popLast;			// Delete top editor when adding new one?
 	std::stack<Editor*> m_editors; // stack of editors

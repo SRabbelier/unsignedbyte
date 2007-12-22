@@ -161,7 +161,7 @@ public:
 	 * Return pointer the row data pointer
 	 * \return pointer to the row data pointer
 	 */
-	T* Get()
+	T* Get() const
 	{
 		return m_ref->GetData();
 	}

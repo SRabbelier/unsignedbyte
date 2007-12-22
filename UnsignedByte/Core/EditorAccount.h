@@ -45,6 +45,7 @@ public:
 	void beginLogin(const std::string& argument);
 	void beginOLC(const std::string& argument);
 	void beginCreation(const std::string& argument);
+	void beginOOC(const std::string& argument);
 	void quitEditor(const std::string& argument);
 	void shutdownGame(const std::string& argument);
 	void listCharacters(const std::string& argument);
@@ -64,6 +65,7 @@ private:
 	static AccountCommand m_listCommands;
 	static AccountCommand m_beginLogin;
 	static AccountCommand m_beginOLC;
+	static AccountCommand m_beginOOC;
 	static AccountCommand m_beginCreation;
 	static AccountCommand m_quitEditor;
 	static AccountCommand m_shutdownGame;

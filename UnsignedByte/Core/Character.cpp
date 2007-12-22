@@ -42,6 +42,7 @@
 #include "Race.h"
 #include "Area.h"
 #include "Room.h"
+#include "Account.h" // needed because UBSocket.h is included
 
 using mud::Character;
 

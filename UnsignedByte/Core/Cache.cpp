@@ -64,17 +64,6 @@ bool Cache::isActive(cstring value)
  * 
  */ 
 
-value_type Cache::AddAccount()
-{
-	db::Accounts d;
-	d.save();
-	value_type id = d.getaccountid();
-	if(id == 0)
-		Global::Get()->bug("Cache::AddAcount(), id = 0");
-		
-	return id;
-}
-
 value_type Cache::AddArea()
 {
 	db::Areas d;
@@ -171,29 +160,6 @@ value_type Cache::AddSector()
  *	 Retreival 
  * 
  */
-
-Account* Cache::GetAccountByKey(value_type id)
-{
-	Account* p = m_accountByKey[id];
-	if (p)
-		return p;
-
-	db::Accounts* d = db::Accounts::bykey(id);
-	p = cacheAccount(d);
-	return p;
-}
-
-Account* Cache::GetAccountByName(cstring value)
-{
-	Account* p = m_accountByName[value];
-	if(p)
-		return p;
-
-	db::Accounts* d = db::Accounts::byname(value);
-	p = cacheAccount(d);
-	
-	return p;
-}
 
 mud::Area* Cache::GetAreaByKey(value_type id)
 {
@@ -476,17 +442,6 @@ bool Cache::existsCharacterWithAccount(value_type characterid, value_type accoun
  *
  */ 
 
-value_type Cache::lookupAccountByName(cstring value)
-{
-	reverseStringKey::iterator it = m_lookupAccountByName.find(value);
-	if(it != m_lookupAccountByName.end())
-		return it->second;
-	
-	value_type id = db::Accounts::lookupname(value);
-	m_lookupAccountByName[value] = id;
-	return id;
-}
-
 value_type Cache::lookupCharacterByName(cstring value)
 {
 	reverseStringKey::iterator it = m_lookupCharacterByName.find(value);
@@ -572,18 +527,6 @@ value_type Cache::lookupSectorByName(cstring value)
  *
  */ 
 
-void Cache::CloseAccount(value_type id)
-{
-	accounts_m::iterator key = m_accountByKey.find(id);
-	if(key != m_accountByKey.end())
-	{
-		m_accountByKey.erase(key);
-		accounts_ms::iterator name = m_accountByName.find(key->second->getName());
-		if(name != m_accountByName.end())
-			m_accountByName.erase(name);
-	}
-}
-
 void Cache::CloseArea(value_type id)
 {
 	areas_m::iterator key = m_areaByKey.find(id);
@@ -666,14 +609,6 @@ void Cache::CloseSector(value_type id)
 	sectors_ms::iterator name = m_sectorByName.find(key->second->getName());
 	m_sectorByKey.erase(key);
 	m_sectorByName.erase(name);	
-}
-
-Account* Cache::cacheAccount(db::Accounts* d)
-{
-	Account* p = new Account(d);
-	m_accountByKey[d->getaccountid()] = p;
-	m_accountByName[d->getname()] = p;
-	return p;
 }
 
 Area* Cache::cacheArea(db::Areas* d)

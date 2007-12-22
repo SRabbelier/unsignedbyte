@@ -23,6 +23,7 @@
 #include "EditorAccount.h"
 #include "UBSocket.h"
 #include "Account.h"
+#include "AccountManager.h"
 #include "Global.h"
 #include "DatabaseMgr.h"
 #include "Cache.h"
@@ -30,7 +31,8 @@
 class DoCmd;
 
 EditorAccountLogin::EditorAccountLogin(UBSocket* sock) :
-Editor(sock)
+Editor(sock),
+m_account(NULL)
 {
 	OnLine(Global::Get()->EmptyString);
 }
@@ -53,27 +55,69 @@ void EditorAccountLogin::OnLine(const std::string &line)
 		m_sock->SetCloseAndDelete();
 		return;
 	}
-
-	if(!line.compare("new"))
-	{
-		m_sock->Send("Starting account creation...\n");
-		m_sock->SetEditor(new EditorNewAccount(m_sock));
-		return;
-	}
 	
-	int id = db::Accounts::lookupname(line);
-	if(id == 0)
+	switch(m_state)
 	{
-		m_sock->Send("No such account.\n");
-		OnLine(Global::Get()->EmptyString);
+	default:
+	{
+		Global::Get()->bug("EditorNewAccount::OnLine(), default m_state!\n");
+		m_sock->Send("BUG! Disconnecting you now...\n");
+		m_sock->SetCloseAndDelete();
 		return;
-	}
+	} /* default */
+		
+	case M_FIRST:
+	{
+		m_state++;
+		// fallthrough
+	} /* case M_FIRST: */
 
-	mud::Account* Acc = mud::Cache::Get()->GetAccountByKey(id);
+	case M_NAME:
+	{
+		if(!line.compare("new"))
+		{
+			m_sock->Send("Starting account creation...\n");
+			m_sock->SetEditor(new EditorNewAccount(m_sock));
+			return;
+		}
+		
+		int id = db::Accounts::lookupname(line);
+		if(id == 0)
+		{
+			m_sock->Send("No such account.\n");
+			OnLine(Global::Get()->EmptyString);
+			return;
+		}
 
-	m_sock->Sendf("Welcome back, %s\n", line.c_str());
-	m_sock->Send("\n");
-	m_sock->SetAccount(Acc);
-	m_sock->SetEditor(new EditorAccount(m_sock));
-	return;
+		m_account = mud::AccountManager::Get()->GetByKey(id);
+		m_state++;
+		OnLine(Global::Get()->EmptyString);
+		break;
+	} /* case M_NAME: */
+		
+	case M_PASSWORD:
+	{
+		if(line.size() == 0)
+		{
+			m_sock->Send("Please enter your password: \n");
+			return;
+		}
+
+		if(line.compare(m_account->getPassword()))
+		{
+			m_sock->Send("Password incorrect, try again.\n");
+			// TODO: log
+			OnLine(Global::Get()->EmptyString);
+			return;
+		}
+
+		m_sock->Sendf("Welcome back, %s\n", line.c_str());
+		m_sock->Send("\n");
+		m_sock->SetAccount(m_account);
+		m_sock->SetEditor(new EditorAccount(m_sock));
+		return;
+	} /* case M_PASSWORD: */
+	
+	} /* switch(state) */
+	
 }
