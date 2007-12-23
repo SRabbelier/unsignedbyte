@@ -32,13 +32,13 @@ typedef std::vector<std::string> Strings;
 class CountActor : public Actor
 {
 public:
-	CountActor(CriteriaPtr crit) : m_count(0), m_criteria(crit) {}
+	CountActor(Criteria* crit) : m_count(0), m_criteria(crit) {}
 	~CountActor() {}
 	
-	void parseRow(sqlite3_stmt* statement, TablePtr table);
+	void parseRow(sqlite3_stmt* statement, Table* table);
 	const value_type getCount() const;
 	
 private:
 	value_type m_count;
-	CriteriaPtr m_criteria;
+	Criteria* m_criteria;
 };

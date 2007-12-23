@@ -23,7 +23,6 @@
 
 #include "Area.h"
 #include "Global.h"
-#include "DatabaseMgr.h"
 #include "Cache.h"
 
 using mud::Area;
@@ -77,12 +76,7 @@ std::string Area::ShowShort()
 			getDescription().c_str());
 }
 
-std::vector<std::string> Area::List()
-{
-	return GetTable()->tableList();
-}
-
-TablePtr Area::GetTable()
+TablePtr Area::getTable() const
 {
 	return Tables::Get()->AREAS;
 }

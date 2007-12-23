@@ -55,7 +55,7 @@ public:
 	void saveGrantGroup(const std::string& argument);
 
 private:
-	mud::GrantGroup* m_grantgroup;
+	SmartPtr<mud::GrantGroup> m_grantgroup;
 	EditorGrantGroup(const EditorGrantGroup& rhs);
 	EditorGrantGroup operator=(const EditorGrantGroup& rhs);
 

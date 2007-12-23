@@ -70,8 +70,8 @@ long DatabaseMgr::CountSavable(const TablePtr table, const long id)
 	long count = 0;
 	
 	SPKCriteria crit(id);
-	CountActor act(SmartPtr<Criteria>(&crit,true));
-	SqliteMgr::Get()->doForEach(table, SmartPtr<Actor>(&act,true));
+	CountActor act(&crit);
+	SqliteMgr::Get()->doForEach(table.get(), act);
 	count = act.getCount();
 	
 	return count;

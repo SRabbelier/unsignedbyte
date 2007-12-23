@@ -34,6 +34,7 @@
 
 #include "Account.h"
 #include "Area.h"
+#include "AreaManager.h"
 
 EditorArea::AreaCommand EditorArea::m_editName("Name", &EditorArea::editName);
 EditorArea::AreaCommand EditorArea::m_editDescription("Description", &EditorArea::editDescription);
@@ -91,12 +92,12 @@ TablePtr EditorArea::getTable()
 
 long EditorArea::addNew()
 {
-	return mud::Cache::Get()->AddArea();
+	return mud::AreaManager::Get()->Add();
 }
 
 std::vector<std::string> EditorArea::getList()
 {
-	return mud::Area::List();
+	return mud::AreaManager::Get()->List();
 }
 
 void EditorArea::setEditing(long id)
@@ -107,7 +108,7 @@ void EditorArea::setEditing(long id)
 		return;
 	}
 	
-	m_area = mud::Cache::Get()->GetAreaByKey(id);
+	m_area = mud::AreaManager::Get()->GetByKey(id);
 	return;
 }
 

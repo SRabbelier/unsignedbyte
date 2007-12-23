@@ -25,6 +25,8 @@
 
 namespace mud
 {
+	class AreaManager;
+	
 	class Area : public Savable
 	{
 	public:
@@ -49,14 +51,7 @@ namespace mud
 		 */
 		std::vector<std::string> Show();
 		std::string ShowShort();
-		TablePtr getTable() const { return GetTable(); }
-
-		/**
-		 * \brief Static utilities
-		 */
-		static TablePtr GetTable();
-		static std::vector<std::string> List();
-		static void Close(Area* area);
+		TablePtr getTable() const;
 		
 		/**
 		 * \brief Database operations
@@ -66,7 +61,9 @@ namespace mud
 		bool Exists();
 
 	private:
-		friend class Cache; // For constructor
+		friend class mud::AreaManager; // For constructor
+		friend class SmartPtr<Area>;
+		
 		db::Areas* m_area;
 
 		/**

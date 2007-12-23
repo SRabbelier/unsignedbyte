@@ -113,9 +113,11 @@
   </VirtualDirectory>
   <VirtualDirectory Name="Managers">
     <File Name="AccountManager.cpp"/>
+    <File Name="AreaManager.cpp"/>
   </VirtualDirectory>
   <VirtualDirectory Name="Manager Header">
     <File Name="AccountManager.h"/>
+    <File Name="AreaManager.h"/>
   </VirtualDirectory>
   <Dependencies>
     <Project Name="Resource"/>

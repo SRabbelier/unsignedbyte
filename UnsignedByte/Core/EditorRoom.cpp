@@ -37,6 +37,7 @@
 
 #include "Account.h"
 #include "Area.h"
+#include "AreaManager.h"
 #include "Room.h"
 #include "Sector.h"
 
@@ -449,7 +450,7 @@ void EditorRoom::listAreas(const std::string& argument)
 	{
 		m_sock->Send("Please specify an area id to change to.\n");
 		m_sock->Sendf("'%s' is not a valid area.\n", argument.c_str());
-		m_sock->Send(String::Get()->box(mud::Area::List(), "Areas"));
+		m_sock->Send(String::Get()->box(mud::AreaManager::Get()->List(), "Areas"));
 		return;
 	}
 	m_area = area;	

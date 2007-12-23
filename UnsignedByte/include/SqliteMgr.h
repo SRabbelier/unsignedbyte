@@ -47,7 +47,7 @@ class SqliteMgr : public Singleton<SqliteMgr>
 		void doUpdate(BindablePtr bindable);
 		void doSelect(BindablePtr bindable);
 		void doLookup(BindablePtr bindable, const std::string& field);
-		void doForEach(const TablePtr table, ActorPtr act);
+		void doForEach(Table* table, Actor& act);
 	
 	private:
 		Database* m_db;
@@ -56,13 +56,13 @@ class SqliteMgr : public Singleton<SqliteMgr>
 		
 		TableStatements m_statements;
 		
-		StatementsPtr getStatements(const TablePtr table);
-		sqlite3_stmt* getInsertStmt(const TablePtr table);
-		sqlite3_stmt* getEraseStmt(const TablePtr table);
-		sqlite3_stmt* getUpdateStmt(const TablePtr table);
-		sqlite3_stmt* getSelectStmt(const TablePtr table);
-		sqlite3_stmt* getLookupStmt(const TablePtr table, const std::string& field);
-		sqlite3_stmt* getForEachStmt(const TablePtr table);		
+		StatementsPtr getStatements(Table* table);
+		sqlite3_stmt* getInsertStmt(Table* table);
+		sqlite3_stmt* getEraseStmt(Table* table);
+		sqlite3_stmt* getUpdateStmt(Table* table);
+		sqlite3_stmt* getSelectStmt(Table* table);
+		sqlite3_stmt* getLookupStmt(Table* table, const std::string& field);
+		sqlite3_stmt* getForEachStmt(Table* table);		
 		
 		friend class Singleton<SqliteMgr>;
 		SqliteMgr();

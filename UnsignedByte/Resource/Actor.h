@@ -34,7 +34,7 @@ public:
 	Actor() {}
 	virtual ~Actor() {}
 	
-	virtual void parseRow(sqlite3_stmt* statement, TablePtr table) = 0;
+	virtual void parseRow(sqlite3_stmt* statement, Table* table) = 0;
 };
 
 typedef SmartPtr<Actor> ActorPtr;

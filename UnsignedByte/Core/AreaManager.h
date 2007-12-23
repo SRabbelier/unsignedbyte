@@ -17,22 +17,55 @@
  *   Free Software Foundation, Inc.,                                       *
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
+#pragma once
 
-#include <iostream>
-#include <sstream>
-#include <stdexcept>
+#include <string>
+#include <vector>
 
-#include "CountActor.h"
-#include "Table.h"
+#include "singleton.h"
+#include "db.h"
 
-void CountActor::parseRow(sqlite3_stmt* statement, Table* table)
+namespace mud 
 { 
-	if(m_criteria->evaluate(statement, table))
-		m_count++;
+	class Area; 
+	typedef SmartPtr<Area> AreaPtr;
 }
 
-const value_type CountActor::getCount() const
+typedef const std::string& cstring;
+typedef std::map<value_type,mud::AreaPtr> areas_m;
+typedef std::map<std::string,mud::AreaPtr> areas_ms;
+typedef std::map<std::string, value_type> reverseStringKey;
+
+namespace mud
 {
-	return m_count;
-}
+	class AreaManager : public Singleton<mud::AreaManager>
+	{
+	public:
+		TablePtr GetTable();
+		std::vector<std::string> List();
+		void Close(AreaPtr area);
+		
+		value_type Add();
+		mud::AreaPtr GetByKey(value_type id);
+		mud::AreaPtr GetByName(cstring name);
+		
+		value_type lookupByName(cstring value);
+		
+		void Close(value_type Areaid);
+		
+	private:
+		AreaPtr cacheArea(db::Areas* d);
+		
+		areas_m m_byKey;
+		areas_ms m_byName;
+		reverseStringKey m_lookupByName;
 
+	private:
+		AreaManager(void) {};
+		AreaManager(const AreaManager& rhs);
+		AreaManager operator=(const AreaManager& rhs);
+		~AreaManager(void) {};
+		
+		friend class Singleton<mud::AreaManager>;
+	};
+}

@@ -35,7 +35,6 @@
 #include "PCharacter.h"
 #include "MCharacter.h"
 #include "Race.h"
-#include "Area.h"
 #include "Room.h"
 #include "Sector.h"
 #include "Colour.h"
@@ -63,17 +62,6 @@ bool Cache::isActive(cstring value)
  *	 Functionality
  * 
  */ 
-
-value_type Cache::AddArea()
-{
-	db::Areas d;
-	d.save();
-	value_type id = d.getareaid();
-	if(id == 0)
-		Global::Get()->bug("Cache::AddArea(), id = 0");
-		
-	return id;
-}
 
 value_type Cache::AddCharacter()
 {
@@ -160,17 +148,6 @@ value_type Cache::AddSector()
  *	 Retreival 
  * 
  */
-
-mud::Area* Cache::GetAreaByKey(value_type id)
-{
-	Area* p = m_areaByKey[id];
-	if(p)
-		return p;
-
-	db::Areas* d = db::Areas::bykey(id);
-	p = cacheArea(d);
-	return p;
-}
 
 mud::Character* Cache::GetCharacterByKey(value_type id)
 {
@@ -527,12 +504,6 @@ value_type Cache::lookupSectorByName(cstring value)
  *
  */ 
 
-void Cache::CloseArea(value_type id)
-{
-	areas_m::iterator key = m_areaByKey.find(id);
-	m_areaByKey.erase(key);
-}
-
 void Cache::CloseCharacter(value_type id)
 {
 	characters_m::iterator key = m_characterByKey.find(id);
@@ -609,13 +580,6 @@ void Cache::CloseSector(value_type id)
 	sectors_ms::iterator name = m_sectorByName.find(key->second->getName());
 	m_sectorByKey.erase(key);
 	m_sectorByName.erase(name);	
-}
-
-Area* Cache::cacheArea(db::Areas* d)
-{
-	Area* p = new Area(d);
-	m_areaByKey[d->getareaid()] = p;
-	return p;
 }
 
 Character* Cache::cacheCharacter(db::Characters *d)

@@ -57,7 +57,7 @@ public:
 	void savePermission(const std::string& argument);
 
 private:
-	mud::Permission* m_permission;
+	SmartPtr<mud::Permission> m_permission;
 	value_type m_account;
 	value_type m_grantgroup;
 	

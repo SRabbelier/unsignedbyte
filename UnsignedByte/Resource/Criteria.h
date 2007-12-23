@@ -32,7 +32,7 @@ public:
 	Criteria() {}
 	virtual ~Criteria() {}
 
-	virtual bool evaluate(sqlite3_stmt* statement, TablePtr table) { return evaluate(statement); }
+	virtual bool evaluate(sqlite3_stmt* statement, Table* table) { return evaluate(statement); }
 	
 private:
 	virtual bool evaluate(sqlite3_stmt* statement) = 0;

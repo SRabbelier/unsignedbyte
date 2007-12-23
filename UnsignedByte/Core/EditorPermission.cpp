@@ -50,7 +50,7 @@ EditorPermission::PermissionCommand EditorPermission::m_savePermission("Save", &
 
 EditorPermission::EditorPermission(UBSocket* sock) :
 OLCEditor(sock),
-m_permission(NULL)
+m_permission()
 {
 	listCommands(Global::Get()->EmptyString);
 }
@@ -110,7 +110,7 @@ void EditorPermission::setEditing(long id)
 {
 	if(id == 0)
 	{
-		m_permission = NULL;
+		m_permission.reset();
 		return;
 	}
 	

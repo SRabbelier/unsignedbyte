@@ -1,3 +1,16 @@
+#ifndef SMART_PTR_H
+#define SMART_PTR_H
+
+#include <boost/shared_ptr.hpp>
+
+// using boost::shared_ptr;
+#define SmartPtr boost::shared_ptr
+
+
+#endif // SMART_PTR_H
+
+
+#define CODELITE_SMART_PTR_H
 #ifndef CODELITE_SMART_PTR_H
 #define CODELITE_SMART_PTR_H
 

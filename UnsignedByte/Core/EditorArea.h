@@ -24,9 +24,14 @@
 #include "singleton.h"
 #include "Interpreter.h"
 #include "CommandObject.h"
+#include "smart_ptr.h"
 
 class UBSocket;
-namespace mud { class Area; };
+namespace mud 
+{ 
+	class Area; 
+	typedef SmartPtr<Area> AreaPtr;
+};
 
 class EditorArea : public OLCEditor
 {
@@ -57,7 +62,7 @@ public:
 	void saveArea(const std::string& argument);
 
 private:
-	mud::Area* m_area;
+	mud::AreaPtr m_area;
 
 	EditorArea(const EditorArea& rhs);
 	EditorArea operator=(const EditorArea& rhs);

@@ -28,7 +28,7 @@ Preprocessors=
 CmpOptions=-g -Wall $(Preprocessors)
 RcCmpOptions=
 LinkOptions=-O0
-IncludePath=$(IncludeSwitch). $(IncludeSwitch)../include 
+IncludePath=$(IncludeSwitch). $(IncludeSwitch)../include $(IncludeSwitch)/usr/include/boost 
 RcIncludePath=
 Libs=
 LibPath=$(LibraryPathSwitch). 
@@ -45,11 +45,14 @@ Objects=$(IntermediateDirectory)/Base64$(ObjectSuffix) $(IntermediateDirectory)/
 ##
 all: $(IntermediateDirectory) $(OutputFile)
 
-$(OutputFile):  $(Objects)
+$(OutputFile): PrePreBuild $(Objects)
 	$(ArchiveTool) $(OutputFile) $(Objects)
 
 ./Debug:
 	@test -d ./Debug || mkdir ./Debug
+
+PrePreBuild: 
+
 
 
 PreBuild:

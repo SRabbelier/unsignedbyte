@@ -46,7 +46,7 @@ EditorGrantGroup::GrantGroupCommand EditorGrantGroup::m_saveGrantGroup("Save", &
 
 EditorGrantGroup::EditorGrantGroup(UBSocket* sock) :
 OLCEditor(sock),
-m_grantgroup(NULL)
+m_grantgroup()
 {
 	listCommands(Global::Get()->EmptyString);
 }
@@ -105,7 +105,7 @@ void EditorGrantGroup::setEditing(long id)
 {
 	if(id == 0)
 	{
-		m_grantgroup = NULL;
+		m_grantgroup.reset();
 		return;
 	}
 	

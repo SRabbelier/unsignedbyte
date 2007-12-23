@@ -54,7 +54,7 @@ Table::~Table()
 
 void Table::addPK(const std::string& name)
 {
-	m_primarykeys[name] = NULL; // TODO - maybe this needs fixing?
+	m_primarykeys[name].reset(); // TODO - maybe this needs fixing?
 	
 	if(m_primarykeys.size() == 1)
 		m_spkey = true;
@@ -104,7 +104,7 @@ void Table::addTextField(const std::string& name, const std::string& defaulttext
 
 void Table::addField(const std::string& name, bool text, const std::string& defaulttext, bool providelookup)
 {
-	FieldPtr field = new Field(name, text, defaulttext);
+	FieldPtr field(new Field(name, text, defaulttext));
 	m_fields.push_back(field);
 	
 	if(providelookup)
@@ -141,7 +141,7 @@ const std::vector<std::string>& Table::tableList()
 	if(m_listcache > m_lastchange)
 	{
 		ListActor act;
-		SqliteMgr::Get()->doForEach(this, ActorPtr(&act, false));
+		SqliteMgr::Get()->doForEach(this, act);
 		m_list = act.getList();
 		m_listcache = time(NULL);
 	}

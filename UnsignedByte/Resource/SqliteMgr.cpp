@@ -40,7 +40,7 @@ SqliteMgr::~SqliteMgr()
 
 void SqliteMgr::doInsert(BindablePtr bindable)
 {
-	TablePtr table = bindable->getTable();
+	Table* table = bindable->getTable().get();
 	sqlite3_stmt* insert = getInsertStmt(table);
 	sqlite3_reset(insert);
 	
@@ -53,7 +53,7 @@ void SqliteMgr::doInsert(BindablePtr bindable)
 
 void SqliteMgr::doErase(BindablePtr bindable)
 {
-	TablePtr table = bindable->getTable();
+	Table* table = bindable->getTable().get();
 	sqlite3_stmt* erase = getEraseStmt(table);
 	sqlite3_reset(erase);
 	
@@ -63,7 +63,7 @@ void SqliteMgr::doErase(BindablePtr bindable)
 
 void SqliteMgr::doUpdate(BindablePtr bindable)
 {
-	TablePtr table = bindable->getTable();
+	Table* table = bindable->getTable().get();
 	sqlite3_stmt* update = getUpdateStmt(table);
 	sqlite3_reset(update);
 	
@@ -73,7 +73,7 @@ void SqliteMgr::doUpdate(BindablePtr bindable)
 
 void SqliteMgr::doSelect(BindablePtr bindable)
 {
-	TablePtr table = bindable->getTable();
+	Table* table = bindable->getTable().get();
 	sqlite3_stmt* select = getSelectStmt(table);
 	sqlite3_reset(select);
 	
@@ -87,7 +87,7 @@ void SqliteMgr::doSelect(BindablePtr bindable)
 
 void SqliteMgr::doLookup(BindablePtr bindable, const std::string& field)
 {
-	TablePtr table = bindable->getTable();
+	Table* table = bindable->getTable().get();
 	sqlite3_stmt* lookup = getLookupStmt(table, field);
 	sqlite3_reset(lookup);
 	
@@ -102,7 +102,7 @@ void SqliteMgr::doLookup(BindablePtr bindable, const std::string& field)
 		throw bindable;
 }
 
-void SqliteMgr::doForEach(const TablePtr table, ActorPtr act)
+void SqliteMgr::doForEach(Table* table, Actor& act)
 {
 	sqlite3_stmt* forEach = getForEachStmt(table);
 	sqlite3_reset(forEach);
@@ -111,7 +111,7 @@ void SqliteMgr::doForEach(const TablePtr table, ActorPtr act)
 	for(int i = 0; good; i++)
 	{
 		good = doStatement(forEach);
-		act->parseRow(forEach, table);
+		act.parseRow(forEach, table);
 	}
 }
 		
@@ -139,19 +139,19 @@ bool SqliteMgr::doStatement(sqlite3_stmt* stmt)
 	}
 }
 
-StatementsPtr SqliteMgr::getStatements(TablePtr table)
+StatementsPtr SqliteMgr::getStatements(Table* table)
 {
-	StatementsPtr statements = m_statements[table.Get()];
+	StatementsPtr statements = m_statements[table];
 	if(statements)
 		return statements;
 	
-	statements = new Statements();
+	statements = StatementsPtr(new Statements());
 	
-	m_statements[table.Get()] = statements;
+	m_statements[table] = statements;
 	return statements;
 }
 
-sqlite3_stmt* SqliteMgr::getInsertStmt(TablePtr table)
+sqlite3_stmt* SqliteMgr::getInsertStmt(Table* table)
 {
 	StatementsPtr statements = getStatements(table);
 	sqlite3_stmt* statement = statements->getInsert();
@@ -193,7 +193,7 @@ sqlite3_stmt* SqliteMgr::getInsertStmt(TablePtr table)
 	return statement;
 }
 
-sqlite3_stmt* SqliteMgr::getEraseStmt(const TablePtr table)
+sqlite3_stmt* SqliteMgr::getEraseStmt(Table* table)
 {
 	StatementsPtr statements = getStatements(table);
 	sqlite3_stmt* statement = statements->getErase();
@@ -229,7 +229,7 @@ sqlite3_stmt* SqliteMgr::getEraseStmt(const TablePtr table)
 	return statement;
 }
 
-sqlite3_stmt* SqliteMgr::getUpdateStmt(const TablePtr table)
+sqlite3_stmt* SqliteMgr::getUpdateStmt(Table* table)
 {
 	StatementsPtr statements = getStatements(table);
 	sqlite3_stmt* statement = statements->getUpdate();
@@ -274,7 +274,7 @@ sqlite3_stmt* SqliteMgr::getUpdateStmt(const TablePtr table)
 	return statement;
 }
 
-sqlite3_stmt* SqliteMgr::getSelectStmt(const TablePtr table)
+sqlite3_stmt* SqliteMgr::getSelectStmt(Table* table)
 {
 	StatementsPtr statements = getStatements(table);
 	sqlite3_stmt* statement = statements->getSelect();
@@ -319,7 +319,7 @@ sqlite3_stmt* SqliteMgr::getSelectStmt(const TablePtr table)
 	return statement;
 }
 
-sqlite3_stmt* SqliteMgr::getLookupStmt(const TablePtr table, const std::string& field)
+sqlite3_stmt* SqliteMgr::getLookupStmt(Table* table, const std::string& field)
 {
 	StatementsPtr statements = getStatements(table);
 	sqlite3_stmt* statement = statements->getLookup(field);
@@ -356,7 +356,7 @@ sqlite3_stmt* SqliteMgr::getLookupStmt(const TablePtr table, const std::string& 
 	return statement;
 }
 
-sqlite3_stmt* SqliteMgr::getForEachStmt(const TablePtr table)
+sqlite3_stmt* SqliteMgr::getForEachStmt(Table* table)
 {
 	StatementsPtr statements = getStatements(table);
 	sqlite3_stmt* statement = statements->getForEach();

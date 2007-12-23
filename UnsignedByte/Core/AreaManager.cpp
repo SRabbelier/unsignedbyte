@@ -18,21 +18,59 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#include <iostream>
-#include <sstream>
+#include <string>
 #include <stdexcept>
 
-#include "CountActor.h"
-#include "Table.h"
+#include "AreaManager.h"
+#include "Area.h"
+#include "Global.h"
+#include "Area.h"
 
-void CountActor::parseRow(sqlite3_stmt* statement, Table* table)
-{ 
-	if(m_criteria->evaluate(statement, table))
-		m_count++;
-}
+using mud::AreaManager;
+using mud::Area;
+using mud::AreaPtr;
 
-const value_type CountActor::getCount() const
+std::vector<std::string> AreaManager::List()
 {
-	return m_count;
+	return GetTable()->tableList();
 }
 
+TablePtr AreaManager::GetTable()
+{
+	return Tables::Get()->AREAS;
+}
+
+value_type AreaManager::Add()
+{
+	db::Areas d;
+	d.save();
+	value_type id = d.getareaid();
+	if(id == 0)
+		Global::Get()->bug("Cache::AddArea(), id = 0");
+		
+	return id;
+}
+
+mud::AreaPtr AreaManager::GetByKey(value_type id)
+{
+	AreaPtr p = m_byKey[id];
+	if(p)
+		return p;
+
+	db::Areas* d = db::Areas::bykey(id);
+	p = cacheArea(d);
+	return p;
+}
+
+void AreaManager::Close(value_type id)
+{
+	areas_m::iterator key = m_byKey.find(id);
+	m_byKey.erase(key);
+}
+
+AreaPtr AreaManager::cacheArea(db::Areas* d)
+{
+	AreaPtr p = new Area(d);
+	m_byKey[d->getareaid()] = p;
+	return p;
+}

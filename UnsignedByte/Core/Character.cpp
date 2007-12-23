@@ -43,6 +43,7 @@
 #include "Area.h"
 #include "Room.h"
 #include "Account.h" // needed because UBSocket.h is included
+#include "AreaManager.h"
 
 using mud::Character;
 
@@ -86,7 +87,7 @@ void Character::OnSendf(const char* format, ...)
  */ 	
 void Character::OnAreaList(const std::string& msg)
 {
-	OnSend(String::Get()->box(mud::Area::List(), "Areas"));
+	OnSend(String::Get()->box(mud::AreaManager::Get()->List(), "Areas"));
 	return;
 }
 

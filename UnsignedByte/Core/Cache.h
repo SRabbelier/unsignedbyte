@@ -56,7 +56,6 @@ typedef std::pair<value_type, value_type> twoValueKey;
 
 typedef std::map<std::string, value_type> reverseStringKey;
 
-typedef std::map<oneValueKey,mud::Area*> areas_m;
 typedef std::map<oneValueKey,mud::MCharacter*> mobiles_m;
 typedef std::map<oneValueKey,mud::Character*> characters_m;
 typedef std::map<oneValueKey,mud::Colour*> colours_m;
@@ -67,7 +66,6 @@ typedef std::map<oneValueKey,mud::Room*> rooms_m;
 typedef std::map<oneValueKey,mud::Sector*> sectors_m;
 typedef std::map<oneValueKey,mud::PCharacter*> players_m;
 
-typedef std::map<oneStringKey,mud::Area*> areas_ms;
 typedef std::map<oneStringKey,mud::MCharacter*> mobiles_ms;
 typedef std::map<oneStringKey,mud::Character*> characters_ms;
 typedef std::map<oneStringKey,mud::Colour*> colours_ms;
@@ -91,7 +89,6 @@ namespace mud
 		bool isActive(value_type id);
 		bool isActive(cstring name);
 		
-		value_type AddArea();
 		value_type AddCharacter();
 		value_type AddColour();
 		value_type AddCommand();
@@ -99,8 +96,6 @@ namespace mud
 		value_type AddRace();
 		value_type AddRoom();
 		value_type AddSector();
-		
-		mud::Area* GetAreaByKey(value_type id);
 		
 		mud::Character* GetCharacterByKey(value_type id);
 		mud::Character* GetCharacterByName(cstring name);
@@ -144,7 +139,6 @@ namespace mud
 		value_type lookupRaceByName(cstring value);
 		value_type lookupSectorByName(cstring value);
 
-		void CloseArea(value_type areaid);
 		void CloseCharacter(value_type characterid);
 		void CloseColour(value_type colourid);
 		void CloseCommand(value_type commandid);
@@ -157,7 +151,6 @@ namespace mud
 		void CloseSector(value_type sectorid);
 
 	private:
-		Area* cacheArea(db::Areas* d);
 		Character* cacheCharacter(db::Characters* d);
 		Colour* cacheColour(db::Colours* d);
 		Command* cacheCommand(db::Commands* d);
@@ -167,8 +160,6 @@ namespace mud
 		Race* cacheRace(db::Races* d);
 		Room* cacheRoom(db::Rooms* d);
 		Sector* cacheSector(db::Sectors* d);
-		
-		areas_m m_areaByKey;
 		
 		characteraccount_m m_characteraccountByKey;
 		
