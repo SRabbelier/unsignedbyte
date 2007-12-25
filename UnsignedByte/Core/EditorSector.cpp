@@ -48,7 +48,7 @@ EditorSector::SectorCommand EditorSector::m_saveSector("Save", &EditorSector::sa
 
 EditorSector::EditorSector(UBSocket* sock) :
 OLCEditor(sock),
-m_sector(NULL)
+m_sector()
 {
 	listCommands(Global::Get()->EmptyString);
 }
@@ -108,11 +108,11 @@ void EditorSector::setEditing(long id)
 {
 	if(id == 0)
 	{
-		m_sector = NULL;
+		m_sector.reset();
 		return;
 	}
 	
-	m_sector = mud::Cache::Get()->GetSectorByKey(id);
+	m_sector.reset(mud::Cache::Get()->GetSectorByKey(id));
 	return;
 }
 

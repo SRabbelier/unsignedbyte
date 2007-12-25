@@ -153,7 +153,7 @@ void ClassSourceGenerator::AppendKeyFactory()
 	for(TableMap::const_iterator it = m_table->keybegin(); it != m_table->keyend(); it++)
 		(*m_file) << m_tabs << "result->m_" << it->first << " = " << it->first<< ";" << endl;
 	
-	(*m_file) << m_tabs << "SqliteMgr::Get()->doSelect(SmartPtr<Bindable>(result,true));" << endl;
+	(*m_file) << m_tabs << "SqliteMgr::Get()->doSelect(result);" << endl;
 	(*m_file) << m_tabs << "return result;" << endl;
 	(*m_file) << "}" << endl;
 	(*m_file) << endl;
@@ -192,16 +192,14 @@ void ClassSourceGenerator::AppendCtorFactory()
 				(*m_file) << "const std::string& value)" << endl;
 			else
 				(*m_file) << "value_type value)" << endl;
-			(*m_file) << "{" << endl;
-			
-			(*m_file) << m_tabs <<  m_name << "* result = new " << m_name << "();" << endl;
-			(*m_file) << m_tabs << "SmartPtr<Bindable> bindableresult(result); // will handle deletion of ptr" << endl;
+			(*m_file) << "{" << endl;			
+			(*m_file) << m_tabs << "SmartPtr<" << m_name << "> result(new " << m_name << "()); // will handle deletion of ptr" << endl;
 			(*m_file) << m_tabs << "result->m_lookupvalue = value;" << endl;
 			(*m_file) << m_tabs << "value_type key = 0;" << endl;
 			(*m_file) << m_tabs << "try {" << endl;
-			(*m_file) << m_tabs << m_tabs << "SqliteMgr::Get()->doLookup(bindableresult, \"" << (*it)->getName() << "\");" << endl;
+			(*m_file) << m_tabs << m_tabs << "SqliteMgr::Get()->doLookup(result.get(), \"" << (*it)->getName() << "\");" << endl;
 			(*m_file) << m_tabs << m_tabs << "key = result->get" << m_table->firstKey() << "();" << endl;
-			(*m_file) << m_tabs << "} catch(SmartPtr<Bindable> result) {	}" << endl;
+			(*m_file) << m_tabs << "} catch(Bindable* result) {	}" << endl;
 			(*m_file) << endl;
 			(*m_file) << m_tabs << "return key;" << endl;
 			(*m_file) << "}" << endl;
@@ -218,7 +216,7 @@ void ClassSourceGenerator::AppendBody()
 	(*m_file) << "void " << m_name <<  "::erase()" << endl;
 	(*m_file) << "{" << endl;
 	(*m_file) << m_tabs << "if(!m_newentry)" << endl;	
-	(*m_file) << m_tabs << m_tabs << "SqliteMgr::Get()->doErase(SmartPtr<Bindable>(this,true));" << endl;
+	(*m_file) << m_tabs << m_tabs << "SqliteMgr::Get()->doErase(this);" << endl;
 	(*m_file) << "}" << endl;
 	(*m_file) << endl;
 		
@@ -226,13 +224,13 @@ void ClassSourceGenerator::AppendBody()
 	(*m_file) << "{" << endl;
 	(*m_file) << m_tabs << "if(m_newentry)" << endl;
 	(*m_file) << m_tabs << "{" << endl;
-	(*m_file) << m_tabs << m_tabs << "SqliteMgr::Get()->doInsert(SmartPtr<Bindable>(this,true));" << endl;
+	(*m_file) << m_tabs << m_tabs << "SqliteMgr::Get()->doInsert(this);" << endl;
 	(*m_file) << m_tabs << m_tabs << "m_newentry = false;" << endl;
 	(*m_file) << m_tabs << "}" << endl;
 	(*m_file) << endl;
 	(*m_file) << m_tabs << "if(m_dirty)" << endl;
 	(*m_file) << m_tabs << "{" << endl;
-	(*m_file) << m_tabs << m_tabs << "SqliteMgr::Get()->doUpdate(SmartPtr<Bindable>(this,true));" << endl;
+	(*m_file) << m_tabs << m_tabs << "SqliteMgr::Get()->doUpdate(this);" << endl;
 	(*m_file) << m_tabs << m_tabs << "getTable()->modify();" << endl;
 	(*m_file) << m_tabs << m_tabs << "m_dirty = false;" << endl;
 	(*m_file) << m_tabs << "}" << endl;

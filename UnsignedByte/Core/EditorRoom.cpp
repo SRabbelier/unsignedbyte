@@ -71,7 +71,7 @@ OLCEditor(sock),
 m_area(1),
 m_xpos(1),
 m_ypos(1),
-m_room(NULL)
+m_room()
 {
 	listCommands(Global::Get()->EmptyString);
 }
@@ -136,11 +136,11 @@ void EditorRoom::setEditing(long id)
 {
 	if(id == 0)
 	{
-		m_room = NULL;
+		m_room.reset();
 		return;
 	}
 	
-	m_room = mud::Cache::Get()->GetRoomByKey(id);
+	m_room.reset(mud::Cache::Get()->GetRoomByKey(id));
 	return;
 }
 
@@ -257,7 +257,7 @@ void EditorRoom::deactivateRoom(const std::string& argument)
 	m_sock->Sendf("Deleting room '%s'.\n", m_room->getName().c_str());
 	m_room->Delete();
 	Room::Close(m_room);
-	m_room = NULL;
+	m_room.reset();
 	m_sock->Send("Deleted.\n");
 	return;
 }

@@ -79,5 +79,6 @@ namespace mud
 		~GrantGroup(void);
 		
 		friend class Cache;
+		friend void boost::checked_delete<mud::GrantGroup>(mud::GrantGroup* x);
 	};
 }

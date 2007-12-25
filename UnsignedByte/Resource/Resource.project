@@ -109,14 +109,12 @@
     <File Name="SPKCriteria.h"/>
     <File Name="../include/smart_ptr.h"/>
   </VirtualDirectory>
-  <Dependencies/>
   <Settings Type="Static Library">
     <Configuration Name="Debug" CompilerType="gnu g++" DebuggerType="GNU gdb debugger">
       <General OutputFile="../lib/libubresource.a" IntermediateDirectory="./Debug" Command="" CommandArguments="" WorkingDirectory=""/>
       <Compiler Required="yes" Options="-g -Wall">
         <IncludePath Value="."/>
         <IncludePath Value="../include"/>
-        <IncludePath Value="/usr/include/boost"/>
       </Compiler>
       <Linker Required="yes" Options="-O0">
         <LibraryPath Value="."/>
@@ -136,4 +134,5 @@
       </AdditionalRules>
     </Configuration>
   </Settings>
+  <Dependencies/>
 </CodeLite_Project>

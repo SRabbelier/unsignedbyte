@@ -57,7 +57,7 @@ public:
 	void saveSector(const std::string& argument);
 
 private:
-	mud::Sector* m_sector;
+	SmartPtr<mud::Sector> m_sector;
 	EditorSector(const EditorSector& rhs);
 	EditorSector operator=(const EditorSector& rhs);
 

@@ -32,7 +32,7 @@ class DoCmd;
 
 EditorAccountLogin::EditorAccountLogin(UBSocket* sock) :
 Editor(sock),
-m_account(NULL)
+m_account()
 {
 	OnLine(Global::Get()->EmptyString);
 }

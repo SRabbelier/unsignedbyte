@@ -70,7 +70,7 @@ void AreaManager::Close(value_type id)
 
 AreaPtr AreaManager::cacheArea(db::Areas* d)
 {
-	AreaPtr p = new Area(d);
+	AreaPtr p(new Area(d));
 	m_byKey[d->getareaid()] = p;
 	return p;
 }

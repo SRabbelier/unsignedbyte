@@ -58,7 +58,7 @@ public:
 	void saveCommand(const std::string& argument);
 
 private:
-	mud::Command* m_command;
+	SmartPtr<mud::Command> m_command;
 	
 	EditorCommand(const EditorCommand& rhs);
 	EditorCommand operator=(const EditorCommand& rhs);

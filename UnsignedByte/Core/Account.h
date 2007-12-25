@@ -23,6 +23,7 @@
 #include "Savable.h"
 #include "db.h"
 #include "smart_ptr.h"
+#include <boost/checked_delete.hpp>
 
 class UBSocket;
 
@@ -72,6 +73,6 @@ namespace mud
 		~Account(void);
 		
 		friend class AccountManager; // for constructor
-		friend class SmartPtr<Account>;
+		friend void boost::checked_delete<mud::Account>(mud::Account* x);
 	};
 }

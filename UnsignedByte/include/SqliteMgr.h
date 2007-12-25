@@ -42,11 +42,11 @@ typedef unsigned long value_type;
 class SqliteMgr : public Singleton<SqliteMgr>
 {
 	public:
-		void doInsert(BindablePtr bindable);
-		void doErase(BindablePtr bindable);
-		void doUpdate(BindablePtr bindable);
-		void doSelect(BindablePtr bindable);
-		void doLookup(BindablePtr bindable, const std::string& field);
+		void doInsert(Bindable* bindable);
+		void doErase(Bindable* bindable);
+		void doUpdate(Bindable* bindable);
+		void doSelect(Bindable* bindable);
+		void doLookup(Bindable* bindable, const std::string& field);
 		void doForEach(Table* table, Actor& act);
 	
 	private:

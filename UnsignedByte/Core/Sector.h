@@ -77,5 +77,6 @@ namespace mud
 		~Sector(void);
 		
 		friend class Cache;
+		friend void boost::checked_delete<mud::Sector>(mud::Sector* x);
 	};
 }

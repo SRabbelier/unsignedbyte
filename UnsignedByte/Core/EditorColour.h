@@ -55,7 +55,7 @@ public:
 	void showColour(const std::string& argument);
 
 private:
-	mud::Colour* m_colour;
+	SmartPtr<mud::Colour> m_colour;
 	
 	EditorColour(const EditorColour& rhs);
 	EditorColour operator=(const EditorColour& rhs);

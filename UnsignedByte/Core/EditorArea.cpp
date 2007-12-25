@@ -45,7 +45,7 @@ EditorArea::AreaCommand EditorArea::m_saveArea("Save", &EditorArea::saveArea);
 
 EditorArea::EditorArea(UBSocket* sock) :
 OLCEditor(sock),
-m_area(NULL)
+m_area()
 {
 	listCommands(Global::Get()->EmptyString);
 }
@@ -104,7 +104,7 @@ void EditorArea::setEditing(long id)
 {
 	if(id == 0)
 	{
-		m_area = NULL;
+		m_area.reset();
 		return;
 	}
 	

@@ -62,7 +62,7 @@ namespace mud
 
 	private:
 		friend class mud::AreaManager; // For constructor
-		friend class SmartPtr<Area>;
+		friend void boost::checked_delete<mud::Area>(mud::Area* x);
 		
 		db::Areas* m_area;
 

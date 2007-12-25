@@ -240,13 +240,12 @@ std::vector<std::string> Room::List()
 	return GetTable()->tableList();
 }
 
-void Room::Close(Room* room)
+void Room::Close(SmartPtr<Room> room)
 {
 	if(room == NULL)
 		throw std::invalid_argument("Room::Close(), room == NULL!");
 	
 	Cache::Get()->CloseRoom(room->getID());
-	delete room;
 }
 
 TablePtr Room::GetTable()

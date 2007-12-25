@@ -69,5 +69,6 @@ namespace mud
 		~Colour(void);
 		
 		friend class Cache;
+		friend void boost::checked_delete<mud::Colour>(mud::Colour* x);
 	};
 }

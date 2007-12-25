@@ -112,7 +112,7 @@ value_type AccountManager::lookupByName(cstring value)
 
 AccountPtr AccountManager::cacheAccount(db::Accounts* d)
 {
-	AccountPtr p = new Account(d);
+	AccountPtr p(new Account(d));
 	m_byKey[d->getaccountid()] = p;
 	m_byName[d->getname()] = p;
 	return p;

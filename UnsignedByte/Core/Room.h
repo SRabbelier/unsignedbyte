@@ -67,7 +67,7 @@ namespace mud
 		static TablePtr GetTable();
 		static std::vector<std::string> List();
 		static std::string CreateMap(long id, long origx, long origy);
-		static void Close(Room* room);
+		static void Close(SmartPtr<Room> room);
 		
 		/**
 		 * \brief Database utilities
@@ -86,5 +86,6 @@ namespace mud
 		~Room(void);
 
 		friend class Cache; // constructor
+		friend void boost::checked_delete<mud::Room>(mud::Room* x);
 	};
 }

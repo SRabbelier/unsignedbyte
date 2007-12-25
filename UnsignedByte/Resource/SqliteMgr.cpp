@@ -38,7 +38,7 @@ SqliteMgr::~SqliteMgr()
 	m_db->freedb(m_odb);
 }
 
-void SqliteMgr::doInsert(BindablePtr bindable)
+void SqliteMgr::doInsert(Bindable* bindable)
 {
 	Table* table = bindable->getTable().get();
 	sqlite3_stmt* insert = getInsertStmt(table);
@@ -51,7 +51,7 @@ void SqliteMgr::doInsert(BindablePtr bindable)
 	bindable->parseInsert(m_odb->db);
 }
 
-void SqliteMgr::doErase(BindablePtr bindable)
+void SqliteMgr::doErase(Bindable* bindable)
 {
 	Table* table = bindable->getTable().get();
 	sqlite3_stmt* erase = getEraseStmt(table);
@@ -61,7 +61,7 @@ void SqliteMgr::doErase(BindablePtr bindable)
 	doStatement(erase);	
 }
 
-void SqliteMgr::doUpdate(BindablePtr bindable)
+void SqliteMgr::doUpdate(Bindable* bindable)
 {
 	Table* table = bindable->getTable().get();
 	sqlite3_stmt* update = getUpdateStmt(table);
@@ -71,7 +71,7 @@ void SqliteMgr::doUpdate(BindablePtr bindable)
 	doStatement(update);
 }
 
-void SqliteMgr::doSelect(BindablePtr bindable)
+void SqliteMgr::doSelect(Bindable* bindable)
 {
 	Table* table = bindable->getTable().get();
 	sqlite3_stmt* select = getSelectStmt(table);
@@ -85,7 +85,7 @@ void SqliteMgr::doSelect(BindablePtr bindable)
 		throw std::runtime_error("SqliteMgr::doSelect(), no row.");
 }
 
-void SqliteMgr::doLookup(BindablePtr bindable, const std::string& field)
+void SqliteMgr::doLookup(Bindable* bindable, const std::string& field)
 {
 	Table* table = bindable->getTable().get();
 	sqlite3_stmt* lookup = getLookupStmt(table, field);

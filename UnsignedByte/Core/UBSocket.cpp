@@ -40,7 +40,7 @@
 UBSocket::UBSocket(ISocketHandler& h) :
 TcpSocket(h),
 m_prompt(),
-m_account(NULL),
+m_account(),
 m_popeditor(false),
 m_popLast(false),
 m_editors(),
@@ -72,8 +72,7 @@ UBSocket::~UBSocket(void)
 	if(m_account)
 	{
 		mud::AccountManager::Get()->Close(m_account);
-		// TODO
-		m_account = NULL;
+		m_account.reset();
 	}
 }
 
@@ -122,7 +121,7 @@ mud::Account* UBSocket::GetAccount() const
 	if(!m_account)
 		throw std::logic_error("UBSocket::GetAccount(), m_account == NULL!");
 	
-	return m_account.Get();
+	return m_account.get();
 }
 
 UBSocket* UBSocket::GetForcer() const

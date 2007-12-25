@@ -85,5 +85,6 @@ namespace mud
 		Command operator=(const Command& rhs);
 		~Command(void);
 		friend class Cache;
+		friend void boost::checked_delete<mud::Command>(mud::Command* x);
 	};
 }

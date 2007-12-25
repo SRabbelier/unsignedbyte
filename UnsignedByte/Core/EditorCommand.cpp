@@ -50,7 +50,7 @@ EditorCommand::CommandCommand EditorCommand::m_saveCommand("Save", &EditorComman
 
 EditorCommand::EditorCommand(UBSocket* sock) :
 OLCEditor(sock),
-m_command(NULL)
+m_command()
 {
 	listCommands(Global::Get()->EmptyString);
 }
@@ -109,11 +109,11 @@ void EditorCommand::setEditing(long id)
 {
 	if(id == 0)
 	{
-		m_command = NULL;
+		m_command.reset();
 		return;
 	}
 	
-	m_command = mud::Cache::Get()->GetCommandByKey(id);
+	m_command.reset(mud::Cache::Get()->GetCommandByKey(id));
 	return;
 }
 

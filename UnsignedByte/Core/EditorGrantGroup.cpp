@@ -109,7 +109,7 @@ void EditorGrantGroup::setEditing(long id)
 		return;
 	}
 	
-	m_grantgroup = mud::Cache::Get()->GetGrantGroupByKey(id);
+	m_grantgroup.reset(mud::Cache::Get()->GetGrantGroupByKey(id));
 	return;
 }
 

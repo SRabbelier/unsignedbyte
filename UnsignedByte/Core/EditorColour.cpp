@@ -47,7 +47,7 @@ EditorColour::ColourCommand EditorColour::m_showColour("Show", &EditorColour::sh
 
 EditorColour::EditorColour(UBSocket* sock) :
 OLCEditor(sock),
-m_colour(NULL)
+m_colour()
 {
 	listCommands(Global::Get()->EmptyString);
 }
@@ -107,11 +107,11 @@ void EditorColour::setEditing(long id)
 {
 	if(id == 0)
 	{
-		m_colour = NULL;
+		m_colour.reset();
 		return;
 	}
 	
-	m_colour = mud::Cache::Get()->GetColourByKey(id);
+	m_colour.reset(mud::Cache::Get()->GetColourByKey(id));
 	return;
 }
 

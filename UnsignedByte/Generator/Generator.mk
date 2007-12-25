@@ -42,7 +42,7 @@ Objects=$(IntermediateDirectory)/main$(ObjectSuffix) $(IntermediateDirectory)/Cl
 all: $(OutputFile)
 
 $(OutputFile): makeDirStep  $(Objects)
-	$(LinkerName) $(OutputSwitch)$(OutputFile) $(LinkOptions) $(Objects) $(LibPath) $(Libs)
+	$(LinkerName) $(OutputSwitch)$(OutputFile) $(Objects) $(LibPath) $(Libs) $(LinkOptions)
 	@echo Executing Post Build commands ...
 	../bin/Generator
 	mv db.cpp ../DAL

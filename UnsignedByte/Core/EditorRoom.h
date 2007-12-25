@@ -75,7 +75,7 @@ private:
 	long m_area;
 	long m_xpos;
 	long m_ypos;
-	mud::Room* m_room;
+	SmartPtr<mud::Room> m_room;
 
 	class RoomInterpreter : public Interpreter<RoomCommand>, public Singleton<RoomInterpreter> {
 	private:

@@ -37,5 +37,6 @@ namespace mud
 		virtual ~MCharacter(void);
 
 		friend class Cache; // for constructor
+		friend void boost::checked_delete<mud::MCharacter>(mud::MCharacter* x);
 	};
 }

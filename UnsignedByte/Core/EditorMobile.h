@@ -55,7 +55,7 @@ public:
 	void saveMobile(const std::string& argument);
 
 private:
-	mud::MCharacter* m_mobile;
+	SmartPtr<mud::MCharacter> m_mobile;
 	EditorMobile(const EditorMobile& rhs);
 	EditorMobile operator=(const EditorMobile& rhs);
 

@@ -44,7 +44,7 @@ EditorMobile::MobileCommand EditorMobile::m_saveMobile("Save", &EditorMobile::sa
 
 EditorMobile::EditorMobile(UBSocket* sock) :
 OLCEditor(sock),
-m_mobile(NULL)
+m_mobile()
 {
 	listCommands(Global::Get()->EmptyString);
 }
@@ -103,11 +103,11 @@ void EditorMobile::setEditing(long id)
 {
 	if(id == 0)
 	{
-		m_mobile = NULL;
+		m_mobile.reset();
 		return;
 	}
 	
-	m_mobile = mud::Cache::Get()->GetMCharacterByKey(id);
+	m_mobile.reset(mud::Cache::Get()->GetMCharacterByKey(id));
 	return;
 }
 

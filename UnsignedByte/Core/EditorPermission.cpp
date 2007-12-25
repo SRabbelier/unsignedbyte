@@ -176,8 +176,7 @@ void EditorPermission::editGrantGroup(const std::string& argument)
 	}
 
 	m_sock->Sendf("Preparing to edit permission with grangroup '%d'.\n", id);
-	// m_grantgroup = id;
-	// TODO - find some way to pass the Editor to Run()
+	m_grantgroup = id;
 	return;
 }
 
