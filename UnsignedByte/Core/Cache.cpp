@@ -63,17 +63,6 @@ bool Cache::isActive(cstring value)
  * 
  */ 
 
-value_type Cache::AddCharacter()
-{
-	db::Characters d;
-	d.save();
-	value_type id = d.getcharacterid();
-	if(id == 0)
-		Global::Get()->bug("Cache::AddCharacter(), id = 0");
-		
-	return id;
-}
-
 value_type Cache::AddColour()
 {
 	db::Colours d;
@@ -148,28 +137,6 @@ value_type Cache::AddSector()
  *	 Retreival 
  * 
  */
-
-mud::Character* Cache::GetCharacterByKey(value_type id)
-{
-	Character* p = m_characterByKey[id];
-	if(p)
-		return p;
-
-	db::Characters* d = db::Characters::bykey(id);
-	p = cacheCharacter(d);
-	return p;
-}
-
-mud::Character* Cache::GetCharacterByName(cstring value)
-{
-	Character* p = m_characterByName[value];
-	if(p)
-		return p;
-		
-	db::Characters* d = db::Characters::byname(value);
-	p = cacheCharacter(d);
-	return p;
-}
 
 mud::Colour* Cache::GetColourByKey(value_type id)
 {
@@ -392,43 +359,11 @@ mud::Sector* Cache::GetSectorByName(cstring value)
 
 /**
  *
- * Database
- * Relation
- * Checking 
- *
- */ 
-
-bool Cache::existsCharacterWithAccount(value_type characterid, value_type accountid)
-{
-	twoValueKey key(accountid, characterid);
-	db::CharacterAccount* d = m_characteraccountByKey[key];
-	if(d)
-		return d->exists();
-	
-	d = db::CharacterAccount::bykey(accountid, characterid);
-	m_characteraccountByKey[key] = d;
-	return d->exists();
-}
-
-
-/**
- *
  * Lookup
  * By Field
  * Functionality 
  *
  */ 
-
-value_type Cache::lookupCharacterByName(cstring value)
-{
-	reverseStringKey::iterator it = m_lookupCharacterByName.find(value);
-	if(it != m_lookupCharacterByName.end())
-		return it->second;
-	
-	value_type id = db::Characters::lookupname(value);
-	m_lookupCharacterByName[value] = id;
-	return id;
-}
 
 value_type Cache::lookupColourByCode(cstring value)
 {
@@ -504,14 +439,6 @@ value_type Cache::lookupSectorByName(cstring value)
  *
  */ 
 
-void Cache::CloseCharacter(value_type id)
-{
-	characters_m::iterator key = m_characterByKey.find(id);
-	characters_ms::iterator name = m_characterByName.find(key->second->getName());
-	m_characterByKey.erase(key);
-	m_characterByName.erase(name);
-}
-
 void Cache::CloseColour(value_type id)
 {
 	colours_m::iterator key = m_colourByKey.find(id);
@@ -582,13 +509,11 @@ void Cache::CloseSector(value_type id)
 	m_sectorByName.erase(name);	
 }
 
-Character* Cache::cacheCharacter(db::Characters *d)
-{
-	Character* p = new Character(d);
-	m_characterByKey[d->getcharacterid()] = p;
-	m_characterByName[d->getname()] = p;
-	return p;
-}
+/**
+ * Entity
+ * Caching
+ * Functions 
+ */ 
 
 Colour* Cache::cacheColour(db::Colours* d)
 {
@@ -654,4 +579,19 @@ Sector* Cache::cacheSector(db::Sectors* d)
 	m_sectorByKey[d->getsectorid()] = p;
 	m_sectorByName[d->getname()] = p;
 	return p;
+}
+
+/**
+ * Belongs to CharacterAccount
+ */ 
+bool Cache::existsCharacterWithAccount(value_type characterid, value_type accountid)
+{
+	twoValueKey key(accountid, characterid);
+	db::CharacterAccount* d = m_characteraccountByKey[key];
+	if(d)
+		return d->exists();
+	
+	d = db::CharacterAccount::bykey(accountid, characterid);
+	m_characteraccountByKey[key] = d;
+	return d->exists();
 }

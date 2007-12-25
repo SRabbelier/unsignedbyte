@@ -36,6 +36,7 @@
 
 #include "Account.h"
 #include "MCharacter.h"
+#include "CharacterManager.h"
 
 EditorMobile::MobileCommand EditorMobile::m_editName("Name", &EditorMobile::editName);
 EditorMobile::MobileCommand EditorMobile::m_editDescription("Description", &EditorMobile::editDescription);
@@ -91,12 +92,12 @@ TablePtr EditorMobile::getTable()
 
 long EditorMobile::addNew()
 {
-	return mud::Cache::Get()->AddCharacter();
+	return mud::CharacterManager::Get()->Add();
 }
 
 std::vector<std::string> EditorMobile::getList()
 {
-	return mud::MCharacter::List();
+	return mud::CharacterManager::Get()->List();
 }
 
 void EditorMobile::setEditing(long id)

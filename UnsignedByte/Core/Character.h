@@ -27,6 +27,7 @@
 
 namespace mud
 {
+	class CharacterManager;
 	class Character : public Savable
 	{
 	public:
@@ -76,15 +77,7 @@ namespace mud
 		 */
 		std::vector<std::string> Show();
 		std::string ShowShort();
-		TablePtr getTable() const { return GetTable(); }
-		
-		/**
-		 * \brief Static utilities
-		 */
-		static TablePtr GetTable();
-		static std::vector<std::string> List();
-		static void Close(Character* Ch);
-		static bool IllegalName(const std::string& name);
+		TablePtr getTable() const;
 
 	protected:
 		db::Characters* m_character;
@@ -92,7 +85,8 @@ namespace mud
 		Character(db::Characters* character);
 		virtual ~Character(void);
 		
-		friend class Cache; // for constructor
+		friend class mud::CharacterManager; // for constructor
+		friend void boost::checked_delete<mud::Character>(mud::Character* x);
 		
 	private:
 		Character(const Character& rhs);

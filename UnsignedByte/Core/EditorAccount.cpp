@@ -37,6 +37,7 @@
 #include "Command.h"
 #include "Permission.h"
 #include "PCharacter.h"
+#include "CharacterManager.h"
 #include "Room.h"
 
 using mud::Cache;
@@ -115,7 +116,7 @@ void EditorAccount::beginLogin(const std::string &argument)
 		return;
 	}
 
-	int id = mud::Cache::Get()->lookupCharacterByName(argument);
+	int id = mud::CharacterManager::Get()->lookupByName(argument);
 	if(id <= 0)
 	{
 		m_sock->Send("No such character.\n");

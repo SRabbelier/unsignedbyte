@@ -20,6 +20,7 @@
 
 #include "EditorOOC.h"
 #include "Character.h"
+#include "CharacterManager.h"
 #include "UBSocket.h"
 #include "UBHandler.h"
 #include "StringUtilities.h"
@@ -125,5 +126,5 @@ void EditorOOC::listOnlineCharacters(const std::string& argument)
 
 void EditorOOC::listCharacters(const std::string& argument)
 {
-	m_sock->Send(String::Get()->box(mud::Character::List(), "Characters"));
+	m_sock->Send(String::Get()->box(mud::CharacterManager::Get()->List(), "Characters"));
 }

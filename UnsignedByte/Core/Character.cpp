@@ -178,19 +178,11 @@ void Character::Delete()
 void Character::Save() 
 {
 	m_character->save(); 
-};
+}
 
 bool Character::Exists() 
 { 
 	return m_character->exists(); 
-};
-
-bool Character::IllegalName(const std::string& name)
-{
-	if(mud::Cache::Get()->lookupCharacterByName(name))
-		return true;
-
-	return false;
 }
 
 std::vector<std::string> Character::Show()
@@ -207,24 +199,7 @@ std::string Character::ShowShort()
 	return result;
 }
 
-std::vector<std::string> Character::List()
-{
-	return GetTable()->tableList();
-}
-
-void Character::Close(mud::Character* Ch)
-{
-	if(Ch == NULL)
-	{
-		throw std::invalid_argument("Character::Close(), Ch == NULL");
-		return;
-	}
-	
-	Cache::Get()->CloseCharacter(Ch->getID());
-	delete Ch;
-}
-
-TablePtr Character::GetTable()
+TablePtr Character::getTable() const
 { 
 	return Tables::Get()->CHARACTERS; 
-};
+}

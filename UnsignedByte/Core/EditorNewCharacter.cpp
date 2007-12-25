@@ -22,6 +22,7 @@
 #include "EditorPlaying.h"
 #include "EditorAccount.h"
 #include "UBSocket.h"
+#include "CharacterManager.h"
 #include "PCharacter.h"
 #include "Global.h"
 #include "DatabaseMgr.h"
@@ -72,7 +73,7 @@ void EditorNewCharacter::OnLine(const std::string &line)
 			return;
 		}
 
-		if(mud::Character::IllegalName(line))
+		if(mud::CharacterManager::Get()->IllegalName(line))
 		{
 			m_sock->Sendf("You cannot use the name %s, please pick another name.\n", line.c_str());
 			OnLine(Global::Get()->EmptyString);
@@ -162,7 +163,7 @@ void EditorNewCharacter::OnLine(const std::string &line)
 			return;			
 		}
 
-		long id = mud::Cache::Get()->AddCharacter();
+		long id = mud::CharacterManager::Get()->Add();
 		if(id <= 0)
 		{
 			m_sock->Send("For some reason your characters newly inserted id is <= 0.\n");
