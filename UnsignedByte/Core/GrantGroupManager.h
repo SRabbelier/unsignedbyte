@@ -17,78 +17,55 @@
  *   Free Software Foundation, Inc.,                                       *
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
+#pragma once
 
 #include <string>
-#include <stdexcept>
+#include <vector>
 
-#include "GrantGroup.h"
-#include "Global.h"
-#include "DatabaseMgr.h"
-#include "Cache.h"
+#include "singleton.h"
 #include "db.h"
-#include "Permission.h"
 
-using mud::GrantGroup;
-
-GrantGroup::GrantGroup(db::GrantGroups* area) :
-m_grantgroup(area)
-{
-	if(m_grantgroup == NULL)
-		throw std::invalid_argument("GrantGroup::GrantGroup(), m_grantgroup == NULL!");
+namespace mud 
+{ 
+	class GrantGroup; 
+	typedef SmartPtr<GrantGroup> GrantGroupPtr;
 }
 
-GrantGroup::~GrantGroup(void)
-{
-	delete m_grantgroup;
-	m_grantgroup = NULL;
-}
+typedef const std::string& cstring;
+typedef std::map<value_type,mud::GrantGroupPtr> grantgroups_m;
+typedef std::map<std::string,mud::GrantGroupPtr> grantgroups_ms;
+typedef std::map<std::string, value_type> reverseStringKey;
 
-bool GrantGroup::getDefaultGrant()
+namespace mud
 {
-	return Permission::isGrant(m_grantgroup->getdefaultgrant());
-}
+	class GrantGroupManager : public Singleton<mud::GrantGroupManager>
+	{
+	public:
+		TablePtr GetTable();
+		std::vector<std::string> List();
+		void Close(GrantGroupPtr grantgroup);
+		
+		value_type Add();
+		mud::GrantGroupPtr GetByKey(value_type id);
+		mud::GrantGroupPtr GetByName(cstring name);
+		
+		value_type lookupByName(cstring value);
+		
+		void Close(value_type GrantGroupid);
+		
+	private:
+		GrantGroupPtr cacheGrantGroup(db::GrantGroups* d);
+		
+		grantgroups_m m_byKey;
+		grantgroups_ms m_byName;
+		reverseStringKey m_lookupByName;
 
-bool GrantGroup::getDefaultLog()
-{
-	return Permission::isLog(m_grantgroup->getdefaultgrant());
-}
-
-/*void GrantGroup::setDefaultGrant(bool defaultgrant)
-{
-	UBASSERT(m_grantgroup != NULL);
-	if(m_grantgroup)
-		m_grantgroup->defaultgrant = defaultgrant;
-}*/
-
-void GrantGroup::Delete()
-{
-	m_grantgroup->erase();
-}
-
-void GrantGroup::Save()
-{
-	m_grantgroup->save();
-}
-
-bool GrantGroup::Exists()
-{
-	return m_grantgroup->exists();
-}
-
-std::vector<std::string> GrantGroup::Show()
-{
-	std::vector<std::string> result;
-	result.push_back(Global::Get()->sprintf("Name: '%s'.\n", getName().c_str()));
-	return result;
-}
-
-std::string GrantGroup::ShowShort()
-{
-	return Global::Get()->sprintf("%s\n", 
-			getName().c_str());
-}
-
-TablePtr GrantGroup::getTable() const
-{
-	return Tables::Get()->GRANTGROUPS;
+	private:
+		GrantGroupManager(void) {};
+		GrantGroupManager(const GrantGroupManager& rhs);
+		GrantGroupManager operator=(const GrantGroupManager& rhs);
+		~GrantGroupManager(void) {};
+		
+		friend class Singleton<mud::GrantGroupManager>;
+	};
 }

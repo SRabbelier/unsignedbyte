@@ -38,6 +38,7 @@
 #include "Command.h"
 #include "CommandManager.h"
 #include "GrantGroup.h"
+#include "GrantGroupManager.h"
 
 using mud::Command;
 
@@ -164,7 +165,7 @@ void EditorCommand::editGrantGroups(const std::string& argument)
 	if(!id)
 	{
 		m_sock->Sendf("'%s' is not a valid grantgroup!\n", argument.c_str());
-		m_sock->Send(String::Get()->box(mud::GrantGroup::List(), "GrantGroups"));
+		m_sock->Send(String::Get()->box(mud::GrantGroupManager::Get()->List(), "GrantGroups"));
 		return;
 	}
 

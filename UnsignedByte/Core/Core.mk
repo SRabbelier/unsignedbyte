@@ -38,7 +38,7 @@ Objects=$(IntermediateDirectory)/Account$(ObjectSuffix) $(IntermediateDirectory)
 	$(IntermediateDirectory)/Sector$(ObjectSuffix) $(IntermediateDirectory)/UBHandler$(ObjectSuffix) $(IntermediateDirectory)/UBSocket$(ObjectSuffix) $(IntermediateDirectory)/SQLSocket$(ObjectSuffix) $(IntermediateDirectory)/Command$(ObjectSuffix) $(IntermediateDirectory)/GrantGroup$(ObjectSuffix) $(IntermediateDirectory)/Permission$(ObjectSuffix) $(IntermediateDirectory)/EditorOLC$(ObjectSuffix) $(IntermediateDirectory)/Editor$(ObjectSuffix) $(IntermediateDirectory)/EditorPermission$(ObjectSuffix) \
 	$(IntermediateDirectory)/EditorGrantGroup$(ObjectSuffix) $(IntermediateDirectory)/EditorString$(ObjectSuffix) $(IntermediateDirectory)/EditorCommand$(ObjectSuffix) $(IntermediateDirectory)/EditorScript$(ObjectSuffix) $(IntermediateDirectory)/EditorSector$(ObjectSuffix) $(IntermediateDirectory)/EditorRoom$(ObjectSuffix) $(IntermediateDirectory)/EditorPlaying$(ObjectSuffix) $(IntermediateDirectory)/EditorNewCharacter$(ObjectSuffix) $(IntermediateDirectory)/EditorNewAccount$(ObjectSuffix) $(IntermediateDirectory)/EditorAccount$(ObjectSuffix) \
 	$(IntermediateDirectory)/EditorMobile$(ObjectSuffix) $(IntermediateDirectory)/EditorArea$(ObjectSuffix) $(IntermediateDirectory)/EditorColour$(ObjectSuffix) $(IntermediateDirectory)/OLCEditor$(ObjectSuffix) $(IntermediateDirectory)/EditorAccountLogin$(ObjectSuffix) $(IntermediateDirectory)/EditorOOC$(ObjectSuffix) $(IntermediateDirectory)/AccountManager$(ObjectSuffix) $(IntermediateDirectory)/AreaManager$(ObjectSuffix) $(IntermediateDirectory)/CharacterManager$(ObjectSuffix) $(IntermediateDirectory)/ColourManager$(ObjectSuffix) \
-	$(IntermediateDirectory)/CommandManager$(ObjectSuffix) 
+	$(IntermediateDirectory)/CommandManager$(ObjectSuffix) $(IntermediateDirectory)/GrantGroupManager$(ObjectSuffix) 
 
 ##
 ## Main Build Tragets 
@@ -263,6 +263,11 @@ $(IntermediateDirectory)/CommandManager$(ObjectSuffix): CommandManager.cpp $(Int
 $(IntermediateDirectory)/CommandManager$(ObjectSuffix).d:
 	@$(CompilerName) $(CmpOptions) $(IncludePath) -MT$(IntermediateDirectory)/CommandManager$(ObjectSuffix) -MF$(IntermediateDirectory)/CommandManager$(ObjectSuffix).d -MM CommandManager.cpp
 
+$(IntermediateDirectory)/GrantGroupManager$(ObjectSuffix): GrantGroupManager.cpp $(IntermediateDirectory)/GrantGroupManager$(ObjectSuffix).d
+	$(CompilerName) $(SourceSwitch)GrantGroupManager.cpp $(CmpOptions)   $(OutputSwitch)$(IntermediateDirectory)/GrantGroupManager$(ObjectSuffix) $(IncludePath)
+$(IntermediateDirectory)/GrantGroupManager$(ObjectSuffix).d:
+	@$(CompilerName) $(CmpOptions) $(IncludePath) -MT$(IntermediateDirectory)/GrantGroupManager$(ObjectSuffix) -MF$(IntermediateDirectory)/GrantGroupManager$(ObjectSuffix).d -MM GrantGroupManager.cpp
+
 ##
 ## Clean
 ##
@@ -349,6 +354,8 @@ clean:
 	$(RM) $(IntermediateDirectory)/ColourManager$(ObjectSuffix).d
 	$(RM) $(IntermediateDirectory)/CommandManager$(ObjectSuffix)
 	$(RM) $(IntermediateDirectory)/CommandManager$(ObjectSuffix).d
+	$(RM) $(IntermediateDirectory)/GrantGroupManager$(ObjectSuffix)
+	$(RM) $(IntermediateDirectory)/GrantGroupManager$(ObjectSuffix).d
 	$(RM) $(OutputFile)
 
 -include $(IntermediateDirectory)/*.d

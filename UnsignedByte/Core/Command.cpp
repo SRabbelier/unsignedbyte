@@ -28,6 +28,7 @@
 #include "Cache.h"
 #include "db.h"
 #include "GrantGroup.h"
+#include "GrantGroupManager.h"
 #include "Account.h"
 
 using mud::Command;
@@ -71,7 +72,7 @@ bool Command::getDefaultGrant()
 	try
 	{
 		long id = getGrantGroup();
-		GrantGroup* grp = Cache::Get()->GetGrantGroupByKey(id);
+		GrantGroupPtr grp = mud::GrantGroupManager::Get()->GetByKey(id);
 		return grp->getDefaultGrant();
 	}
 	catch(std::exception& e)
@@ -103,7 +104,7 @@ bool Command::getDefaultLog()
 	try
 	{
 		long id = getGrantGroup();
-		GrantGroup* grp = Cache::Get()->GetGrantGroupByKey(id);
+		GrantGroupPtr grp = mud::GrantGroupManager::Get()->GetByKey(id);
 		return grp->getDefaultLog();
 	}
 	catch(std::exception& e)

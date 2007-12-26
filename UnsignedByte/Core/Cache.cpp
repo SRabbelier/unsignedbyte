@@ -63,17 +63,6 @@ bool Cache::isActive(cstring value)
  * 
  */
 
-value_type Cache::AddGrantGroup()
-{
-	db::GrantGroups d;
-	d.save();
-	value_type id = d.getgrantgroupid();
-	if(id == 0)
-		Global::Get()->bug("Cache::AddGrantGroup(), id = 0");
-	
-	return id;
-}
-
 value_type Cache::AddRace()
 {
 	db::Races d;
@@ -115,28 +104,6 @@ value_type Cache::AddSector()
  *	 Retreival 
  * 
  */
-
-mud::GrantGroup* Cache::GetGrantGroupByKey(value_type id)
-{
-	GrantGroup* p = m_grantgroupByKey[id];
-	if(p)
-		return p;
-		
-	db::GrantGroups* d = db::GrantGroups::bykey(id);
-	p = cacheGrantGroup(d);
-	return p;
-}
-
-mud::GrantGroup* Cache::GetGrantGroupByName(cstring value)
-{
-	GrantGroup* p = m_grantgroupByName[value];
-	if(p)
-		return p;
-		
-	db::GrantGroups* d = db::GrantGroups::byname(value);
-	p = cacheGrantGroup(d);
-	return p;
-}
 
 mud::MCharacter* Cache::GetMCharacterByKey(value_type id)
 {
@@ -288,17 +255,6 @@ mud::Sector* Cache::GetSectorByName(cstring value)
  *
  */ 
 
-value_type Cache::lookupGrantGroupByName(cstring value)
-{
-	reverseStringKey::iterator it = m_lookupGrantGroupByName.find(value);
-	if(it != m_lookupGrantGroupByName.end())
-		return it->second;
-	
-	value_type id = db::GrantGroups::lookupname(value);
-	m_lookupGrantGroupByName[value] = id;
-	return id;
-}
-
 value_type Cache::lookupRaceByName(cstring value)
 {
 	reverseStringKey::iterator it = m_lookupRaceByName.find(value);
@@ -328,14 +284,6 @@ value_type Cache::lookupSectorByName(cstring value)
  * Functionality 
  *
  */ 
-
-void Cache::CloseGrantGroup(value_type id)
-{
-	grantgroups_m::iterator key = m_grantgroupByKey.find(id);
-	grantgroups_ms::iterator name = m_grantgroupByName.find(key->second->getName());
-	m_grantgroupByKey.erase(key);
-	m_grantgroupByName.erase(name);
-}
 
 void Cache::CloseMCharacter(value_type id)
 {
@@ -386,14 +334,6 @@ void Cache::CloseSector(value_type id)
  * Caching
  * Functions 
  */ 
-
-GrantGroup* Cache::cacheGrantGroup(db::GrantGroups* d)
-{
-	GrantGroup* p = new GrantGroup(d);
-	m_grantgroupByKey[d->getgrantgroupid()] = p;
-	m_grantgroupByName[d->getname()] = p;
-	return p;
-}
 
 MCharacter* Cache::cacheMCharacter(db::Characters* d)
 {

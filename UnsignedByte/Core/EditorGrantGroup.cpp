@@ -36,6 +36,7 @@
 
 #include "Account.h"
 #include "GrantGroup.h"
+#include "GrantGroupManager.h"
 
 using mud::GrantGroup;
 
@@ -93,12 +94,12 @@ TablePtr EditorGrantGroup::getTable()
 
 long EditorGrantGroup::addNew()
 {
-	return mud::Cache::Get()->AddGrantGroup();
+	return mud::GrantGroupManager::Get()->Add();
 }
 
 std::vector<std::string> EditorGrantGroup::getList()
 {
-	return GrantGroup::List();
+	return mud::GrantGroupManager::Get()->List();
 }
 
 void EditorGrantGroup::setEditing(long id)
@@ -109,7 +110,7 @@ void EditorGrantGroup::setEditing(long id)
 		return;
 	}
 	
-	m_grantgroup.reset(mud::Cache::Get()->GetGrantGroupByKey(id));
+	m_grantgroup = mud::GrantGroupManager::Get()->GetByKey(id);
 	return;
 }
 

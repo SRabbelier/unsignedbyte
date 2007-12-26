@@ -21,74 +21,81 @@
 #include <string>
 #include <stdexcept>
 
+#include "GrantGroupManager.h"
 #include "GrantGroup.h"
 #include "Global.h"
-#include "DatabaseMgr.h"
-#include "Cache.h"
-#include "db.h"
-#include "Permission.h"
+#include "GrantGroup.h"
 
+using mud::GrantGroupManager;
 using mud::GrantGroup;
+using mud::GrantGroupPtr;
 
-GrantGroup::GrantGroup(db::GrantGroups* area) :
-m_grantgroup(area)
+std::vector<std::string> GrantGroupManager::List()
 {
-	if(m_grantgroup == NULL)
-		throw std::invalid_argument("GrantGroup::GrantGroup(), m_grantgroup == NULL!");
+	return GetTable()->tableList();
 }
 
-GrantGroup::~GrantGroup(void)
-{
-	delete m_grantgroup;
-	m_grantgroup = NULL;
-}
-
-bool GrantGroup::getDefaultGrant()
-{
-	return Permission::isGrant(m_grantgroup->getdefaultgrant());
-}
-
-bool GrantGroup::getDefaultLog()
-{
-	return Permission::isLog(m_grantgroup->getdefaultgrant());
-}
-
-/*void GrantGroup::setDefaultGrant(bool defaultgrant)
-{
-	UBASSERT(m_grantgroup != NULL);
-	if(m_grantgroup)
-		m_grantgroup->defaultgrant = defaultgrant;
-}*/
-
-void GrantGroup::Delete()
-{
-	m_grantgroup->erase();
-}
-
-void GrantGroup::Save()
-{
-	m_grantgroup->save();
-}
-
-bool GrantGroup::Exists()
-{
-	return m_grantgroup->exists();
-}
-
-std::vector<std::string> GrantGroup::Show()
-{
-	std::vector<std::string> result;
-	result.push_back(Global::Get()->sprintf("Name: '%s'.\n", getName().c_str()));
-	return result;
-}
-
-std::string GrantGroup::ShowShort()
-{
-	return Global::Get()->sprintf("%s\n", 
-			getName().c_str());
-}
-
-TablePtr GrantGroup::getTable() const
+TablePtr GrantGroupManager::GetTable()
 {
 	return Tables::Get()->GRANTGROUPS;
+}
+
+value_type GrantGroupManager::Add()
+{
+	db::GrantGroups d;
+	d.save();
+	value_type id = d.getgrantgroupid();
+	if(id == 0)
+		Global::Get()->bug("GrantGroupManager::AddGrantGroup(), id = 0");
+	
+	return id;
+}
+
+mud::GrantGroupPtr GrantGroupManager::GetByKey(value_type id)
+{
+	GrantGroupPtr p = m_byKey[id];
+	if(p)
+		return p;
+		
+	db::GrantGroups* d = db::GrantGroups::bykey(id);
+	p = cacheGrantGroup(d);
+	return p;
+}
+
+mud::GrantGroupPtr GrantGroupManager::GetByName(cstring value)
+{
+	GrantGroupPtr p = m_byName[value];
+	if(p)
+		return p;
+		
+	db::GrantGroups* d = db::GrantGroups::byname(value);
+	p = cacheGrantGroup(d);
+	return p;
+}
+
+value_type GrantGroupManager::lookupByName(cstring value)
+{
+	reverseStringKey::iterator it = m_lookupByName.find(value);
+	if(it != m_lookupByName.end())
+		return it->second;
+	
+	value_type id = db::GrantGroups::lookupname(value);
+	m_lookupByName[value] = id;
+	return id;
+}
+
+void GrantGroupManager::Close(value_type id)
+{
+	grantgroups_m::iterator key = m_byKey.find(id);
+	grantgroups_ms::iterator name = m_byName.find(key->second->getName());
+	m_byKey.erase(key);
+	m_byName.erase(name);
+}
+
+GrantGroupPtr GrantGroupManager::cacheGrantGroup(db::GrantGroups* d)
+{
+	GrantGroupPtr p(new GrantGroup(d));
+	m_byKey[d->getgrantgroupid()] = p;
+	m_byName[d->getname()] = p;
+	return p;
 }

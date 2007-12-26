@@ -25,6 +25,7 @@
 
 namespace mud
 {
+	class GrantGroupManager;
 	class GrantGroup : public Savable
 	{
 	public:
@@ -51,14 +52,7 @@ namespace mud
 		 */
 		std::vector<std::string> Show();
 		std::string ShowShort();
-		TablePtr getTable() const { return GetTable(); }
-		
-		/**
-		 * \brief Static utilities
-		 */
-		static TablePtr GetTable();
-		static std::vector<std::string> List();
-		static void Close(GrantGroup* grantgroup);
+		TablePtr getTable() const;
 		
 		/**
 		 * \brief Database utilities
@@ -78,7 +72,7 @@ namespace mud
 		GrantGroup operator=(const GrantGroup& rhs);
 		~GrantGroup(void);
 		
-		friend class Cache;
+		friend class GrantGroupManager;
 		friend void boost::checked_delete<mud::GrantGroup>(mud::GrantGroup* x);
 	};
 }
