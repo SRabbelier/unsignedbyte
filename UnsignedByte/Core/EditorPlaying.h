@@ -20,6 +20,9 @@
 #pragma once
 
 #include <string>
+
+#include "smart_ptr.h"
+
 #include "Editor.h"
 #include "singleton.h"
 #include "Interpreter.h"
@@ -27,14 +30,18 @@
 
 class UBSocket;
 
-namespace mud { class PCharacter; };
+namespace mud 
+{ 
+	class PCharacter; 
+	typedef SmartPtr<PCharacter> PCharacterPtr;
+};
 
 class EditorPlaying : public Editor
 {
 public:
 	typedef CommandObject<EditorPlaying> PlayingCommand;
 
-	EditorPlaying(UBSocket* sock, mud::PCharacter* character);
+	EditorPlaying(UBSocket* sock, mud::PCharacterPtr character);
 	~EditorPlaying(void);
 
 	std::string name() { return "Playing"; };
@@ -55,7 +62,7 @@ public:
 	void quitEditor(const std::string& argument);
 
 private:
-	mud::PCharacter* m_char; // current active PCharacter
+	mud::PCharacterPtr m_char; // current active PCharacter
 	EditorPlaying(const EditorPlaying& rhs);
 	EditorPlaying operator=(const EditorPlaying& rhs);
 

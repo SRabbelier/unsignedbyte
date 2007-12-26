@@ -24,6 +24,7 @@
 #include "UBSocket.h"
 #include "CharacterManager.h"
 #include "PCharacter.h"
+#include "PCharacterManager.h"
 #include "Global.h"
 #include "DatabaseMgr.h"
 #include "StringUtilities.h"
@@ -172,7 +173,7 @@ void EditorNewCharacter::OnLine(const std::string &line)
 			return;
 		}
 
-		mud::PCharacter* Ch = mud::Cache::Get()->LoadPCharacterByKey(m_sock, id);
+		mud::PCharacterPtr Ch = mud::PCharacterManager::Get()->LoadByKey(m_sock, id);
 		if(!Ch)
 		{
 			m_sock->Send("For some reason your new characters could not be retreived.\n");

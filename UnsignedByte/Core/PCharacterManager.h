@@ -17,61 +17,66 @@
  *   Free Software Foundation, Inc.,                                       *
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
-
-#ifdef _WIN32
-#include <winsock2.h>
-#endif
+#pragma once
 
 #include <string>
-#include <stdexcept>
+#include <vector>
+#include <set>
 
-#include "PCharacter.h"
-#include "UBSocket.h"
-#include "DatabaseMgr.h"
-#include "Cache.h"
+#include "singleton.h"
 #include "db.h"
-#include "Account.h"
-#include "EditorAccount.h"
 
-using mud::PCharacter;
-
-PCharacter::PCharacter(UBSocket* sock, db::Characters* character) :
-Character(character),
-m_sock(sock)
-{
-
+namespace mud 
+{ 
+	class PCharacter; 
+	typedef SmartPtr<PCharacter> PCharacterPtr;
 }
 
-PCharacter::~PCharacter(void)
-{
-	//m_sock is deleted by handler
-}
+class UBSocket;
 
-void PCharacter::Quit()
-{
-	// m_sock->SetEditor(new EditorAccount(m_sock));
-	m_sock->PopEditor();
-	return;	
-}
+typedef const std::string& cstring;
+typedef std::map<value_type,mud::PCharacterPtr> players_m;
+typedef std::map<std::string,mud::PCharacterPtr> players_ms;
+typedef std::map<std::string, value_type> reverseStringKey;
+typedef std::set<value_type> valueset;
+typedef std::set<std::string> stringset;
 
-void PCharacter::Save()
+namespace mud
 {
-	OnSend("Saving...\n");
-	Character::Save();
-	OnSend("Saved!\n");
-
-	return;
-}
-
-void PCharacter::OnSend(const std::string &msg)
-{
-	/*
-	for(UBSockets::iterator it = m_snooping.begin(); it != m_snooping.end(); it++)
+	class PCharacterManager : public Singleton<mud::PCharacterManager>
 	{
-		(*it)->Sendf("##%s## %s", getName().c_str(), msg.c_str());
-	}
-	*/
+	public:	
+		bool isActive(value_type id);
+		bool isActive(cstring name);
 	
-	m_sock->Send(msg);
-	return;
+		value_type Add();
+		
+		mud::PCharacterPtr GetByKey(value_type id);
+		mud::PCharacterPtr GetByName(cstring name);
+		
+		mud::PCharacterPtr LoadByKey(UBSocket* sock, value_type id);
+		mud::PCharacterPtr LoadByName(UBSocket* sock, cstring name);
+
+		void Close(value_type id);
+		void Close(PCharacterPtr Ch);
+		
+	private:
+		PCharacterPtr cachePCharacter(UBSocket* sock, db::Characters* d);
+		
+		players_m m_byKey;
+		players_ms m_byName;
+		
+		valueset m_pcharactersByKey;
+		stringset m_pcharactersByName;
+		
+		reverseStringKey m_lookupByName;
+
+	private:
+		PCharacterManager(void) {};
+		PCharacterManager(const PCharacterManager& rhs);
+		PCharacterManager operator=(const PCharacterManager& rhs);
+		~PCharacterManager(void) {};
+		
+		friend class Singleton<mud::PCharacterManager>;
+	};
 }

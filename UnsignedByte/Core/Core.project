@@ -90,6 +90,7 @@
     <File Name="CommandManager.cpp"/>
     <File Name="GrantGroupManager.cpp"/>
     <File Name="MCharacterManager.cpp"/>
+    <File Name="PCharacterManager.cpp"/>
   </VirtualDirectory>
   <VirtualDirectory Name="Manager Header">
     <File Name="AccountManager.h"/>
@@ -99,6 +100,7 @@
     <File Name="CommandManager.h"/>
     <File Name="GrantGroupManager.h"/>
     <File Name="MCharacterManager.h"/>
+    <File Name="PCharacterManager.h"/>
   </VirtualDirectory>
   <Settings Type="Executable">
     <Configuration Name="Debug" CompilerType="gnu g++" DebuggerType="GNU gdb debugger">

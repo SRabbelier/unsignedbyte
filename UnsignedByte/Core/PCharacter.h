@@ -26,7 +26,7 @@ class UBSocket;
 
 namespace mud
 {
-	class Account;
+	class PCharacterManager;
 	
 	class PCharacter : public Character
 	{
@@ -34,8 +34,6 @@ namespace mud
 		void Quit();
 		void Save();
 		void OnSend(const std::string& msg);
-		
-		static void Close(PCharacter* Ch);
 		
 	private:
 		UBSocket* m_sock;
@@ -45,6 +43,7 @@ namespace mud
 		PCharacter operator=(const PCharacter& rhs);
 		virtual ~PCharacter(void);
 
-		friend class Cache; // for constructor
+		friend class PCharacterManager; // for constructor
+		friend void boost::checked_delete<mud::PCharacter>(mud::PCharacter* x);
 	};
 }

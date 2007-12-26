@@ -23,7 +23,6 @@
 #endif
 
 #include <stdexcept>
-#include <sstream>
 
 #include "Cache.h"
 #include "UBSocket.h"
@@ -43,16 +42,6 @@
 #include "Permission.h"
 
 using namespace mud;
-
-bool Cache::isActive(value_type id)
-{
-	return m_pcharactersByKey.find(id) != m_pcharactersByKey.end();
-}
-
-bool Cache::isActive(cstring value)
-{
-	return m_pcharactersByName.find(value) != m_pcharactersByName.end();
-}
 
 /**
  *
@@ -104,58 +93,6 @@ value_type Cache::AddSector()
  *	 Retreival 
  * 
  */
-
-mud::PCharacter* Cache::GetPCharacterByKey(value_type id)
-{
-	PCharacter* p = m_playerByKey[id];
-	if(p)
-		return p;
-		
-	std::ostringstream err;
-	err << "Cache::GetPCharacterByKey(), The id '" << id << "' has not been loaded yet.";
-	throw std::invalid_argument(err.str());
-}
-
-mud::PCharacter* Cache::GetPCharacterByName(cstring value)
-{
-	PCharacter* p = m_playerByName[value];
-	if(p)
-		return p;
-		
-	std::ostringstream err;
-	err << "Cache::GetPCharacterByKey(), No character with name '" << value << "' has not been loaded yet.";
-	throw std::invalid_argument(err.str());	
-}
-
-mud::PCharacter* Cache::LoadPCharacterByKey(UBSocket* sock, value_type id)
-{
-	PCharacter* p = m_playerByKey[id];
-	if(p)
-	{
-		std::ostringstream err;
-		err << "Cache::LoadPCharacterByKey(), id '" << id << "' has already been loaded.";
-		throw std::invalid_argument(err.str());
-	}
-	
-	db::Characters* d = db::Characters::bykey(id);
-	p = cachePCharacter(sock, d);
-	return p;
-}
-
-mud::PCharacter* Cache::LoadPCharacterByName(UBSocket* sock, cstring value)
-{
-	PCharacter* p = m_playerByName[value];
-	if(p)
-	{
-		std::ostringstream err;
-		err << "Cache::LoadPCharacterByKey(), A character with name '" << value << "' has already been loaded.";
-		throw std::invalid_argument(err.str());
-	}	
-	
-	db::Characters* d = db::Characters::byname(value);
-	p = cachePCharacter(sock, d);
-	return p;
-}
 
 mud::Permission* Cache::GetPermissionByKeys(value_type account, value_type grantgroup)
 {
@@ -262,14 +199,6 @@ value_type Cache::lookupSectorByName(cstring value)
  * Functionality 
  *
  */ 
- 
-void Cache::ClosePCharacter(value_type id)
-{
-	players_m::iterator key = m_playerByKey.find(id);
-	players_ms::iterator name = m_playerByName.find(key->second->getName());
-	m_playerByKey.erase(key);
-	m_playerByName.erase(name);
-}
 
 void Cache::ClosePermission(value_type account, value_type permission)
 {
@@ -304,16 +233,6 @@ void Cache::CloseSector(value_type id)
  * Caching
  * Functions 
  */ 
-
-PCharacter* Cache::cachePCharacter(UBSocket* sock, db::Characters* d)
-{
-	PCharacter* p = new PCharacter(sock, d);
-	m_playerByKey[d->getcharacterid()] = p;
-	m_pcharactersByKey.insert(d->getcharacterid());
-	m_playerByName[d->getname()] = p;
-	m_pcharactersByName.insert(d->getname());
-	return p;
-}
 
 Race* Cache::cacheRace(db::Races* d)
 {

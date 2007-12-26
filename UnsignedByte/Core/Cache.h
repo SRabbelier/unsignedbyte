@@ -46,8 +46,6 @@ namespace mud
 class UBSocket;
 
 typedef unsigned long value_type;
-typedef std::set<value_type> valueset;
-typedef std::set<std::string> stringset;
 
 typedef value_type oneValueKey;
 typedef std::string oneStringKey;
@@ -59,12 +57,10 @@ typedef std::map<std::string, value_type> reverseStringKey;
 typedef std::map<oneValueKey,mud::Race*> races_m;
 typedef std::map<oneValueKey,mud::Room*> rooms_m;
 typedef std::map<oneValueKey,mud::Sector*> sectors_m;
-typedef std::map<oneValueKey,mud::PCharacter*> players_m;
 
 typedef std::map<oneStringKey,mud::Race*> races_ms;
 typedef std::map<oneStringKey,mud::Room*> rooms_ms;
 typedef std::map<oneStringKey,mud::Sector*> sectors_ms;
-typedef std::map<oneStringKey,mud::PCharacter*> players_ms;
 
 typedef std::map<twoValueKey,db::CharacterAccount*> characteraccount_m; // character, account
 typedef std::map<twoValueKey,mud::Permission*> permissions_m; // account, grantgroup
@@ -76,19 +72,10 @@ namespace mud
 	class Cache : public Singleton<Cache>
 	{
 	public:
-		bool isActive(value_type id);
-		bool isActive(cstring name);
-		
 		value_type AddRace();
 		value_type AddRoom();
 		value_type AddSector();
-
-		mud::PCharacter* GetPCharacterByKey(value_type id);
-		mud::PCharacter* GetPCharacterByName(cstring name);
-		
-		mud::PCharacter* LoadPCharacterByKey(UBSocket* sock, value_type id);
-		mud::PCharacter* LoadPCharacterByName(UBSocket* sock, cstring name);
-		
+				
 		mud::Permission* GetPermissionByKeys(value_type account, value_type grantgroup);
 		
 		mud::Race* GetRaceByKey(value_type id);
@@ -102,7 +89,6 @@ namespace mud
 		value_type lookupRaceByName(cstring value);
 		value_type lookupSectorByName(cstring value);
 
-		void ClosePCharacter(value_type characterid);
 		void ClosePermission(value_type account, value_type permission);
 		void CloseRace(value_type raceid);
 		void CloseRoom(value_type roomid);
@@ -111,7 +97,6 @@ namespace mud
 		bool existsCharacterWithAccount(value_type characterid, value_type accountid);
 
 	private:
-		PCharacter* cachePCharacter(UBSocket* sock, db::Characters* d);
 		Race* cacheRace(db::Races* d);
 		Room* cacheRoom(db::Rooms* d);
 		Sector* cacheSector(db::Sectors* d);
@@ -120,9 +105,6 @@ namespace mud
 				
 		permissions_m m_permissionByKeys;
 		
-		players_m m_playerByKey;
-		players_ms m_playerByName;
-		
 		races_m m_raceByKey;
 		races_ms m_raceByName;
 		
@@ -130,9 +112,6 @@ namespace mud
 		
 		sectors_m m_sectorByKey;
 		sectors_ms m_sectorByName;
-
-		valueset m_pcharactersByKey;
-		stringset m_pcharactersByName;
 		
 		reverseStringKey m_lookupRaceByName;
 		reverseStringKey m_lookupSectorByName;

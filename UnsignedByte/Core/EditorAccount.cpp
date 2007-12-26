@@ -37,6 +37,7 @@
 #include "Command.h"
 #include "Permission.h"
 #include "PCharacter.h"
+#include "PCharacterManager.h"
 #include "CharacterManager.h"
 #include "Room.h"
 
@@ -110,7 +111,7 @@ void EditorAccount::beginLogin(const std::string &argument)
 		return;
 	}
 
-	if(Cache::Get()->isActive(argument))
+	if(mud::PCharacterManager::Get()->isActive(argument))
 	{
 		m_sock->Send("You are already playing that character!\n");
 		return;
@@ -132,7 +133,7 @@ void EditorAccount::beginLogin(const std::string &argument)
 		return;
 	}
 
-	mud::PCharacter* Ch = Cache::Get()->LoadPCharacterByKey(m_sock, id);
+	mud::PCharacterPtr Ch = mud::PCharacterManager::Get()->LoadByKey(m_sock, id);
 	m_sock->Sendf("Welcome back, %s\n", argument.c_str());
 	m_sock->SetEditor(new EditorPlaying(m_sock, Ch));
 	return;

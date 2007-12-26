@@ -33,6 +33,7 @@
 #include "Account.h"
 #include "Character.h"
 #include "PCharacter.h"
+#include "PCharacterManager.h"
 #include "Room.h"
 
 using mud::PCharacter;
@@ -48,7 +49,7 @@ EditorPlaying::PlayingCommand EditorPlaying::m_say("Say", &EditorPlaying::say);
 EditorPlaying::PlayingCommand EditorPlaying::m_deleteCharacter("Delete", &EditorPlaying::deleteCharacter);
 EditorPlaying::PlayingCommand EditorPlaying::m_quitEditor("Quit", &EditorPlaying::quitEditor);
 
-EditorPlaying::EditorPlaying(UBSocket* sock, PCharacter* character) :
+EditorPlaying::EditorPlaying(UBSocket* sock, mud::PCharacterPtr character) :
 Editor(sock),
 m_char(character)
 {
@@ -76,8 +77,8 @@ m_char(character)
 EditorPlaying::~EditorPlaying(void)
 {
 	m_char->Save();
-	PCharacter::Close(m_char);
-	m_char = NULL;
+	mud::PCharacterManager::Get()->Close(m_char);
+	m_char.reset();
 }
 
 std::string EditorPlaying::lookup(const std::string& action)
@@ -177,7 +178,7 @@ void EditorPlaying::quitEditor(const std::string& argument)
 	try
 	{
 		m_sock->SetEditor(new EditorAccount(m_sock));
-		mud::PCharacter::Close(m_char);
+		mud::PCharacterManager::Get()->Close(m_char);
 	}
 	catch(std::exception& e)
 	{
