@@ -21,75 +21,80 @@
 #include <string>
 #include <stdexcept>
 
-#include "GrantGroup.h"
-#include "Global.h"
-#include "DatabaseMgr.h"
-#include "Cache.h"
-#include "db.h"
-#include "Permission.h"
 #include "PermissionManager.h"
+#include "Permission.h"
+#include "Global.h"
 
-using mud::GrantGroup;
+using mud::PermissionManager;
+using mud::Permission;
+using mud::PermissionPtr;
 
-GrantGroup::GrantGroup(db::GrantGroups* area) :
-m_grantgroup(area)
+PermissionManager::PermissionManager(void) :
+defaultGrant(true),
+defaultLog(false)
 {
-	if(m_grantgroup == NULL)
-		throw std::invalid_argument("GrantGroup::GrantGroup(), m_grantgroup == NULL!");
+	
 }
 
-GrantGroup::~GrantGroup(void)
+std::vector<std::string> PermissionManager::List()
 {
-	delete m_grantgroup;
-	m_grantgroup = NULL;
+	return GetTable()->tableList();
 }
 
-bool GrantGroup::getDefaultGrant()
+TablePtr PermissionManager::GetTable()
 {
-	return mud::PermissionManager::Get()->isGrant(m_grantgroup->getdefaultgrant());
+	return Tables::Get()->PERMISSIONS;
 }
 
-bool GrantGroup::getDefaultLog()
+bool PermissionManager::isGrant(long grant)
 {
-	return mud::PermissionManager::Get()->isLog(m_grantgroup->getdefaultgrant());
+	switch(grant)
+	{
+		default:
+			return defaultGrant;
+			
+		case Permission::GRANT_ENABLE:
+		case Permission::GRANT_ENABLEANDLOG:
+			return true;
+			
+		case Permission::GRANT_DISABLE:
+		case Permission::GRANT_DISABLEANDLOG:
+			return false;
+	}
 }
 
-/*void GrantGroup::setDefaultGrant(bool defaultgrant)
+bool PermissionManager::isLog(long grant)
 {
-	UBASSERT(m_grantgroup != NULL);
-	if(m_grantgroup)
-		m_grantgroup->defaultgrant = defaultgrant;
-}*/
-
-void GrantGroup::Delete()
-{
-	m_grantgroup->erase();
+	switch(grant)
+	{
+		default:
+			return defaultLog;
+			
+		case Permission::GRANT_ENABLEANDLOG:
+		case Permission::GRANT_DISABLEANDLOG:
+			return true;
+			
+		case Permission::GRANT_ENABLE:
+		case Permission::GRANT_DISABLE:
+			return false;
+	}
 }
 
-void GrantGroup::Save()
+mud::PermissionPtr PermissionManager::GetByKeys(value_type account, value_type grantgroup)
 {
-	m_grantgroup->save();
+	twoValueKey key(account, grantgroup);
+	PermissionPtr p(m_byKeys[key]);
+	if(p)
+		return p;
+		
+	db::Permissions* d = db::Permissions::bykey(account, grantgroup);
+	p = PermissionPtr(new Permission(d));
+	m_byKeys[key] = p.get();
+	return p;	
 }
 
-bool GrantGroup::Exists()
+void PermissionManager::Close(value_type account, value_type permission)
 {
-	return m_grantgroup->exists();
-}
-
-std::vector<std::string> GrantGroup::Show()
-{
-	std::vector<std::string> result;
-	result.push_back(Global::Get()->sprintf("Name: '%s'.\n", getName().c_str()));
-	return result;
-}
-
-std::string GrantGroup::ShowShort()
-{
-	return Global::Get()->sprintf("%s\n", 
-			getName().c_str());
-}
-
-TablePtr GrantGroup::getTable() const
-{
-	return Tables::Get()->GRANTGROUPS;
+	permissions_m::iterator key = m_byKeys.find(twoValueKey(account, permission));
+	m_byKeys.erase(key);
 }

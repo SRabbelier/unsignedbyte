@@ -24,7 +24,6 @@
 #include "AreaManager.h"
 #include "Area.h"
 #include "Global.h"
-#include "Area.h"
 
 using mud::AreaManager;
 using mud::Area;

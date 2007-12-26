@@ -26,6 +26,7 @@
 #include "Editor.h"
 #include "Parse.h"
 #include "Permission.h"
+#include "PermissionManager.h"
 #include "Cache.h"
 #include "Command.h"
 #include "CommandManager.h"
@@ -91,8 +92,8 @@ void Editor::OnLine(const std::string& line)
 	commandname.append("::");
 	commandname.append(actionname);
 
-	bool hasGrant = Permission::defaultGrant;
-	bool hasLog = Permission::defaultLog;
+	bool hasGrant = mud::PermissionManager::Get()->defaultGrant;
+	bool hasLog = mud::PermissionManager::Get()->defaultLog;
 	
 	bool canLowForce = Command::defaultLowForce;
 	bool canForce = Command::defaultForce;

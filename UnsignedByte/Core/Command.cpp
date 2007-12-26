@@ -29,6 +29,7 @@
 #include "db.h"
 #include "GrantGroup.h"
 #include "GrantGroupManager.h"
+#include "PermissionManager.h"
 #include "Account.h"
 
 using mud::Command;
@@ -57,7 +58,7 @@ bool Command::getGrant(UBSocket* sock)
 		long gid = getGrantGroup();
 		long aid = sock->GetAccount()->getID();
 		
-		Permission* prm = Cache::Get()->GetPermissionByKeys(aid, gid);
+		PermissionPtr prm = mud::PermissionManager::Get()->GetByKeys(aid, gid);
 		return prm->hasGrant();
 	}
 	catch(std::exception& e)
@@ -78,7 +79,7 @@ bool Command::getDefaultGrant()
 	catch(std::exception& e)
 	{
 		Global::Get()->bug(e.what());
-		return Permission::defaultGrant;
+		return mud::PermissionManager::Get()->defaultGrant;
 	}
 }
 
@@ -89,7 +90,7 @@ bool Command::getLog(UBSocket* sock)
 		long gid = getGrantGroup();
 		long aid = sock->GetAccount()->getID();
 		
-		Permission* prm = Cache::Get()->GetPermissionByKeys(aid, gid);
+		PermissionPtr prm = mud::PermissionManager::Get()->GetByKeys(aid, gid);
 		return prm->hasLog();
 	}
 	catch(std::exception& e)
@@ -110,7 +111,7 @@ bool Command::getDefaultLog()
 	catch(std::exception& e)
 	{
 		Global::Get()->bug(e.what());
-		return Permission::defaultLog;
+		return mud::PermissionManager::Get()->defaultLog;
 	}
 }
 

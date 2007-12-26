@@ -37,6 +37,7 @@
 #include "Account.h"
 #include "AccountManager.h"
 #include "Permission.h"
+#include "PermissionManager.h"
 #include "GrantGroup.h"
 #include "GrantGroupManager.h"
 
@@ -104,7 +105,7 @@ long EditorPermission::addNew()
 
 std::vector<std::string> EditorPermission::getList()
 {
-	return Permission::List();
+	return mud::PermissionManager::Get()->List();
 }
 
 void EditorPermission::setEditing(long id)

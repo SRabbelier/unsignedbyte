@@ -93,19 +93,6 @@ value_type Cache::AddSector()
  *	 Retreival 
  * 
  */
-
-mud::Permission* Cache::GetPermissionByKeys(value_type account, value_type grantgroup)
-{
-	twoValueKey key(account, grantgroup);
-	Permission* p = m_permissionByKeys[key];
-	if(p)
-		return p;
-		
-	db::Permissions* d = db::Permissions::bykey(account, grantgroup);
-	p = new Permission(d);
-	m_permissionByKeys[key] = p;
-	return p;	
-}
 		
 mud::Race* Cache::GetRaceByKey(value_type id)
 {
@@ -199,12 +186,6 @@ value_type Cache::lookupSectorByName(cstring value)
  * Functionality 
  *
  */ 
-
-void Cache::ClosePermission(value_type account, value_type permission)
-{
-	permissions_m::iterator key = m_permissionByKeys.find(twoValueKey(account, permission));
-	m_permissionByKeys.erase(key);
-}
 
 void Cache::CloseRace(value_type id)
 {

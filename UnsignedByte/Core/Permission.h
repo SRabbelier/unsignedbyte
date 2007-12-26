@@ -28,9 +28,6 @@ namespace mud
 	class Permission : public Savable
 	{
 	public:
-		static bool defaultGrant;
-		static bool defaultLog;
-		
 		/**
 		 * \brief Getters
 		 */ 
@@ -48,16 +45,7 @@ namespace mud
 		 */
 		std::vector<std::string> Show();
 		std::string ShowShort();
-		TablePtr getTable() const { return GetTable(); }
-		
-		/**
-		 * \brief Static utilities
-		 */
-		static TablePtr GetTable();
-		static std::vector<std::string> List();
-		static void Close(Permission* permission);
-		static bool isGrant(long grant);
-		static bool isLog(long grant);
+		TablePtr getTable() const;
 		
 		/**
 		 * \brief Database utilities
@@ -74,7 +62,8 @@ namespace mud
 		Permission operator=(const Permission& rhs);
 		~Permission(void);
 		
-		friend class Cache;
+		friend class PermissionManager;
+		friend void boost::checked_delete<mud::Permission>(mud::Permission* x);
 		
 		enum GRANTS
 		{

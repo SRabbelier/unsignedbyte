@@ -63,7 +63,6 @@ typedef std::map<oneStringKey,mud::Room*> rooms_ms;
 typedef std::map<oneStringKey,mud::Sector*> sectors_ms;
 
 typedef std::map<twoValueKey,db::CharacterAccount*> characteraccount_m; // character, account
-typedef std::map<twoValueKey,mud::Permission*> permissions_m; // account, grantgroup
 
 typedef const std::string& cstring;
 
@@ -75,8 +74,6 @@ namespace mud
 		value_type AddRace();
 		value_type AddRoom();
 		value_type AddSector();
-				
-		mud::Permission* GetPermissionByKeys(value_type account, value_type grantgroup);
 		
 		mud::Race* GetRaceByKey(value_type id);
 		mud::Race* GetRaceByName(cstring name);
@@ -89,7 +86,6 @@ namespace mud
 		value_type lookupRaceByName(cstring value);
 		value_type lookupSectorByName(cstring value);
 
-		void ClosePermission(value_type account, value_type permission);
 		void CloseRace(value_type raceid);
 		void CloseRoom(value_type roomid);
 		void CloseSector(value_type sectorid);
@@ -102,8 +98,6 @@ namespace mud
 		Sector* cacheSector(db::Sectors* d);
 		
 		characteraccount_m m_characteraccountByKey;
-				
-		permissions_m m_permissionByKeys;
 		
 		races_m m_raceByKey;
 		races_ms m_raceByName;

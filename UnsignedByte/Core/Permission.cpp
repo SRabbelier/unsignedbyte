@@ -22,15 +22,13 @@
 #include <stdexcept>
 
 #include "Permission.h"
+#include "PermissionManager.h"
 #include "Global.h"
 #include "DatabaseMgr.h"
 #include "Cache.h"
 #include "db.h"
 
 using mud::Permission;
-
-bool Permission::defaultGrant = true;
-bool Permission::defaultLog = false;
 
 Permission::Permission(db::Permissions* area) :
 m_permission(area)
@@ -47,46 +45,12 @@ Permission::~Permission(void)
 
 bool Permission::hasGrant() const
 {
-	return isGrant(m_permission->getgrant());
+	return mud::PermissionManager::Get()->isGrant(m_permission->getgrant());
 }
 
 bool Permission::hasLog() const
 {
-	return isLog(m_permission->getgrant());
-}
-
-bool Permission::isGrant(long grant)
-{
-	switch(grant)
-	{
-		default:
-			return defaultGrant;
-			
-		case GRANT_ENABLE:
-		case GRANT_ENABLEANDLOG:
-			return true;
-			
-		case GRANT_DISABLE:
-		case GRANT_DISABLEANDLOG:
-			return false;
-	}
-}
-
-bool Permission::isLog(long grant)
-{
-	switch(grant)
-	{
-		default:
-			return defaultLog;
-			
-		case GRANT_ENABLEANDLOG:
-		case GRANT_DISABLEANDLOG:
-			return true;
-			
-		case GRANT_ENABLE:
-		case GRANT_DISABLE:
-			return false;
-	}
+	return mud::PermissionManager::Get()->isLog(m_permission->getgrant());
 }
 
 void Permission::setGrant(bool grant)
@@ -154,12 +118,7 @@ std::string Permission::ShowShort()
 	return result;
 }
 
-std::vector<std::string> Permission::List()
-{
-	return GetTable()->tableList();
-}
-
-TablePtr Permission::GetTable()
+TablePtr Permission::getTable() const
 {
 	return Tables::Get()->PERMISSIONS;
 }

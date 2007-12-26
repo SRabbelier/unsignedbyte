@@ -17,79 +17,55 @@
  *   Free Software Foundation, Inc.,                                       *
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
+#pragma once
 
 #include <string>
-#include <stdexcept>
+#include <vector>
 
-#include "GrantGroup.h"
-#include "Global.h"
-#include "DatabaseMgr.h"
-#include "Cache.h"
+#include "singleton.h"
 #include "db.h"
-#include "Permission.h"
-#include "PermissionManager.h"
 
-using mud::GrantGroup;
-
-GrantGroup::GrantGroup(db::GrantGroups* area) :
-m_grantgroup(area)
-{
-	if(m_grantgroup == NULL)
-		throw std::invalid_argument("GrantGroup::GrantGroup(), m_grantgroup == NULL!");
+namespace mud 
+{ 
+	class Permission; 
+	typedef SmartPtr<Permission> PermissionPtr;
 }
 
-GrantGroup::~GrantGroup(void)
-{
-	delete m_grantgroup;
-	m_grantgroup = NULL;
-}
+typedef const std::string& cstring;
+typedef std::pair<value_type, value_type> twoValueKey;
+typedef std::map<twoValueKey,mud::Permission*> permissions_m; // account, grantgroup
 
-bool GrantGroup::getDefaultGrant()
+namespace mud
 {
-	return mud::PermissionManager::Get()->isGrant(m_grantgroup->getdefaultgrant());
-}
+	class PermissionManager : public Singleton<mud::PermissionManager>
+	{
+	public:
+		bool defaultGrant;
+		bool defaultLog;
+	
+		TablePtr GetTable();
+		std::vector<std::string> List();
+		void Close(PermissionPtr permission);
+		bool isGrant(long grant);
+		bool isLog(long grant);
+		
+		mud::PermissionPtr GetByKeys(value_type account, value_type grantgroup);
+		
+		value_type lookupByName(cstring value);
+		
+		void Close(value_type account, value_type permission);
+		
+	private:
+		PermissionPtr cachePermission(db::Permissions* d);
+		
+		permissions_m m_byKeys;
 
-bool GrantGroup::getDefaultLog()
-{
-	return mud::PermissionManager::Get()->isLog(m_grantgroup->getdefaultgrant());
-}
-
-/*void GrantGroup::setDefaultGrant(bool defaultgrant)
-{
-	UBASSERT(m_grantgroup != NULL);
-	if(m_grantgroup)
-		m_grantgroup->defaultgrant = defaultgrant;
-}*/
-
-void GrantGroup::Delete()
-{
-	m_grantgroup->erase();
-}
-
-void GrantGroup::Save()
-{
-	m_grantgroup->save();
-}
-
-bool GrantGroup::Exists()
-{
-	return m_grantgroup->exists();
-}
-
-std::vector<std::string> GrantGroup::Show()
-{
-	std::vector<std::string> result;
-	result.push_back(Global::Get()->sprintf("Name: '%s'.\n", getName().c_str()));
-	return result;
-}
-
-std::string GrantGroup::ShowShort()
-{
-	return Global::Get()->sprintf("%s\n", 
-			getName().c_str());
-}
-
-TablePtr GrantGroup::getTable() const
-{
-	return Tables::Get()->GRANTGROUPS;
+	private:
+		PermissionManager(void);
+		PermissionManager(const PermissionManager& rhs);
+		PermissionManager operator=(const PermissionManager& rhs);
+		~PermissionManager(void) {};
+		
+		friend class Singleton<mud::PermissionManager>;
+	};
 }
