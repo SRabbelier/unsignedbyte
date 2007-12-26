@@ -86,12 +86,7 @@ std::string Colour::ShowShort()
 			getColourString().c_str());
 }
 
-std::vector<std::string> Colour::List()
-{
-	return GetTable()->tableList();
-}
-
-TablePtr Colour::GetTable()
+TablePtr Colour::getTable() const
 {
 	return Tables::Get()->COLOURS;
 }

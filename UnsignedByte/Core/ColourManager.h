@@ -20,49 +20,56 @@
 #pragma once
 
 #include <string>
-#include "Savable.h"
+#include <vector>
+
+#include "singleton.h"
 #include "db.h"
+
+namespace mud 
+{ 
+	class Colour; 
+	typedef SmartPtr<Colour> ColourPtr;
+}
+
+typedef const std::string& cstring;
+typedef std::map<value_type,mud::ColourPtr> colours_m;
+typedef std::map<std::string,mud::ColourPtr> colours_ms;
+typedef std::map<std::string, value_type> reverseStringKey;
 
 namespace mud
 {
-	class ColourManager;
-	class Colour : public Savable
+	class ColourManager : public Singleton<mud::ColourManager>
 	{
 	public:
-		const std::string& getName() const { return m_colour->getname(); }
-		std::string getColourString();
-		const std::string& getCode() const { return m_colour->getcode(); }
-
-		void setName(const std::string& name) { m_colour->setname(name); }
-		void setColourString(const std::string& colourstring) { m_colour->setcolourstring(colourstring); }
-		void setCode(const std::string& code) { m_colour->setcode(code); };
-
-		/**
-		 * \brief Utilities
-		 */
-		std::vector<std::string> Show();
-		std::string ShowShort();
-		TablePtr getTable() const;
+		TablePtr GetTable();
+		std::vector<std::string> List();
+		void Close(ColourPtr area);
 		
-		/**
-		 * \brief Database utilities
-		 */
-		void Delete();
-		void Save();
-		bool Exists();
+		value_type Add();
+		mud::ColourPtr GetByKey(value_type id);
+		mud::ColourPtr GetByName(cstring name);
+		mud::ColourPtr GetByCode(cstring code);
+		
+		value_type lookupByName(cstring value);
+		value_type lookupByCode(cstring value);
+		
+		void Close(value_type colourid);
+		
+	private:
+		ColourPtr cacheColour(db::Colours* d);
+		
+		colours_m m_byKey;
+		colours_ms m_byName;
+		colours_ms m_byCode;
+		reverseStringKey m_lookupByName;
+		reverseStringKey m_lookupByCode;
 
 	private:
-		db::Colours* m_colour;
-
-		/**
-		 * \brief Ctors
-		 */ 
-		Colour(db::Colours* object);
-		Colour(const Colour& rhs);
-		Colour operator=(const Colour& rhs);
-		~Colour(void);
+		ColourManager(void) {};
+		ColourManager(const ColourManager& rhs);
+		ColourManager operator=(const ColourManager& rhs);
+		~ColourManager(void) {};
 		
-		friend class ColourManager;
-		friend void boost::checked_delete<mud::Colour>(mud::Colour* x);
+		friend class Singleton<mud::ColourManager>;
 	};
 }

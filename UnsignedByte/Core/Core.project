@@ -86,11 +86,13 @@
     <File Name="AccountManager.cpp"/>
     <File Name="AreaManager.cpp"/>
     <File Name="CharacterManager.cpp"/>
+    <File Name="ColourManager.cpp"/>
   </VirtualDirectory>
   <VirtualDirectory Name="Manager Header">
     <File Name="AccountManager.h"/>
     <File Name="AreaManager.h"/>
     <File Name="CharacterManager.h"/>
+    <File Name="ColourManager.h"/>
   </VirtualDirectory>
   <Settings Type="Executable">
     <Configuration Name="Debug" CompilerType="gnu g++" DebuggerType="GNU gdb debugger">

@@ -37,6 +37,7 @@
 #include "Action.h"
 #include "Account.h"
 #include "Colour.h"
+#include "ColourManager.h"
 
 using mud::Colour;
 
@@ -94,13 +95,13 @@ TablePtr EditorColour::getTable()
 
 long EditorColour::addNew()
 {
-	return mud::Cache::Get()->AddColour();
+	return mud::ColourManager::Get()->Add();
 	return 0;
 }
 
 std::vector<std::string> EditorColour::getList()
 {
-	return Colour::List();
+	return mud::ColourManager::Get()->List();
 }
 
 void EditorColour::setEditing(long id)
@@ -111,7 +112,7 @@ void EditorColour::setEditing(long id)
 		return;
 	}
 	
-	m_colour.reset(mud::Cache::Get()->GetColourByKey(id));
+	m_colour = mud::ColourManager::Get()->GetByKey(id);
 	return;
 }
 

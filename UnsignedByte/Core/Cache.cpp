@@ -63,17 +63,6 @@ bool Cache::isActive(cstring value)
  * 
  */ 
 
-value_type Cache::AddColour()
-{
-	db::Colours d;
-	d.save();
-	value_type id = d.getcolourid();
-	if(id == 0)
-		Global::Get()->bug("Cache::AddColour(), id = 0");
-	
-	return id;
-}
-
 value_type Cache::AddCommand()
 {
 	db::Commands d;
@@ -137,39 +126,6 @@ value_type Cache::AddSector()
  *	 Retreival 
  * 
  */
-
-mud::Colour* Cache::GetColourByKey(value_type id)
-{
-	Colour* p = m_colourByKey[id];
-	if(p)
-		return p;
-
-	db::Colours* d = db::Colours::bykey(id);
-	p = cacheColour(d);
-	return p;
-}
-
-mud::Colour* Cache::GetColourByName(cstring value)
-{
-	Colour* p = m_colourByName[value];
-	if(p)
-		return p;
-
-	db::Colours* d = db::Colours::byname(value);
-	p = cacheColour(d);
-	return p;
-}
-
-mud::Colour* Cache::GetColourByCode(cstring value)
-{
-	Colour* p = m_colourByCode[value];
-	if(p)
-		return p;
-
-	db::Colours* d = db::Colours::bycode(value);
-	p = cacheColour(d);
-	return p;
-}
 
 mud::Command* Cache::GetCommandByKey(value_type id)
 {
@@ -365,28 +321,6 @@ mud::Sector* Cache::GetSectorByName(cstring value)
  *
  */ 
 
-value_type Cache::lookupColourByCode(cstring value)
-{
-	reverseStringKey::iterator it = m_lookupColourByCode.find(value);
-	if(it != m_lookupColourByCode.end())
-		return it->second;
-	
-	value_type id = db::Colours::lookupcode(value);
-	m_lookupColourByCode[value] = id;
-	return id;
-}
-
-value_type Cache::lookupColourByName(cstring value)
-{
-	reverseStringKey::iterator it = m_lookupColourByName.find(value);
-	if(it != m_lookupColourByName.end())
-		return it->second;
-	
-	value_type id = db::Colours::lookupname(value);
-	m_lookupColourByName[value] = id;
-	return id;
-}
-
 value_type Cache::lookupCommandByName(cstring value)
 {
 	reverseStringKey::iterator it = m_lookupCommandByName.find(value);
@@ -438,17 +372,7 @@ value_type Cache::lookupSectorByName(cstring value)
  * Functionality 
  *
  */ 
-
-void Cache::CloseColour(value_type id)
-{
-	colours_m::iterator key = m_colourByKey.find(id);
-	colours_ms::iterator name = m_colourByName.find(key->second->getName());
-	colours_ms::iterator code = m_colourByCode.find(key->second->getCode());
-	m_colourByKey.erase(key);
-	m_colourByName.erase(name);
-	m_colourByCode.erase(code);
-}
-
+ 
 void Cache::CloseCommand(value_type id)
 {
 	commands_m::iterator key = m_commandByKey.find(id);
@@ -514,16 +438,7 @@ void Cache::CloseSector(value_type id)
  * Caching
  * Functions 
  */ 
-
-Colour* Cache::cacheColour(db::Colours* d)
-{
-	Colour* p = new Colour(d);
-	m_colourByKey[d->getcolourid()] = p;
-	m_colourByName[d->getname()] = p;
-	m_colourByCode[d->getcode()] = p;
-	return p;
-}
-
+ 
 Command* Cache::cacheCommand(db::Commands* d)
 {
 	Command* p = new Command(d);

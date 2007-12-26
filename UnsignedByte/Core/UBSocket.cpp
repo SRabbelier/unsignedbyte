@@ -36,6 +36,7 @@
 #include "AccountManager.h"
 #include "Cache.h"
 #include "Colour.h"
+#include "ColourManager.h"
 
 UBSocket::UBSocket(ISocketHandler& h) :
 TcpSocket(h),
@@ -252,7 +253,7 @@ void UBSocket::Send(const std::string& msg)
 			continue;
 		}
 
-		mud::Colour* colour = mud::Cache::Get()->GetColourByKey(id);
+		mud::ColourPtr colour = mud::ColourManager::Get()->GetByKey(id);
 		buf.insert(i, colour->getColourString());
 	}
 	

@@ -57,7 +57,6 @@ typedef std::pair<value_type, value_type> twoValueKey;
 typedef std::map<std::string, value_type> reverseStringKey;
 
 typedef std::map<oneValueKey,mud::MCharacter*> mobiles_m;
-typedef std::map<oneValueKey,mud::Colour*> colours_m;
 typedef std::map<oneValueKey,mud::Command*> commands_m;
 typedef std::map<oneValueKey,mud::GrantGroup*> grantgroups_m;
 typedef std::map<oneValueKey,mud::Race*> races_m;
@@ -66,7 +65,6 @@ typedef std::map<oneValueKey,mud::Sector*> sectors_m;
 typedef std::map<oneValueKey,mud::PCharacter*> players_m;
 
 typedef std::map<oneStringKey,mud::MCharacter*> mobiles_ms;
-typedef std::map<oneStringKey,mud::Colour*> colours_ms;
 typedef std::map<oneStringKey,mud::Command*> commands_ms;
 typedef std::map<oneStringKey,mud::GrantGroup*> grantgroups_ms;
 typedef std::map<oneStringKey,mud::Race*> races_ms;
@@ -87,16 +85,11 @@ namespace mud
 		bool isActive(value_type id);
 		bool isActive(cstring name);
 		
-		value_type AddColour();
 		value_type AddCommand();
 		value_type AddGrantGroup();
 		value_type AddRace();
 		value_type AddRoom();
 		value_type AddSector();
-		
-		mud::Colour* GetColourByKey(value_type id);
-		mud::Colour* GetColourByCode(cstring code);
-		mud::Colour* GetColourByName(cstring name);
 		
 		mud::Command* GetCommandByKey(value_type id);
 		mud::Command* GetCommandByName(cstring name);
@@ -123,14 +116,11 @@ namespace mud
 		mud::Sector* GetSectorByKey(value_type id);
 		mud::Sector* GetSectorByName(cstring name);
 		
-		value_type lookupColourByCode(cstring value);
-		value_type lookupColourByName(cstring value);
 		value_type lookupCommandByName(cstring value);
 		value_type lookupGrantGroupByName(cstring value);
 		value_type lookupRaceByName(cstring value);
 		value_type lookupSectorByName(cstring value);
 
-		void CloseColour(value_type colourid);
 		void CloseCommand(value_type commandid);
 		void CloseGrantGroup(value_type grantgroupid);
 		void CloseMCharacter(value_type characterid);
@@ -143,7 +133,6 @@ namespace mud
 		bool existsCharacterWithAccount(value_type characterid, value_type accountid);
 
 	private:
-		Colour* cacheColour(db::Colours* d);
 		Command* cacheCommand(db::Commands* d);
 		GrantGroup* cacheGrantGroup(db::GrantGroups* d);
 		MCharacter* cacheMCharacter(db::Characters* d);
@@ -154,10 +143,6 @@ namespace mud
 		
 		characteraccount_m m_characteraccountByKey;
 
-		colours_m m_colourByKey;
-		colours_ms m_colourByCode;
-		colours_ms m_colourByName;
-		
 		commands_m m_commandByKey;
 		commands_ms m_commandByName;
 		
@@ -183,8 +168,6 @@ namespace mud
 		valueset m_pcharactersByKey;
 		stringset m_pcharactersByName;
 		
-		reverseStringKey m_lookupColourByCode;
-		reverseStringKey m_lookupColourByName;
 		reverseStringKey m_lookupCommandByName;
 		reverseStringKey m_lookupGrantGroupByName;
 		reverseStringKey m_lookupRaceByName;
