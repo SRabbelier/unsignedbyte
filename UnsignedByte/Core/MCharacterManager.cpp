@@ -17,26 +17,53 @@
  *   Free Software Foundation, Inc.,                                       *
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
-#pragma once
 
 #include <string>
-#include "Character.h"
+#include <stdexcept>
 
-class UBSocket;
+#include "MCharacterManager.h"
+#include "MCharacter.h"
+#include "Global.h"
+#include "MCharacter.h"
 
-namespace mud
+using mud::MCharacterManager;
+using mud::MCharacter;
+using mud::MCharacterPtr;
+
+mud::MCharacterPtr MCharacterManager::GetByKey(value_type id)
 {
-	class MCharacter : public Character
-	{
-	public:
+	MCharacterPtr p = m_byKey[id];
+	if(p)
+		return p;
+		
+	db::Characters* d = db::Characters::bykey(id);
+	p = cacheMCharacter(d);
+	return p;
+}
 
-	private:
-		MCharacter(db::Characters* character);
-		MCharacter(const MCharacter& rhs);
-		MCharacter operator=(const MCharacter& rhs);
-		virtual ~MCharacter(void);
+mud::MCharacterPtr MCharacterManager::GetByName(cstring value)
+{
+	MCharacterPtr p = m_byName[value];
+	if(p)
+		return p;
+		
+	db::Characters* d = db::Characters::byname(value);
+	p = cacheMCharacter(d);
+	return p;
+}
 
-		friend class MCharacterManager; // for constructor
-		friend void boost::checked_delete<mud::MCharacter>(mud::MCharacter* x);
-	};
+void MCharacterManager::Close(value_type id)
+{
+	mobiles_m::iterator key = m_byKey.find(id);
+	mobiles_ms::iterator name = m_byName.find(key->second->getName());
+	m_byKey.erase(key);
+	m_byName.erase(name);
+}
+
+MCharacterPtr MCharacterManager::cacheMCharacter(db::Characters* d)
+{
+	MCharacterPtr p(new MCharacter(d));
+	m_byKey[d->getcharacterid()] = p;
+	m_byName[d->getname()] = p;
+	return p;
 }

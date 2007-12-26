@@ -36,6 +36,7 @@
 
 #include "Account.h"
 #include "MCharacter.h"
+#include "MCharacterManager.h"
 #include "CharacterManager.h"
 
 EditorMobile::MobileCommand EditorMobile::m_editName("Name", &EditorMobile::editName);
@@ -108,7 +109,7 @@ void EditorMobile::setEditing(long id)
 		return;
 	}
 	
-	m_mobile.reset(mud::Cache::Get()->GetMCharacterByKey(id));
+	m_mobile = mud::MCharacterManager::Get()->GetByKey(id);
 	return;
 }
 

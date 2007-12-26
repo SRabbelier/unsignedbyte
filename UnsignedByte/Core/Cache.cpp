@@ -105,28 +105,6 @@ value_type Cache::AddSector()
  * 
  */
 
-mud::MCharacter* Cache::GetMCharacterByKey(value_type id)
-{
-	MCharacter* p = m_mobileByKey[id];
-	if(p)
-		return p;
-		
-	db::Characters* d = db::Characters::bykey(id);
-	p = cacheMCharacter(d);
-	return p;
-}
-
-mud::MCharacter* Cache::GetMCharacterByName(cstring value)
-{
-	MCharacter* p = m_mobileByName[value];
-	if(p)
-		return p;
-		
-	db::Characters* d = db::Characters::byname(value);
-	p = cacheMCharacter(d);
-	return p;
-}
-
 mud::PCharacter* Cache::GetPCharacterByKey(value_type id)
 {
 	PCharacter* p = m_playerByKey[id];
@@ -284,15 +262,7 @@ value_type Cache::lookupSectorByName(cstring value)
  * Functionality 
  *
  */ 
-
-void Cache::CloseMCharacter(value_type id)
-{
-	mobiles_m::iterator key = m_mobileByKey.find(id);
-	mobiles_ms::iterator name = m_mobileByName.find(key->second->getName());
-	m_mobileByKey.erase(key);
-	m_mobileByName.erase(name);
-}
-
+ 
 void Cache::ClosePCharacter(value_type id)
 {
 	players_m::iterator key = m_playerByKey.find(id);
@@ -334,14 +304,6 @@ void Cache::CloseSector(value_type id)
  * Caching
  * Functions 
  */ 
-
-MCharacter* Cache::cacheMCharacter(db::Characters* d)
-{
-	MCharacter* p = new MCharacter(d);
-	m_mobileByKey[d->getcharacterid()] = p;
-	m_mobileByName[d->getname()] = p;
-	return p;
-}
 
 PCharacter* Cache::cachePCharacter(UBSocket* sock, db::Characters* d)
 {

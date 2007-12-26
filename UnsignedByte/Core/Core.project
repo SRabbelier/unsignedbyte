@@ -89,6 +89,7 @@
     <File Name="ColourManager.cpp"/>
     <File Name="CommandManager.cpp"/>
     <File Name="GrantGroupManager.cpp"/>
+    <File Name="MCharacterManager.cpp"/>
   </VirtualDirectory>
   <VirtualDirectory Name="Manager Header">
     <File Name="AccountManager.h"/>
@@ -97,6 +98,7 @@
     <File Name="ColourManager.h"/>
     <File Name="CommandManager.h"/>
     <File Name="GrantGroupManager.h"/>
+    <File Name="MCharacterManager.h"/>
   </VirtualDirectory>
   <Settings Type="Executable">
     <Configuration Name="Debug" CompilerType="gnu g++" DebuggerType="GNU gdb debugger">
