@@ -28,6 +28,7 @@
 #include "Permission.h"
 #include "Cache.h"
 #include "Command.h"
+#include "CommandManager.h"
 #include "UBSocket.h"
 #include "Account.h"
 
@@ -102,10 +103,10 @@ void Editor::OnLine(const std::string& line)
 	bool isHighForced = m_sock->isHighForced();
 	bool isForced = isLowForced || isNormalForced || isHighForced;
 
-	long id = mud::Cache::Get()->lookupCommandByName(actionname);
+	long id = mud::CommandManager::Get()->lookupByName(actionname);
 	if(id)
 	{
-		Command* cmd = mud::Cache::Get()->GetCommandByKey(id);
+		mud::CommandPtr cmd = mud::CommandManager::Get()->GetByKey(id);
 		hasGrant = cmd->getGrant(m_sock);
 		hasLog = cmd->getLog(m_sock);
 		if(isForced)

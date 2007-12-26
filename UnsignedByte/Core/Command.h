@@ -24,8 +24,13 @@
 #include "Permission.h"
 #include "db.h"
 
+class UBSocket;
+
 namespace mud
 {
+	class CommandManager;
+	class Command;
+	typedef SmartPtr<Command> CommandPtr;
 	class Command : public Savable
 	{
 	public:
@@ -62,14 +67,8 @@ namespace mud
 		 */
 		std::vector<std::string> Show();
 		std::string ShowShort();
-		TablePtr getTable() const { return GetTable(); }
-		
-		/**
-		 * \brief Static utilities
-		 */
-		static TablePtr GetTable();
-		static std::vector<std::string> List();
-		
+		TablePtr getTable() const;
+			
 		/**
 		 * \brief Database utilities
 		 */
@@ -84,7 +83,7 @@ namespace mud
 		Command(const Command& rhs);
 		Command operator=(const Command& rhs);
 		~Command(void);
-		friend class Cache;
+		friend class CommandManager;
 		friend void boost::checked_delete<mud::Command>(mud::Command* x);
 	};
 }

@@ -61,18 +61,7 @@ bool Cache::isActive(cstring value)
  *	 Rows
  *	 Functionality
  * 
- */ 
-
-value_type Cache::AddCommand()
-{
-	db::Commands d;
-	d.save();
-	value_type id = d.getcommandid();
-	if(id == 0)
-		Global::Get()->bug("Cache::AddCommand(), id = 0");
-	
-	return id;
-}
+ */
 
 value_type Cache::AddGrantGroup()
 {
@@ -126,28 +115,6 @@ value_type Cache::AddSector()
  *	 Retreival 
  * 
  */
-
-mud::Command* Cache::GetCommandByKey(value_type id)
-{
-	Command* p = m_commandByKey[id];
-	if(p)
-		return p;
-		
-	db::Commands* d = db::Commands::bykey(id);
-	p = cacheCommand(d);
-	return p;
-}
-
-mud::Command* Cache::GetCommandByName(cstring value)
-{
-	Command* p = m_commandByName[value];
-	if(p)
-		return p;
-		
-	db::Commands* d = db::Commands::byname(value);
-	p = cacheCommand(d);
-	return p;
-}
 
 mud::GrantGroup* Cache::GetGrantGroupByKey(value_type id)
 {
@@ -321,17 +288,6 @@ mud::Sector* Cache::GetSectorByName(cstring value)
  *
  */ 
 
-value_type Cache::lookupCommandByName(cstring value)
-{
-	reverseStringKey::iterator it = m_lookupCommandByName.find(value);
-	if(it != m_lookupCommandByName.end())
-		return it->second;
-	
-	value_type id = db::Commands::lookupname(value);
-	m_lookupCommandByName[value] = id;
-	return id;
-}
-
 value_type Cache::lookupGrantGroupByName(cstring value)
 {
 	reverseStringKey::iterator it = m_lookupGrantGroupByName.find(value);
@@ -372,14 +328,6 @@ value_type Cache::lookupSectorByName(cstring value)
  * Functionality 
  *
  */ 
- 
-void Cache::CloseCommand(value_type id)
-{
-	commands_m::iterator key = m_commandByKey.find(id);
-	commands_ms::iterator name = m_commandByName.find(key->second->getName());
-	m_commandByKey.erase(key);
-	m_commandByName.erase(name);
-}
 
 void Cache::CloseGrantGroup(value_type id)
 {
@@ -438,14 +386,6 @@ void Cache::CloseSector(value_type id)
  * Caching
  * Functions 
  */ 
- 
-Command* Cache::cacheCommand(db::Commands* d)
-{
-	Command* p = new Command(d);
-	m_commandByKey[d->getcommandid()] = p;
-	m_commandByName[d->getname()] = p;
-	return p;
-}
 
 GrantGroup* Cache::cacheGrantGroup(db::GrantGroups* d)
 {

@@ -158,12 +158,7 @@ std::string Command::ShowShort()
 			forcelevel.c_str());
 }
 
-std::vector<std::string> Command::List()
-{
-	return GetTable()->tableList();
-}
-
-TablePtr Command::GetTable()
+TablePtr Command::getTable() const
 {
 	return Tables::Get()->COMMANDS;
 }

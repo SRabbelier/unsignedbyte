@@ -57,7 +57,6 @@ typedef std::pair<value_type, value_type> twoValueKey;
 typedef std::map<std::string, value_type> reverseStringKey;
 
 typedef std::map<oneValueKey,mud::MCharacter*> mobiles_m;
-typedef std::map<oneValueKey,mud::Command*> commands_m;
 typedef std::map<oneValueKey,mud::GrantGroup*> grantgroups_m;
 typedef std::map<oneValueKey,mud::Race*> races_m;
 typedef std::map<oneValueKey,mud::Room*> rooms_m;
@@ -65,7 +64,6 @@ typedef std::map<oneValueKey,mud::Sector*> sectors_m;
 typedef std::map<oneValueKey,mud::PCharacter*> players_m;
 
 typedef std::map<oneStringKey,mud::MCharacter*> mobiles_ms;
-typedef std::map<oneStringKey,mud::Command*> commands_ms;
 typedef std::map<oneStringKey,mud::GrantGroup*> grantgroups_ms;
 typedef std::map<oneStringKey,mud::Race*> races_ms;
 typedef std::map<oneStringKey,mud::Room*> rooms_ms;
@@ -85,14 +83,10 @@ namespace mud
 		bool isActive(value_type id);
 		bool isActive(cstring name);
 		
-		value_type AddCommand();
 		value_type AddGrantGroup();
 		value_type AddRace();
 		value_type AddRoom();
 		value_type AddSector();
-		
-		mud::Command* GetCommandByKey(value_type id);
-		mud::Command* GetCommandByName(cstring name);
 		
 		mud::GrantGroup* GetGrantGroupByKey(value_type id);
 		mud::GrantGroup* GetGrantGroupByName(cstring name);
@@ -116,12 +110,10 @@ namespace mud
 		mud::Sector* GetSectorByKey(value_type id);
 		mud::Sector* GetSectorByName(cstring name);
 		
-		value_type lookupCommandByName(cstring value);
 		value_type lookupGrantGroupByName(cstring value);
 		value_type lookupRaceByName(cstring value);
 		value_type lookupSectorByName(cstring value);
 
-		void CloseCommand(value_type commandid);
 		void CloseGrantGroup(value_type grantgroupid);
 		void CloseMCharacter(value_type characterid);
 		void ClosePCharacter(value_type characterid);
@@ -133,7 +125,6 @@ namespace mud
 		bool existsCharacterWithAccount(value_type characterid, value_type accountid);
 
 	private:
-		Command* cacheCommand(db::Commands* d);
 		GrantGroup* cacheGrantGroup(db::GrantGroups* d);
 		MCharacter* cacheMCharacter(db::Characters* d);
 		PCharacter* cachePCharacter(UBSocket* sock, db::Characters* d);
@@ -143,9 +134,6 @@ namespace mud
 		
 		characteraccount_m m_characteraccountByKey;
 
-		commands_m m_commandByKey;
-		commands_ms m_commandByName;
-		
 		grantgroups_m m_grantgroupByKey;
 		grantgroups_ms m_grantgroupByName;
 		
@@ -168,7 +156,6 @@ namespace mud
 		valueset m_pcharactersByKey;
 		stringset m_pcharactersByName;
 		
-		reverseStringKey m_lookupCommandByName;
 		reverseStringKey m_lookupGrantGroupByName;
 		reverseStringKey m_lookupRaceByName;
 		reverseStringKey m_lookupSectorByName;

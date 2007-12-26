@@ -36,6 +36,7 @@
 
 #include "Account.h"
 #include "Command.h"
+#include "CommandManager.h"
 #include "GrantGroup.h"
 
 using mud::Command;
@@ -97,12 +98,12 @@ TablePtr EditorCommand::getTable()
 
 long EditorCommand::addNew()
 {
-	return mud::Cache::Get()->AddCommand();
+	return mud::CommandManager::Get()->Add();
 }
 
 std::vector<std::string> EditorCommand::getList()
 {
-	return Command::List();
+	return mud::CommandManager::Get()->List();
 }
 
 void EditorCommand::setEditing(long id)
@@ -113,7 +114,7 @@ void EditorCommand::setEditing(long id)
 		return;
 	}
 	
-	m_command.reset(mud::Cache::Get()->GetCommandByKey(id));
+	m_command = mud::CommandManager::Get()->GetByKey(id);
 	return;
 }
 
