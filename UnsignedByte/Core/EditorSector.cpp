@@ -36,6 +36,7 @@
 
 #include "Account.h"
 #include "Sector.h"
+#include "SectorManager.h"
 
 using mud::Sector;
 
@@ -95,13 +96,13 @@ TablePtr EditorSector::getTable()
 
 long EditorSector::addNew()
 {
-	return mud::Cache::Get()->AddSector();
+	return mud::SectorManager::Get()->Add();
 	return 0;
 }
 
 std::vector<std::string> EditorSector::getList()
 {
-	return Sector::List();
+	return mud::SectorManager::Get()->List();
 }
 
 void EditorSector::setEditing(long id)
@@ -112,7 +113,7 @@ void EditorSector::setEditing(long id)
 		return;
 	}
 	
-	m_sector.reset(mud::Cache::Get()->GetSectorByKey(id));
+	m_sector = mud::SectorManager::Get()->GetByKey(id);
 	return;
 }
 

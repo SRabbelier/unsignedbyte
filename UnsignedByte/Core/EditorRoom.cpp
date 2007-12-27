@@ -41,6 +41,7 @@
 #include "Room.h"
 #include "RoomManager.h"
 #include "Sector.h"
+#include "SectorManager.h"
 
 using mud::Room;
 
@@ -234,11 +235,11 @@ void EditorRoom::editSector(const std::string& argument)
 	if(!id)
 	{
 		m_sock->Sendf("'%s' is not a valid sector type!\n", argument.c_str());
-		m_sock->Send(String::Get()->box(mud::Sector::List(), "Sectors"));
+		m_sock->Send(String::Get()->box(mud::SectorManager::Get()->List(), "Sectors"));
 		return;
 	}
 	
-	mud::Sector* sector = mud::Cache::Get()->GetSectorByKey(id);
+	mud::SectorPtr sector = mud::SectorManager::Get()->GetByKey(id);
 	m_sock->Sendf("Sector type changed from '%s' to '%s'.\n", sector->getName().c_str(), argument.c_str());
 		
 	m_room->setSector(id);

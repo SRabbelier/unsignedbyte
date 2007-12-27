@@ -20,11 +20,16 @@
 #pragma once
 
 #include <string>
+#include "smart_ptr.h"
 #include "Savable.h"
 #include "db.h"
 
 namespace mud
 {
+	class SectorManager;
+	class Sector;
+	typedef SmartPtr<Sector> SectorPtr;
+
 	class Sector : public Savable
 	{
 	public:
@@ -49,14 +54,7 @@ namespace mud
 		 */
 		std::vector<std::string> Show();
 		std::string ShowShort();
-		TablePtr getTable() const { return GetTable(); }
-		
-		/**
-		 * \brief Static utilities
-		 */
-		static TablePtr GetTable();
-		static std::vector<std::string> List();
-		static void Close(Sector* sector);
+		TablePtr getTable() const;
 		
 		/**
 		 * \brief Database utilities
@@ -76,7 +74,7 @@ namespace mud
 		Sector operator=(const Sector& rhs);
 		~Sector(void);
 		
-		friend class Cache;
+		friend class SectorManager;
 		friend void boost::checked_delete<mud::Sector>(mud::Sector* x);
 	};
 }

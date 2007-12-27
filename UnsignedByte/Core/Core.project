@@ -94,6 +94,7 @@
     <File Name="PermissionManager.cpp"/>
     <File Name="RaceManager.cpp"/>
     <File Name="RoomManager.cpp"/>
+    <File Name="SectorManager.cpp"/>
   </VirtualDirectory>
   <VirtualDirectory Name="Manager Header">
     <File Name="AccountManager.h"/>
@@ -107,6 +108,7 @@
     <File Name="PermissionManager.h"/>
     <File Name="RaceManager.h"/>
     <File Name="RoomManager.h"/>
+    <File Name="SectorManager.h"/>
   </VirtualDirectory>
   <Settings Type="Executable">
     <Configuration Name="Debug" CompilerType="gnu g++" DebuggerType="GNU gdb debugger">

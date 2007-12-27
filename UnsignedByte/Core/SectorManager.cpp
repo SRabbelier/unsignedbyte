@@ -21,57 +21,80 @@
 #include <string>
 #include <stdexcept>
 
+#include "SectorManager.h"
 #include "Sector.h"
 #include "Global.h"
-#include "DatabaseMgr.h"
-#include "Cache.h"
-#include "db.h"
 
+using mud::SectorManager;
 using mud::Sector;
+using mud::SectorPtr;
 
-Sector::Sector(db::Sectors* Sector) :
-m_sector(Sector)
+std::vector<std::string> SectorManager::List()
 {
-	if(m_sector == NULL)
-		throw std::invalid_argument("Sector::Sector(), m_sector == NULL!");
+	return GetTable()->tableList();
 }
 
-Sector::~Sector(void)
-{
-	delete m_sector;
-	m_sector = NULL;
-}
-
-void Sector::Delete()
-{
-	m_sector->erase();
-}
-
-void Sector::Save()
-{
-	m_sector->save();
-}
-
-bool Sector::Exists()
-{
-	return m_sector->getsectorid();
-}
-
-std::vector<std::string> Sector::Show()
-{
-	std::vector<std::string> result;
-	
-	return result;
-}
-
-std::string Sector::ShowShort()
-{
-	std::string result;
-	
-	return result;
-}
-
-TablePtr Sector::getTable() const
+TablePtr SectorManager::GetTable()
 {
 	return Tables::Get()->SECTORS;
+}
+
+value_type SectorManager::Add()
+{	
+	db::Sectors d;
+	d.save();
+	value_type id = d.getsectorid();
+	if(id == 0)
+		Global::Get()->bug("SectorManager::AddSector(), id = 0");
+	
+	return id;	
+}
+
+mud::SectorPtr SectorManager::GetByKey(value_type id)
+{
+	SectorPtr p = m_byKey[id];
+	if(p)
+		return p;
+		
+	db::Sectors* d = db::Sectors::bykey(id);
+	p = cacheSector(d);
+	return p;
+}
+
+mud::SectorPtr SectorManager::GetByName(cstring value)
+{
+	SectorPtr p = m_byName[value];
+	if(p)
+		return p;
+		
+	db::Sectors* d = db::Sectors::byname(value);
+	p = cacheSector(d);
+	return p;
+} 
+
+value_type SectorManager::lookupByName(cstring value)
+{
+	reverseStringKey::iterator it = m_lookupByName.find(value);
+	if(it != m_lookupByName.end())
+		return it->second;
+	
+	value_type id = db::Sectors::lookupname(value);
+	m_lookupByName[value] = id;
+	return id;
+}
+
+void SectorManager::Close(value_type id)
+{
+	sectors_m::iterator key = m_byKey.find(id);
+	sectors_ms::iterator name = m_byName.find(key->second->getName());
+	m_byKey.erase(key);
+	m_byName.erase(name);	
+}
+
+SectorPtr SectorManager::cacheSector(db::Sectors* d)
+{
+	SectorPtr p(new Sector(d));
+	m_byKey[d->getsectorid()] = p;
+	m_byName[d->getname()] = p;
+	return p;
 }

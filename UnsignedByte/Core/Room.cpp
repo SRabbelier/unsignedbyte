@@ -34,6 +34,7 @@
 #include "Room.h"
 #include "Area.h"
 #include "Sector.h"
+#include "SectorManager.h"
 #include "Character.h"
 
 using mud::Room;
@@ -217,7 +218,7 @@ std::vector<std::string> Room::Show()
 	result.push_back(Global::Get()->sprintf("Description: '%s'.\n", getDescription().c_str()));
 	try
 	{
-		Sector* sector = Cache::Get()->GetSectorByKey(getSector());
+		SectorPtr sector = mud::SectorManager::Get()->GetByKey(getSector());
 		result.push_back(Global::Get()->sprintf("Sector: '%s' (%s).\n", sector->getName().c_str(), sector->getSymbol().c_str()));
 	}
 	catch(std::exception& e)
