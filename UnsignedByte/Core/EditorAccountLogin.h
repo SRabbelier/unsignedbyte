@@ -48,10 +48,7 @@ private:
 	{
 		M_FIRST,
 		M_NAME,
-		M_NAMECONFIRM,
 		M_PASSWORD,
-		M_PASSWORDCONFIRM,
-		M_DONE,
 	};
 
 	int m_state;

@@ -32,6 +32,7 @@ class DoCmd;
 
 EditorAccountLogin::EditorAccountLogin(UBSocket* sock) :
 Editor(sock),
+m_state(M_FIRST),
 m_account()
 {
 	OnLine(Global::Get()->EmptyString);
@@ -43,12 +44,6 @@ EditorAccountLogin::~EditorAccountLogin(void)
 
 void EditorAccountLogin::OnLine(const std::string &line)
 {
-	if(line.size() == 0)
-	{
-		m_sock->Send("Please enter your name:\n");
-		return;
-	}
-
 	if(!line.compare("quit"))
 	{
 		m_sock->Send("Goodbye!\n");
@@ -60,7 +55,7 @@ void EditorAccountLogin::OnLine(const std::string &line)
 	{
 	default:
 	{
-		Global::Get()->bug("EditorNewAccount::OnLine(), default m_state!\n");
+		Global::Get()->bug("EditorAccountLogin::OnLine(), default m_state!\n");
 		m_sock->Send("BUG! Disconnecting you now...\n");
 		m_sock->SetCloseAndDelete();
 		return;
@@ -78,6 +73,12 @@ void EditorAccountLogin::OnLine(const std::string &line)
 		{
 			m_sock->Send("Starting account creation...\n");
 			m_sock->SetEditor(new EditorNewAccount(m_sock));
+			return;
+		}
+		
+		if(line.size() == 0)
+		{
+			m_sock->Send("Please enter your name:\n");
 			return;
 		}
 		
@@ -111,7 +112,7 @@ void EditorAccountLogin::OnLine(const std::string &line)
 			return;
 		}
 
-		m_sock->Sendf("Welcome back, %s\n", line.c_str());
+		m_sock->Sendf("Welcome back, %s\n", m_account->getName().c_str());
 		m_sock->Send("\n");
 		m_sock->SetAccount(m_account);
 		m_sock->SetEditor(new EditorAccount(m_sock));
