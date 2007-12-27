@@ -28,6 +28,8 @@ namespace mud
 {
 	class Character;
 	typedef std::vector<Character*> Characters;
+	class Room;
+	typedef SmartPtr<Room> RoomPtr;
 	
 	class Room : public Savable
 	{
@@ -59,15 +61,7 @@ namespace mud
 		 */
 		std::vector<std::string> Show();
 		std::string ShowShort();
-		TablePtr getTable() const { return GetTable(); }
-		
-		/**
-		 * \brief static utilities
-		 */
-		static TablePtr GetTable();
-		static std::vector<std::string> List();
-		static std::string CreateMap(long id, long origx, long origy);
-		static void Close(SmartPtr<Room> room);
+		TablePtr getTable() const;
 		
 		/**
 		 * \brief Database utilities
@@ -85,7 +79,7 @@ namespace mud
 		Room operator=(const Room& rhs);
 		~Room(void);
 
-		friend class Cache; // constructor
+		friend class RoomManager; // constructor
 		friend void boost::checked_delete<mud::Room>(mud::Room* x);
 	};
 }

@@ -38,7 +38,7 @@ Objects=$(IntermediateDirectory)/Account$(ObjectSuffix) $(IntermediateDirectory)
 	$(IntermediateDirectory)/Sector$(ObjectSuffix) $(IntermediateDirectory)/UBHandler$(ObjectSuffix) $(IntermediateDirectory)/UBSocket$(ObjectSuffix) $(IntermediateDirectory)/SQLSocket$(ObjectSuffix) $(IntermediateDirectory)/Command$(ObjectSuffix) $(IntermediateDirectory)/GrantGroup$(ObjectSuffix) $(IntermediateDirectory)/Permission$(ObjectSuffix) $(IntermediateDirectory)/EditorOLC$(ObjectSuffix) $(IntermediateDirectory)/Editor$(ObjectSuffix) $(IntermediateDirectory)/EditorPermission$(ObjectSuffix) \
 	$(IntermediateDirectory)/EditorGrantGroup$(ObjectSuffix) $(IntermediateDirectory)/EditorString$(ObjectSuffix) $(IntermediateDirectory)/EditorCommand$(ObjectSuffix) $(IntermediateDirectory)/EditorScript$(ObjectSuffix) $(IntermediateDirectory)/EditorSector$(ObjectSuffix) $(IntermediateDirectory)/EditorRoom$(ObjectSuffix) $(IntermediateDirectory)/EditorPlaying$(ObjectSuffix) $(IntermediateDirectory)/EditorNewCharacter$(ObjectSuffix) $(IntermediateDirectory)/EditorNewAccount$(ObjectSuffix) $(IntermediateDirectory)/EditorAccount$(ObjectSuffix) \
 	$(IntermediateDirectory)/EditorMobile$(ObjectSuffix) $(IntermediateDirectory)/EditorArea$(ObjectSuffix) $(IntermediateDirectory)/EditorColour$(ObjectSuffix) $(IntermediateDirectory)/OLCEditor$(ObjectSuffix) $(IntermediateDirectory)/EditorAccountLogin$(ObjectSuffix) $(IntermediateDirectory)/EditorOOC$(ObjectSuffix) $(IntermediateDirectory)/AccountManager$(ObjectSuffix) $(IntermediateDirectory)/AreaManager$(ObjectSuffix) $(IntermediateDirectory)/CharacterManager$(ObjectSuffix) $(IntermediateDirectory)/ColourManager$(ObjectSuffix) \
-	$(IntermediateDirectory)/CommandManager$(ObjectSuffix) $(IntermediateDirectory)/GrantGroupManager$(ObjectSuffix) $(IntermediateDirectory)/MCharacterManager$(ObjectSuffix) $(IntermediateDirectory)/PCharacterManager$(ObjectSuffix) $(IntermediateDirectory)/PermissionManager$(ObjectSuffix) $(IntermediateDirectory)/RaceManager$(ObjectSuffix) 
+	$(IntermediateDirectory)/CommandManager$(ObjectSuffix) $(IntermediateDirectory)/GrantGroupManager$(ObjectSuffix) $(IntermediateDirectory)/MCharacterManager$(ObjectSuffix) $(IntermediateDirectory)/PCharacterManager$(ObjectSuffix) $(IntermediateDirectory)/PermissionManager$(ObjectSuffix) $(IntermediateDirectory)/RaceManager$(ObjectSuffix) $(IntermediateDirectory)/RoomManager$(ObjectSuffix) 
 
 ##
 ## Main Build Tragets 
@@ -288,6 +288,11 @@ $(IntermediateDirectory)/RaceManager$(ObjectSuffix): RaceManager.cpp $(Intermedi
 $(IntermediateDirectory)/RaceManager$(ObjectSuffix).d:
 	@$(CompilerName) $(CmpOptions) $(IncludePath) -MT$(IntermediateDirectory)/RaceManager$(ObjectSuffix) -MF$(IntermediateDirectory)/RaceManager$(ObjectSuffix).d -MM RaceManager.cpp
 
+$(IntermediateDirectory)/RoomManager$(ObjectSuffix): RoomManager.cpp $(IntermediateDirectory)/RoomManager$(ObjectSuffix).d
+	$(CompilerName) $(SourceSwitch)RoomManager.cpp $(CmpOptions)   $(OutputSwitch)$(IntermediateDirectory)/RoomManager$(ObjectSuffix) $(IncludePath)
+$(IntermediateDirectory)/RoomManager$(ObjectSuffix).d:
+	@$(CompilerName) $(CmpOptions) $(IncludePath) -MT$(IntermediateDirectory)/RoomManager$(ObjectSuffix) -MF$(IntermediateDirectory)/RoomManager$(ObjectSuffix).d -MM RoomManager.cpp
+
 ##
 ## Clean
 ##
@@ -384,6 +389,8 @@ clean:
 	$(RM) $(IntermediateDirectory)/PermissionManager$(ObjectSuffix).d
 	$(RM) $(IntermediateDirectory)/RaceManager$(ObjectSuffix)
 	$(RM) $(IntermediateDirectory)/RaceManager$(ObjectSuffix).d
+	$(RM) $(IntermediateDirectory)/RoomManager$(ObjectSuffix)
+	$(RM) $(IntermediateDirectory)/RoomManager$(ObjectSuffix).d
 	$(RM) $(OutputFile)
 
 -include $(IntermediateDirectory)/*.d

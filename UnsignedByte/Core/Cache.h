@@ -54,10 +54,8 @@ typedef std::pair<value_type, value_type> twoValueKey;
 
 typedef std::map<std::string, value_type> reverseStringKey;
 
-typedef std::map<oneValueKey,mud::Room*> rooms_m;
 typedef std::map<oneValueKey,mud::Sector*> sectors_m;
 
-typedef std::map<oneStringKey,mud::Room*> rooms_ms;
 typedef std::map<oneStringKey,mud::Sector*> sectors_ms;
 
 typedef std::map<twoValueKey,db::CharacterAccount*> characteraccount_m; // character, account
@@ -69,28 +67,21 @@ namespace mud
 	class Cache : public Singleton<Cache>
 	{
 	public:
-		value_type AddRoom();
 		value_type AddSector();
-		
-		mud::Room* GetRoomByKey(value_type id);
 		
 		mud::Sector* GetSectorByKey(value_type id);
 		mud::Sector* GetSectorByName(cstring name);
 		
 		value_type lookupSectorByName(cstring value);
 
-		void CloseRoom(value_type roomid);
 		void CloseSector(value_type sectorid);
 		
 		bool existsCharacterWithAccount(value_type characterid, value_type accountid);
 
 	private:
-		Room* cacheRoom(db::Rooms* d);
 		Sector* cacheSector(db::Sectors* d);
 		
 		characteraccount_m m_characteraccountByKey;
-		
-		rooms_m m_roomByKey;
 		
 		sectors_m m_sectorByKey;
 		sectors_ms m_sectorByName;

@@ -52,17 +52,6 @@ using namespace mud;
  * 
  */
 
-value_type Cache::AddRoom()
-{
-	db::Rooms d;
-	d.save();
-	value_type id = d.getroomid();
-	if(id == 0)
-		Global::Get()->bug("Cache::AddRoom(), id = 0");
-	
-	return id;
-}
-
 value_type Cache::AddSector()
 {	
 	db::Sectors d;
@@ -82,17 +71,6 @@ value_type Cache::AddSector()
  *	 Retreival 
  * 
  */
-
-mud::Room* Cache::GetRoomByKey(value_type id)
-{
-	Room* p = m_roomByKey[id];
-	if(p)
-		return p;
-		
-	db::Rooms* d = db::Rooms::bykey(id);
-	p = cacheRoom(d);
-	return p;
-}
 
 mud::Sector* Cache::GetSectorByKey(value_type id)
 {
@@ -143,12 +121,6 @@ value_type Cache::lookupSectorByName(cstring value)
  *
  */ 
 
-void Cache::CloseRoom(value_type id)
-{
-	rooms_m::iterator key = m_roomByKey.find(id);
-	m_roomByKey.erase(key);
-}
-
 void Cache::CloseSector(value_type id)
 {
 	sectors_m::iterator key = m_sectorByKey.find(id);
@@ -162,13 +134,6 @@ void Cache::CloseSector(value_type id)
  * Caching
  * Functions 
  */ 
-
-Room* Cache::cacheRoom(db::Rooms* d)
-{
-	Room* p = new Room(d);
-	m_roomByKey[d->getroomid()] = p;
-	return p;
-}
 
 Sector* Cache::cacheSector(db::Sectors* d)
 {

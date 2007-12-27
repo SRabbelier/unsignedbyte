@@ -86,11 +86,11 @@ bool Room::Exists()
 {
 	return m_room->getroomid();
 }
-
+/*
 std::string Room::CreateMap(long id, long origx, long origy)
 {
 	std::string result;
-	/*
+
 	long count = DatabaseMgr::Get()->CountSavable(Tables::Get()->AREAS, id);
 
 	if(count <= 0)
@@ -205,9 +205,9 @@ std::string Room::CreateMap(long id, long origx, long origy)
 		result.append("\n");
 	}
 
-	*/
 	return result;
 }
+*/
 
 std::vector<std::string> Room::Show()
 {
@@ -235,21 +235,7 @@ std::string Room::ShowShort()
 	return result;
 }
 
-std::vector<std::string> Room::List()
-{
-	return GetTable()->tableList();
-}
-
-void Room::Close(SmartPtr<Room> room)
-{
-	if(room == NULL)
-		throw std::invalid_argument("Room::Close(), room == NULL!");
-	
-	Cache::Get()->CloseRoom(room->getID());
-}
-
-TablePtr Room::GetTable()
+TablePtr Room::getTable() const
 {
 	return Tables::Get()->ROOMS;
 }
-

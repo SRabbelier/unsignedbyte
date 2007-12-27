@@ -93,6 +93,7 @@
     <File Name="PCharacterManager.cpp"/>
     <File Name="PermissionManager.cpp"/>
     <File Name="RaceManager.cpp"/>
+    <File Name="RoomManager.cpp"/>
   </VirtualDirectory>
   <VirtualDirectory Name="Manager Header">
     <File Name="AccountManager.h"/>
@@ -105,6 +106,7 @@
     <File Name="PCharacterManager.h"/>
     <File Name="PermissionManager.h"/>
     <File Name="RaceManager.h"/>
+    <File Name="RoomManager.h"/>
   </VirtualDirectory>
   <Settings Type="Executable">
     <Configuration Name="Debug" CompilerType="gnu g++" DebuggerType="GNU gdb debugger">

@@ -43,6 +43,7 @@
 #include "RaceManager.h"
 #include "Area.h"
 #include "Room.h"
+#include "RoomManager.h"
 #include "Account.h" // needed because UBSocket.h is included
 #include "AreaManager.h"
 
@@ -104,7 +105,7 @@ void Character::OnLook(const std::string& msg)
 	try 
 	{
 		long id = this->getRoom();
-		Room* room = Cache::Get()->GetRoomByKey(id);
+		RoomPtr room = mud::RoomManager::Get()->GetByKey(id);
 
 		OnSendf("Room (%d|<%dx%dx%d): %s\n", room->getArea(), room->getHeight(), room->getLength(), room->getWidth(), room->getName().c_str());
 		OnSendf("%s\n", room->getDescription().c_str());
@@ -134,7 +135,7 @@ void Character::OnRaceList(const std::string& msg)
 
 void Character::OnRoomList(const std::string& msg)
 {
-	OnSend(String::Get()->box(mud::Room::List(), "Rooms"));
+	OnSend(String::Get()->box(mud::RoomManager::Get()->List(), "Rooms"));
 	return;
 }
 
@@ -155,7 +156,7 @@ void Character::OnSay(const std::string& msg)
 	try
 	{
 		long id = getRoom();
-		Room* room = Cache::Get()->GetRoomByKey(id);
+		RoomPtr room = mud::RoomManager::Get()->GetByKey(id);
 
 		room->Sendf("%s says '%s`^'\n", getName().c_str(), msg.c_str());
 		return;

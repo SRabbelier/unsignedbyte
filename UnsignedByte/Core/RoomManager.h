@@ -17,84 +17,55 @@
  *   Free Software Foundation, Inc.,                                       *
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
+#pragma once
 
 #include <string>
-#include <stdexcept>
+#include <vector>
 
-#include "RaceManager.h"
-#include "Race.h"
-#include "Global.h"
+#include "singleton.h"
+#include "db.h"
 
-using mud::RaceManager;
-using mud::Race;
-using mud::RacePtr;
-
-std::vector<std::string> RaceManager::List()
-{
-	return GetTable()->tableList();
+namespace mud 
+{ 
+	class Room; 
+	typedef SmartPtr<Room> RoomPtr;
 }
 
-TablePtr RaceManager::GetTable()
-{
-	return Tables::Get()->RACES;
-}
+typedef const std::string& cstring;
+typedef std::map<value_type,mud::RoomPtr> rooms_m;
+typedef std::map<std::string,mud::RoomPtr> rooms_ms;
+typedef std::map<std::string, value_type> reverseStringKey;
 
-value_type RaceManager::Add()
+namespace mud
 {
-	db::Races d;
-	d.save();
-	value_type id = d.getraceid();
-	if(id == 0)
-		Global::Get()->bug("RaceManager::AddRace(), id = 0");
-	
-	return id;
-}
-
-mud::RacePtr RaceManager::GetByKey(value_type id)
-{
-	RacePtr p = m_byKey[id];
-	if(p)
-		return p;
+	class RoomManager : public Singleton<mud::RoomManager>
+	{
+	public:
+		TablePtr GetTable();
+		std::vector<std::string> List();
+		void Close(RoomPtr room);
 		
-	db::Races* d = db::Races::bykey(id);
-	p = cacheRace(d);
-	return p;
-}
-
-mud::RacePtr RaceManager::GetByName(cstring value)
-{
-	RacePtr p = m_byName[value];
-	if(p)
-		return p;
+		value_type Add();
+		mud::RoomPtr GetByKey(value_type id);
+		mud::RoomPtr GetByName(cstring name);
 		
-	db::Races* d = db::Races::byname(value);
-	p = cacheRace(d);
-	return p;
-}
+		value_type lookupByName(cstring value);
+		
+		void Close(value_type Roomid);
+		
+	private:
+		RoomPtr cacheRoom(db::Rooms* d);
+		
+		rooms_m m_byKey;
+		rooms_ms m_byName;
+		reverseStringKey m_lookupByName;
 
-value_type RaceManager::lookupByName(cstring value)
-{
-	reverseStringKey::iterator it = m_lookupByName.find(value);
-	if(it != m_lookupByName.end())
-		return it->second;
-	
-	value_type id = db::Races::lookupname(value);
-	m_lookupByName[value] = id;
-	return id;
-}
-
-void RaceManager::Close(value_type id)
-{
-	races_m::iterator key = m_byKey.find(id);
-	races_ms::iterator name = m_byName.find(key->second->getName());
-	m_byKey.erase(key);
-	m_byName.erase(name);	
-}
-
-RacePtr RaceManager::cacheRace(db::Races* d)
-{
-	RacePtr p(new Race(d));
-	m_byKey[d->getraceid()] = p;
-	m_byName[d->getname()] = p;
-	return p;
+	private:
+		RoomManager(void) {};
+		RoomManager(const RoomManager& rhs);
+		RoomManager operator=(const RoomManager& rhs);
+		~RoomManager(void) {};
+		
+		friend class Singleton<mud::RoomManager>;
+	};
 }

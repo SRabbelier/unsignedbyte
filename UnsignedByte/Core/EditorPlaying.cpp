@@ -35,6 +35,7 @@
 #include "PCharacter.h"
 #include "PCharacterManager.h"
 #include "Room.h"
+#include "RoomManager.h"
 
 using mud::PCharacter;
 
@@ -56,7 +57,7 @@ m_char(character)
 	try
 	{
 		long id = m_char->getRoom();
-		mud::Room* inroom = mud::Cache::Get()->GetRoomByKey(id);
+		mud::RoomPtr inroom = mud::RoomManager::Get()->GetByKey(id);
 	
 		inroom->Sendf("%s enters the realm.\n", m_char->getName().c_str());
 	}
@@ -165,7 +166,7 @@ void EditorPlaying::quitEditor(const std::string& argument)
 	{
 		m_char->OnSend("Thank you for visiting.\n");
 		long id =m_char->getRoom();
-		mud::Room* room = mud::Cache::Get()->GetRoomByKey(id);
+		mud::RoomPtr room = mud::RoomManager::Get()->GetByKey(id);
 		
 		room->Sendf("%s fades from the realm.\n", m_char->getName().c_str());	
 	}

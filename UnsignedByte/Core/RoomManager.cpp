@@ -21,80 +21,63 @@
 #include <string>
 #include <stdexcept>
 
-#include "RaceManager.h"
-#include "Race.h"
+#include "RoomManager.h"
+#include "Room.h"
 #include "Global.h"
 
-using mud::RaceManager;
-using mud::Race;
-using mud::RacePtr;
+using mud::RoomManager;
+using mud::Room;
+using mud::RoomPtr;
 
-std::vector<std::string> RaceManager::List()
+std::vector<std::string> RoomManager::List()
 {
 	return GetTable()->tableList();
 }
 
-TablePtr RaceManager::GetTable()
+void RoomManager::Close(RoomPtr room)
 {
-	return Tables::Get()->RACES;
+	if(room == NULL)
+		throw std::invalid_argument("Room::Close(), room == NULL!");
+	
+	Close(room->getID());
 }
 
-value_type RaceManager::Add()
+TablePtr RoomManager::GetTable()
 {
-	db::Races d;
+	return Tables::Get()->ROOMS;
+}
+
+value_type RoomManager::Add()
+{
+	db::Rooms d;
 	d.save();
-	value_type id = d.getraceid();
+	value_type id = d.getroomid();
 	if(id == 0)
-		Global::Get()->bug("RaceManager::AddRace(), id = 0");
+		Global::Get()->bug("RoomManager::AddRoom(), id = 0");
 	
 	return id;
 }
 
-mud::RacePtr RaceManager::GetByKey(value_type id)
+mud::RoomPtr RoomManager::GetByKey(value_type id)
 {
-	RacePtr p = m_byKey[id];
+	RoomPtr p = m_byKey[id];
 	if(p)
 		return p;
 		
-	db::Races* d = db::Races::bykey(id);
-	p = cacheRace(d);
+	db::Rooms* d = db::Rooms::bykey(id);
+	p = cacheRoom(d);
 	return p;
 }
 
-mud::RacePtr RaceManager::GetByName(cstring value)
+void RoomManager::Close(value_type id)
 {
-	RacePtr p = m_byName[value];
-	if(p)
-		return p;
-		
-	db::Races* d = db::Races::byname(value);
-	p = cacheRace(d);
-	return p;
-}
-
-value_type RaceManager::lookupByName(cstring value)
-{
-	reverseStringKey::iterator it = m_lookupByName.find(value);
-	if(it != m_lookupByName.end())
-		return it->second;
-	
-	value_type id = db::Races::lookupname(value);
-	m_lookupByName[value] = id;
-	return id;
-}
-
-void RaceManager::Close(value_type id)
-{
-	races_m::iterator key = m_byKey.find(id);
-	races_ms::iterator name = m_byName.find(key->second->getName());
+	rooms_m::iterator key = m_byKey.find(id);
 	m_byKey.erase(key);
-	m_byName.erase(name);	
 }
 
-RacePtr RaceManager::cacheRace(db::Races* d)
+RoomPtr RoomManager::cacheRoom(db::Rooms* d)
 {
-	RacePtr p(new Race(d));
-	m_byKey[d->getraceid()] = p;
-	m_byName[d->getname()] = p;
+	RoomPtr p(new Room(d));
+	m_byKey[d->getroomid()] = p;
 	return p;
 }

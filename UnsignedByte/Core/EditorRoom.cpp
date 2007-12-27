@@ -39,6 +39,7 @@
 #include "Area.h"
 #include "AreaManager.h"
 #include "Room.h"
+#include "RoomManager.h"
 #include "Sector.h"
 
 using mud::Room;
@@ -124,12 +125,12 @@ TablePtr EditorRoom::getTable()
 
 long EditorRoom::addNew()
 {
-	return mud::Cache::Get()->AddRoom();
+	return mud::RoomManager::Get()->Add();
 }
 
 std::vector<std::string> EditorRoom::getList()
 {
-	return Room::List();
+	return mud::RoomManager::Get()->List();
 }
 
 void EditorRoom::setEditing(long id)
@@ -140,7 +141,7 @@ void EditorRoom::setEditing(long id)
 		return;
 	}
 	
-	m_room.reset(mud::Cache::Get()->GetRoomByKey(id));
+	m_room = mud::RoomManager::Get()->GetByKey(id);
 	return;
 }
 
@@ -256,7 +257,7 @@ void EditorRoom::deactivateRoom(const std::string& argument)
 {
 	m_sock->Sendf("Deleting room '%s'.\n", m_room->getName().c_str());
 	m_room->Delete();
-	Room::Close(m_room);
+	mud::RoomManager::Get()->Close(m_room);
 	m_room.reset();
 	m_sock->Send("Deleted.\n");
 	return;
