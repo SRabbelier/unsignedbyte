@@ -71,13 +71,7 @@ std::string Race::ShowShort()
 	return result;
 }
 
-std::vector<std::string> Race::List()
-{
-	return GetTable()->tableList();
-}
-
-TablePtr Race::GetTable()
+TablePtr Race::getTable() const
 {
 	return Tables::Get()->RACES;
 }
-

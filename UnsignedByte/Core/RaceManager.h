@@ -20,45 +20,52 @@
 #pragma once
 
 #include <string>
-#include "Savable.h"
+#include <vector>
+
+#include "singleton.h"
 #include "db.h"
+
+namespace mud 
+{ 
+	class Race; 
+	typedef SmartPtr<Race> RacePtr;
+}
+
+typedef const std::string& cstring;
+typedef std::map<value_type,mud::RacePtr> races_m;
+typedef std::map<std::string,mud::RacePtr> races_ms;
+typedef std::map<std::string, value_type> reverseStringKey;
 
 namespace mud
 {
-	class RaceManager;
-	class Race : public Savable
+	class RaceManager : public Singleton<mud::RaceManager>
 	{
 	public:
-		const std::string& getName() const { return m_race->getname(); }
-
-		void setName(const std::string& name) { m_race->setname(name); }
-
-		/**
-		 * \brief Utilities
-		 */
-		std::vector<std::string> Show();
-		std::string ShowShort();
-		TablePtr getTable() const;
+		TablePtr GetTable();
+		std::vector<std::string> List();
+		void Close(RacePtr race);
 		
-		/**
-		 * \brief Database utilities
-		 */
-		void Delete();	
-		void Save();
-		bool Exists();
+		value_type Add();
+		mud::RacePtr GetByKey(value_type id);
+		mud::RacePtr GetByName(cstring name);
+		
+		value_type lookupByName(cstring value);
+		
+		void Close(value_type Raceid);
+		
+	private:
+		RacePtr cacheRace(db::Races* d);
+		
+		races_m m_byKey;
+		races_ms m_byName;
+		reverseStringKey m_lookupByName;
 
 	private:
-		db::Races* m_race;
-
-		/**
-		 * \brief Ctors
-		 */ 
-		Race(db::Races* race);
-		Race(const Race& rhs);
-		Race operator=(const Race& rhs);
-		~Race(void);
+		RaceManager(void) {};
+		RaceManager(const RaceManager& rhs);
+		RaceManager operator=(const RaceManager& rhs);
+		~RaceManager(void) {};
 		
-		friend class RaceManager;
-		friend void boost::checked_delete<mud::Race>(mud::Race* x);
+		friend class Singleton<mud::RaceManager>;
 	};
 }

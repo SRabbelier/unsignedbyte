@@ -17,48 +17,84 @@
  *   Free Software Foundation, Inc.,                                       *
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
-#pragma once
 
 #include <string>
-#include "Savable.h"
-#include "db.h"
+#include <stdexcept>
 
-namespace mud
+#include "RaceManager.h"
+#include "Race.h"
+#include "Global.h"
+
+using mud::RaceManager;
+using mud::Race;
+using mud::RacePtr;
+
+std::vector<std::string> RaceManager::List()
 {
-	class RaceManager;
-	class Race : public Savable
-	{
-	public:
-		const std::string& getName() const { return m_race->getname(); }
+	return GetTable()->tableList();
+}
 
-		void setName(const std::string& name) { m_race->setname(name); }
+TablePtr RaceManager::GetTable()
+{
+	return Tables::Get()->RACES;
+}
 
-		/**
-		 * \brief Utilities
-		 */
-		std::vector<std::string> Show();
-		std::string ShowShort();
-		TablePtr getTable() const;
+value_type RaceManager::Add()
+{
+	db::Races d;
+	d.save();
+	value_type id = d.getraceid();
+	if(id == 0)
+		Global::Get()->bug("Cache::AddRace(), id = 0");
+	
+	return id;
+}
+
+mud::RacePtr RaceManager::GetByKey(value_type id)
+{
+	RacePtr p = m_byKey[id];
+	if(p)
+		return p;
 		
-		/**
-		 * \brief Database utilities
-		 */
-		void Delete();	
-		void Save();
-		bool Exists();
+	db::Races* d = db::Races::bykey(id);
+	p = cacheRace(d);
+	return p;
+}
 
-	private:
-		db::Races* m_race;
-
-		/**
-		 * \brief Ctors
-		 */ 
-		Race(db::Races* race);
-		Race(const Race& rhs);
-		Race operator=(const Race& rhs);
-		~Race(void);
+mud::RacePtr RaceManager::GetByName(cstring value)
+{
+	RacePtr p = m_byName[value];
+	if(p)
+		return p;
 		
-		friend class RaceManager;
-		friend void boost::checked_delete<mud::Race>(mud::Race* x);
-	};
+	db::Races* d = db::Races::byname(value);
+	p = cacheRace(d);
+	return p;
+}
+
+value_type RaceManager::lookupByName(cstring value)
+{
+	reverseStringKey::iterator it = m_lookupByName.find(value);
+	if(it != m_lookupByName.end())
+		return it->second;
+	
+	value_type id = db::Races::lookupname(value);
+	m_lookupByName[value] = id;
+	return id;
+}
+
+void RaceManager::Close(value_type id)
+{
+	races_m::iterator key = m_byKey.find(id);
+	races_ms::iterator name = m_byName.find(key->second->getName());
+	m_byKey.erase(key);
+	m_byName.erase(name);	
+}
+
+RacePtr RaceManager::cacheRace(db::Races* d)
+{
+	RacePtr p(new Race(d));
+	m_byKey[d->getraceid()] = p;
+	m_byName[d->getname()] = p;
+	return p;
 }

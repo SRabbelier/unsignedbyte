@@ -32,6 +32,7 @@
 #include "Account.h"
 #include "db.h"
 #include "Race.h"
+#include "RaceManager.h"
 
 EditorNewCharacter::EditorNewCharacter(UBSocket* sock) :
 Editor(sock),
@@ -120,7 +121,7 @@ void EditorNewCharacter::OnLine(const std::string &line)
 			if(line.size() == 0)
 			{
 				m_sock->Send("Please choose a race: \n");
-				m_sock->Send(String::Get()->box(mud::Race::List(), "Races"));
+				m_sock->Send(String::Get()->box(mud::RaceManager::Get()->List(), "Races"));
 				return;
 			}
 

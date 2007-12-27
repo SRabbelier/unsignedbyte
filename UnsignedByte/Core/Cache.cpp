@@ -52,17 +52,6 @@ using namespace mud;
  * 
  */
 
-value_type Cache::AddRace()
-{
-	db::Races d;
-	d.save();
-	value_type id = d.getraceid();
-	if(id == 0)
-		Global::Get()->bug("Cache::AddRace(), id = 0");
-	
-	return id;
-}
-
 value_type Cache::AddRoom()
 {
 	db::Rooms d;
@@ -93,28 +82,6 @@ value_type Cache::AddSector()
  *	 Retreival 
  * 
  */
-		
-mud::Race* Cache::GetRaceByKey(value_type id)
-{
-	Race* p = m_raceByKey[id];
-	if(p)
-		return p;
-		
-	db::Races* d = db::Races::bykey(id);
-	p = cacheRace(d);
-	return p;
-}
-
-mud::Race* Cache::GetRaceByName(cstring value)
-{
-	Race* p = m_raceByName[value];
-	if(p)
-		return p;
-		
-	db::Races* d = db::Races::byname(value);
-	p = cacheRace(d);
-	return p;
-}
 
 mud::Room* Cache::GetRoomByKey(value_type id)
 {
@@ -157,17 +124,6 @@ mud::Sector* Cache::GetSectorByName(cstring value)
  *
  */ 
 
-value_type Cache::lookupRaceByName(cstring value)
-{
-	reverseStringKey::iterator it = m_lookupRaceByName.find(value);
-	if(it != m_lookupRaceByName.end())
-		return it->second;
-	
-	value_type id = db::Races::lookupname(value);
-	m_lookupRaceByName[value] = id;
-	return id;
-}
-
 value_type Cache::lookupSectorByName(cstring value)
 {
 	reverseStringKey::iterator it = m_lookupSectorByName.find(value);
@@ -186,14 +142,6 @@ value_type Cache::lookupSectorByName(cstring value)
  * Functionality 
  *
  */ 
-
-void Cache::CloseRace(value_type id)
-{
-	races_m::iterator key = m_raceByKey.find(id);
-	races_ms::iterator name = m_raceByName.find(key->second->getName());
-	m_raceByKey.erase(key);
-	m_raceByName.erase(name);	
-}
 
 void Cache::CloseRoom(value_type id)
 {
@@ -214,14 +162,6 @@ void Cache::CloseSector(value_type id)
  * Caching
  * Functions 
  */ 
-
-Race* Cache::cacheRace(db::Races* d)
-{
-	Race* p = new Race(d);
-	m_raceByKey[d->getraceid()] = p;
-	m_raceByName[d->getname()] = p;
-	return p;
-}
 
 Room* Cache::cacheRoom(db::Rooms* d)
 {

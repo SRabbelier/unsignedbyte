@@ -54,11 +54,9 @@ typedef std::pair<value_type, value_type> twoValueKey;
 
 typedef std::map<std::string, value_type> reverseStringKey;
 
-typedef std::map<oneValueKey,mud::Race*> races_m;
 typedef std::map<oneValueKey,mud::Room*> rooms_m;
 typedef std::map<oneValueKey,mud::Sector*> sectors_m;
 
-typedef std::map<oneStringKey,mud::Race*> races_ms;
 typedef std::map<oneStringKey,mud::Room*> rooms_ms;
 typedef std::map<oneStringKey,mud::Sector*> sectors_ms;
 
@@ -71,43 +69,32 @@ namespace mud
 	class Cache : public Singleton<Cache>
 	{
 	public:
-		value_type AddRace();
 		value_type AddRoom();
 		value_type AddSector();
 		
-		mud::Race* GetRaceByKey(value_type id);
-		mud::Race* GetRaceByName(cstring name);
-
 		mud::Room* GetRoomByKey(value_type id);
 		
 		mud::Sector* GetSectorByKey(value_type id);
 		mud::Sector* GetSectorByName(cstring name);
 		
-		value_type lookupRaceByName(cstring value);
 		value_type lookupSectorByName(cstring value);
 
-		void CloseRace(value_type raceid);
 		void CloseRoom(value_type roomid);
 		void CloseSector(value_type sectorid);
 		
 		bool existsCharacterWithAccount(value_type characterid, value_type accountid);
 
 	private:
-		Race* cacheRace(db::Races* d);
 		Room* cacheRoom(db::Rooms* d);
 		Sector* cacheSector(db::Sectors* d);
 		
 		characteraccount_m m_characteraccountByKey;
-		
-		races_m m_raceByKey;
-		races_ms m_raceByName;
 		
 		rooms_m m_roomByKey;
 		
 		sectors_m m_sectorByKey;
 		sectors_ms m_sectorByName;
 		
-		reverseStringKey m_lookupRaceByName;
 		reverseStringKey m_lookupSectorByName;
 
 	private:

@@ -40,6 +40,7 @@
 #include "UBHandler.h"
 
 #include "Race.h"
+#include "RaceManager.h"
 #include "Area.h"
 #include "Room.h"
 #include "Account.h" // needed because UBSocket.h is included
@@ -127,7 +128,7 @@ void Character::OnLook(const std::string& msg)
 
 void Character::OnRaceList(const std::string& msg)
 {
-	OnSend(String::Get()->box(mud::Race::List(), "Races"));
+	OnSend(String::Get()->box(mud::RaceManager::Get()->List(), "Races"));
 	return;
 }
 
