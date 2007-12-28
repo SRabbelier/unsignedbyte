@@ -24,6 +24,7 @@
 #include "EditorRoom.h"
 #include "EditorOLC.h"
 #include "EditorArea.h"
+#include "EditorString.h"
 
 #include "UBSocket.h"
 
@@ -70,10 +71,8 @@ EditorRoom::RoomCommand EditorRoom::m_openExit("Open", &EditorRoom::openExit);
 
 EditorRoom::EditorRoom(UBSocket* sock) :
 OLCEditor(sock),
-m_area(1),
-m_xpos(1),
-m_ypos(1),
-m_room()
+m_room(),
+m_target(M_NONE)
 {
 	listCommands(Global::Get()->EmptyString);
 }
@@ -81,6 +80,24 @@ m_room()
 EditorRoom::~EditorRoom(void)
 {
 
+}
+
+void EditorRoom::OnFocus()
+{
+	if(m_target == M_NONE)
+		return;
+		
+	switch(m_target)
+	{
+		case M_NONE:
+			break;
+			
+		case M_DESCRIPTION:
+			m_room->setDescription(m_value);
+			break;
+	}
+	
+	m_target = M_NONE;
 }
 
 std::string EditorRoom::lookup(const std::string& action)
@@ -215,6 +232,8 @@ void EditorRoom::editDescription(const std::string& argument)
 	if(argument.size() == 0)
 	{
 		m_sock->Send("No argument, dropping you into the string editor!\n");
+		m_sock->SetEditor(new EditorString(m_sock, m_value));
+		m_target = M_DESCRIPTION;
 		return;
 	}
 
@@ -447,18 +466,7 @@ void EditorRoom::NorthWest::Run(EditorRoom* editor, const std::string& argument)
 
 void EditorRoom::listAreas(const std::string& argument)
 {
-	int area = atoi(argument.c_str());
-	if(area <= 0)
-	{
-		m_sock->Send("Please specify an area id to change to.\n");
-		m_sock->Sendf("'%s' is not a valid area.\n", argument.c_str());
-		m_sock->Send(String::Get()->box(mud::AreaManager::Get()->List(), "Areas"));
-		return;
-	}
-	m_area = area;	
-	m_xpos = 1;
-	m_ypos = 1;
-	// editor->getRoom(Global::Get()->EmptyString);
+	m_sock->Send(String::Get()->box(mud::AreaManager::Get()->List(), "Areas"));
 }
 
 void EditorRoom::activateRoom(const std::string& argument)

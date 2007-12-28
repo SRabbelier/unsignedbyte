@@ -30,7 +30,7 @@ class UBSocket;
 class EditorString : public Editor
 {
 public:
-	EditorString(UBSocket* sock);
+	EditorString(UBSocket* sock, std::string& target);
 	~EditorString(void);
 
 	void OnLine(const std::string& line);
@@ -39,5 +39,21 @@ public:
 private:
 	EditorString(const EditorString& rhs);
 	EditorString operator=(const EditorString& rhs);
+	
+	enum E_STATE
+	{
+		M_FIRST,
+		M_WAITING_FOR_INPUT,
+		M_APPEND,
+		M_REPLACE,
+		M_VIEW,
+		M_DONE,
+	};
+	
+	EditorString::E_STATE ParseMode(char mode, bool silent = false);
+	void ParseDot(const std::string& line);
+	
 	std::vector<std::string> m_strings;
+	E_STATE m_state;
+	std::string& m_target;
 };

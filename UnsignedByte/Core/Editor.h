@@ -31,6 +31,8 @@ public:
 	virtual ~Editor(void);
 
 	virtual void OnLine(const std::string& line);
+	virtual void OnFocus() { }
+	
 	virtual std::string name() = 0;
 	virtual std::string prompt() { return Global::Get()->EmptyString; };
 	

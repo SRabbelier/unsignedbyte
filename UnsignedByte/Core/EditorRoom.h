@@ -35,6 +35,8 @@ public:
 	
 	EditorRoom(UBSocket* sock);
 	~EditorRoom(void);
+	
+	void OnFocus();
 
 	std::string name() { return "Room"; };
 	std::string prompt() { return "Room> "; };
@@ -71,11 +73,16 @@ public:
 private:
 	EditorRoom(const EditorRoom& rhs);
 	EditorRoom operator=(const EditorRoom& rhs);
+	
+	enum E_TARGET
+	{
+		M_NONE,
+		M_DESCRIPTION,
+	};
 
-	long m_area;
-	long m_xpos;
-	long m_ypos;
 	SmartPtr<mud::Room> m_room;
+	std::string m_value;
+	EditorRoom::E_TARGET m_target;
 
 	class RoomInterpreter : public Interpreter<RoomCommand>, public Singleton<RoomInterpreter> {
 	private:

@@ -181,7 +181,7 @@ void UBSocket::SwitchEditors()
 	
 	if(m_popeditor || m_popLast)
 	{
-		if(m_editors.empty()) // should be always
+		if(m_editors.empty()) // should never happen
 		{
 			Global::Get()->bug("UBSocket::SwitchEditors() was called, but we don't have a current editor?!");
 			Send("Something went wrong, somehow you are switching to another editor but you don't have one set?!\n");
@@ -204,6 +204,8 @@ void UBSocket::SwitchEditors()
 		SetPrompt(m_editors.top()->prompt());
 		SendPrompt();
 	}
+	
+	m_editors.top()->OnFocus();
 }
 
 void UBSocket::PopEditor()
