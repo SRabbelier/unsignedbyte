@@ -17,59 +17,63 @@
  *   Free Software Foundation, Inc.,                                       *
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
+#pragma once
 
 #include <string>
-#include <stdexcept>
+#include "OLCEditor.h"
+#include "singleton.h"
+#include "Interpreter.h"
+#include "CommandObject.h"
+#include "smart_ptr.h"
 
-#include "AreaManager.h"
-#include "Area.h"
-#include "Global.h"
+class UBSocket;
+namespace mud 
+{ 
+	class Chunk; 
+	typedef SmartPtr<Chunk> ChunkPtr;
+};
 
-using mud::AreaManager;
-using mud::Area;
-using mud::AreaPtr;
-
-std::vector<std::string> AreaManager::List()
+class EditorChunk : public OLCEditor
 {
-	return GetTable()->tableList();
-}
+public:
+	typedef CommandObject<EditorChunk> ChunkCommand;
 
-TablePtr AreaManager::GetTable()
-{
-	return Tables::Get()->AREAS;
-}
+	EditorChunk(UBSocket* sock);
+	~EditorChunk(void);
 
-value_type AreaManager::Add()
-{
-	db::Areas d;
-	d.save();
-	value_type id = d.getareaid();
-	if(id == 0)
-		Global::Get()->bug("AreaManager::AddArea(), id = 0");
-		
-	return id;
-}
+	std::string name() { return "Chunk"; };
+	std::string prompt() { return "Chunk> "; };
+	
+	std::string lookup(const std::string& action);
+	void dispatch(const std::string& action, const std::string& argument);
+	
+	SavablePtr getEditing();
+	TablePtr getTable();
+	long addNew();
+	std::vector<std::string> getList();
+	std::vector<std::string> getCommands();
+	void setEditing(long id);
+	
+	void editName(const std::string& argument);
+	void editDescription(const std::string& argument);
+	void showChunk(const std::string& argument);
+	void saveChunk(const std::string& argument);
 
-mud::AreaPtr AreaManager::GetByKey(value_type id)
-{
-	AreaPtr p = m_byKey[id];
-	if(p)
-		return p;
+private:
+	mud::ChunkPtr m_chunk;
 
-	db::Areas* d = db::Areas::bykey(id);
-	p = cacheArea(d);
-	return p;
-}
+	EditorChunk(const EditorChunk& rhs);
+	EditorChunk operator=(const EditorChunk& rhs);
+	
+	class ChunkInterpreter : public Interpreter<ChunkCommand>, public Singleton<ChunkInterpreter> {
+	private:
+		ChunkInterpreter(void);
+		~ChunkInterpreter(void);
+		friend class Singleton<ChunkInterpreter>;
+	};
 
-void AreaManager::Close(value_type id)
-{
-	areas_m::iterator key = m_byKey.find(id);
-	m_byKey.erase(key);
-}
-
-AreaPtr AreaManager::cacheArea(db::Areas* d)
-{
-	AreaPtr p(new Area(d));
-	m_byKey[d->getareaid()] = p;
-	return p;
-}
+	static ChunkCommand m_editName;
+	static ChunkCommand m_editDescription;
+	static ChunkCommand m_showChunk;
+	static ChunkCommand m_saveChunk;
+};

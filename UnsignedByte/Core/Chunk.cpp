@@ -21,55 +21,58 @@
 #include <string>
 #include <stdexcept>
 
-#include "AreaManager.h"
-#include "Area.h"
+#include "Chunk.h"
 #include "Global.h"
+#include "Cache.h"
 
-using mud::AreaManager;
-using mud::Area;
-using mud::AreaPtr;
+using mud::Chunk;
 
-std::vector<std::string> AreaManager::List()
+Chunk::Chunk(db::Chunks* chunk) :
+m_chunk(chunk)
 {
-	return GetTable()->tableList();
+	if(m_chunk == NULL)
+		throw new std::invalid_argument("Chunk::Chunk(), m_chunk == NULL!");
 }
 
-TablePtr AreaManager::GetTable()
+Chunk::~Chunk(void)
+{
+	delete m_chunk;
+	m_chunk = NULL;
+}
+
+void Chunk::Delete()
+{
+	m_chunk->erase();
+}
+
+void Chunk::Save()
+{
+	m_chunk->save();
+}
+
+bool Chunk::Exists()
+{
+	return m_chunk->exists();
+}
+
+std::vector<std::string> Chunk::Show()
+{
+	std::vector<std::string> result;
+	
+	result.push_back(Global::Get()->sprintf("Name: '%s'.", getName().c_str()));
+	result.push_back(Global::Get()->sprintf("Description: '%s'.", getDescription().c_str()));
+	
+	return result;
+}
+
+std::string Chunk::ShowShort()
+{
+	return Global::Get()->sprintf("%s: %s\n", 
+			getName().c_str(),
+			getDescription().c_str());
+}
+
+TablePtr Chunk::getTable() const
 {
 	return Tables::Get()->AREAS;
-}
-
-value_type AreaManager::Add()
-{
-	db::Areas d;
-	d.save();
-	value_type id = d.getareaid();
-	if(id == 0)
-		Global::Get()->bug("AreaManager::AddArea(), id = 0");
-		
-	return id;
-}
-
-mud::AreaPtr AreaManager::GetByKey(value_type id)
-{
-	AreaPtr p = m_byKey[id];
-	if(p)
-		return p;
-
-	db::Areas* d = db::Areas::bykey(id);
-	p = cacheArea(d);
-	return p;
-}
-
-void AreaManager::Close(value_type id)
-{
-	areas_m::iterator key = m_byKey.find(id);
-	m_byKey.erase(key);
-}
-
-AreaPtr AreaManager::cacheArea(db::Areas* d)
-{
-	AreaPtr p(new Area(d));
-	m_byKey[d->getareaid()] = p;
-	return p;
 }

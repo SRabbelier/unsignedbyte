@@ -18,6 +18,7 @@
     <File Name="Command.cpp"/>
     <File Name="GrantGroup.cpp"/>
     <File Name="Permission.cpp"/>
+    <File Name="Chunk.cpp"/>
   </VirtualDirectory>
   <VirtualDirectory Name="Header Files">
     <File Name="Account.h"/>
@@ -39,6 +40,7 @@
     <File Name="GrantGroup.h"/>
     <File Name="Permission.h"/>
     <File Name="CommandObject.h"/>
+    <File Name="Chunk.h"/>
   </VirtualDirectory>
   <VirtualDirectory Name="Editors">
     <File Name="EditorOLC.cpp"/>
@@ -60,6 +62,7 @@
     <File Name="OLCEditor.cpp"/>
     <File Name="EditorAccountLogin.cpp"/>
     <File Name="EditorOOC.cpp"/>
+    <File Name="EditorChunk.cpp"/>
   </VirtualDirectory>
   <VirtualDirectory Name="Editor Header">
     <File Name="EditorPermission.h"/>
@@ -81,6 +84,7 @@
     <File Name="EditorAccountLogin.h"/>
     <File Name="EditorSector.h"/>
     <File Name="EditorOOC.h"/>
+    <File Name="EditorChunk.h"/>
   </VirtualDirectory>
   <VirtualDirectory Name="Managers">
     <File Name="AccountManager.cpp"/>
@@ -95,6 +99,7 @@
     <File Name="RaceManager.cpp"/>
     <File Name="RoomManager.cpp"/>
     <File Name="SectorManager.cpp"/>
+    <File Name="ChunkManager.cpp"/>
   </VirtualDirectory>
   <VirtualDirectory Name="Manager Header">
     <File Name="AccountManager.h"/>
@@ -109,6 +114,7 @@
     <File Name="RaceManager.h"/>
     <File Name="RoomManager.h"/>
     <File Name="SectorManager.h"/>
+    <File Name="ChunkManager.h"/>
   </VirtualDirectory>
   <Settings Type="Executable">
     <Configuration Name="Debug" CompilerType="gnu g++" DebuggerType="GNU gdb debugger">

@@ -644,6 +644,62 @@ namespace db
 		Clusters operator=(const Clusters& rhs);
 	};
 
+	class Chunks : public Bindable
+	{
+	public:
+		// Ctors
+		Chunks();
+		~Chunks();
+
+		// Factories
+		static Chunks* bykey(value_type chunkid);
+
+		// Database interaction
+		void erase();
+		void save();
+		bool exists();
+
+		// Bindable interface
+		void bindKeys(sqlite3_stmt* stmt) const;
+		void bindUpdate(sqlite3_stmt* stmt) const;
+		void bindLookup(sqlite3_stmt* stmt) const;
+		void parseInsert(sqlite3* db);
+		void parseSelect(sqlite3_stmt* stmt);
+		void parseLookup(sqlite3_stmt* stmt);
+		TablePtr getTable() const;
+
+		// Getters
+		value_type getchunkid() const;
+		value_type getfkRooms() const;
+		const std::string& getname() const;
+		const std::string& getdescription() const;
+
+		// Setters
+		void setfkRooms(value_type value);
+		void setname(const std::string& value);
+		void setdescription(const std::string& value);
+
+	private:
+		// Database pointer
+		Database* m_db;
+
+		// Keys
+		value_type m_chunkid;
+
+		// Fields
+		value_type m_fkRooms;
+		std::string m_name;
+		std::string m_description;
+
+		// State flags
+		bool m_newentry;
+		bool m_dirty;
+
+		// Hide constructor and assignment operator
+		Chunks(const Chunks& rhs);
+		Chunks operator=(const Chunks& rhs);
+	};
+
 	class Colours : public Bindable
 	{
 	public:
@@ -775,6 +831,64 @@ namespace db
 		// Hide constructor and assignment operator
 		Commands(const Commands& rhs);
 		Commands operator=(const Commands& rhs);
+	};
+
+	class Details : public Bindable
+	{
+	public:
+		// Ctors
+		Details();
+		~Details();
+
+		// Factories
+		static Details* bykey(value_type detailid);
+		static Details* bykey(const std::string& value);
+		static value_type lookupkey(const std::string& value);
+
+		// Database interaction
+		void erase();
+		void save();
+		bool exists();
+
+		// Bindable interface
+		void bindKeys(sqlite3_stmt* stmt) const;
+		void bindUpdate(sqlite3_stmt* stmt) const;
+		void bindLookup(sqlite3_stmt* stmt) const;
+		void parseInsert(sqlite3* db);
+		void parseSelect(sqlite3_stmt* stmt);
+		void parseLookup(sqlite3_stmt* stmt);
+		TablePtr getTable() const;
+
+		// Getters
+		value_type getdetailid() const;
+		const std::string& getkey() const;
+		const std::string& getdescription() const;
+
+		// Setters
+		void setkey(const std::string& value);
+		void setdescription(const std::string& value);
+
+	private:
+		// Database pointer
+		Database* m_db;
+
+		// Lookup
+		std::string m_lookupvalue;
+
+		// Keys
+		value_type m_detailid;
+
+		// Fields
+		std::string m_key;
+		std::string m_description;
+
+		// State flags
+		bool m_newentry;
+		bool m_dirty;
+
+		// Hide constructor and assignment operator
+		Details(const Details& rhs);
+		Details operator=(const Details& rhs);
 	};
 
 	class Exits : public Bindable

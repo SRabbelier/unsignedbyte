@@ -21,55 +21,55 @@
 #include <string>
 #include <stdexcept>
 
-#include "AreaManager.h"
-#include "Area.h"
+#include "ChunkManager.h"
+#include "Chunk.h"
 #include "Global.h"
 
-using mud::AreaManager;
-using mud::Area;
-using mud::AreaPtr;
+using mud::ChunkManager;
+using mud::Chunk;
+using mud::ChunkPtr;
 
-std::vector<std::string> AreaManager::List()
+std::vector<std::string> ChunkManager::List()
 {
 	return GetTable()->tableList();
 }
 
-TablePtr AreaManager::GetTable()
+TablePtr ChunkManager::GetTable()
 {
-	return Tables::Get()->AREAS;
+	return Tables::Get()->CHUNKS;
 }
 
-value_type AreaManager::Add()
+value_type ChunkManager::Add()
 {
-	db::Areas d;
+	db::Chunks d;
 	d.save();
-	value_type id = d.getareaid();
+	value_type id = d.getchunkid();
 	if(id == 0)
-		Global::Get()->bug("AreaManager::AddArea(), id = 0");
+		Global::Get()->bug("ChunkManager::AddChunk(), id = 0");
 		
 	return id;
 }
 
-mud::AreaPtr AreaManager::GetByKey(value_type id)
+mud::ChunkPtr ChunkManager::GetByKey(value_type id)
 {
-	AreaPtr p = m_byKey[id];
+	ChunkPtr p = m_byKey[id];
 	if(p)
 		return p;
 
-	db::Areas* d = db::Areas::bykey(id);
-	p = cacheArea(d);
+	db::Chunks* d = db::Chunks::bykey(id);
+	p = cacheChunk(d);
 	return p;
 }
 
-void AreaManager::Close(value_type id)
+void ChunkManager::Close(value_type id)
 {
-	areas_m::iterator key = m_byKey.find(id);
+	chunks_m::iterator key = m_byKey.find(id);
 	m_byKey.erase(key);
 }
 
-AreaPtr AreaManager::cacheArea(db::Areas* d)
+ChunkPtr ChunkManager::cacheChunk(db::Chunks* d)
 {
-	AreaPtr p(new Area(d));
-	m_byKey[d->getareaid()] = p;
+	ChunkPtr p(new Chunk(d));
+	m_byKey[d->getchunkid()] = p;
 	return p;
 }

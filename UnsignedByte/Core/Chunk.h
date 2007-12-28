@@ -17,59 +17,66 @@
  *   Free Software Foundation, Inc.,                                       *
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
+#pragma once
 
 #include <string>
-#include <stdexcept>
+#include "Savable.h"
+#include "db.h"
 
-#include "AreaManager.h"
-#include "Area.h"
-#include "Global.h"
-
-using mud::AreaManager;
-using mud::Area;
-using mud::AreaPtr;
-
-std::vector<std::string> AreaManager::List()
+namespace mud
 {
-	return GetTable()->tableList();
-}
+	class ChunkManager;
+	
+	class Chunk : public Savable
+	{
+	public:
+		/**
+		 * \brief Getters
+		 */
+		const std::string& getName() const { return m_chunk->getname(); }
+		const std::string& getDescription() const { return m_chunk->getdescription(); }
+		const value_type getRoom() const { return m_chunk->getfkRooms(); }
 
-TablePtr AreaManager::GetTable()
-{
-	return Tables::Get()->AREAS;
-}
+		/**
+		 * \brief Setters
+		 */
+		void setName(const std::string& name) { m_chunk->setname(name); }
+		void setDescription(const std::string& description) { m_chunk->setdescription(description); }
+		void setRoom(value_type room) { m_chunk->setfkRooms(room); }
 
-value_type AreaManager::Add()
-{
-	db::Areas d;
-	d.save();
-	value_type id = d.getareaid();
-	if(id == 0)
-		Global::Get()->bug("AreaManager::AddArea(), id = 0");
+		/**
+		 * \brief Utilities
+		 */
+		std::vector<std::string> Show();
+		std::string ShowShort();
+		TablePtr getTable() const;
 		
-	return id;
-}
+		/**
+		 * \brief Database operations
+		 */
+		void Delete();
+		void Save();
+		bool Exists();
 
-mud::AreaPtr AreaManager::GetByKey(value_type id)
-{
-	AreaPtr p = m_byKey[id];
-	if(p)
-		return p;
+	private:
+		friend class mud::ChunkManager; // For constructor
+		friend void boost::checked_delete<mud::Chunk>(mud::Chunk* x);
+		
+		db::Chunks* m_chunk;
 
-	db::Areas* d = db::Areas::bykey(id);
-	p = cacheArea(d);
-	return p;
-}
-
-void AreaManager::Close(value_type id)
-{
-	areas_m::iterator key = m_byKey.find(id);
-	m_byKey.erase(key);
-}
-
-AreaPtr AreaManager::cacheArea(db::Areas* d)
-{
-	AreaPtr p(new Area(d));
-	m_byKey[d->getareaid()] = p;
-	return p;
+		/**
+		 * \brief Constructor
+		 * \param chunk The DB object
+		 * \return 
+		 */
+		Chunk(db::Chunks* chunk);
+		
+		Chunk(const Chunk& rhs);
+		Chunk operator=(const Chunk& rhs);
+			
+		/**
+		 * \brief Default destructor
+		 */
+		~Chunk(void);
+	};
 }

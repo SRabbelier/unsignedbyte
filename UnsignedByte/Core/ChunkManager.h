@@ -17,59 +17,54 @@
  *   Free Software Foundation, Inc.,                                       *
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
+#pragma once
 
 #include <string>
-#include <stdexcept>
+#include <vector>
 
-#include "AreaManager.h"
-#include "Area.h"
-#include "Global.h"
+#include "singleton.h"
+#include "db.h"
 
-using mud::AreaManager;
-using mud::Area;
-using mud::AreaPtr;
-
-std::vector<std::string> AreaManager::List()
-{
-	return GetTable()->tableList();
+namespace mud 
+{ 
+	class Chunk; 
+	typedef SmartPtr<Chunk> ChunkPtr;
 }
 
-TablePtr AreaManager::GetTable()
-{
-	return Tables::Get()->AREAS;
-}
+typedef const std::string& cstring;
+typedef std::map<value_type,mud::ChunkPtr> chunks_m;
+typedef std::map<std::string,mud::ChunkPtr> chunks_ms;
+typedef std::map<std::string, value_type> reverseStringKey;
 
-value_type AreaManager::Add()
+namespace mud
 {
-	db::Areas d;
-	d.save();
-	value_type id = d.getareaid();
-	if(id == 0)
-		Global::Get()->bug("AreaManager::AddArea(), id = 0");
+	class ChunkManager : public Singleton<mud::ChunkManager>
+	{
+	public:
+		TablePtr GetTable();
+		std::vector<std::string> List();
+		void Close(ChunkPtr chunk);
 		
-	return id;
-}
+		value_type Add();
+		mud::ChunkPtr GetByKey(value_type id);
+		
+		value_type lookupByName(cstring value);
+		
+		void Close(value_type Chunkid);
+		
+	private:
+		ChunkPtr cacheChunk(db::Chunks* d);
+		
+		chunks_m m_byKey;
+		chunks_ms m_byName;
+		reverseStringKey m_lookupByName;
 
-mud::AreaPtr AreaManager::GetByKey(value_type id)
-{
-	AreaPtr p = m_byKey[id];
-	if(p)
-		return p;
-
-	db::Areas* d = db::Areas::bykey(id);
-	p = cacheArea(d);
-	return p;
-}
-
-void AreaManager::Close(value_type id)
-{
-	areas_m::iterator key = m_byKey.find(id);
-	m_byKey.erase(key);
-}
-
-AreaPtr AreaManager::cacheArea(db::Areas* d)
-{
-	AreaPtr p(new Area(d));
-	m_byKey[d->getareaid()] = p;
-	return p;
+	private:
+		ChunkManager(void) {};
+		ChunkManager(const ChunkManager& rhs);
+		ChunkManager operator=(const ChunkManager& rhs);
+		~ChunkManager(void) {};
+		
+		friend class Singleton<mud::ChunkManager>;
+	};
 }

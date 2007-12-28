@@ -18,8 +18,10 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#ifdef _WIN32
 #pragma warning (disable:4244)
 #pragma warning (disable:4267)
+#endif
 
 #include <string>
 #include <stdexcept>
@@ -1654,6 +1656,157 @@ void Clusters::setname(const std::string& value)
 
 /**
  * Begin of implementation
+ * class Chunks
+ **/
+
+// Ctors
+Chunks::Chunks() :
+m_chunkid(),
+m_fkRooms(0),
+m_name(),
+m_description(),
+m_newentry(true),
+m_dirty(false)
+{
+
+}
+
+Chunks::~Chunks()
+{
+
+}
+
+Chunks* Chunks::bykey(value_type chunkid)
+{
+	Chunks* result = new Chunks();
+	result->m_chunkid = chunkid;
+	SqliteMgr::Get()->doSelect(result);
+	return result;
+}
+
+void Chunks::erase()
+{
+	if(!m_newentry)
+		SqliteMgr::Get()->doErase(this);
+}
+
+void Chunks::save()
+{
+	if(m_newentry)
+	{
+		SqliteMgr::Get()->doInsert(this);
+		m_newentry = false;
+	}
+
+	if(m_dirty)
+	{
+		SqliteMgr::Get()->doUpdate(this);
+		getTable()->modify();
+		m_dirty = false;
+	}
+}
+
+bool Chunks::exists()
+{
+	if(m_newentry)
+		return false;
+
+	return true;
+}
+
+void Chunks::bindKeys(sqlite3_stmt* stmt) const
+{
+	sqlite3_bind_int64(stmt, 1, m_chunkid);
+}
+
+void Chunks::bindUpdate(sqlite3_stmt* stmt) const
+{
+	sqlite3_bind_int64(stmt, 1, m_fkRooms);
+	sqlite3_bind_text(stmt, 2, m_name.c_str(), m_name.size(), SQLITE_TRANSIENT);
+	sqlite3_bind_text(stmt, 3, m_description.c_str(), m_description.size(), SQLITE_TRANSIENT);
+	sqlite3_bind_int64(stmt, 4, m_chunkid);
+}
+
+void Chunks::bindLookup(sqlite3_stmt* stmt) const
+{
+	// Do nothing
+}
+
+void Chunks::parseInsert(sqlite3* db)
+{
+	m_chunkid = sqlite3_last_insert_rowid(db);
+}
+
+void Chunks::parseSelect(sqlite3_stmt* stmt)
+{
+	const unsigned char * text;
+	m_fkRooms = sqlite3_column_int64(stmt, 0);
+	text = sqlite3_column_text(stmt, 1);
+	if(text != 0)
+		m_name = std::string((const char *)text);
+	text = sqlite3_column_text(stmt, 2);
+	if(text != 0)
+		m_description = std::string((const char *)text);
+	m_newentry = false;
+}
+
+void Chunks::parseLookup(sqlite3_stmt* stmt)
+{
+	m_chunkid = sqlite3_column_int64(stmt, 0);
+}
+
+TablePtr Chunks::getTable() const
+{
+	return Tables::Get()->CHUNKS;
+}
+
+value_type Chunks::getchunkid() const
+{
+	return m_chunkid;
+}
+
+value_type Chunks::getfkRooms() const
+{
+	return m_fkRooms;
+}
+
+const std::string& Chunks::getname() const
+{
+	return m_name;
+}
+
+const std::string& Chunks::getdescription() const
+{
+	return m_description;
+}
+
+void Chunks::setfkRooms(value_type value)
+{
+	m_fkRooms = value;
+	m_dirty = true;
+}
+
+void Chunks::setname(const std::string& value)
+{
+	m_name = value;
+	m_dirty = true;
+}
+
+void Chunks::setdescription(const std::string& value)
+{
+	m_description = value;
+	m_dirty = true;
+}
+
+
+/**
+ * End of implementation
+ * class Chunks
+ **/
+
+
+/**
+ * Begin of implementation
  * class Colours
  **/
 
@@ -2062,6 +2215,167 @@ void Commands::setlowforce(value_type value)
 /**
  * End of implementation
  * class Commands
+ **/
+
+
+/**
+ * Begin of implementation
+ * class Details
+ **/
+
+// Ctors
+Details::Details() :
+m_detailid(),
+m_key(),
+m_description(),
+m_newentry(true),
+m_dirty(false)
+{
+
+}
+
+Details::~Details()
+{
+
+}
+
+Details* Details::bykey(value_type detailid)
+{
+	Details* result = new Details();
+	result->m_detailid = detailid;
+	SqliteMgr::Get()->doSelect(result);
+	return result;
+}
+
+Details* Details::bykey(const std::string& value)
+{
+	Details* result = new Details();
+	result->m_lookupvalue = value;
+	SqliteMgr::Get()->doLookup(result,"key");
+	return result;
+}
+
+value_type Details::lookupkey(const std::string& value)
+{
+	SmartPtr<Details> result(new Details()); // will handle deletion of ptr
+	result->m_lookupvalue = value;
+	value_type key = 0;
+	try {
+		SqliteMgr::Get()->doLookup(result.get(), "key");
+		key = result->getdetailid();
+	} catch(Bindable* result) {	}
+
+	return key;
+}
+
+void Details::erase()
+{
+	if(!m_newentry)
+		SqliteMgr::Get()->doErase(this);
+}
+
+void Details::save()
+{
+	if(m_newentry)
+	{
+		SqliteMgr::Get()->doInsert(this);
+		m_newentry = false;
+	}
+
+	if(m_dirty)
+	{
+		SqliteMgr::Get()->doUpdate(this);
+		getTable()->modify();
+		m_dirty = false;
+	}
+}
+
+bool Details::exists()
+{
+	if(m_newentry)
+		return false;
+
+	return true;
+}
+
+void Details::bindKeys(sqlite3_stmt* stmt) const
+{
+	sqlite3_bind_int64(stmt, 1, m_detailid);
+}
+
+void Details::bindUpdate(sqlite3_stmt* stmt) const
+{
+	sqlite3_bind_text(stmt, 1, m_key.c_str(), m_key.size(), SQLITE_TRANSIENT);
+	sqlite3_bind_text(stmt, 2, m_description.c_str(), m_description.size(), SQLITE_TRANSIENT);
+	sqlite3_bind_int64(stmt, 3, m_detailid);
+}
+
+void Details::bindLookup(sqlite3_stmt* stmt) const
+{
+	int rc;
+	rc = sqlite3_bind_text(stmt, 1, m_lookupvalue.c_str(), m_lookupvalue.size(), SQLITE_TRANSIENT);
+	if(rc != SQLITE_OK)
+		throw new std::runtime_error("SqliteMgr::bindLookup(), rc != SQLITE_OK.");
+}
+
+void Details::parseInsert(sqlite3* db)
+{
+	m_detailid = sqlite3_last_insert_rowid(db);
+}
+
+void Details::parseSelect(sqlite3_stmt* stmt)
+{
+	const unsigned char * text;
+	text = sqlite3_column_text(stmt, 0);
+	if(text != 0)
+		m_key = std::string((const char *)text);
+	text = sqlite3_column_text(stmt, 1);
+	if(text != 0)
+		m_description = std::string((const char *)text);
+	m_newentry = false;
+}
+
+void Details::parseLookup(sqlite3_stmt* stmt)
+{
+	m_detailid = sqlite3_column_int64(stmt, 0);
+}
+
+TablePtr Details::getTable() const
+{
+	return Tables::Get()->DETAILS;
+}
+
+value_type Details::getdetailid() const
+{
+	return m_detailid;
+}
+
+const std::string& Details::getkey() const
+{
+	return m_key;
+}
+
+const std::string& Details::getdescription() const
+{
+	return m_description;
+}
+
+void Details::setkey(const std::string& value)
+{
+	m_key = value;
+	m_dirty = true;
+}
+
+void Details::setdescription(const std::string& value)
+{
+	m_description = value;
+	m_dirty = true;
+}
+
+
+/**
+ * End of implementation
+ * class Details
  **/
 
 

@@ -185,8 +185,10 @@ void Generator::AppendSourceIncludes()
 	if(!m_sourcefile)
 		throw std::logic_error("Header file is not open for writing.\n");
 
+	m_sourcefile << "#ifdef _WIN32" << endl;
 	m_sourcefile << "#pragma warning (disable:4244)" << endl;
 	m_sourcefile << "#pragma warning (disable:4267)" << endl;
+	m_sourcefile << "#endif" << endl;
 	m_sourcefile << endl;
 	
 	m_sourcefile << "#include <string>" << endl;

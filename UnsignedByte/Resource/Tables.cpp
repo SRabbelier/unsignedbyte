@@ -32,9 +32,11 @@ Tables::Tables() :
 	CHARACTERSKILL( new Table("CharacterSkill") ),
 	CHARACTERSTAT( new Table("CharacterStat") ),
 	CHARACTERTREE( new Table("CharacterTree") ),
+	CHUNKS( new Table("Chunks") ),
 	CLUSTERS( new Table("Clusters") ),
 	COLOURS( new Table("Colours") ),
 	COMMANDS( new Table("Commands") ),
+	DETAILS( new Table("Details") ),
 	EXITS( new Table("Exits") ),
 	GRANTGROUPS( new Table("GrantGroups") ),
 	PERMISSIONS( new Table("Permissions") ),
@@ -91,6 +93,11 @@ Tables::Tables() :
 	CHARACTERTREE->addFPK(TREES);
 	CHARACTERTREE->addValue("xp");
 	
+	CHUNKS->addPK("chunkid");
+	CHUNKS->addFK(ROOMS);
+	CHUNKS->addTextField("name");
+	CHUNKS->addTextField("description");
+	
 	CLUSTERS->addPK("clusterid");
 	CLUSTERS->addLookupTextField("name");
 		
@@ -106,6 +113,10 @@ Tables::Tables() :
 	COMMANDS->addValue("highforce", 1);
 	COMMANDS->addValue("force", 1);
 	COMMANDS->addValue("lowforce", 0);
+	
+	DETAILS->addPK("detailid");
+	DETAILS->addLookupTextField("key");
+	DETAILS->addTextField("description");
 	
 	EXITS->addPK("exitid");
 	EXITS->addValue("dir");
@@ -168,8 +179,10 @@ Tables::Tables() :
 	m_tables.push_back(CHARACTERSTAT);
 	m_tables.push_back(CHARACTERTREE);
 	m_tables.push_back(CLUSTERS);
+	m_tables.push_back(CHUNKS);
 	m_tables.push_back(COLOURS);
 	m_tables.push_back(COMMANDS);
+	m_tables.push_back(DETAILS);
 	m_tables.push_back(EXITS);
 	m_tables.push_back(GRANTGROUPS);
 	m_tables.push_back(PERMISSIONS);

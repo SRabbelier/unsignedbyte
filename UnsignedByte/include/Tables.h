@@ -40,9 +40,11 @@ public:
 	TablePtr CHARACTERSKILL;
 	TablePtr CHARACTERSTAT;
 	TablePtr CHARACTERTREE;
+	TablePtr CHUNKS;
 	TablePtr CLUSTERS;
 	TablePtr COLOURS;
 	TablePtr COMMANDS;
+	TablePtr DETAILS;
 	TablePtr EXITS;
 	TablePtr GRANTGROUPS;
 	TablePtr PERMISSIONS;
