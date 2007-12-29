@@ -52,8 +52,6 @@ public:
 	void setEditing(long id);
 	
 	void showMap(const std::string& argument);
-	void activateRoom(const std::string& argument);
-	void deactivateRoom(const std::string& argument);
 	void goNorth(const std::string& argument);
 	void goNorthEast(const std::string& argument);
 	void goEast(const std::string& argument);
@@ -62,6 +60,8 @@ public:
 	void goSouthWest(const std::string& argument);
 	void goWest(const std::string& argument);
 	void goNorthWest(const std::string& argument);
+	
+	void showRoom(const std::string& argument);
 	void listAreas(const std::string& argument);
 	void editName(const std::string& argument);
 	void editDescription(const std::string& argument);
@@ -91,16 +91,16 @@ private:
 		friend class Singleton<RoomInterpreter>;
 	};
 
+/*
 	class DirectionInterpreter : public Interpreter<RoomCommand>, public Singleton<DirectionInterpreter> {
 	private:
 		DirectionInterpreter(void);
 		~DirectionInterpreter(void);
 		friend class Singleton<DirectionInterpreter>;
 	};
+*/
 	
 	static RoomCommand m_showMap;
-	static RoomCommand m_activateRoom;
-	static RoomCommand m_deactivateRoom;
 	static RoomCommand m_goNorth;
 	static RoomCommand m_goNorthEast;
 	static RoomCommand m_goEast;
@@ -109,6 +109,8 @@ private:
 	static RoomCommand m_goSouthWest;
 	static RoomCommand m_goWest;
 	static RoomCommand m_goNorthWest;
+	
+	static RoomCommand m_showRoom;
 	static RoomCommand m_listAreas;
 	static RoomCommand m_editName;
 	static RoomCommand m_editDescription;

@@ -27,7 +27,7 @@ Editor(sock),
 m_state(M_FIRST),
 m_target(target)
 {
-	
+	OnLine(Global::Get()->EmptyString);
 }
 
 EditorString::~EditorString()
@@ -45,11 +45,12 @@ EditorString::E_STATE EditorString::ParseMode(char mode, bool silent)
 		default:
 			if(!silent)
 				m_sock->Sendf("Unknown mode '%c'.\n", mode);
+			break;
 		
 		case 'a': // append
 			m_sock->Send("Switching to 'append' mode.\n");
 			choice = M_APPEND;
-			break;
+			break;	
 			
 		case 'd': // done
 			m_sock->Send("Allright, done!\n");
@@ -85,9 +86,16 @@ void EditorString::ParseDot(const std::string& line)
 	
 	if(command.compare("c"))
 	{
-			m_sock->Send("Text cleared.\n");
-			m_strings.clear();
-			return;
+		m_sock->Send("Text cleared.\n");
+		m_strings.clear();
+		return;
+	}
+	
+	if(command.compare("q"))
+	{
+		m_sock->Send("Quitting now.\n");
+		m_state = M_DONE;
+		return;
 	}
 	
 	m_sock->Sendf("Unknown dot command '%s'.\n", command.c_str());
@@ -96,7 +104,9 @@ void EditorString::ParseDot(const std::string& line)
 
 void EditorString::OnLine(const std::string& line)
 {
-	if(!line.compare("@"))
+	Global::Get()->logf("line: '%s'\n", line.c_str());
+	
+	if(!line.compare("~"))
 	{
 		m_sock->Send("Allright, done!\n");
 		m_state = M_DONE;
@@ -161,8 +171,6 @@ void EditorString::OnLine(const std::string& line)
 		}
 
 		m_strings.push_back(line);
-		
-		OnLine(Global::Get()->EmptyString);
 		return;
 	} /* case M_APPEND: */
 

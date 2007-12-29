@@ -47,8 +47,6 @@
 using mud::Room;
 
 EditorRoom::RoomCommand EditorRoom::m_showMap("Map", &EditorRoom::showMap);
-EditorRoom::RoomCommand EditorRoom::m_activateRoom("Activate", &EditorRoom::activateRoom);
-EditorRoom::RoomCommand EditorRoom::m_deactivateRoom("Deactivate", &EditorRoom::deactivateRoom);
 
 /*
 EditorRoom::RoomCommand EditorRoom::m_goNorth("North", &EditorRoom::goNorth);
@@ -68,6 +66,7 @@ EditorRoom::RoomCommand EditorRoom::m_editSector("Sector", &EditorRoom::editSect
 EditorRoom::RoomCommand EditorRoom::m_saveRoom("Room", &EditorRoom::saveRoom);
 EditorRoom::RoomCommand EditorRoom::m_closeExit("Close", &EditorRoom::closeExit);
 EditorRoom::RoomCommand EditorRoom::m_openExit("Open", &EditorRoom::openExit);
+EditorRoom::RoomCommand EditorRoom::m_showRoom("Show", &EditorRoom::showRoom);
 
 EditorRoom::EditorRoom(UBSocket* sock) :
 OLCEditor(sock),
@@ -83,14 +82,11 @@ EditorRoom::~EditorRoom(void)
 }
 
 void EditorRoom::OnFocus()
-{
-	if(m_target == M_NONE)
-		return;
-		
+{		
 	switch(m_target)
 	{
 		case M_NONE:
-			break;
+			return;
 			
 		case M_DESCRIPTION:
 			m_room->setDescription(m_value);
@@ -106,27 +102,22 @@ std::string EditorRoom::lookup(const std::string& action)
 	if(name.size() != 0)
 		return name;
 		
-	/*
-	RoomCommand* act = PermissionInterpreter::Get()->translate(action);
+		
+	RoomCommand* act = RoomInterpreter::Get()->translate(action);
 	if(act)
 		return act->getName();
-	*/
-	// TODO - EditorRoom::lookup
 		
 	return Global::Get()->EmptyString;
 }
 
 void EditorRoom::dispatch(const std::string& action, const std::string& argument)
 {
-	/*
-	RoomCommand* act = PermissionInterpreter::Get()->translate(action);
+	RoomCommand* act = RoomInterpreter::Get()->translate(action);
 	
 	if(act)
-		act->Run(m_sock, argument, m_permission);
+		act->Run(this, argument);
 	else
-	*/
 		OLCEditor::dispatch(action, argument);
-		// TODO - EditorRoom::dispatch
 		
 	return;
 }
@@ -174,9 +165,8 @@ EditorRoom::RoomInterpreter::RoomInterpreter(void)
 	addWord("description", &m_editDescription);
 	addWord("sectors", &m_editSector);
 	addWord("save", &m_saveRoom);
-	addWord("deactivate", &m_deactivateRoom);
-	addWord("open", &m_openExit);
 	addWord("close", &m_closeExit);
+	addWord("show", &m_showRoom);
 }
 
 EditorRoom::RoomInterpreter::~RoomInterpreter(void)
@@ -184,11 +174,12 @@ EditorRoom::RoomInterpreter::~RoomInterpreter(void)
 
 }
 
+/*
 EditorRoom::DirectionInterpreter::DirectionInterpreter(void)
 {
 	// addWord("activate", Activate::Get());
 	addWord("area", &m_listAreas);
-/*	addWord("north", North::Get());
+	addWord("north", North::Get());
 	addWord("northeast", NorthEast::Get());
 	addWord("ne", NorthEast::Get());
 	addWord("east", East::Get());
@@ -199,7 +190,7 @@ EditorRoom::DirectionInterpreter::DirectionInterpreter(void)
 	addWord("sw", SouthWest::Get());
 	addWord("west", West::Get());
 	addWord("northwest", NorthWest::Get());
-	addWord("nw", NorthWest::Get());*/
+	addWord("nw", NorthWest::Get());
 	addWord("map", &m_showMap);
 }
 
@@ -207,6 +198,7 @@ EditorRoom::DirectionInterpreter::~DirectionInterpreter(void)
 {
 
 }
+*/
 
 void EditorRoom::editName(const std::string& argument)
 {
@@ -273,14 +265,14 @@ void EditorRoom::saveRoom(const std::string& argument)
 	return;
 }
 
-void EditorRoom::deactivateRoom(const std::string& argument)
+void EditorRoom::showRoom(const std::string& argument)
 {
-	m_sock->Sendf("Deleting room '%s'.\n", m_room->getName().c_str());
-	m_room->Delete();
-	mud::RoomManager::Get()->Close(m_room);
-	m_room.reset();
-	m_sock->Send("Deleted.\n");
-	return;
+	m_sock->Send(String::Get()->box(m_room->Show(), "Room"));
+}
+
+void EditorRoom::listAreas(const std::string& argument)
+{
+	m_sock->Send(String::Get()->box(mud::AreaManager::Get()->List(), "Areas"));
 }
 
 void EditorRoom::closeExit(const std::string& argument)
@@ -462,12 +454,6 @@ void EditorRoom::NorthWest::Run(EditorRoom* editor, const std::string& argument)
 	editor->getRoom(Global::Get()->EmptyString);
 	editor->m_m_sock->Send(Room::CreateMap(editor->m_area, editor->m_xpos, editor->m_ypos));
 }
-*/
-
-void EditorRoom::listAreas(const std::string& argument)
-{
-	m_sock->Send(String::Get()->box(mud::AreaManager::Get()->List(), "Areas"));
-}
 
 void EditorRoom::activateRoom(const std::string& argument)
 {
@@ -475,3 +461,15 @@ void EditorRoom::activateRoom(const std::string& argument)
 	m_sock->Send("- Alturin, 17-08-2007\n");	
 	return;
 }
+
+void EditorRoom::deactivateRoom(const std::string& argument)
+{
+	m_sock->Sendf("Deleting room '%s'.\n", m_room->getName().c_str());
+	m_room->Delete();
+	mud::RoomManager::Get()->Close(m_room);
+	m_room.reset();
+	m_sock->Send("Deleted.\n");
+	return;
+}
+
+*/
