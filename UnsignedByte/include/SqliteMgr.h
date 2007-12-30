@@ -54,8 +54,11 @@ class SqliteMgr : public Singleton<SqliteMgr>
 		Database::OPENDB* m_odb;
 		const char* m_leftover;
 		
+		sqlite3_stmt* m_commitStmt;
+		
 		TableStatements m_statements;
 		
+		void commit();
 		StatementsPtr getStatements(Table* table);
 		sqlite3_stmt* getInsertStmt(Table* table);
 		sqlite3_stmt* getEraseStmt(Table* table);

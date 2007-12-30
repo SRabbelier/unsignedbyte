@@ -31,11 +31,21 @@ SqliteMgr::SqliteMgr()
 {	
 	m_db = DatabaseMgr::Get()->DB();
 	m_odb = m_db->grabdb();
+	
+	std::string sql = "COMMIT;";
+	
+	int errorcode = sqlite3_prepare_v2(m_odb->db, sql.c_str(), (int)sql.size(), &m_commitStmt, &m_leftover);
+	if(errorcode != SQLITE_OK)
+		throw std::runtime_error("SqliteMgr::SqliteMgr(), Could not prepare save query!");
+		
+	if(m_leftover != NULL && strlen(m_leftover) > 0)
+		throw std::runtime_error("SqliteMgr::getForEachStmt(), Leftover from save query is not NULL!");
 }
 
 SqliteMgr::~SqliteMgr()
 {
 	m_db->freedb(m_odb);
+	sqlite3_finalize(m_commitStmt);
 }
 
 void SqliteMgr::doInsert(Bindable* bindable)
@@ -49,6 +59,8 @@ void SqliteMgr::doInsert(Bindable* bindable)
 		
 	doStatement(insert);
 	bindable->parseInsert(m_odb->db);
+	
+	commit();
 }
 
 void SqliteMgr::doErase(Bindable* bindable)
@@ -59,6 +71,8 @@ void SqliteMgr::doErase(Bindable* bindable)
 	
 	bindable->bindKeys(erase);
 	doStatement(erase);	
+	
+	commit();
 }
 
 void SqliteMgr::doUpdate(Bindable* bindable)
@@ -69,6 +83,8 @@ void SqliteMgr::doUpdate(Bindable* bindable)
 	
 	bindable->bindUpdate(update);
 	doStatement(update);
+	
+	commit();
 }
 
 void SqliteMgr::doSelect(Bindable* bindable)
@@ -113,6 +129,12 @@ void SqliteMgr::doForEach(Table* table, Actor& act)
 		good = doStatement(forEach);
 		act.parseRow(forEach, table);
 	}
+}
+
+void SqliteMgr::commit()
+{
+	sqlite3_reset(m_commitStmt);
+	doStatement(m_commitStmt);
 }
 		
 
@@ -169,7 +191,7 @@ sqlite3_stmt* SqliteMgr::getInsertStmt(Table* table)
 
 		   sql.append(it->first);
 	}
-	sql.append(") values(");
+	sql.append(") VALUES(");
 	for(TableMap::const_iterator it = table->keybegin(); it != table->keyend(); it++)
 	{
 		   if(it != table->keybegin())
@@ -203,7 +225,7 @@ sqlite3_stmt* SqliteMgr::getEraseStmt(Table* table)
 	std::string sql;
 	sql.append("DELETE ");
 	sql.append(table->tableName());
-	sql.append(" where ");
+	sql.append(" WHERE ");
 	for(TableMap::const_iterator it = table->keybegin(); it != table->keyend(); it++)
 	{
 		if(it != table->keybegin())
@@ -237,9 +259,9 @@ sqlite3_stmt* SqliteMgr::getUpdateStmt(Table* table)
 		return statement;
 
 	std::string sql;
-	sql.append("Update ");
+	sql.append("UPDATE ");
 	sql.append(table->tableName());
-	sql.append(" set ");
+	sql.append(" SET ");
 	for(Fields::const_iterator it = table->begin(); it != table->end(); it++)
 	{
 		if(it != table->begin())
@@ -248,7 +270,7 @@ sqlite3_stmt* SqliteMgr::getUpdateStmt(Table* table)
 		sql.append((*it)->getName());
 		sql.append("=?");
 	}
-	sql.append(" where ");
+	sql.append(" WHERE ");
 	for(TableMap::const_iterator it = table->keybegin(); it != table->keyend(); it++)
 	{
 		if(it != table->keybegin())
@@ -282,7 +304,7 @@ sqlite3_stmt* SqliteMgr::getSelectStmt(Table* table)
 		return statement;
 		
 	std::string sql;
-	sql.append("Select ");
+	sql.append("SELECT ");
 	for(Fields::const_iterator it = table->begin(); it != table->end(); it++)
 	{
 		if(it != table->begin())
@@ -291,9 +313,9 @@ sqlite3_stmt* SqliteMgr::getSelectStmt(Table* table)
 		sql.append((*it)->getName());
 	}
 	 
-	sql.append(" from ");
+	sql.append(" FROM ");
 	sql.append(table->tableName());
-	sql.append(" where ");
+	sql.append(" WHERE ");
 	
 	for(TableMap::const_iterator it = table->keybegin(); it != table->keyend(); it++)
 	{
@@ -364,7 +386,7 @@ sqlite3_stmt* SqliteMgr::getForEachStmt(Table* table)
 		return statement;
 		
 	std::string sql;
-	sql.append("Select ");
+	sql.append("SELECT ");
 	bool comspace = false;
 	for(TableMap::const_iterator it = table->keybegin(); it != table->keyend(); it++)
 	{
@@ -383,7 +405,7 @@ sqlite3_stmt* SqliteMgr::getForEachStmt(Table* table)
 		comspace = true;
 	}
 	 
-	sql.append(" from ");
+	sql.append(" FROM ");
 	sql.append(table->tableName());
 	sql.append(";");
 	
