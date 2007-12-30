@@ -59,6 +59,6 @@ namespace mud
 		~Race(void);
 		
 		friend class RaceManager;
-		friend void boost::checked_delete<mud::Race>(mud::Race* x);
+		friend SmartPtrDelete(mud::Race);
 	};
 }

@@ -75,6 +75,6 @@ namespace mud
 		~Sector(void);
 		
 		friend class SectorManager;
-		friend void boost::checked_delete<mud::Sector>(mud::Sector* x);
+		friend SmartPtrDelete(mud::Sector);
 	};
 }

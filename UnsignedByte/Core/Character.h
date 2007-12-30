@@ -86,7 +86,7 @@ namespace mud
 		virtual ~Character(void);
 		
 		friend class mud::CharacterManager; // for constructor
-		friend void boost::checked_delete<mud::Character>(mud::Character* x);
+		friend SmartPtrDelete(mud::Character);
 		
 	private:
 		Character(const Character& rhs);

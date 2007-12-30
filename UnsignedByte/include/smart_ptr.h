@@ -1,18 +1,15 @@
 #ifndef SMART_PTR_H
 #define SMART_PTR_H
 
+#ifdef CONFIG_USE_BOOST_POINTERS
+
 #include <boost/shared_ptr.hpp>
-
-// using boost::shared_ptr;
 #define SmartPtr boost::shared_ptr
+#define SmartPtrDelete(target)	void boost::checked_delete<target>(target* x);
 
+#else
 
-#endif // SMART_PTR_H
-
-
-#define CODELITE_SMART_PTR_H
-#ifndef CODELITE_SMART_PTR_H
-#define CODELITE_SMART_PTR_H
+#define SmartPtrDelete(target)	class SmartPtr<target>
 
 /**
  * A smart pointer class that provides a reference counting and auto delete memory.
@@ -128,6 +125,13 @@ public:
 	{
 		*this = rhs;
 	}
+	
+	template<class Y>
+	SmartPtr(SmartPtr<Y> const& rhs) 
+		: m_ref(NULL)
+	{
+		*this = rhs;
+	}
 
 	/**
 	 * Assignment operator
@@ -164,7 +168,7 @@ public:
 	 * if the current ptr is not NULL, it will be freed (reference counting free) before assingning the new ptr
 	 * \param ptr new pointer
 	 */
-	void Reset(T* ptr)
+	void reset(T* ptr = 0)
 	{	
 		DeleteRefCount();
 		CreateFresh( ptr );
@@ -174,7 +178,7 @@ public:
 	 * Return pointer the row data pointer
 	 * \return pointer to the row data pointer
 	 */
-	T* Get() const
+	T* get() const
 	{
 		return m_ref->GetData();
 	}
@@ -249,4 +253,5 @@ private:
 };
 
 
-#endif // CODELITE_SMART_PTR_H
+#endif // CONFIG_USE_BOOST_POINTERS
+#endif // SMART_PTR_H

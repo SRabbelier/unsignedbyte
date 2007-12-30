@@ -21,6 +21,7 @@
 #include "EditorString.h"
 #include "StringUtilities.h"
 #include "UBSocket.h"
+#include "Account.h"
 
 EditorString::EditorString(UBSocket* sock, std::string& target) :
 Editor(sock),
@@ -173,6 +174,28 @@ void EditorString::OnLine(const std::string& line)
 		m_strings.push_back(line);
 		return;
 	} /* case M_APPEND: */
+	
+	case M_REPLACE:
+	{
+		if(line.size() == 0)
+		{
+			m_sock->Send("Not yet implemented - Alturin 30-12-2007.\n");
+			return;
+		}
+		
+		return;
+	}
+	case M_VIEW:
+	{
+		if(line.size() != 0)
+		{
+			m_sock->Send("At the moment all you can do here is hit enter to show the entire string.\n");
+			return;
+		}
+		
+		m_sock->Send(String::Get()->unlines(m_strings, " "));
+		return;
+	}
 
 
 	case M_DONE:

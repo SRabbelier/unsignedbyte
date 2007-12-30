@@ -63,6 +63,6 @@ namespace mud
 		~Colour(void);
 		
 		friend class ColourManager;
-		friend void boost::checked_delete<mud::Colour>(mud::Colour* x);
+		friend SmartPtrDelete(mud::Colour);
 	};
 }

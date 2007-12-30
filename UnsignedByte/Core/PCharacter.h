@@ -44,6 +44,6 @@ namespace mud
 		virtual ~PCharacter(void);
 
 		friend class PCharacterManager; // for constructor
-		friend void boost::checked_delete<mud::PCharacter>(mud::PCharacter* x);
+		friend SmartPtrDelete(mud::PCharacter);
 	};
 }

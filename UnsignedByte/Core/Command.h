@@ -84,6 +84,6 @@ namespace mud
 		Command operator=(const Command& rhs);
 		~Command(void);
 		friend class CommandManager;
-		friend void boost::checked_delete<mud::Command>(mud::Command* x);
+		friend SmartPtrDelete(mud::Command);
 	};
 }

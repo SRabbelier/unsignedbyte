@@ -60,7 +60,7 @@ namespace mud
 
 	private:
 		friend class mud::ChunkManager; // For constructor
-		friend void boost::checked_delete<mud::Chunk>(mud::Chunk* x);
+		friend SmartPtrDelete(mud::Chunk);
 		
 		db::Chunks* m_chunk;
 

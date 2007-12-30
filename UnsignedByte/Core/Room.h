@@ -80,6 +80,7 @@ namespace mud
 		~Room(void);
 
 		friend class RoomManager; // constructor
-		friend void boost::checked_delete<mud::Room>(mud::Room* x);
+		friend SmartPtrDelete(mud::Room);
+		// friend class SmartPtr<mud::Room>;
 	};
 }

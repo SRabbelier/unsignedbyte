@@ -33,7 +33,7 @@ using mud::PCharacterPtr;
 
 void PCharacterManager::Close(PCharacterPtr Ch)
 {
-	if(Ch == NULL)
+	if(!Ch)
 		throw std::invalid_argument("PCharacter::Close(), Ch == NULL!");
 	
 	Close(Ch->getID());

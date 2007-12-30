@@ -73,6 +73,6 @@ namespace mud
 		~Account(void);
 		
 		friend class AccountManager; // for constructor
-		friend void boost::checked_delete<mud::Account>(mud::Account* x);
+		friend SmartPtrDelete(mud::Account);
 	};
 }

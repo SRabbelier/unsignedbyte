@@ -73,6 +73,6 @@ namespace mud
 		~GrantGroup(void);
 		
 		friend class GrantGroupManager;
-		friend void boost::checked_delete<mud::GrantGroup>(mud::GrantGroup* x);
+		friend SmartPtrDelete(mud::GrantGroup);
 	};
 }

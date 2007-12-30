@@ -37,6 +37,6 @@ namespace mud
 		virtual ~MCharacter(void);
 
 		friend class MCharacterManager; // for constructor
-		friend void boost::checked_delete<mud::MCharacter>(mud::MCharacter* x);
+		friend SmartPtrDelete(mud::MCharacter);
 	};
 }

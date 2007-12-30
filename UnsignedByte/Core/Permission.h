@@ -63,7 +63,7 @@ namespace mud
 		~Permission(void);
 		
 		friend class PermissionManager;
-		friend void boost::checked_delete<mud::Permission>(mud::Permission* x);
+		friend SmartPtrDelete(mud::Permission);
 		
 		enum GRANTS
 		{

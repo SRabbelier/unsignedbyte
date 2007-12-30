@@ -36,8 +36,8 @@ std::vector<std::string> RoomManager::List()
 
 void RoomManager::Close(RoomPtr room)
 {
-	if(room == NULL)
-		throw std::invalid_argument("Room::Close(), room == NULL!");
+	if(!room)
+		throw std::invalid_argument("Room::Close(), !rooms!");
 	
 	Close(room->getID());
 }
