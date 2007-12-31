@@ -103,20 +103,22 @@ void Editor::OnLine(const std::string& line)
 	bool isNormalForced = m_sock->isForced();
 	bool isHighForced = m_sock->isHighForced();
 	bool isForced = isLowForced || isNormalForced || isHighForced;
-
-	long id = mud::CommandManager::Get()->lookupByName(actionname);
-	if(id)
+	
+	try
 	{
+		long id = mud::CommandManager::Get()->lookupByName(actionname);
 		mud::CommandPtr cmd = mud::CommandManager::Get()->GetByKey(id);
+		
 		hasGrant = cmd->getGrant(m_sock);
 		hasLog = cmd->getLog(m_sock);
+		
 		if(isForced)
 		{
 			canHighForce = cmd->canHighForce();
 			canForce = cmd->canForce();
 			canLowForce = cmd->canLowForce();
 		}
-	}
+	} catch(RowNotFoundException& e) { }
 	
 	if(isForced)
 	{
