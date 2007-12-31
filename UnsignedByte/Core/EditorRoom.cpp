@@ -102,7 +102,6 @@ std::string EditorRoom::lookup(const std::string& action)
 	if(name.size() != 0)
 		return name;
 		
-		
 	RoomCommand* act = RoomInterpreter::Get()->translate(action);
 	if(act)
 		return act->getName();
@@ -114,9 +113,26 @@ void EditorRoom::dispatch(const std::string& action, const std::string& argument
 {
 	RoomCommand* act = RoomInterpreter::Get()->translate(action);
 	
+	if(act) 
+	{
+		if(!m_room)
+		{
+			m_sock->Send("You need to  be editing a room first.\n");
+			m_sock->Send("(Use the 'edit' command.)\n");
+			return;
+		}
+		else
+		{
+			act->Run(this, argument);
+			return;
+		}
+	}
+	
+	act = RoomEditingInterpreter::Get()->translate(action);
+	
 	if(act)
 		act->Run(this, argument);
-	else
+	else	
 		OLCEditor::dispatch(action, argument);
 		
 	return;
@@ -174,11 +190,12 @@ EditorRoom::RoomInterpreter::~RoomInterpreter(void)
 
 }
 
-/*
-EditorRoom::DirectionInterpreter::DirectionInterpreter(void)
+EditorRoom::RoomEditingInterpreter::RoomEditingInterpreter(void)
 {
-	// addWord("activate", Activate::Get());
 	addWord("area", &m_listAreas);
+	addWord("map", &m_showMap);
+	
+	/*
 	addWord("north", North::Get());
 	addWord("northeast", NorthEast::Get());
 	addWord("ne", NorthEast::Get());
@@ -191,14 +208,13 @@ EditorRoom::DirectionInterpreter::DirectionInterpreter(void)
 	addWord("west", West::Get());
 	addWord("northwest", NorthWest::Get());
 	addWord("nw", NorthWest::Get());
-	addWord("map", &m_showMap);
+	*/
 }
 
-EditorRoom::DirectionInterpreter::~DirectionInterpreter(void)
+EditorRoom::RoomEditingInterpreter::~RoomEditingInterpreter(void)
 {
 
 }
-*/
 
 void EditorRoom::editName(const std::string& argument)
 {

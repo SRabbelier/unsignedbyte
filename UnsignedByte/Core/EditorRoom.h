@@ -51,7 +51,7 @@ public:
 	std::vector<std::string> getCommands();
 	void setEditing(long id);
 	
-	void showMap(const std::string& argument);
+	/*
 	void goNorth(const std::string& argument);
 	void goNorthEast(const std::string& argument);
 	void goEast(const std::string& argument);
@@ -60,15 +60,20 @@ public:
 	void goSouthWest(const std::string& argument);
 	void goWest(const std::string& argument);
 	void goNorthWest(const std::string& argument);
+	*/
 	
-	void showRoom(const std::string& argument);
 	void listAreas(const std::string& argument);
+	void showMap(const std::string& argument);
+	
 	void editName(const std::string& argument);
 	void editDescription(const std::string& argument);
 	void editSector(const std::string& argument);
-	void saveRoom(const std::string& argument);
+	
 	void closeExit(const std::string& argument);
 	void openExit(const std::string& argument);
+	
+	void showRoom(const std::string& argument);
+	void saveRoom(const std::string& argument);
 
 private:
 	EditorRoom(const EditorRoom& rhs);
@@ -91,14 +96,12 @@ private:
 		friend class Singleton<RoomInterpreter>;
 	};
 
-/*
-	class DirectionInterpreter : public Interpreter<RoomCommand>, public Singleton<DirectionInterpreter> {
+	class RoomEditingInterpreter : public Interpreter<RoomCommand>, public Singleton<RoomEditingInterpreter> {
 	private:
-		DirectionInterpreter(void);
-		~DirectionInterpreter(void);
-		friend class Singleton<DirectionInterpreter>;
+		RoomEditingInterpreter(void);
+		~RoomEditingInterpreter(void);
+		friend class Singleton<RoomEditingInterpreter>;
 	};
-*/
 	
 	static RoomCommand m_showMap;
 	static RoomCommand m_goNorth;

@@ -72,15 +72,12 @@ void EditorArea::dispatch(const std::string& action, const std::string& argument
 {
 	AreaCommand* act = AreaInterpreter::Get()->translate(action);
 	
-	// TODO
-	/*
 	if(act && !m_area)
 	{
 		m_sock->Send("You need to  be editing an area first.\n");
-		m_sock->Send("(Use the 'edit' command.\n");
+		m_sock->Send("(Use the 'edit' command.)\n");
 		return;
 	}
-	*/
 	
 	if(act)
 		act->Run(this, argument);

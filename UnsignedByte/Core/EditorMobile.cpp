@@ -73,6 +73,13 @@ void EditorMobile::dispatch(const std::string& action, const std::string& argume
 {
 	MobileCommand* act = MobileInterpreter::Get()->translate(action);
 	
+	if(act && !m_mobile)
+	{
+		m_sock->Send("You need to  be editing a mobile first.\n");
+		m_sock->Send("(Use the 'edit' command.)\n");
+		return;
+	}
+	
 	if(act)
 		act->Run(this, argument);
 	else

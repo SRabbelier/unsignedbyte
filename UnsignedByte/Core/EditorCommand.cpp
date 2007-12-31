@@ -79,6 +79,13 @@ void EditorCommand::dispatch(const std::string& action, const std::string& argum
 {
 	CommandCommand* act = CommandInterpreter::Get()->translate(action);
 	
+	if(act && !m_command)
+	{
+		m_sock->Send("You need to  be editing a command first.\n");
+		m_sock->Send("(Use the 'edit' command.)\n");
+		return;
+	}
+	
 	if(act)
 		act->Run(this, argument);
 	else
