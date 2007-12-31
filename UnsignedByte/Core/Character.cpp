@@ -120,7 +120,7 @@ void Character::OnLook(const std::string& msg)
 		
 		return;
 	}
-	catch (std::exception& e) 
+	catch (RowNotFoundException& e) 
 	{
 		Global::Get()->bug(e.what());
 		return;
@@ -161,7 +161,7 @@ void Character::OnSay(const std::string& msg)
 		room->Sendf("%s says '%s`^'\n", getName().c_str(), msg.c_str());
 		return;
 	}
-	catch (std::exception& e)
+	catch (RowNotFoundException& e)
 	{
 		Global::Get()->bug(e.what());
 		return;

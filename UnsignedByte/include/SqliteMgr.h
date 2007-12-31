@@ -21,6 +21,7 @@
 #pragma once
 
 #include <map>
+#include <stdexcept>
 
 #include <sqlite3.h>
 #include <Database.h>
@@ -38,6 +39,12 @@ typedef SmartPtr<Statements> StatementsPtr;
 
 typedef std::map<Table*, StatementsPtr>  TableStatements;
 typedef unsigned long value_type;
+
+class RowNotFoundException : public std::runtime_error
+{
+	public:
+		RowNotFoundException(const std::string& arg) : std::runtime_error(arg) { }
+};
 
 class SqliteMgr : public Singleton<SqliteMgr>
 {

@@ -61,16 +61,9 @@ m_char(character)
 	
 		inroom->Sendf("%s enters the realm.\n", m_char->getName().c_str());
 	}
-	/*
-	catch(unfoundroom)
-	{
-		// continue execution, don't return
-	}
-	*/
-	catch(std::exception& e)
+	catch(RowNotFoundException& e)
 	{
 		Global::Get()->bug(e.what());
-		return;
 	}
 	m_char->OnSend(String::Get()->box(PlayingInterpreter::Get()->getWords(), "Playing"));
 }
@@ -170,7 +163,7 @@ void EditorPlaying::quitEditor(const std::string& argument)
 		
 		room->Sendf("%s fades from the realm.\n", m_char->getName().c_str());	
 	}
-	catch(std::exception& e)
+	catch(RowNotFoundException& e)
 	{
 		Global::Get()->bug(e.what());
 		// don't return

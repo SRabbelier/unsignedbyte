@@ -61,7 +61,7 @@ bool Command::getGrant(UBSocket* sock)
 		PermissionPtr prm = mud::PermissionManager::Get()->GetByKeys(aid, gid);
 		return prm->hasGrant();
 	}
-	catch(std::exception& e)
+	catch(RowNotFoundException& e)
 	{
 		Global::Get()->bug(e.what());
 		return getDefaultGrant();
@@ -76,7 +76,7 @@ bool Command::getDefaultGrant()
 		GrantGroupPtr grp = mud::GrantGroupManager::Get()->GetByKey(id);
 		return grp->getDefaultGrant();
 	}
-	catch(std::exception& e)
+	catch(RowNotFoundException& e)
 	{
 		Global::Get()->bug(e.what());
 		return mud::PermissionManager::Get()->defaultGrant;
@@ -93,7 +93,7 @@ bool Command::getLog(UBSocket* sock)
 		PermissionPtr prm = mud::PermissionManager::Get()->GetByKeys(aid, gid);
 		return prm->hasLog();
 	}
-	catch(std::exception& e)
+	catch(RowNotFoundException& e)
 	{
 		Global::Get()->bug(e.what());
 		return getDefaultLog();
@@ -108,7 +108,7 @@ bool Command::getDefaultLog()
 		GrantGroupPtr grp = mud::GrantGroupManager::Get()->GetByKey(id);
 		return grp->getDefaultLog();
 	}
-	catch(std::exception& e)
+	catch(RowNotFoundException& e)
 	{
 		Global::Get()->bug(e.what());
 		return mud::PermissionManager::Get()->defaultLog;

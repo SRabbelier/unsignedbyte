@@ -196,10 +196,10 @@ void ClassSourceGenerator::AppendCtorFactory()
 			(*m_file) << m_tabs << "SmartPtr<" << m_name << "> result(new " << m_name << "()); // will handle deletion of ptr" << endl;
 			(*m_file) << m_tabs << "result->m_lookupvalue = value;" << endl;
 			(*m_file) << m_tabs << "value_type key = 0;" << endl;
-			(*m_file) << m_tabs << "try {" << endl;
-			(*m_file) << m_tabs << m_tabs << "SqliteMgr::Get()->doLookup(result.get(), \"" << (*it)->getName() << "\");" << endl;
-			(*m_file) << m_tabs << m_tabs << "key = result->get" << m_table->firstKey() << "();" << endl;
-			(*m_file) << m_tabs << "} catch(Bindable* result) {	}" << endl;
+			// (*m_file) << m_tabs << "try {" << endl;
+			(*m_file) << /*m_tabs <<*/ m_tabs << "SqliteMgr::Get()->doLookup(result.get(), \"" << (*it)->getName() << "\");" << endl;
+			(*m_file) << /*m_tabs <<*/ m_tabs << "key = result->get" << m_table->firstKey() << "();" << endl;
+			// (*m_file) << m_tabs << "} catch(RowNotFoundException e) { }" << endl;
 			(*m_file) << endl;
 			(*m_file) << m_tabs << "return key;" << endl;
 			(*m_file) << "}" << endl;
@@ -251,7 +251,6 @@ void ClassSourceGenerator::AppendBindKeys()
 {
 	if(!m_file)
 		throw std::logic_error("Source file is not open for writing.\n");
-	
 	
 	(*m_file) << "void " << m_name << "::bindKeys(sqlite3_stmt* stmt) const" << endl;
 	(*m_file) << "{" << endl;

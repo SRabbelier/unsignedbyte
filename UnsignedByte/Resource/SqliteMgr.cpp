@@ -98,7 +98,7 @@ void SqliteMgr::doSelect(Bindable* bindable)
 	if(row)
 		bindable->parseSelect(select);
 	else
-		throw std::runtime_error("SqliteMgr::doSelect(), no row.");
+		throw RowNotFoundException("SqliteMgr::doSelect(), no row.");
 }
 
 void SqliteMgr::doLookup(Bindable* bindable, const std::string& field)
@@ -115,7 +115,7 @@ void SqliteMgr::doLookup(Bindable* bindable, const std::string& field)
 		doSelect(bindable);
 	}
 	else
-		throw bindable;
+		throw RowNotFoundException("SqliteMgr::doLookup(), no row.");
 }
 
 void SqliteMgr::doForEach(Table* table, Actor& act)

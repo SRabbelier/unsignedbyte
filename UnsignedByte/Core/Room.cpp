@@ -169,7 +169,7 @@ std::string Room::CreateMap(long id, long origx, long origy)
 						Sector* sector = Cache::Get()->GetSector(room->getSector());
 						thisrow.append(sector->getSymbol());
 					}
-					catch(std::exception& e)
+					catch(RowNotFoundException& e)
 					{
 						Global::Get()->log(e.what());
 						thisrow.append("?");
@@ -221,7 +221,7 @@ std::vector<std::string> Room::Show()
 		SectorPtr sector = mud::SectorManager::Get()->GetByKey(getSector());
 		result.push_back(Global::Get()->sprintf("Sector: '%s' (%s).\n", sector->getName().c_str(), sector->getSymbol().c_str()));
 	}
-	catch(std::exception& e)
+	catch(RowNotFoundException& e)
 	{
 		Global::Get()->bug(e.what());
 	}
