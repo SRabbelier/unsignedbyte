@@ -2363,6 +2363,345 @@ void Details::setdescription(const std::string& value)
 
 /**
  * Begin of implementation
+ * class DetailRoom
+ **/
+
+// Ctors
+DetailRoom::DetailRoom() :
+m_fkDetails(),
+m_newentry(true),
+m_dirty(false)
+{
+
+}
+
+DetailRoom::~DetailRoom()
+{
+
+}
+
+DetailRoom* DetailRoom::bykey(value_type fkDetails, value_type fkRooms)
+{
+	DetailRoom* result = new DetailRoom();
+	result->m_fkDetails = fkDetails;
+	result->m_fkRooms = fkRooms;
+	SqliteMgr::Get()->doSelect(result);
+	return result;
+}
+
+void DetailRoom::erase()
+{
+	if(!m_newentry)
+		SqliteMgr::Get()->doErase(this);
+}
+
+void DetailRoom::save()
+{
+	if(m_newentry)
+	{
+		SqliteMgr::Get()->doInsert(this);
+		m_newentry = false;
+	}
+
+	if(m_dirty)
+	{
+		SqliteMgr::Get()->doUpdate(this);
+		getTable()->modify();
+		m_dirty = false;
+	}
+}
+
+bool DetailRoom::exists()
+{
+	if(m_newentry)
+		return false;
+
+	return true;
+}
+
+void DetailRoom::bindKeys(sqlite3_stmt* stmt) const
+{
+	sqlite3_bind_int64(stmt, 1, m_fkDetails);
+	sqlite3_bind_int64(stmt, 2, m_fkRooms);
+}
+
+void DetailRoom::bindUpdate(sqlite3_stmt* stmt) const
+{
+	sqlite3_bind_int64(stmt, 1, m_fkDetails);
+	sqlite3_bind_int64(stmt, 2, m_fkRooms);
+}
+
+void DetailRoom::bindLookup(sqlite3_stmt* stmt) const
+{
+	// Do nothing
+}
+
+void DetailRoom::parseInsert(sqlite3* db)
+{
+	// Do nothing
+}
+
+void DetailRoom::parseSelect(sqlite3_stmt* stmt)
+{
+	// Do nothing
+}
+
+void DetailRoom::parseLookup(sqlite3_stmt* stmt)
+{
+	m_fkDetails = sqlite3_column_int64(stmt, 0);
+	m_fkRooms = sqlite3_column_int64(stmt, 1);
+}
+
+TablePtr DetailRoom::getTable() const
+{
+	return Tables::Get()->DETAILROOM;
+}
+
+value_type DetailRoom::getfkDetails() const
+{
+	return m_fkDetails;
+}
+
+value_type DetailRoom::getfkRooms() const
+{
+	return m_fkRooms;
+}
+
+
+/**
+ * End of implementation
+ * class DetailRoom
+ **/
+
+
+/**
+ * Begin of implementation
+ * class DetailChunk
+ **/
+
+// Ctors
+DetailChunk::DetailChunk() :
+m_fkChunks(),
+m_newentry(true),
+m_dirty(false)
+{
+
+}
+
+DetailChunk::~DetailChunk()
+{
+
+}
+
+DetailChunk* DetailChunk::bykey(value_type fkChunks, value_type fkDetails)
+{
+	DetailChunk* result = new DetailChunk();
+	result->m_fkChunks = fkChunks;
+	result->m_fkDetails = fkDetails;
+	SqliteMgr::Get()->doSelect(result);
+	return result;
+}
+
+void DetailChunk::erase()
+{
+	if(!m_newentry)
+		SqliteMgr::Get()->doErase(this);
+}
+
+void DetailChunk::save()
+{
+	if(m_newentry)
+	{
+		SqliteMgr::Get()->doInsert(this);
+		m_newentry = false;
+	}
+
+	if(m_dirty)
+	{
+		SqliteMgr::Get()->doUpdate(this);
+		getTable()->modify();
+		m_dirty = false;
+	}
+}
+
+bool DetailChunk::exists()
+{
+	if(m_newentry)
+		return false;
+
+	return true;
+}
+
+void DetailChunk::bindKeys(sqlite3_stmt* stmt) const
+{
+	sqlite3_bind_int64(stmt, 1, m_fkChunks);
+	sqlite3_bind_int64(stmt, 2, m_fkDetails);
+}
+
+void DetailChunk::bindUpdate(sqlite3_stmt* stmt) const
+{
+	sqlite3_bind_int64(stmt, 1, m_fkChunks);
+	sqlite3_bind_int64(stmt, 2, m_fkDetails);
+}
+
+void DetailChunk::bindLookup(sqlite3_stmt* stmt) const
+{
+	// Do nothing
+}
+
+void DetailChunk::parseInsert(sqlite3* db)
+{
+	// Do nothing
+}
+
+void DetailChunk::parseSelect(sqlite3_stmt* stmt)
+{
+	// Do nothing
+}
+
+void DetailChunk::parseLookup(sqlite3_stmt* stmt)
+{
+	m_fkChunks = sqlite3_column_int64(stmt, 0);
+	m_fkDetails = sqlite3_column_int64(stmt, 1);
+}
+
+TablePtr DetailChunk::getTable() const
+{
+	return Tables::Get()->DETAILCHUNK;
+}
+
+value_type DetailChunk::getfkChunks() const
+{
+	return m_fkChunks;
+}
+
+value_type DetailChunk::getfkDetails() const
+{
+	return m_fkDetails;
+}
+
+
+/**
+ * End of implementation
+ * class DetailChunk
+ **/
+
+
+/**
+ * Begin of implementation
+ * class DETAILCHARACTER
+ **/
+
+// Ctors
+DETAILCHARACTER::DETAILCHARACTER() :
+m_fkCharacters(),
+m_newentry(true),
+m_dirty(false)
+{
+
+}
+
+DETAILCHARACTER::~DETAILCHARACTER()
+{
+
+}
+
+DETAILCHARACTER* DETAILCHARACTER::bykey(value_type fkCharacters, value_type fkDetails)
+{
+	DETAILCHARACTER* result = new DETAILCHARACTER();
+	result->m_fkCharacters = fkCharacters;
+	result->m_fkDetails = fkDetails;
+	SqliteMgr::Get()->doSelect(result);
+	return result;
+}
+
+void DETAILCHARACTER::erase()
+{
+	if(!m_newentry)
+		SqliteMgr::Get()->doErase(this);
+}
+
+void DETAILCHARACTER::save()
+{
+	if(m_newentry)
+	{
+		SqliteMgr::Get()->doInsert(this);
+		m_newentry = false;
+	}
+
+	if(m_dirty)
+	{
+		SqliteMgr::Get()->doUpdate(this);
+		getTable()->modify();
+		m_dirty = false;
+	}
+}
+
+bool DETAILCHARACTER::exists()
+{
+	if(m_newentry)
+		return false;
+
+	return true;
+}
+
+void DETAILCHARACTER::bindKeys(sqlite3_stmt* stmt) const
+{
+	sqlite3_bind_int64(stmt, 1, m_fkCharacters);
+	sqlite3_bind_int64(stmt, 2, m_fkDetails);
+}
+
+void DETAILCHARACTER::bindUpdate(sqlite3_stmt* stmt) const
+{
+	sqlite3_bind_int64(stmt, 1, m_fkCharacters);
+	sqlite3_bind_int64(stmt, 2, m_fkDetails);
+}
+
+void DETAILCHARACTER::bindLookup(sqlite3_stmt* stmt) const
+{
+	// Do nothing
+}
+
+void DETAILCHARACTER::parseInsert(sqlite3* db)
+{
+	// Do nothing
+}
+
+void DETAILCHARACTER::parseSelect(sqlite3_stmt* stmt)
+{
+	// Do nothing
+}
+
+void DETAILCHARACTER::parseLookup(sqlite3_stmt* stmt)
+{
+	m_fkCharacters = sqlite3_column_int64(stmt, 0);
+	m_fkDetails = sqlite3_column_int64(stmt, 1);
+}
+
+TablePtr DETAILCHARACTER::getTable() const
+{
+	return Tables::Get()->DETAILCHARACTER;
+}
+
+value_type DETAILCHARACTER::getfkCharacters() const
+{
+	return m_fkCharacters;
+}
+
+value_type DETAILCHARACTER::getfkDetails() const
+{
+	return m_fkDetails;
+}
+
+
+/**
+ * End of implementation
+ * class DETAILCHARACTER
+ **/
+
+
+/**
+ * Begin of implementation
  * class Exits
  **/
 

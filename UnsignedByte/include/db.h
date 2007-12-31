@@ -891,6 +891,147 @@ namespace db
 		Details operator=(const Details& rhs);
 	};
 
+	class DetailRoom : public Bindable
+	{
+	public:
+		// Ctors
+		~DetailRoom();
+
+		// Factories
+		static DetailRoom* bykey(value_type fkDetails, value_type fkRooms);
+
+		// Database interaction
+		void erase();
+		void save();
+		bool exists();
+
+		// Bindable interface
+		void bindKeys(sqlite3_stmt* stmt) const;
+		void bindUpdate(sqlite3_stmt* stmt) const;
+		void bindLookup(sqlite3_stmt* stmt) const;
+		void parseInsert(sqlite3* db);
+		void parseSelect(sqlite3_stmt* stmt);
+		void parseLookup(sqlite3_stmt* stmt);
+		TablePtr getTable() const;
+
+		// Getters
+		value_type getfkDetails() const;
+		value_type getfkRooms() const;
+
+	private:
+		// Database pointer
+		Database* m_db;
+
+		// Keys
+		value_type m_fkDetails;
+		value_type m_fkRooms;
+
+		// Fields
+
+		// State flags
+		bool m_newentry;
+		bool m_dirty;
+
+		// Hide constructor and assignment operator
+		DetailRoom();
+		DetailRoom(const DetailRoom& rhs);
+		DetailRoom operator=(const DetailRoom& rhs);
+	};
+
+	class DetailChunk : public Bindable
+	{
+	public:
+		// Ctors
+		~DetailChunk();
+
+		// Factories
+		static DetailChunk* bykey(value_type fkChunks, value_type fkDetails);
+
+		// Database interaction
+		void erase();
+		void save();
+		bool exists();
+
+		// Bindable interface
+		void bindKeys(sqlite3_stmt* stmt) const;
+		void bindUpdate(sqlite3_stmt* stmt) const;
+		void bindLookup(sqlite3_stmt* stmt) const;
+		void parseInsert(sqlite3* db);
+		void parseSelect(sqlite3_stmt* stmt);
+		void parseLookup(sqlite3_stmt* stmt);
+		TablePtr getTable() const;
+
+		// Getters
+		value_type getfkChunks() const;
+		value_type getfkDetails() const;
+
+	private:
+		// Database pointer
+		Database* m_db;
+
+		// Keys
+		value_type m_fkChunks;
+		value_type m_fkDetails;
+
+		// Fields
+
+		// State flags
+		bool m_newentry;
+		bool m_dirty;
+
+		// Hide constructor and assignment operator
+		DetailChunk();
+		DetailChunk(const DetailChunk& rhs);
+		DetailChunk operator=(const DetailChunk& rhs);
+	};
+
+	class DETAILCHARACTER : public Bindable
+	{
+	public:
+		// Ctors
+		~DETAILCHARACTER();
+
+		// Factories
+		static DETAILCHARACTER* bykey(value_type fkCharacters, value_type fkDetails);
+
+		// Database interaction
+		void erase();
+		void save();
+		bool exists();
+
+		// Bindable interface
+		void bindKeys(sqlite3_stmt* stmt) const;
+		void bindUpdate(sqlite3_stmt* stmt) const;
+		void bindLookup(sqlite3_stmt* stmt) const;
+		void parseInsert(sqlite3* db);
+		void parseSelect(sqlite3_stmt* stmt);
+		void parseLookup(sqlite3_stmt* stmt);
+		TablePtr getTable() const;
+
+		// Getters
+		value_type getfkCharacters() const;
+		value_type getfkDetails() const;
+
+	private:
+		// Database pointer
+		Database* m_db;
+
+		// Keys
+		value_type m_fkCharacters;
+		value_type m_fkDetails;
+
+		// Fields
+
+		// State flags
+		bool m_newentry;
+		bool m_dirty;
+
+		// Hide constructor and assignment operator
+		DETAILCHARACTER();
+		DETAILCHARACTER(const DETAILCHARACTER& rhs);
+		DETAILCHARACTER operator=(const DETAILCHARACTER& rhs);
+	};
+
 	class Exits : public Bindable
 	{
 	public:
