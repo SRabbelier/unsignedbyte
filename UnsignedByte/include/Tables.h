@@ -45,6 +45,9 @@ public:
 	TablePtr COLOURS;
 	TablePtr COMMANDS;
 	TablePtr DETAILS;
+	TablePtr DETAILROOM;
+	TablePtr DETAILCHUNK;
+	TablePtr DETAILCHARACTER;
 	TablePtr EXITS;
 	TablePtr GRANTGROUPS;
 	TablePtr PERMISSIONS;

@@ -37,6 +37,9 @@ Tables::Tables() :
 	COLOURS( new Table("Colours") ),
 	COMMANDS( new Table("Commands") ),
 	DETAILS( new Table("Details") ),
+	DETAILROOM( new Table("DetailRoom") ),
+	DETAILCHUNK( new Table("DetailChunk") ),
+	DETAILCHARACTER( new Table("DETAILCHARACTER") ),
 	EXITS( new Table("Exits") ),
 	GRANTGROUPS( new Table("GrantGroups") ),
 	PERMISSIONS( new Table("Permissions") ),
@@ -118,6 +121,15 @@ Tables::Tables() :
 	DETAILS->addLookupTextField("key");
 	DETAILS->addTextField("description");
 	
+	DETAILROOM->addFPK(DETAILS);
+	DETAILROOM->addFPK(ROOMS);
+	
+	DETAILCHUNK->addFPK(DETAILS);
+	DETAILCHUNK->addFPK(CHUNKS);
+	
+	DETAILCHARACTER->addFPK(DETAILS);
+	DETAILCHARACTER->addFPK(CHARACTERS);
+	
 	EXITS->addPK("exitid");
 	EXITS->addValue("dir");
 		
@@ -183,6 +195,9 @@ Tables::Tables() :
 	m_tables.push_back(COLOURS);
 	m_tables.push_back(COMMANDS);
 	m_tables.push_back(DETAILS);
+	m_tables.push_back(DETAILROOM);
+	m_tables.push_back(DETAILCHUNK);
+	m_tables.push_back(DETAILCHARACTER);
 	m_tables.push_back(EXITS);
 	m_tables.push_back(GRANTGROUPS);
 	m_tables.push_back(PERMISSIONS);
