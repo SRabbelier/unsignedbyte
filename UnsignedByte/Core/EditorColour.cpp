@@ -77,7 +77,7 @@ void EditorColour::dispatch(const std::string& action, const std::string& argume
 	
 	if(act && !m_colour)
 	{
-		m_sock->Send("You need to  be editing a colour first.\n");
+		m_sock->Send("You need to be editing a colour first.\n");
 		m_sock->Send("(Use the 'edit' command.)\n");
 		return;
 	}

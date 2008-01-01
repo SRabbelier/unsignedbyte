@@ -76,7 +76,7 @@ void EditorGrantGroup::dispatch(const std::string& action, const std::string& ar
 	
 	if(act && !m_grantgroup)
 	{
-		m_sock->Send("You need to  be editing a grantgroup first.\n");
+		m_sock->Send("You need to be editing a grantgroup first.\n");
 		m_sock->Send("(Use the 'edit' command.)\n");
 		return;
 	}

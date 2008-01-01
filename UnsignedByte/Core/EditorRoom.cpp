@@ -117,7 +117,7 @@ void EditorRoom::dispatch(const std::string& action, const std::string& argument
 	{
 		if(!m_room)
 		{
-			m_sock->Send("You need to  be editing a room first.\n");
+			m_sock->Send("You need to be editing a room first.\n");
 			m_sock->Send("(Use the 'edit' command.)\n");
 			return;
 		}

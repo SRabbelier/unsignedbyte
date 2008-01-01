@@ -81,7 +81,7 @@ void EditorPermission::dispatch(const std::string& action, const std::string& ar
 	
 	if(act && !m_permission)
 	{
-		m_sock->Send("You need to  be editing a permission first.\n");
+		m_sock->Send("You need to be editing a permission first.\n");
 		m_sock->Send("(Use the 'edit' command.)\n");
 		return;
 	}

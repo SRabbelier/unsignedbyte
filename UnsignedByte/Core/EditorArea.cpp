@@ -74,7 +74,7 @@ void EditorArea::dispatch(const std::string& action, const std::string& argument
 	
 	if(act && !m_area)
 	{
-		m_sock->Send("You need to  be editing an area first.\n");
+		m_sock->Send("You need to be editing an area first.\n");
 		m_sock->Send("(Use the 'edit' command.)\n");
 		return;
 	}
