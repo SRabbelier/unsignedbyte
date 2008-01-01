@@ -171,7 +171,7 @@ std::string Room::CreateMap(long id, long origx, long origy)
 					}
 					catch(RowNotFoundException& e)
 					{
-						Global::Get()->log(e.what());
+						Global::Get()->bug(e.what());
 						thisrow.append("?");
 					}					
 				}
