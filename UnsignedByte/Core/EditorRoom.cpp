@@ -231,12 +231,6 @@ void EditorRoom::editName(const std::string& argument)
 
 void EditorRoom::editDescription(const std::string& argument)
 {
-	if(!m_room->Exists())
-	{
-		m_sock->Send("For some reason the room you are editing does not exist.\n");
-		return;
-	}
-
 	if(argument.size() == 0)
 	{
 		m_sock->Send("No argument, dropping you into the string editor!\n");
