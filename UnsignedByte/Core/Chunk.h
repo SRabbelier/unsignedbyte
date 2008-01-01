@@ -35,6 +35,7 @@ namespace mud
 		 */
 		const std::string& getName() const { return m_chunk->getname(); }
 		const std::string& getDescription() const { return m_chunk->getdescription(); }
+		const std::string& getTags() const { return m_chunk->gettags(); }
 		const value_type getRoom() const { return m_chunk->getfkRooms(); }
 
 		/**
@@ -42,6 +43,7 @@ namespace mud
 		 */
 		void setName(const std::string& name) { m_chunk->setname(name); }
 		void setDescription(const std::string& description) { m_chunk->setdescription(description); }
+		void setTags(const std::string& description) { m_chunk->settags(description); }
 		void setRoom(value_type room) { m_chunk->setfkRooms(room); }
 
 		/**

@@ -61,6 +61,8 @@ std::vector<std::string> Chunk::Show()
 	
 	result.push_back(Global::Get()->sprintf("Name: '%s'.", getName().c_str()));
 	result.push_back(Global::Get()->sprintf("Description: '%s'.", getDescription().c_str()));
+	result.push_back(Global::Get()->sprintf("Tags: '%s'.", getTags().c_str()));
+	result.push_back(Global::Get()->sprintf("Roomid: '%d'.", getRoom()));
 	
 	return result;
 }
