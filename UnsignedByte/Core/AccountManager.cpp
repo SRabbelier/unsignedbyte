@@ -51,7 +51,7 @@ value_type AccountManager::Add()
 	d.save();
 	value_type id = d.getaccountid();
 	if(id == 0)
-		Global::Get()->bug("Cache::AddAcount(), id = 0");
+		Global::Get()->bug("AccountManager::AddAcount(), id = 0");
 		
 	return id;
 }
