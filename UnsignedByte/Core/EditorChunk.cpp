@@ -35,6 +35,8 @@
 #include "Account.h"
 #include "Chunk.h"
 #include "ChunkManager.h"
+#include "Room.h"
+#include "RoomManager.h"
 
 EditorChunk::ChunkCommand EditorChunk::m_editName("Name", &EditorChunk::editName);
 EditorChunk::ChunkCommand EditorChunk::m_editDescription("Description", &EditorChunk::editDescription);
@@ -157,24 +159,23 @@ void EditorChunk::editDescription(const std::string& argument)
 }
 
 void EditorChunk::editRoom(const std::string& argument)
-{
-	if(argument.size() == 0)
+{	
+	int id = atoi(argument.c_str());
+	if(id <= 0)
 	{
 		m_sock->Send("Please specify a room this Chunk belongs to.\n");
-		return;
 	}
 	
 	try
 	{
-		long id = db::Rooms::lookupname(argument);
-		mud::RoomPtr sector = mud::RoomManager::Get()->GetByKey(id);
-		m_sock->Sendf("Room changed from '%s' to '%s'.\n", room->fgetName().c_str(), argument.c_str());
-		m_room->setSector(id);
+		mud::RoomPtr room = mud::RoomManager::Get()->GetByKey(id);
+		m_sock->Sendf("Room changed from '%s' to '%s'.\n", room->getName().c_str(), argument.c_str());
+		m_chunk->setRoom(id);
 	}
 	catch(RowNotFoundException& e) 
 	{
 		m_sock->Sendf("'%s' is not a valid room!\n", argument.c_str());
-		m_sock->Send(String::Get()->box(mud::SectorManager::Get()->List(), "Sectors"));
+		m_sock->Send(String::Get()->box(mud::RoomManager::Get()->List(), "Rooms"));
 		return;
 	}
 }
