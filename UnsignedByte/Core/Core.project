@@ -116,6 +116,9 @@
     <File Name="SectorManager.h"/>
     <File Name="ChunkManager.h"/>
   </VirtualDirectory>
+  <Dependencies>
+    <Project Name="Resource"/>
+  </Dependencies>
   <Settings Type="Executable">
     <Configuration Name="Debug" CompilerType="gnu g++" DebuggerType="GNU gdb debugger">
       <General OutputFile="../bin/UnsignedByte" IntermediateDirectory="./Debug" Command="./UnsignedByte" CommandArguments="" WorkingDirectory="../bin"/>
@@ -136,16 +139,15 @@
       <PreBuild/>
       <PostBuild/>
       <CustomBuild Enabled="no">
-        <CleanCommand/>
-        <BuildCommand/>
+        <CleanCommand></CleanCommand>
+        <BuildCommand></BuildCommand>
       </CustomBuild>
       <AdditionalRules>
-        <CustomPostBuild/>
-        <CustomPreBuild/>
+        <CustomPostBuild></CustomPostBuild>
+        <CustomPreBuild>
+
+</CustomPreBuild>
       </AdditionalRules>
     </Configuration>
   </Settings>
-  <Dependencies>
-    <Project Name="Resource"/>
-  </Dependencies>
 </CodeLite_Project>
