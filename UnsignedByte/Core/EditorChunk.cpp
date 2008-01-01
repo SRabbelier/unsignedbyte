@@ -106,7 +106,7 @@ SavablePtr EditorChunk::getEditing()
 
 TablePtr EditorChunk::getTable()
 {
-	return Tables::Get()->AREAS;
+	return Tables::Get()->CHUNKS;
 }
 
 long EditorChunk::addNew()
