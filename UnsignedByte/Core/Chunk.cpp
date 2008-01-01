@@ -76,5 +76,5 @@ std::string Chunk::ShowShort()
 
 TablePtr Chunk::getTable() const
 {
-	return Tables::Get()->AREAS;
+	return Tables::Get()->CHUNKS;
 }
