@@ -214,12 +214,12 @@ std::vector<std::string> Room::Show()
 {
 	std::vector<std::string> result;
 	
-	result.push_back(Global::Get()->sprintf("Name: '%s'.\n", getName().c_str()));
-	result.push_back(Global::Get()->sprintf("Description: '%s'.\n", getDescription().c_str()));
+	result.push_back(Global::Get()->sprintf("Name: '%s'., getName().c_str()));
+	result.push_back(Global::Get()->sprintf("Description: '%s'.", getDescription().c_str()));
 	try
 	{
 		SectorPtr sector = mud::SectorManager::Get()->GetByKey(getSector());
-		result.push_back(Global::Get()->sprintf("Sector: '%s' (%s).\n", sector->getName().c_str(), sector->getSymbol().c_str()));
+		result.push_back(Global::Get()->sprintf("Sector: '%s' (%s).", sector->getName().c_str(), sector->getSymbol().c_str()));
 	}
 	catch(RowNotFoundException& e)
 	{
