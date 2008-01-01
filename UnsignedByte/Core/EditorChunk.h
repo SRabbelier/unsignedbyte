@@ -56,6 +56,7 @@ public:
 	
 	void editName(const std::string& argument);
 	void editDescription(const std::string& argument);
+	void editRoom(const std::string& argument);
 	void showChunk(const std::string& argument);
 	void saveChunk(const std::string& argument);
 
@@ -74,6 +75,7 @@ private:
 
 	static ChunkCommand m_editName;
 	static ChunkCommand m_editDescription;
+	static ChunkCommand m_editRoom;
 	static ChunkCommand m_showChunk;
 	static ChunkCommand m_saveChunk;
 };

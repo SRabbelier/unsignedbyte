@@ -117,8 +117,13 @@ void EditorAccount::beginLogin(const std::string &argument)
 		return;
 	}
 
-	int id = mud::CharacterManager::Get()->lookupByName(argument);
-	if(id <= 0)
+	int id = 0;
+
+	try
+	{
+		id = mud::CharacterManager::Get()->lookupByName(argument);
+	}
+	catch(RowNotFoundException& e)
 	{
 		m_sock->Send("No such character.\n");
 		m_beginLogin.Run(this, Global::Get()->EmptyString);

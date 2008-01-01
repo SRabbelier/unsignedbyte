@@ -258,19 +258,18 @@ void EditorRoom::editSector(const std::string& argument)
 		return;
 	}
 
-	long id = db::Sectors::lookupname(argument);
-	if(!id)
+	try
+	{
+		long id = db::Sectors::lookupname(argument);
+		mud::SectorPtr sector = mud::SectorManager::Get()->GetByKey(id);
+		m_sock->Sendf("Sector type changed from '%s' to '%s'.\n", sector->getName().c_str(), argument.c_str());
+		m_room->setSector(id);
+	}
+	catch(RowNotFoundException& e)
 	{
 		m_sock->Sendf("'%s' is not a valid sector type!\n", argument.c_str());
 		m_sock->Send(String::Get()->box(mud::SectorManager::Get()->List(), "Sectors"));
-		return;
 	}
-	
-	mud::SectorPtr sector = mud::SectorManager::Get()->GetByKey(id);
-	m_sock->Sendf("Sector type changed from '%s' to '%s'.\n", sector->getName().c_str(), argument.c_str());
-		
-	m_room->setSector(id);
-	return;
 }
 
 void EditorRoom::saveRoom(const std::string& argument)
