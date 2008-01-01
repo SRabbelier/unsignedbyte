@@ -141,6 +141,7 @@ EditorChunk::ChunkInterpreter::ChunkInterpreter(void)
 	addWord("name", &m_editName);
 	addWord("description", &m_editDescription);
 	addWord("room", &m_editRoom);
+	addWord("import", &m_importChunk);
 	addWord("show", &m_showChunk);
 	addWord("save", &m_saveChunk);
 }
