@@ -38,6 +38,7 @@
 
 EditorChunk::ChunkCommand EditorChunk::m_editName("Name", &EditorChunk::editName);
 EditorChunk::ChunkCommand EditorChunk::m_editDescription("Description", &EditorChunk::editDescription);
+EditorChunk::ChunkCommand EditorChunk::m_editRoom("Room", &EditorChunk::editRoom);
 EditorChunk::ChunkCommand EditorChunk::m_showChunk("Show", &EditorChunk::showChunk);
 EditorChunk::ChunkCommand EditorChunk::m_saveChunk("Save", &EditorChunk::saveChunk);
 
@@ -119,6 +120,7 @@ EditorChunk::ChunkInterpreter::ChunkInterpreter(void)
 {
 	addWord("name", &m_editName);
 	addWord("description", &m_editDescription);
+	addWord("room", &m_editRoom);
 	addWord("show", &m_showChunk);
 	addWord("save", &m_saveChunk);
 }
@@ -143,12 +145,6 @@ void EditorChunk::editName(const std::string& argument)
 
 void EditorChunk::editDescription(const std::string& argument)
 {
-	if(!m_chunk->Exists())
-	{
-		m_sock->Send("For some reason the chunk you are editing does not exist.\n");
-		return;
-	}
-
 	if(argument.size() == 0)
 	{
 		m_sock->Send("No argument, dropping you into the string editor!\n");
@@ -158,6 +154,29 @@ void EditorChunk::editDescription(const std::string& argument)
 	m_sock->Sendf("Chunk description changed from '%s' to '%s'.\n", m_chunk->getDescription().c_str(), argument.c_str());
 	m_chunk->setDescription(argument);
 	return;
+}
+
+void EditorChunk::editRoom(const std::string& argument)
+{
+	if(argument.size() == 0)
+	{
+		m_sock->Send("Please specify a room this Chunk belongs to.\n");
+		return;
+	}
+	
+	try
+	{
+		long id = db::Rooms::lookupname(argument);
+		mud::RoomPtr sector = mud::RoomManager::Get()->GetByKey(id);
+		m_sock->Sendf("Room changed from '%s' to '%s'.\n", room->fgetName().c_str(), argument.c_str());
+		m_room->setSector(id);
+	}
+	catch(RowNotFoundException& e) 
+	{
+		m_sock->Sendf("'%s' is not a valid room!\n", argument.c_str());
+		m_sock->Send(String::Get()->box(mud::SectorManager::Get()->List(), "Sectors"));
+		return;
+	}
 }
 
 void EditorChunk::showChunk(const std::string& argument)
