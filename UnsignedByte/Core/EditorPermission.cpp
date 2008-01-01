@@ -155,17 +155,17 @@ void EditorPermission::editAccount(const std::string& argument)
 		return;
 	}
 
-	long id = db::Accounts::lookupname(argument);
-	if(!id)
+	try
+	{
+		long id = db::Accounts::lookupname(argument);
+		m_sock->Sendf("Preparing to edit permission with account '%d'.\n", id);
+		m_account = id;
+	}
+	catch(RowNotFoundException& e)
 	{
 		m_sock->Sendf("'%s' is not a valid account!\n", argument.c_str());
 		m_sock->Send(String::Get()->box(mud::AccountManager::Get()->List(), "Accounts"));
-		return;
 	}
-
-	m_sock->Sendf("Preparing to edit permission with account '%d'.\n", id);
-	m_account = id;
-	return;
 }
 
 void EditorPermission::editGrantGroup(const std::string& argument)
@@ -176,17 +176,17 @@ void EditorPermission::editGrantGroup(const std::string& argument)
 		return;
 	}
 
-	long id = db::GrantGroups::lookupname(argument);
-	if(!id)
+	try
+	{
+		long id = db::GrantGroups::lookupname(argument);
+		m_sock->Sendf("Preparing to edit permission with grangroup '%d'.\n", id);
+		m_grantgroup = id;
+	}
+	catch(RowNotFoundException& e)
 	{
 		m_sock->Sendf("'%s' is not a valid grantgroup!\n", argument.c_str());
 		m_sock->Send(String::Get()->box(mud::GrantGroupManager::Get()->List(), "GrantGroups"));
-		return;
 	}
-
-	m_sock->Sendf("Preparing to edit permission with grangroup '%d'.\n", id);
-	m_grantgroup = id;
-	return;
 }
 
 void EditorPermission::editGrant(const std::string& argument)

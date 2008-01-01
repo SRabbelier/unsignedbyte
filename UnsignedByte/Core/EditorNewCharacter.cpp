@@ -124,20 +124,22 @@ void EditorNewCharacter::OnLine(const std::string &line)
 				m_sock->Send(String::Get()->box(mud::RaceManager::Get()->List(), "Races"));
 				return;
 			}
+			
+			try
+			{
+				int id = db::Races::lookupname(line);
+				m_raceid = id;
 
-			int id = db::Races::lookupname(line);
-			if(id <= 0)
+				m_sock->Sendf("Your race is now %s.\n", line.c_str());
+				m_state++;
+				OnLine(Global::Get()->EmptyString);
+			}
+			catch(RowNotFoundException& e)
 			{
 				m_sock->Send("No such race.\n");
 				OnLine(Global::Get()->EmptyString);
-				return;
 			}
-
-			m_raceid = id;
-
-			m_sock->Sendf("Your race is now %s.\n", line.c_str());
-			m_state++;
-			OnLine(Global::Get()->EmptyString);
+			
 			return;
 		}
 

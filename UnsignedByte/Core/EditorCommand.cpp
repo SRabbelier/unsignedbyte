@@ -167,18 +167,18 @@ void EditorCommand::editGrantGroups(const std::string& argument)
 		m_sock->Send("For some reason the command you are editing does not exist.\n");
 		return;
 	}
-
-	long id = db::GrantGroups::lookupname(argument);
-	if(!id)
+	
+	try
+	{
+		long id = db::GrantGroups::lookupname(argument);
+		m_sock->Sendf("Grantgroup changed from '%d' to '%d'.\n", m_command->getGrantGroup(), id);
+		m_command->setGrantGroup(id);
+	}
+	catch(RowNotFoundException& e)
 	{
 		m_sock->Sendf("'%s' is not a valid grantgroup!\n", argument.c_str());
 		m_sock->Send(String::Get()->box(mud::GrantGroupManager::Get()->List(), "GrantGroups"));
-		return;
 	}
-
-	m_sock->Sendf("Grantgroup changed from '%d' to '%d'.\n", m_command->getGrantGroup(), id);
-	m_command->setGrantGroup(id);
-	return;
 }
 
 void EditorCommand::editHighForce(const std::string& argument)
