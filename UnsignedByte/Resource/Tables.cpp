@@ -100,6 +100,7 @@ Tables::Tables() :
 	CHUNKS->addFK(ROOMS);
 	CHUNKS->addTextField("name");
 	CHUNKS->addTextField("description");
+	CHUNKS->addTextField("tags");
 	
 	CLUSTERS->addPK("clusterid");
 	CLUSTERS->addLookupTextField("name");

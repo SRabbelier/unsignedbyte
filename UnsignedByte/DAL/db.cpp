@@ -1655,6 +1655,7 @@ m_chunkid(),
 m_fkRooms(0),
 m_name(),
 m_description(),
+m_tags(),
 m_newentry(true),
 m_dirty(false)
 {
@@ -1714,7 +1715,8 @@ void Chunks::bindUpdate(sqlite3_stmt* stmt) const
 	sqlite3_bind_int64(stmt, 1, m_fkRooms);
 	sqlite3_bind_text(stmt, 2, m_name.c_str(), m_name.size(), SQLITE_TRANSIENT);
 	sqlite3_bind_text(stmt, 3, m_description.c_str(), m_description.size(), SQLITE_TRANSIENT);
-	sqlite3_bind_int64(stmt, 4, m_chunkid);
+	sqlite3_bind_text(stmt, 4, m_tags.c_str(), m_tags.size(), SQLITE_TRANSIENT);
+	sqlite3_bind_int64(stmt, 5, m_chunkid);
 }
 
 void Chunks::bindLookup(sqlite3_stmt* stmt) const
@@ -1737,6 +1739,9 @@ void Chunks::parseSelect(sqlite3_stmt* stmt)
 	text = sqlite3_column_text(stmt, 2);
 	if(text != 0)
 		m_description = std::string((const char *)text);
+	text = sqlite3_column_text(stmt, 3);
+	if(text != 0)
+		m_tags = std::string((const char *)text);
 	m_newentry = false;
 }
 
@@ -1770,6 +1775,11 @@ const std::string& Chunks::getdescription() const
 	return m_description;
 }
 
+const std::string& Chunks::gettags() const
+{
+	return m_tags;
+}
+
 void Chunks::setfkRooms(value_type value)
 {
 	m_fkRooms = value;
@@ -1785,6 +1795,12 @@ void Chunks::setname(const std::string& value)
 void Chunks::setdescription(const std::string& value)
 {
 	m_description = value;
+	m_dirty = true;
+}
+
+void Chunks::settags(const std::string& value)
+{
+	m_tags = value;
 	m_dirty = true;
 }
 

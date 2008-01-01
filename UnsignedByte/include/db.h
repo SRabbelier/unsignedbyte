@@ -673,11 +673,13 @@ namespace db
 		value_type getfkRooms() const;
 		const std::string& getname() const;
 		const std::string& getdescription() const;
+		const std::string& gettags() const;
 
 		// Setters
 		void setfkRooms(value_type value);
 		void setname(const std::string& value);
 		void setdescription(const std::string& value);
+		void settags(const std::string& value);
 
 	private:
 		// Database pointer
@@ -690,6 +692,7 @@ namespace db
 		value_type m_fkRooms;
 		std::string m_name;
 		std::string m_description;
+		std::string m_tags;
 
 		// State flags
 		bool m_newentry;
