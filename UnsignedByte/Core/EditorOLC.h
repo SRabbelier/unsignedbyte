@@ -48,6 +48,7 @@ public:
 	void startSectors(const std::string& argument);
 	void startColours(const std::string& argument);
 	void startCommands(const std::string& argument);
+	void startChunks(const std::string& argument);
 	void listCommands(const std::string& argument);
 	void quitEditor(const std::string& argument);
 
@@ -69,6 +70,7 @@ private:
 	static OLCCommand m_startSectors;
 	static OLCCommand m_startColours;
 	static OLCCommand m_startCommands;
+	static OLCCommand m_startChunks;
 	static OLCCommand m_listCommands;
 	static OLCCommand m_quitEditor;
 };

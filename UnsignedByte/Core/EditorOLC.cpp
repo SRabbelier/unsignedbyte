@@ -27,6 +27,7 @@
 #include "EditorColour.h"
 #include "EditorCommand.h"
 #include "EditorAccount.h"
+#include "EditorChunk.h"
 
 #include "UBSocket.h"
 #include "Account.h"
@@ -39,12 +40,13 @@
 
 EditorOLC::OLCCommand EditorOLC::m_startAreas("Areas", &EditorOLC::startAreas);
 EditorOLC::OLCCommand EditorOLC::m_startRooms("Rooms", &EditorOLC::startRooms);
+EditorOLC::OLCCommand EditorOLC::m_startChunks("Chunks", &EditorOLC::startChunks);
 EditorOLC::OLCCommand EditorOLC::m_startScripts("Scripts", &EditorOLC::startScripts);
 EditorOLC::OLCCommand EditorOLC::m_startMobiles("Mobiles", &EditorOLC::startMobiles);
 EditorOLC::OLCCommand EditorOLC::m_startSectors("Sectors", &EditorOLC::startSectors);
 EditorOLC::OLCCommand EditorOLC::m_startColours("Colours", &EditorOLC::startColours);
-EditorOLC::OLCCommand EditorOLC::m_startCommands("OLC", &EditorOLC::startCommands);
-EditorOLC::OLCCommand EditorOLC::m_listCommands("Commands", &EditorOLC::listCommands);
+EditorOLC::OLCCommand EditorOLC::m_startCommands("Commands", &EditorOLC::startCommands);
+EditorOLC::OLCCommand EditorOLC::m_listCommands("?", &EditorOLC::listCommands);
 EditorOLC::OLCCommand EditorOLC::m_quitEditor("Quit", &EditorOLC::quitEditor);
 
 EditorOLC::EditorOLC(UBSocket* sock) :
@@ -88,6 +90,7 @@ EditorOLC::OLCInterpreter::OLCInterpreter(void)
 	addWord("sectors", &m_startSectors);
 	addWord("colour", &m_startColours);
 	addWord("commands", &m_startCommands);
+	addWord("chunks", &m_startChunks);
 	addWord("?", &m_listCommands);
 	addWord("quit", &m_quitEditor);
 }
@@ -137,6 +140,13 @@ void EditorOLC::startCommands(const std::string& argument)
 {
 	m_sock->Send("Dropping you into Command Edit mode!\n");
 	m_sock->SetEditor(new EditorCommand(m_sock));
+	return;
+}
+
+void EditorOLC::startChunks(const std::string& argument)
+{
+	m_sock->Send("Dropping you into Chunk Edit mode!\n");
+	m_sock->SetEditor(new EditorChunk(m_sock));
 	return;
 }
 
