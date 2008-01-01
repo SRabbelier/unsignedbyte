@@ -133,8 +133,8 @@ void SqliteMgr::doForEach(Table* table, Actor& act)
 
 void SqliteMgr::commit()
 {
-	sqlite3_reset(m_commitStmt);
-	doStatement(m_commitStmt);
+	//sqlite3_reset(m_commitStmt);
+	//doStatement(m_commitStmt);
 }
 		
 
