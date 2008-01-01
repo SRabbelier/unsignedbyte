@@ -31,8 +31,11 @@ using mud::AccountPtr;
 
 bool AccountManager::IllegalName(const std::string& name)
 {
-	if(lookupByName(name))
+	try
+	{
+		lookupByName(name);
 		return true;
+	} catch(RowNotFoundException& e) {}
 
 	return false;
 }
