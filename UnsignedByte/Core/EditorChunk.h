@@ -40,6 +40,8 @@ public:
 
 	EditorChunk(UBSocket* sock);
 	~EditorChunk(void);
+	
+	void OnFocus();
 
 	std::string name() { return "Chunk"; };
 	std::string prompt() { return "Chunk> "; };
@@ -57,14 +59,23 @@ public:
 	void editName(const std::string& argument);
 	void editDescription(const std::string& argument);
 	void editRoom(const std::string& argument);
+	void importChunk(const std::string& argument);
 	void showChunk(const std::string& argument);
 	void saveChunk(const std::string& argument);
 
 private:
-	mud::ChunkPtr m_chunk;
-
 	EditorChunk(const EditorChunk& rhs);
 	EditorChunk operator=(const EditorChunk& rhs);
+	
+	enum E_TARGET
+	{
+		M_NONE,
+		M_IMPORT,
+	};
+	
+	mud::ChunkPtr m_chunk;
+	std::string m_value;
+	EditorChunk::E_TARGET m_target;
 	
 	class ChunkInterpreter : public Interpreter<ChunkCommand>, public Singleton<ChunkInterpreter> {
 	private:
@@ -76,6 +87,7 @@ private:
 	static ChunkCommand m_editName;
 	static ChunkCommand m_editDescription;
 	static ChunkCommand m_editRoom;
+	static ChunkCommand m_importChunk;
 	static ChunkCommand m_showChunk;
 	static ChunkCommand m_saveChunk;
 };

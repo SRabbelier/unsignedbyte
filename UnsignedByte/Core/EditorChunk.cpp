@@ -23,6 +23,7 @@
 
 #include "EditorChunk.h"
 #include "EditorOLC.h"
+#include "EditorString.h"
 
 #include "UBSocket.h"
 
@@ -41,12 +42,14 @@
 EditorChunk::ChunkCommand EditorChunk::m_editName("Name", &EditorChunk::editName);
 EditorChunk::ChunkCommand EditorChunk::m_editDescription("Description", &EditorChunk::editDescription);
 EditorChunk::ChunkCommand EditorChunk::m_editRoom("Room", &EditorChunk::editRoom);
+EditorChunk::ChunkCommand EditorChunk::m_importChunk("Import", &EditorChunk::importChunk);
 EditorChunk::ChunkCommand EditorChunk::m_showChunk("Show", &EditorChunk::showChunk);
 EditorChunk::ChunkCommand EditorChunk::m_saveChunk("Save", &EditorChunk::saveChunk);
 
 EditorChunk::EditorChunk(UBSocket* sock) :
 OLCEditor(sock),
-m_chunk()
+m_chunk(),
+m_target(M_NONE)
 {
 	listCommands(Global::Get()->EmptyString);
 }
@@ -54,6 +57,21 @@ m_chunk()
 EditorChunk::~EditorChunk(void)
 {
 
+}
+
+void EditorChunk::OnFocus()
+{		
+	switch(m_target)
+	{
+		case M_NONE:
+			return;
+			
+		case M_IMPORT:
+			importChunk(m_value);
+			break;
+	}
+	
+	m_target = M_NONE;
 }
 
 std::string EditorChunk::lookup(const std::string& action)
@@ -178,6 +196,22 @@ void EditorChunk::editRoom(const std::string& argument)
 		m_sock->Send(String::Get()->box(mud::RoomManager::Get()->List(), "Rooms"));
 		return;
 	}
+}
+
+void EditorChunk::importChunk(const std::string& argument)
+{
+	if(argument.size() == 0)
+	{
+		m_sock->Send("No argument, dropping you into the String Editor.\n");
+		m_sock->Send("Paste your description there, when done the room will be imported.\n");
+		m_sock->SetEditor(new EditorString(m_sock, m_value));
+		m_target = M_IMPORT;
+		return;
+	}
+	
+	m_sock->Send("Importing:\n");
+	m_sock->Send(argument);
+	m_sock->Send("End of import.\n");
 }
 
 void EditorChunk::showChunk(const std::string& argument)
