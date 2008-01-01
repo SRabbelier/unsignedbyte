@@ -249,15 +249,16 @@ void UBSocket::Send(const std::string& msg)
 		buf.erase(i+1, 1);
 		buf.erase(i, 1);
 
-		long id = db::Colours::lookupcode(code);
-		if(!id)
+		try
+		{
+			mud::ColourPtr colour = mud::ColourManager::Get()->GetByCode(code);
+			buf.insert(i, colour->getColourString());
+		}
+		catch(RowNotFoundException& e)
 		{
 			Global::Get()->bugf("Unknown colour code %s!\n", code.c_str());
 			continue;
 		}
-
-		mud::ColourPtr colour = mud::ColourManager::Get()->GetByKey(id);
-		buf.insert(i, colour->getColourString());
 	}
 	
 	SendBuf(buf.c_str(), buf.size());
