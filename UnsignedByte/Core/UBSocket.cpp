@@ -202,9 +202,9 @@ void UBSocket::SwitchEditors()
 		m_editors.push(m_nexteditor);
 		m_nexteditor = NULL;
 		SetPrompt(m_editors.top()->prompt());
-		SendPrompt();
 	}
 	
+	SendPrompt();
 	m_editors.top()->OnFocus();
 }
 
@@ -220,6 +220,7 @@ void UBSocket::PopEditor()
 	}
 	
 	m_popeditor = true;
+	SetPrompt();
 }
 
 void UBSocket::Send(const std::string& msg)
