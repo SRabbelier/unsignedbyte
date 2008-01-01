@@ -12,6 +12,47 @@
 #define SmartPtrDelete(target)	class SmartPtr<target>
 
 /**
+ * The reference counting class
+ */
+class SmartPtrCount
+{
+	int m_refCount;
+
+public:
+	/**
+	 * Construct a reference counting class for row pointer data
+	 * \param data pointer
+	 */
+	SmartPtrCount()
+		: m_refCount( 1 )
+	{
+	}
+
+	/**
+	 * Destructor
+	 */
+	virtual ~SmartPtrCount()
+	{
+		
+	}
+
+	/**
+	 * Increase reference counting by 1
+	 */
+	void IncRef() { m_refCount ++ ; }
+
+	/**
+	 * Decrease reference counting by 1
+	 */
+	void DecRef() { m_refCount -- ; }
+	/**
+	 * Return the current reference counting
+	 * \return current reference counting
+	 */
+	int  GetRefCount() { return m_refCount; }
+};
+
+/**
  * A smart pointer class that provides a reference counting and auto delete memory.
  *
  * This class is similar to std::auto_ptr, with 2 exceptions:
@@ -20,99 +61,30 @@
  * It is recommended to use this class instead of using raw pointer wherever possible.
  *
  * \note smart pointer to NULL is valid.
- *
- * \ingroup CodeLite
- * \version 1.0
- * first version
- * \date 09-17-2006
- * \author Eran
  */
 template <class T>
 class SmartPtr
 {
-	/**
-     * The reference counting class
-     *
-	 * \ingroup CodeLite
-	 * \version 1.0
-	 * first version
-	 *
-	 * \date 09-17-2006
-	 * \author Eran
-	 */
-	class SmartPtrRef
-	{
-		T* m_data;
-		int m_refCount;
-		bool m_delete;
-
-	public:
-		/**
-		 * Construct a reference counting class for row pointer data
-		 * \param data pointer
-		 */
-		SmartPtrRef(T* data)
-			: m_data( data )
-			, m_refCount( 1 )
-		{
-		}
-
-		/**
-		 * Destructor
-		 */
-		virtual ~SmartPtrRef()
-		{
-			if(m_delete)
-				delete m_data;
-		}
-		
-		/**
-		 * Disables deleting m_data in destructor
-		 */ 
-		void SetNoDelete() { m_delete = false; }
-
-		/**
-		 * \return Pointer to the row data 
-		 */
-		T* GetData() { return m_data; }
-
-		/**
-		 * Increase reference counting by 1
-		 */
-		void IncRef() { m_refCount ++ ; }
-
-
-		/**
-		 * Decrease reference counting by 1
-		 */
-		void DecRef() { m_refCount -- ; }
-		/**
-		 * Return the current reference counting
-		 * \return current reference counting
-		 */
-		int  GetRefCount() { return m_refCount; }
-	};
-
-	SmartPtrRef *m_ref;
+	T* m_data;
+	SmartPtrCount* m_ref;
 
 public:
 	/**
 	 * Construct smart pointer from ptr
 	 * \param ptr pointer
 	 */
-	SmartPtr(T* ptr, bool disableDelete = false)
+	SmartPtr(T* ptr)
 	{
 		// create a fresh copy
 		CreateFresh( ptr );
-		if(disableDelete)
-			SetNoDelete();
 	}
 	
 	/**
 	 * Default constructor
 	 */
 	SmartPtr()
-		: m_ref(NULL)
+		: m_data(NULL), 
+		m_ref(NULL)
 	{
 	}
 
@@ -121,16 +93,18 @@ public:
 	 * \param rhs right hand side 
 	 */
 	SmartPtr(const SmartPtr& rhs)
-		: m_ref(NULL)
+		: m_data(NULL),
+		m_ref(NULL)
 	{
 		*this = rhs;
 	}
 	
 	template<class Y>
 	SmartPtr(SmartPtr<Y> const& rhs) 
-		: m_ref(NULL)
+		: m_data(rhs.m_data),
+		m_ref(rhs.m_ref)
 	{
-		*this = rhs;
+		m_ref->IncRef();
 	}
 
 	/**
@@ -147,9 +121,11 @@ public:
 		// Delete previous reference 
 		DeleteRefCount();
 
+		// TODO: What to do here?
 		if( !rhs.m_ref )
 			return *this;
 
+		m_data = rhs.m_data;
 		m_ref = rhs.m_ref;
 		m_ref->IncRef();
 		return *this;
@@ -180,7 +156,7 @@ public:
 	 */
 	T* get() const
 	{
-		return m_ref->GetData();
+		return m_data;
 	}
 
 	/**
@@ -189,7 +165,7 @@ public:
 	 */
 	T* operator->() const 
 	{
-		return m_ref->GetData();
+		return m_data;
 	}
 
 	/**
@@ -198,7 +174,7 @@ public:
 	 */
 	T& operator*() const
 	{
-		return *(m_ref->GetData());
+		return *(m_data);
 	}
 
 	/**
@@ -207,10 +183,7 @@ public:
 	 */
 	bool operator!() const
 	{
-		if( !m_ref )
-			return true;
-
-		return m_ref->GetData() == NULL;
+		return (!m_ref || !m_data);
 	}
 
 	/**
@@ -219,15 +192,12 @@ public:
 	 */
 	operator bool() const
 	{
-		return m_ref && m_ref->GetData();
+		return m_ref && m_data;
 	}
 	
-	/**
-	 * Disables deletion functionality
-	 */ 
-	void SetNoDelete()
+	void print() const
 	{
-		m_ref->SetNoDelete();
+		printf("%d: %p (%p)\n", m_ref->GetRefCount(), m_data, this);
 	}
 
 private:
@@ -240,6 +210,8 @@ private:
 			{
 				delete m_ref;
 				m_ref = NULL;
+				delete m_data;
+				m_data = NULL;
 			}
 			else
 				m_ref->DecRef();
@@ -248,10 +220,12 @@ private:
 
 	void CreateFresh(T* ptr)
 	{
-		m_ref = new SmartPtrRef( ptr );
+		m_ref = new SmartPtrCount();
+		m_data = ptr;
 	}
+	
+	template<class Y> friend class SmartPtr;
 };
-
 
 #endif // CONFIG_USE_BOOST_POINTERS
 #endif // SMART_PTR_H
