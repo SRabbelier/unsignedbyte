@@ -201,7 +201,7 @@ sqlite3_stmt* SqliteMgr::getInsertStmt(Table* table)
 	}
 	sql.append(");");
 	
-	Global::Get()->logf("SQL is: %s\n", sql.c_str());
+	// Global::Get()->logf("SQL is: %s\n", sql.c_str());
 	
 	int errorcode = sqlite3_prepare_v2(m_odb->db, sql.c_str(), (int)sql.size(), &statement, &m_leftover);
 
@@ -236,7 +236,7 @@ sqlite3_stmt* SqliteMgr::getEraseStmt(Table* table)
 	}
 	sql.append(";");
 	
-	Global::Get()->logf("SQL is: %s\n", sql.c_str());
+	// Global::Get()->logf("SQL is: %s\n", sql.c_str());
 	
 	int errorcode = sqlite3_prepare_v2(m_odb->db, sql.c_str(), (int)sql.size(), &statement, &m_leftover);
 
@@ -281,7 +281,7 @@ sqlite3_stmt* SqliteMgr::getUpdateStmt(Table* table)
 	}	
 	sql.append(";");
 	
-	Global::Get()->logf("SQL is: %s\n", sql.c_str());
+	// Global::Get()->logf("SQL is: %s\n", sql.c_str());
 
 	int errorcode = sqlite3_prepare_v2(m_odb->db, sql.c_str(), (int)sql.size(), &statement, &m_leftover);
 
@@ -327,7 +327,7 @@ sqlite3_stmt* SqliteMgr::getSelectStmt(Table* table)
 	}
 	sql.append(";");
 	
-	Global::Get()->logf("SQL is: %s\n", sql.c_str());
+	// Global::Get()->logf("SQL is: %s\n", sql.c_str());
 		
 	int errorcode = sqlite3_prepare_v2(m_odb->db, sql.c_str(), (int)sql.size(), &statement, &m_leftover);
 
@@ -364,7 +364,7 @@ sqlite3_stmt* SqliteMgr::getLookupStmt(Table* table, const std::string& field)
 	sql.append("=?");
 	sql.append(";");
 	
-	Global::Get()->logf("SQL is: %s\n", sql.c_str());
+	// Global::Get()->logf("SQL is: %s\n", sql.c_str());
 		
 	int errorcode = sqlite3_prepare_v2(m_odb->db, sql.c_str(), (int)sql.size(), &statement, &m_leftover);
 
@@ -409,7 +409,7 @@ sqlite3_stmt* SqliteMgr::getForEachStmt(Table* table)
 	sql.append(table->tableName());
 	sql.append(";");
 	
-	Global::Get()->logf("SQL is: %s\n", sql.c_str());
+	// Global::Get()->logf("SQL is: %s\n", sql.c_str());
 		
 	int errorcode = sqlite3_prepare_v2(m_odb->db, sql.c_str(), (int)sql.size(), &statement, &m_leftover);
 
