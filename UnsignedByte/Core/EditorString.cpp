@@ -108,9 +108,7 @@ void EditorString::ParseDot(const std::string& line)
 }
 
 void EditorString::OnLine(const std::string& line)
-{
-	Global::Get()->logf("line: '%s'\n", line.c_str());
-	
+{	
 	if(!line.compare("~"))
 	{
 		m_sock->Send("Allright, done!\n");
