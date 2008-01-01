@@ -1,0 +1,8 @@
+.PHONY: clean All
+
+All:
+	@echo ----------Building project:[ TestCases - Debug ]----------
+	@cd "UnsignedByte/TestCases" && "/usr/bin/make" -f "TestCases.mk" type=Debug 
+clean:
+	@echo ----------Building project:[ TestCases - Debug ]----------
+	@cd "UnsignedByte/TestCases" && "/usr/bin/make" -f "TestCases.mk" type=Debug  clean
