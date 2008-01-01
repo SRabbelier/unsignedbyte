@@ -58,6 +58,10 @@ EditorString::E_STATE EditorString::ParseMode(char mode, bool silent)
 			choice = M_WAITING_FOR_INPUT;
 			break;
 			
+		case 'h': // help
+			m_sock->Send("Some descriptive help text goes here.\n");
+			break;
+			
 		case 'r': // replace
 			m_sock->Send("Switching to 'replacement' mode.\n");
 			choice = M_REPLACE;
@@ -85,14 +89,14 @@ void EditorString::ParseDot(const std::string& line)
 		return;
 	}
 	
-	if(command.compare("c"))
+	if(!command.compare("c"))
 	{
 		m_sock->Send("Text cleared.\n");
 		m_strings.clear();
 		return;
 	}
 	
-	if(command.compare("q"))
+	if(!command.compare("q"))
 	{
 		m_sock->Send("Quitting now.\n");
 		m_state = M_DONE;
