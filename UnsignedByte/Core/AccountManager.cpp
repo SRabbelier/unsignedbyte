@@ -42,7 +42,12 @@ bool AccountManager::IllegalName(const std::string& name)
 
 std::vector<std::string> AccountManager::List()
 {
-	return Tables::Get()->ACCOUNTS->tableList();
+	return GetTable()->tableList();
+}
+
+TablePtr AccountManager::GetTable()
+{
+	return Tables::Get()->ACCOUNTS;
 }
 
 value_type AccountManager::Add()

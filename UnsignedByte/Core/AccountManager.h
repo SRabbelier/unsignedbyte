@@ -41,6 +41,7 @@ namespace mud
 	class AccountManager : public Singleton<mud::AccountManager>
 	{
 	public:
+		TablePtr GetTable();
 		std::vector<std::string> List();
 		void Close(AccountPtr account);
 		bool IllegalName(const std::string& name);
