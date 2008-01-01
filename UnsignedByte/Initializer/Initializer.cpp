@@ -114,31 +114,44 @@ bool Initializer::VerifyTables()
 }
 
 void Initializer::InitDatabase()
-{
-	/*
-	hp::Version oldver(1);
-	oldver.erase();
-	*/
+{	
+	try
+	{
+		db::Version::bykey(1);
+	}
+	catch(RowNotFoundException& e)
+	{
+		db::Version ver;
+		ver.setmajor(game::major);
+		ver.setminor(game::minor);
+		ver.setmicro(game::micro);
+		ver.setversiontext(game::vstring);
+		ver.save();
+	}
+		
+	try
+	{
+		db::Accounts::bykey(1);
+	}
+	catch(RowNotFoundException& e)
+	{
+		db::Accounts acc;
+		acc.setname(game::vname);
+		acc.setpassword("qq");
+		acc.save();
+	}
 	
-	db::Version ver;
-	ver.setmajor(game::major);
-	ver.setminor(game::minor);
-	ver.setmicro(game::micro);
-	ver.setversiontext(game::vstring);
-	ver.save();
-	
-	/*
-	hp::Accounts oldacc(1);
-	oldacc.erase();
-	*/
-
-	db::Accounts acc;
-	acc.setname(game::vname);
-	acc.setpassword("qq");
-	acc.save();
-	
-	db::Rooms room;
-	room.save();
+	try
+	{
+		db::Rooms::bykey(1);
+	}
+	catch(RowNotFoundException& e)
+	{
+		db::Rooms room;
+		room.setname("The Void");
+		room.setdescription("You are in The Void.");
+		room.save();
+	}
 }
 
 void Initializer::InitColours()
