@@ -82,18 +82,20 @@ void EditorAccountLogin::OnLine(const std::string &line)
 			return;
 		}
 		
-		int id = db::Accounts::lookupname(line);
-		if(id == 0)
+		try
+		{
+			int id = db::Accounts::lookupname(line);
+			m_account = mud::AccountManager::Get()->GetByKey(id);
+			m_state++;
+			OnLine(Global::Get()->EmptyString);
+		}
+		catch(RowNotFoundException& e)
 		{
 			m_sock->Send("No such account.\n");
 			OnLine(Global::Get()->EmptyString);
-			return;
 		}
 
-		m_account = mud::AccountManager::Get()->GetByKey(id);
-		m_state++;
-		OnLine(Global::Get()->EmptyString);
-		break;
+		return;
 	} /* case M_NAME: */
 		
 	case M_PASSWORD:
