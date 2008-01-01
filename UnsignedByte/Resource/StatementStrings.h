@@ -18,39 +18,49 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#include "Statements.h"
-#include "sqlite3.h"
+#pragma once
 
-Statements::Statements() :
-m_insert(NULL),
-m_erase(NULL),
-m_update(NULL),
-m_select(NULL),
-m_list(NULL),
-m_foreach(NULL)
+#include <string>
+#include <map>
+#include <smart_ptr.h>
+
+typedef const std::string& cstring;
+
+class StatementStrings
 {
+public:
+	// Constructors
+	StatementStrings() { }
+	~StatementStrings() { }
 	
-}
-
-Statements::~Statements() 
-{ 
-	sqlite3_finalize(m_insert);
-	sqlite3_finalize(m_erase);
-	sqlite3_finalize(m_update);
-	sqlite3_finalize(m_select);
-	sqlite3_finalize(m_list);
-	sqlite3_finalize(m_foreach);
-	for(fieldmap::iterator it = m_lookup.begin(); it != m_lookup.end(); it++)
-		sqlite3_finalize(it->second);
-}
-
-void Statements::commit()
-{
-	sqlite3_finalize(m_insert);
-	sqlite3_finalize(m_erase);
-	sqlite3_finalize(m_update);
+	// Getters
+	cstring getErase() const {return m_erase;}
+	cstring getInsert() const {return m_insert;}
+	cstring getUpdate() const {return m_update;}
+	cstring getSelect() const {return m_select;}
+	cstring getLookup(const std::string& field) {return m_lookup[field];}
+	cstring getList() const {return m_list;}
+	cstring getForEach() const {return m_foreach;}
 	
-	m_insert = NULL;
-	m_erase = NULL;
-	m_update = NULL;
-}
+	// Setters
+	void setErase(cstring erase) { m_erase = erase; }
+	void setInsert(cstring insert) { m_insert = insert; }
+	void setUpdate(cstring update) { m_update = update; }
+	void setSelect(cstring select) { m_select = select; }
+	void setLookup(cstring field, cstring lookup) { m_lookup[field] = lookup; }
+	void setList(cstring list) { m_list = list; }
+	void setForEach(cstring forEach) { m_foreach = forEach; }
+	
+private:
+	typedef std::map<std::string, std::string> fieldmap;
+	
+	std::string m_insert;
+	std::string m_erase;
+	std::string m_update;
+	std::string m_select;
+	fieldmap m_lookup;
+	std::string m_list;
+	std::string m_foreach;
+};
+
+typedef SmartPtr<StatementStrings> StatementStringsPtr;

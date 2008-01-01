@@ -31,13 +31,16 @@
 
 class Table;
 class Statements;
+class StatementStrings;
 class Actor;
 
 typedef SmartPtr<Actor> ActorPtr;
 typedef SmartPtr<Table> TablePtr;
 typedef SmartPtr<Statements> StatementsPtr;
+typedef SmartPtr<StatementStrings> StatementStringsPtr;
 
 typedef std::map<Table*, StatementsPtr>  TableStatements;
+typedef std::map<Table*, StatementStringsPtr>  TableStatementStrings;
 typedef unsigned long value_type;
 
 class RowNotFoundException : public std::runtime_error
@@ -61,12 +64,14 @@ class SqliteMgr : public Singleton<SqliteMgr>
 		Database::OPENDB* m_odb;
 		const char* m_leftover;
 		
-		sqlite3_stmt* m_commitStmt;
-		
 		TableStatements m_statements;
+		TableStatementStrings m_statementstrings;
 		
-		void commit();
+		void commit(Table* table);
+		
 		StatementsPtr getStatements(Table* table);
+		StatementStringsPtr getStatementStrings(Table* table);
+		
 		sqlite3_stmt* getInsertStmt(Table* table);
 		sqlite3_stmt* getEraseStmt(Table* table);
 		sqlite3_stmt* getUpdateStmt(Table* table);

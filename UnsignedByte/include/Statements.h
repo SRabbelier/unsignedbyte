@@ -51,6 +51,8 @@ public:
 	void setList(sqlite3_stmt* list) { m_list = list; }
 	void setForEach(sqlite3_stmt* forEach) { m_foreach = forEach; }
 	
+	void commit();
+	
 private:
 	typedef std::map<std::string, sqlite3_stmt*> fieldmap;
 	

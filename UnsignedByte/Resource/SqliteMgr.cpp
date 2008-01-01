@@ -25,27 +25,18 @@
 #include "Bindable.h"
 #include "Actor.h"
 #include "Statements.h"
+#include "StatementStrings.h"
 #include "Field.h"
 
 SqliteMgr::SqliteMgr()
 {	
 	m_db = DatabaseMgr::Get()->DB();
 	m_odb = m_db->grabdb();
-	
-	std::string sql = "COMMIT;";
-	
-	int errorcode = sqlite3_prepare_v2(m_odb->db, sql.c_str(), (int)sql.size(), &m_commitStmt, &m_leftover);
-	if(errorcode != SQLITE_OK)
-		throw std::runtime_error("SqliteMgr::SqliteMgr(), Could not prepare save query!");
-		
-	if(m_leftover != NULL && strlen(m_leftover) > 0)
-		throw std::runtime_error("SqliteMgr::getForEachStmt(), Leftover from save query is not NULL!");
 }
 
 SqliteMgr::~SqliteMgr()
 {
 	m_db->freedb(m_odb);
-	sqlite3_finalize(m_commitStmt);
 }
 
 void SqliteMgr::doInsert(Bindable* bindable)
@@ -60,7 +51,7 @@ void SqliteMgr::doInsert(Bindable* bindable)
 	doStatement(insert);
 	bindable->parseInsert(m_odb->db);
 	
-	commit();
+	commit(table);
 }
 
 void SqliteMgr::doErase(Bindable* bindable)
@@ -72,7 +63,7 @@ void SqliteMgr::doErase(Bindable* bindable)
 	bindable->bindKeys(erase);
 	doStatement(erase);	
 	
-	commit();
+	commit(table);
 }
 
 void SqliteMgr::doUpdate(Bindable* bindable)
@@ -84,7 +75,7 @@ void SqliteMgr::doUpdate(Bindable* bindable)
 	bindable->bindUpdate(update);
 	doStatement(update);
 	
-	commit();
+	commit(table);
 }
 
 void SqliteMgr::doSelect(Bindable* bindable)
@@ -131,10 +122,11 @@ void SqliteMgr::doForEach(Table* table, Actor& act)
 	}
 }
 
-void SqliteMgr::commit()
+void SqliteMgr::commit(Table* table)
 {
-	//sqlite3_reset(m_commitStmt);
-	//doStatement(m_commitStmt);
+	//StatementsPtr statements = getStatements(table);
+	//statements->commit();
+	m_statements.clear();
 }
 		
 
@@ -173,6 +165,18 @@ StatementsPtr SqliteMgr::getStatements(Table* table)
 	return statements;
 }
 
+StatementStringsPtr SqliteMgr::getStatementStrings(Table* table)
+{
+	StatementStringsPtr statements = m_statementstrings[table];
+	if(statements)
+		return statements;
+	
+	statements = StatementStringsPtr(new StatementStrings());
+	
+	m_statementstrings[table] = statements;
+	return statements;
+}
+
 sqlite3_stmt* SqliteMgr::getInsertStmt(Table* table)
 {
 	StatementsPtr statements = getStatements(table);
@@ -181,27 +185,38 @@ sqlite3_stmt* SqliteMgr::getInsertStmt(Table* table)
 		return statement;
 		
 	std::string sql;
-	sql.append("INSERT INTO ");
-	sql.append(table->tableName());
-	sql.append(" (");
-	for(TableMap::const_iterator it = table->keybegin(); it != table->keyend(); it++)
-	{
-		   if(it != table->keybegin())
-				   sql.append(", ");
-
-		   sql.append(it->first);
-	}
-	sql.append(") VALUES(");
-	for(TableMap::const_iterator it = table->keybegin(); it != table->keyend(); it++)
-	{
-		   if(it != table->keybegin())
-				   sql.append(", ");
-
-		   sql.append("NULL");
-	}
-	sql.append(");");
 	
-	// Global::Get()->logf("SQL is: %s\n", sql.c_str());
+	StatementStringsPtr statementstrings = getStatementStrings(table);
+	cstring statementstring = statementstrings->getInsert();
+	
+	if(statementstring.size() != 0)
+	{
+		sql = statementstring;
+	}
+	else
+	{
+		sql.append("INSERT INTO ");
+		sql.append(table->tableName());
+		sql.append(" (");
+		for(TableMap::const_iterator it = table->keybegin(); it != table->keyend(); it++)
+		{
+			   if(it != table->keybegin())
+					   sql.append(", ");
+
+			   sql.append(it->first);
+		}
+		sql.append(") VALUES(");
+		for(TableMap::const_iterator it = table->keybegin(); it != table->keyend(); it++)
+		{
+			   if(it != table->keybegin())
+					   sql.append(", ");
+
+			   sql.append("NULL");
+		}
+		sql.append(");");
+			
+		statementstrings->setInsert(sql);
+	}
 	
 	int errorcode = sqlite3_prepare_v2(m_odb->db, sql.c_str(), (int)sql.size(), &statement, &m_leftover);
 
@@ -223,28 +238,39 @@ sqlite3_stmt* SqliteMgr::getEraseStmt(Table* table)
 		return statement;
 		
 	std::string sql;
-	sql.append("DELETE ");
-	sql.append(table->tableName());
-	sql.append(" WHERE ");
-	for(TableMap::const_iterator it = table->keybegin(); it != table->keyend(); it++)
-	{
-		if(it != table->keybegin())
-			sql.append(", ");
-
-		sql.append(it->first);
-		sql.append("=?");
-	}
-	sql.append(";");
 	
-	// Global::Get()->logf("SQL is: %s\n", sql.c_str());
+	StatementStringsPtr statementstrings = getStatementStrings(table);
+	cstring statementstring = statementstrings->getErase();
+	
+	if(statementstring.size() != 0)
+	{
+		sql = statementstring;
+	}
+	else
+	{
+		sql.append("DELETE ");
+		sql.append(table->tableName());
+		sql.append(" WHERE ");
+		for(TableMap::const_iterator it = table->keybegin(); it != table->keyend(); it++)
+		{
+			if(it != table->keybegin())
+				sql.append(", ");
+
+			sql.append(it->first);
+			sql.append("=?");
+		}
+		sql.append(";");
+	
+		statementstrings->setErase(sql);
+	}
 	
 	int errorcode = sqlite3_prepare_v2(m_odb->db, sql.c_str(), (int)sql.size(), &statement, &m_leftover);
 
 	if(errorcode != SQLITE_OK)
-		throw std::runtime_error("SqliteMgr::getInsertStmt(), Could not prepare insertion query!");
+		throw std::runtime_error("SqliteMgr::getEraseStmt(), Could not prepare insertion query!");
 		
 	if(m_leftover != NULL && strlen(m_leftover) > 0)
-		throw std::runtime_error("SqliteMgr::getInsertStmt(), Leftover from insertion is not NULL!");
+		throw std::runtime_error("SqliteMgr::getEraseStmt(), Leftover from insertion is not NULL!");
 		
 	
 	statements->setErase(statement);
@@ -259,37 +285,48 @@ sqlite3_stmt* SqliteMgr::getUpdateStmt(Table* table)
 		return statement;
 
 	std::string sql;
-	sql.append("UPDATE ");
-	sql.append(table->tableName());
-	sql.append(" SET ");
-	for(Fields::const_iterator it = table->begin(); it != table->end(); it++)
-	{
-		if(it != table->begin())
-			sql.append(", ");
-
-		sql.append((*it)->getName());
-		sql.append("=?");
-	}
-	sql.append(" WHERE ");
-	for(TableMap::const_iterator it = table->keybegin(); it != table->keyend(); it++)
-	{
-		if(it != table->keybegin())
-			sql.append(", ");
-
-		sql.append(it->first);
-		sql.append("=?");
-	}	
-	sql.append(";");
 	
-	// Global::Get()->logf("SQL is: %s\n", sql.c_str());
+	StatementStringsPtr statementstrings = getStatementStrings(table);
+	cstring statementstring = statementstrings->getUpdate();
+	
+	if(statementstring.size() != 0)
+	{
+		sql = statementstring;
+	}
+	else
+	{
+		sql.append("UPDATE ");
+		sql.append(table->tableName());
+		sql.append(" SET ");
+		for(Fields::const_iterator it = table->begin(); it != table->end(); it++)
+		{
+			if(it != table->begin())
+				sql.append(", ");
+
+			sql.append((*it)->getName());
+			sql.append("=?");
+		}
+		sql.append(" WHERE ");
+		for(TableMap::const_iterator it = table->keybegin(); it != table->keyend(); it++)
+		{
+			if(it != table->keybegin())
+				sql.append(", ");
+
+			sql.append(it->first);
+			sql.append("=?");
+		}	
+		sql.append(";");
+		
+		statementstrings->setUpdate(sql);
+	}
 
 	int errorcode = sqlite3_prepare_v2(m_odb->db, sql.c_str(), (int)sql.size(), &statement, &m_leftover);
 
 	if(errorcode != SQLITE_OK)
-		throw std::runtime_error("SqliteMgr::getInsertStmt(), Could not prepare insertion query!");
+		throw std::runtime_error("SqliteMgr::getUpdateStmt(), Could not prepare insertion query!");
 		
 	if(m_leftover != NULL && strlen(m_leftover) > 0)
-		throw std::runtime_error("SqliteMgr::getInsertStmt(), Leftover from insertion is not NULL!");
+		throw std::runtime_error("SqliteMgr::getUpdateStmt(), Leftover from insertion is not NULL!");
 
 		
 	statements->setUpdate(statement);
@@ -304,30 +341,41 @@ sqlite3_stmt* SqliteMgr::getSelectStmt(Table* table)
 		return statement;
 		
 	std::string sql;
-	sql.append("SELECT ");
-	for(Fields::const_iterator it = table->begin(); it != table->end(); it++)
-	{
-		if(it != table->begin())
-			sql.append(", ");
-
-		sql.append((*it)->getName());
-	}
-	 
-	sql.append(" FROM ");
-	sql.append(table->tableName());
-	sql.append(" WHERE ");
 	
-	for(TableMap::const_iterator it = table->keybegin(); it != table->keyend(); it++)
-	{
-		if(it != table->keybegin())
-			sql.append(", ");
-
-		sql.append(it->first);
-		sql.append("=?");
-	}
-	sql.append(";");
+	StatementStringsPtr statementstrings = getStatementStrings(table);
+	cstring statementstring = statementstrings->getSelect();
 	
-	// Global::Get()->logf("SQL is: %s\n", sql.c_str());
+	if(statementstring.size() != 0)
+	{
+		sql = statementstring;
+	}
+	else
+	{
+		sql.append("SELECT ");
+		for(Fields::const_iterator it = table->begin(); it != table->end(); it++)
+		{
+			if(it != table->begin())
+				sql.append(", ");
+
+			sql.append((*it)->getName());
+		}
+		 
+		sql.append(" FROM ");
+		sql.append(table->tableName());
+		sql.append(" WHERE ");
+		
+		for(TableMap::const_iterator it = table->keybegin(); it != table->keyend(); it++)
+		{
+			if(it != table->keybegin())
+				sql.append(", ");
+
+			sql.append(it->first);
+			sql.append("=?");
+		}
+		sql.append(";");
+	
+		statementstrings->setSelect(sql);
+	}
 		
 	int errorcode = sqlite3_prepare_v2(m_odb->db, sql.c_str(), (int)sql.size(), &statement, &m_leftover);
 
@@ -349,23 +397,34 @@ sqlite3_stmt* SqliteMgr::getLookupStmt(Table* table, const std::string& field)
 		return statement;
 		
 	std::string sql;
-	sql.append("SELECT ");
-	for(TableMap::const_iterator it = table->keybegin(); it != table->keyend(); it++)
-	{
-		if(it != table->keybegin())
-			sql.append(", ");
-
-		sql.append(it->first);
-	}
-	sql.append(" FROM ");
-	sql.append(table->tableName());
-	sql.append(" WHERE ");
-	sql.append(field);
-	sql.append("=?");
-	sql.append(";");
 	
-	// Global::Get()->logf("SQL is: %s\n", sql.c_str());
-		
+	StatementStringsPtr statementstrings = getStatementStrings(table);
+	cstring statementstring = statementstrings->getLookup(field);
+	
+	if(statementstring.size() != 0)
+	{
+		sql = statementstring;
+	}
+	else
+	{
+		sql.append("SELECT ");
+		for(TableMap::const_iterator it = table->keybegin(); it != table->keyend(); it++)
+		{
+			if(it != table->keybegin())
+				sql.append(", ");
+
+			sql.append(it->first);
+		}
+		sql.append(" FROM ");
+		sql.append(table->tableName());
+		sql.append(" WHERE ");
+		sql.append(field);
+		sql.append("=?");
+		sql.append(";");
+			
+		statementstrings->setLookup(field, sql);
+	}
+	
 	int errorcode = sqlite3_prepare_v2(m_odb->db, sql.c_str(), (int)sql.size(), &statement, &m_leftover);
 
 	if(errorcode != SQLITE_OK)
@@ -386,30 +445,41 @@ sqlite3_stmt* SqliteMgr::getForEachStmt(Table* table)
 		return statement;
 		
 	std::string sql;
-	sql.append("SELECT ");
-	bool comspace = false;
-	for(TableMap::const_iterator it = table->keybegin(); it != table->keyend(); it++)
-	{
-		if(comspace)
-			sql.append(", ");
-
-		sql.append(it->first);
-		comspace = true;
-	}
-	for(Fields::const_iterator it = table->begin(); it != table->end(); it++)
-	{
-		if(comspace)
-			sql.append(", ");
-
-		sql.append((*it)->getName());
-		comspace = true;
-	}
-	 
-	sql.append(" FROM ");
-	sql.append(table->tableName());
-	sql.append(";");
+		
+	StatementStringsPtr statementstrings = getStatementStrings(table);
+	cstring statementstring = statementstrings->getForEach();
 	
-	// Global::Get()->logf("SQL is: %s\n", sql.c_str());
+	if(statementstring.size() != 0)
+	{
+		sql = statementstring;
+	}
+	else
+	{
+		sql.append("SELECT ");
+		bool comspace = false;
+		for(TableMap::const_iterator it = table->keybegin(); it != table->keyend(); it++)
+		{
+			if(comspace)
+				sql.append(", ");
+
+			sql.append(it->first);
+			comspace = true;
+		}
+		for(Fields::const_iterator it = table->begin(); it != table->end(); it++)
+		{
+			if(comspace)
+				sql.append(", ");
+
+			sql.append((*it)->getName());
+			comspace = true;
+		}
+		 
+		sql.append(" FROM ");
+		sql.append(table->tableName());
+		sql.append(";");
+	
+		statementstrings->setForEach(sql);
+	}
 		
 	int errorcode = sqlite3_prepare_v2(m_odb->db, sql.c_str(), (int)sql.size(), &statement, &m_leftover);
 

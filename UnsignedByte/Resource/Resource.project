@@ -108,6 +108,7 @@
     <File Name="Criteria.h"/>
     <File Name="SPKCriteria.h"/>
     <File Name="../include/smart_ptr.h"/>
+    <File Name="StatementStrings.h"/>
   </VirtualDirectory>
   <Settings Type="Static Library">
     <Configuration Name="Debug" CompilerType="gnu g++" DebuggerType="GNU gdb debugger">
