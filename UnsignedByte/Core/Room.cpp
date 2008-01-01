@@ -214,7 +214,7 @@ std::vector<std::string> Room::Show()
 {
 	std::vector<std::string> result;
 	
-	result.push_back(Global::Get()->sprintf("Name: '%s'., getName().c_str()));
+	result.push_back(Global::Get()->sprintf("Name: '%s'.", getName().c_str()));
 	result.push_back(Global::Get()->sprintf("Description: '%s'.", getDescription().c_str()));
 	try
 	{
