@@ -32,24 +32,34 @@ namespace mud
 	typedef SmartPtr<Chunk> ChunkPtr;
 }
 
+namespace db
+{
+	class Details;
+	typedef SmartPtr<Details> DetailsPtr;
+}
+
 class ChunkImporter;
 typedef SmartPtr<ChunkImporter> ChunkImporterPtr;
 	
 class ChunkImporter 
 {
+	class Detail;
+	typedef std::vector<ChunkImporter::Detail*> Details;
 	private:
 		class Detail
 		{
 			public:
-				typedef std::vector<ChunkImporter::Detail*> Details;
-				
 				Detail() { }
 				~Detail() { }
 				
 				void append(const std::string& line) { m_description.push_back(line); }
 				void addDetail(Detail* detail) { m_details.push_back(detail); }
 				
+				const std::vector<std::string>& getDescription() { return m_description; }
+				const Details& getDetails() { return m_details; }
+				
 				std::string toString();
+				void apply(db::DetailsPtr detail);
 				
 			private:
 				std::vector<std::string> m_description;

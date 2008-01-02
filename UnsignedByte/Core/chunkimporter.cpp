@@ -36,6 +36,27 @@ std::string ChunkImporter::Detail::toString()
 	return result;
 }
 
+void ChunkImporter::Detail::apply(db::DetailsPtr detail)
+{	
+	Details details = getDetails();
+	for(Details::iterator it = details.begin(); it != details.end(); it++)
+	{
+		ChunkImporter::Detail* onedetail = *it;
+		
+		SmartPtr<db::Details> newdetail = new db::Details();
+		newdetail->setdescription(String::Get()->unlines(onedetail->getDescription() , " ", 0));
+		newdetail->save();
+				
+		/**
+		 * Connect the detail to the chunk
+		 */ 
+		SmartPtr<db::DetailDetail> detaildetail(db::DetailDetail::bykey(newdetail->getdetailid(), detail->getdetailid()));
+		detaildetail->save();
+		
+		onedetail->apply(detail);
+	}
+}
+
 ChunkImporter::ChunkImporter(
 const std::string& input) :
 m_input(input)
@@ -230,7 +251,31 @@ void ChunkImporter::Parse()
 
 void ChunkImporter::Apply(mud::ChunkPtr chunk)
 {
-	printf("Applying...\n");
+	/**
+	 * Set description to that of the top node
+	 */ 
+	chunk->setDescription(String::Get()->unlines(m_result->getDescription() , " ", 0));
+	
+	/**
+	 * Add all the details as details of the chunk
+	 */ 
+	Details details = m_result->getDetails();
+	for(Details::iterator it = details.begin(); it != details.end(); it++)
+	{
+		ChunkImporter::Detail* onedetail = *it;
+		
+		SmartPtr<db::Details> detail = new db::Details();
+		detail->setdescription(String::Get()->unlines(onedetail->getDescription() , " ", 0));
+		detail->save();
+		
+		/**
+		 * Connect the new detail to the chunk
+		 */ 
+		SmartPtr<db::DetailChunk> detailchunk(db::DetailChunk::bykey(chunk->getID(), detail->getdetailid()));
+		detailchunk->save();
+		
+		onedetail->apply(detail);
+	}
 }
 
 const std::string& ChunkImporter::getResult()
