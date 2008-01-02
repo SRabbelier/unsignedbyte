@@ -44,6 +44,7 @@ public:
 	// Add Primary Key
 	void addPK(const std::string& name);
 	void addFPK(TablePtr table);
+	void addFPK(TablePtr table, const std::string& suffix);
 
 	// Add Field
 	void addValue(const std::string& name);
@@ -83,7 +84,7 @@ public:
 	Fields::const_iterator lookupend() const { return m_lookupfields.end(); }
 	size_t lookupsize() const { return m_lookupfields.size(); }
 	
-	bool hasSinglularPrimaryKey() const { return m_spkey; }
+	bool hasSingularPrimaryKey() const { return m_spkey; }
 	
 private:
 	void addField(const std::string& name, bool text, const std::string& defaulttext, bool providelookup);

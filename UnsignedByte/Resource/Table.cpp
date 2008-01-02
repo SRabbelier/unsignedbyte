@@ -75,6 +75,20 @@ void Table::addFPK(TablePtr table)
 		m_spkey = false;
 }
 
+void Table::addFPK(TablePtr table, const std::string& suffix)
+{
+	std::string name;
+	name.append(table->tableForeignName());
+	name.append(suffix);
+	
+	m_primarykeys[name] = table;
+	
+	if(m_primarykeys.size() == 1)
+		m_spkey = true;
+	else
+		m_spkey = false;
+}
+
 void Table::addValue(const std::string& name)
 {
 	addField(name, false, Global::Get()->EmptyString, false);
