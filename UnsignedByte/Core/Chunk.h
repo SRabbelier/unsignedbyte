@@ -33,6 +33,7 @@ namespace mud
 		/**
 		 * \brief Getters
 		 */
+		value_type getID() { return m_chunk->getchunkid(); } 
 		const std::string& getName() const { return m_chunk->getname(); }
 		const std::string& getDescription() const { return m_chunk->getdescription(); }
 		const std::string& getTags() const { return m_chunk->gettags(); }
