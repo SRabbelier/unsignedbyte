@@ -48,6 +48,7 @@ public:
 	TablePtr DETAILROOM;
 	TablePtr DETAILCHUNK;
 	TablePtr DETAILCHARACTER;
+	TablePtr DETAILDETAIL;
 	TablePtr EXITS;
 	TablePtr GRANTGROUPS;
 	TablePtr PERMISSIONS;

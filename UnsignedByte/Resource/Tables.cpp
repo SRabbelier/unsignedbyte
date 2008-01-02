@@ -39,7 +39,8 @@ Tables::Tables() :
 	DETAILS( new Table("Details") ),
 	DETAILROOM( new Table("DetailRoom") ),
 	DETAILCHUNK( new Table("DetailChunk") ),
-	DETAILCHARACTER( new Table("DETAILCHARACTER") ),
+	DETAILCHARACTER( new Table("DetailCharacter") ),
+	DETAILDETAIL( new Table("DetailDetail") ),
 	EXITS( new Table("Exits") ),
 	GRANTGROUPS( new Table("GrantGroups") ),
 	PERMISSIONS( new Table("Permissions") ),
@@ -131,6 +132,9 @@ Tables::Tables() :
 	DETAILCHARACTER->addFPK(DETAILS);
 	DETAILCHARACTER->addFPK(CHARACTERS);
 	
+	DETAILDETAIL->addFPK(DETAILS, "Primary");
+	DETAILDETAIL->addFPK(DETAILS, "Secondary");
+	
 	EXITS->addPK("exitid");
 	EXITS->addValue("dir");
 		
@@ -199,6 +203,7 @@ Tables::Tables() :
 	m_tables.push_back(DETAILROOM);
 	m_tables.push_back(DETAILCHUNK);
 	m_tables.push_back(DETAILCHARACTER);
+	m_tables.push_back(DETAILDETAIL);
 	m_tables.push_back(EXITS);
 	m_tables.push_back(GRANTGROUPS);
 	m_tables.push_back(PERMISSIONS);

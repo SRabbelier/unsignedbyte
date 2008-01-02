@@ -590,7 +590,12 @@ CharacterAccount* CharacterAccount::bykey(value_type fkAccounts, value_type fkCh
 	CharacterAccount* result = new CharacterAccount();
 	result->m_fkAccounts = fkAccounts;
 	result->m_fkCharacters = fkCharacters;
-	SqliteMgr::Get()->doSelect(result);
+	try
+	{
+		SqliteMgr::Get()->doSelect(result);
+	}
+	catch(RowNotFoundException& e) { }
+
 	return result;
 }
 
@@ -704,7 +709,12 @@ CharacterBranch* CharacterBranch::bykey(value_type fkBranches, value_type fkChar
 	CharacterBranch* result = new CharacterBranch();
 	result->m_fkBranches = fkBranches;
 	result->m_fkCharacters = fkCharacters;
-	SqliteMgr::Get()->doSelect(result);
+	try
+	{
+		SqliteMgr::Get()->doSelect(result);
+	}
+	catch(RowNotFoundException& e) { }
+
 	return result;
 }
 
@@ -831,7 +841,12 @@ CharacterCluster* CharacterCluster::bykey(value_type fkCharacters, value_type fk
 	CharacterCluster* result = new CharacterCluster();
 	result->m_fkCharacters = fkCharacters;
 	result->m_fkClusters = fkClusters;
-	SqliteMgr::Get()->doSelect(result);
+	try
+	{
+		SqliteMgr::Get()->doSelect(result);
+	}
+	catch(RowNotFoundException& e) { }
+
 	return result;
 }
 
@@ -1145,7 +1160,12 @@ CharacterSkill* CharacterSkill::bykey(value_type fkBranches, value_type fkCharac
 	CharacterSkill* result = new CharacterSkill();
 	result->m_fkBranches = fkBranches;
 	result->m_fkCharacters = fkCharacters;
-	SqliteMgr::Get()->doSelect(result);
+	try
+	{
+		SqliteMgr::Get()->doSelect(result);
+	}
+	catch(RowNotFoundException& e) { }
+
 	return result;
 }
 
@@ -1272,7 +1292,12 @@ CharacterStat* CharacterStat::bykey(value_type fkCharacters, value_type fkStats)
 	CharacterStat* result = new CharacterStat();
 	result->m_fkCharacters = fkCharacters;
 	result->m_fkStats = fkStats;
-	SqliteMgr::Get()->doSelect(result);
+	try
+	{
+		SqliteMgr::Get()->doSelect(result);
+	}
+	catch(RowNotFoundException& e) { }
+
 	return result;
 }
 
@@ -1399,7 +1424,12 @@ CharacterTree* CharacterTree::bykey(value_type fkCharacters, value_type fkTrees)
 	CharacterTree* result = new CharacterTree();
 	result->m_fkCharacters = fkCharacters;
 	result->m_fkTrees = fkTrees;
-	SqliteMgr::Get()->doSelect(result);
+	try
+	{
+		SqliteMgr::Get()->doSelect(result);
+	}
+	catch(RowNotFoundException& e) { }
+
 	return result;
 }
 
@@ -2401,7 +2431,12 @@ DetailRoom* DetailRoom::bykey(value_type fkDetails, value_type fkRooms)
 	DetailRoom* result = new DetailRoom();
 	result->m_fkDetails = fkDetails;
 	result->m_fkRooms = fkRooms;
-	SqliteMgr::Get()->doSelect(result);
+	try
+	{
+		SqliteMgr::Get()->doSelect(result);
+	}
+	catch(RowNotFoundException& e) { }
+
 	return result;
 }
 
@@ -2514,7 +2549,12 @@ DetailChunk* DetailChunk::bykey(value_type fkChunks, value_type fkDetails)
 	DetailChunk* result = new DetailChunk();
 	result->m_fkChunks = fkChunks;
 	result->m_fkDetails = fkDetails;
-	SqliteMgr::Get()->doSelect(result);
+	try
+	{
+		SqliteMgr::Get()->doSelect(result);
+	}
+	catch(RowNotFoundException& e) { }
+
 	return result;
 }
 
@@ -2605,11 +2645,11 @@ value_type DetailChunk::getfkDetails() const
 
 /**
  * Begin of implementation
- * class DETAILCHARACTER
+ * class DetailCharacter
  **/
 
 // Ctors
-DETAILCHARACTER::DETAILCHARACTER() :
+DetailCharacter::DetailCharacter() :
 m_fkCharacters(),
 m_newentry(true),
 m_dirty(false)
@@ -2617,27 +2657,32 @@ m_dirty(false)
 
 }
 
-DETAILCHARACTER::~DETAILCHARACTER()
+DetailCharacter::~DetailCharacter()
 {
 
 }
 
-DETAILCHARACTER* DETAILCHARACTER::bykey(value_type fkCharacters, value_type fkDetails)
+DetailCharacter* DetailCharacter::bykey(value_type fkCharacters, value_type fkDetails)
 {
-	DETAILCHARACTER* result = new DETAILCHARACTER();
+	DetailCharacter* result = new DetailCharacter();
 	result->m_fkCharacters = fkCharacters;
 	result->m_fkDetails = fkDetails;
-	SqliteMgr::Get()->doSelect(result);
+	try
+	{
+		SqliteMgr::Get()->doSelect(result);
+	}
+	catch(RowNotFoundException& e) { }
+
 	return result;
 }
 
-void DETAILCHARACTER::erase()
+void DetailCharacter::erase()
 {
 	if(!m_newentry)
 		SqliteMgr::Get()->doErase(this);
 }
 
-void DETAILCHARACTER::save()
+void DetailCharacter::save()
 {
 	if(m_newentry)
 	{
@@ -2653,7 +2698,7 @@ void DETAILCHARACTER::save()
 	}
 }
 
-bool DETAILCHARACTER::exists()
+bool DetailCharacter::exists()
 {
 	if(m_newentry)
 		return false;
@@ -2661,50 +2706,50 @@ bool DETAILCHARACTER::exists()
 	return true;
 }
 
-void DETAILCHARACTER::bindKeys(sqlite3_stmt* stmt) const
+void DetailCharacter::bindKeys(sqlite3_stmt* stmt) const
 {
 	sqlite3_bind_int64(stmt, 1, m_fkCharacters);
 	sqlite3_bind_int64(stmt, 2, m_fkDetails);
 }
 
-void DETAILCHARACTER::bindUpdate(sqlite3_stmt* stmt) const
+void DetailCharacter::bindUpdate(sqlite3_stmt* stmt) const
 {
 	sqlite3_bind_int64(stmt, 1, m_fkCharacters);
 	sqlite3_bind_int64(stmt, 2, m_fkDetails);
 }
 
-void DETAILCHARACTER::bindLookup(sqlite3_stmt* stmt) const
+void DetailCharacter::bindLookup(sqlite3_stmt* stmt) const
 {
 	// Do nothing
 }
 
-void DETAILCHARACTER::parseInsert(sqlite3* db)
+void DetailCharacter::parseInsert(sqlite3* db)
 {
 	// Do nothing
 }
 
-void DETAILCHARACTER::parseSelect(sqlite3_stmt* stmt)
+void DetailCharacter::parseSelect(sqlite3_stmt* stmt)
 {
 	// Do nothing
 }
 
-void DETAILCHARACTER::parseLookup(sqlite3_stmt* stmt)
+void DetailCharacter::parseLookup(sqlite3_stmt* stmt)
 {
 	m_fkCharacters = sqlite3_column_int64(stmt, 0);
 	m_fkDetails = sqlite3_column_int64(stmt, 1);
 }
 
-TablePtr DETAILCHARACTER::getTable() const
+TablePtr DetailCharacter::getTable() const
 {
 	return Tables::Get()->DETAILCHARACTER;
 }
 
-value_type DETAILCHARACTER::getfkCharacters() const
+value_type DetailCharacter::getfkCharacters() const
 {
 	return m_fkCharacters;
 }
 
-value_type DETAILCHARACTER::getfkDetails() const
+value_type DetailCharacter::getfkDetails() const
 {
 	return m_fkDetails;
 }
@@ -2712,7 +2757,125 @@ value_type DETAILCHARACTER::getfkDetails() const
 
 /**
  * End of implementation
- * class DETAILCHARACTER
+ * class DetailCharacter
+ **/
+
+
+/**
+ * Begin of implementation
+ * class DetailDetail
+ **/
+
+// Ctors
+DetailDetail::DetailDetail() :
+m_fkDetailsPrimary(),
+m_newentry(true),
+m_dirty(false)
+{
+
+}
+
+DetailDetail::~DetailDetail()
+{
+
+}
+
+DetailDetail* DetailDetail::bykey(value_type fkDetailsPrimary, value_type fkDetailsSecondary)
+{
+	DetailDetail* result = new DetailDetail();
+	result->m_fkDetailsPrimary = fkDetailsPrimary;
+	result->m_fkDetailsSecondary = fkDetailsSecondary;
+	try
+	{
+		SqliteMgr::Get()->doSelect(result);
+	}
+	catch(RowNotFoundException& e) { }
+
+	return result;
+}
+
+void DetailDetail::erase()
+{
+	if(!m_newentry)
+		SqliteMgr::Get()->doErase(this);
+}
+
+void DetailDetail::save()
+{
+	if(m_newentry)
+	{
+		SqliteMgr::Get()->doInsert(this);
+		m_newentry = false;
+	}
+
+	if(m_dirty)
+	{
+		SqliteMgr::Get()->doUpdate(this);
+		getTable()->modify();
+		m_dirty = false;
+	}
+}
+
+bool DetailDetail::exists()
+{
+	if(m_newentry)
+		return false;
+
+	return true;
+}
+
+void DetailDetail::bindKeys(sqlite3_stmt* stmt) const
+{
+	sqlite3_bind_int64(stmt, 1, m_fkDetailsPrimary);
+	sqlite3_bind_int64(stmt, 2, m_fkDetailsSecondary);
+}
+
+void DetailDetail::bindUpdate(sqlite3_stmt* stmt) const
+{
+	sqlite3_bind_int64(stmt, 1, m_fkDetailsPrimary);
+	sqlite3_bind_int64(stmt, 2, m_fkDetailsSecondary);
+}
+
+void DetailDetail::bindLookup(sqlite3_stmt* stmt) const
+{
+	// Do nothing
+}
+
+void DetailDetail::parseInsert(sqlite3* db)
+{
+	// Do nothing
+}
+
+void DetailDetail::parseSelect(sqlite3_stmt* stmt)
+{
+	// Do nothing
+}
+
+void DetailDetail::parseLookup(sqlite3_stmt* stmt)
+{
+	m_fkDetailsPrimary = sqlite3_column_int64(stmt, 0);
+	m_fkDetailsSecondary = sqlite3_column_int64(stmt, 1);
+}
+
+TablePtr DetailDetail::getTable() const
+{
+	return Tables::Get()->DETAILDETAIL;
+}
+
+value_type DetailDetail::getfkDetailsPrimary() const
+{
+	return m_fkDetailsPrimary;
+}
+
+value_type DetailDetail::getfkDetailsSecondary() const
+{
+	return m_fkDetailsSecondary;
+}
+
+
+/**
+ * End of implementation
+ * class DetailDetail
  **/
 
 
@@ -3030,7 +3193,12 @@ Permissions* Permissions::bykey(value_type fkAccounts, value_type fkGrantGroups)
 	Permissions* result = new Permissions();
 	result->m_fkAccounts = fkAccounts;
 	result->m_fkGrantGroups = fkGrantGroups;
-	SqliteMgr::Get()->doSelect(result);
+	try
+	{
+		SqliteMgr::Get()->doSelect(result);
+	}
+	catch(RowNotFoundException& e) { }
+
 	return result;
 }
 
