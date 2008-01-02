@@ -3,11 +3,11 @@
   <Project Name="DAL" Path="UnsignedByte/DAL/DAL.project" Active="No"/>
   <Project Name="Resource" Path="UnsignedByte/Resource/Resource.project" Active="No"/>
   <Project Name="Generator" Path="UnsignedByte/Generator/Generator.project" Active="No"/>
-  <Project Name="Core" Path="UnsignedByte/Core/Core.project" Active="No"/>
+  <Project Name="Core" Path="UnsignedByte/Core/Core.project" Active="Yes"/>
   <Project Name="Core" Path="UnsignedByte/Core/Core.project" Active="No"/>
   <Project Name="Initializer" Path="UnsignedByte/Initializer/Initializer.project" Active="No"/>
   <Project Name="sqlite3" Path="UnsignedByte/Sqlite3/sqlite3.project" Active="No"/>
-  <Project Name="TestCases" Path="UnsignedByte/TestCases/TestCases.project" Active="Yes"/>
+  <Project Name="TestCases" Path="UnsignedByte/TestCases/TestCases.project" Active="No"/>
   <BuildMatrix>
     <WorkspaceConfiguration Name="Debug" Selected="yes">
       <Project Name="Resource" ConfigName="Debug"/>
