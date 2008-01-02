@@ -19,7 +19,7 @@
  ***************************************************************************/
 
 #include "chunkimporter.h"
-// #include "Chunk.h"
+#include "Chunk.h"
 
 #include "StringUtilities.h"
 
@@ -30,7 +30,6 @@ std::string ChunkImporter::Detail::toString()
 	result.append(String::Get()->unlines(m_description , "\n", 0));
 	for(Details::iterator it = m_details.begin(); it != m_details.end(); it++)
 	{
-		// result.append("Detail:\n");
 		result.append((*it)->toString());
 	}
 	result.append("]\n");
@@ -38,9 +37,7 @@ std::string ChunkImporter::Detail::toString()
 }
 
 ChunkImporter::ChunkImporter(
-// mud::ChunkPtr chunk, 
 const std::string& input) :
-// m_chunk(chunk),
 m_input(input)
 {
 	Parse();
@@ -231,9 +228,9 @@ void ChunkImporter::Parse()
 	m_resultstring = current->toString();
 }
 
-void ChunkImporter::Apply()
+void ChunkImporter::Apply(mud::ChunkPtr chunk)
 {
-	
+	printf("Applying...\n");
 }
 
 const std::string& ChunkImporter::getResult()

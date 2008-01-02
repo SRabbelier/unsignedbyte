@@ -22,15 +22,12 @@
 #include <string>
 
 #include "EditorChunk.h"
-#include "EditorOLC.h"
 #include "EditorString.h"
+#include "EditorBool.h"
 
 #include "UBSocket.h"
 
 #include "Global.h"
-#include "DatabaseMgr.h"
-#include "Cache.h"
-#include "Parse.h"
 #include "StringUtilities.h"
 
 #include "Account.h"
@@ -38,6 +35,8 @@
 #include "ChunkManager.h"
 #include "Room.h"
 #include "RoomManager.h"
+
+#include "chunkimporter.h"
 
 EditorChunk::ChunkCommand EditorChunk::m_editName("Name", &EditorChunk::editName);
 EditorChunk::ChunkCommand EditorChunk::m_editDescription("Description", &EditorChunk::editDescription);
@@ -67,11 +66,22 @@ void EditorChunk::OnFocus()
 			return;
 			
 		case M_IMPORT:
+			m_target = M_NONE;
 			importChunk(m_value);
+			break;
+			
+		case M_IMPORTACCEPT:
+			m_target = M_NONE;
+			importChunk(m_yesno ? "accept" : "reject");
+			break;
+			
+		case M_IMPORTSAVECHUNK:
+			m_target = M_NONE;
+			importChunk(m_yesno ? "save" : "discard");
 			break;
 	}
 	
-	m_target = M_NONE;
+	// m_target = M_NONE; // has to happen -before- importChunk is called since importChunk might set it to something else
 }
 
 std::string EditorChunk::lookup(const std::string& action)
@@ -90,6 +100,13 @@ std::string EditorChunk::lookup(const std::string& action)
 void EditorChunk::dispatch(const std::string& action, const std::string& argument)
 {
 	ChunkCommand* act = ChunkInterpreter::Get()->translate(action);
+	
+	if(act && !m_chunk)
+	{
+		m_sock->Send("You need to be editing a chunk first.\n");
+		m_sock->Send("(Use the 'edit' command.)\n");
+		return;
+	}
 	
 	if(act)
 		act->Run(this, argument);
@@ -201,19 +218,74 @@ void EditorChunk::editRoom(const std::string& argument)
 
 void EditorChunk::importChunk(const std::string& argument)
 {
-	if(argument.size() == 0)
+	bool createdImporter = false;
+	
+	/** 
+	 * There is no argument and no importer yes, create one
+	 */ 
+	if(argument.size() == 0 && !m_importer)
 	{
 		m_sock->Send("No argument, dropping you into the String Editor.\n");
-		m_sock->Send("Paste your description there, when done the room will be imported.\n");
+		m_sock->Send("Paste your description there, when done the chunk will be imported.\n");
 		m_sock->SetEditor(new EditorString(m_sock, m_value));
 		m_target = M_IMPORT;
 		return;
 	}
 	
-	m_sock->Send("Importing:\n");
-	m_sock->Send(argument);
-	m_sock->Send("\n");
-	m_sock->Send("End of import.\n");
+	if(!m_importer)
+	{
+		ChunkImporterPtr importer(new ChunkImporter(argument));
+		m_importer = importer;
+		createdImporter = true;
+		m_sock->Send("Import complete.\n");
+	}
+	
+	if(argument.size() == 0 || createdImporter)
+	{
+		m_sock->Send("Importing would result in the following Chunk:\n");
+		m_sock->Send(m_importer->getResult());
+		m_sock->Send("Do you want to accept these changes?\n");
+		m_sock->SetEditor(new EditorBool(m_sock, m_yesno));
+		m_target = M_IMPORTACCEPT;
+		return; 
+	}
+	
+	if(!argument.compare("accept") || !argument.compare("reject"))
+	{
+		if(!argument.compare("accept"))
+		{
+			m_importer->Apply(m_chunk);
+			m_sock->Send("Would you like to apply this import to another chunk as well?\n");
+		}
+		else		
+		{
+			m_sock->Send("Ok, canceled.\n");
+			m_sock->Send("Would you like to apply this import to another chunk instead?\n");
+		}
+		
+		m_sock->Send("(If so, this import will be saved while you remain in the chunk editor.\n");
+		m_sock->Send("The next time you run import, even on another chunk, this import will be applied again.)\n");
+		m_sock->SetEditor(new EditorBool(m_sock, m_yesno));
+		m_target = M_IMPORTSAVECHUNK;
+		return;
+	}
+	
+	if(!argument.compare("save") || !argument.compare("discard"))
+	{
+		if(!argument.compare("save"))
+		{
+			m_sock->Send("Allright, this import will not be deleted till you change editors (e.g., type 'quit').\n");
+			return;
+		}
+		else
+		{
+			m_sock->Send("Allright, import discarded.\n");
+			m_importer.reset();
+			return;
+		}
+	}
+	
+	m_sock->Send("Unknown action.\n");
 }
 
 void EditorChunk::showChunk(const std::string& argument)

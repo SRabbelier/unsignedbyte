@@ -18,63 +18,75 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#pragma once
+#include "EditorBool.h"
+#include "StringUtilities.h"
+#include "UBSocket.h"
+#include "Account.h"
 
-#include <string>
-#include <vector>
-#include <stack>
-
-#include "smart_ptr.h"
-
-namespace mud
+EditorBool::EditorBool(UBSocket* sock, bool& target) :
+Editor(sock),
+m_state(M_FIRST),
+m_target(target)
 {
-	class Chunk;
-	typedef SmartPtr<Chunk> ChunkPtr;
+	OnLine(Global::Get()->EmptyString);
 }
 
-class ChunkImporter;
-typedef SmartPtr<ChunkImporter> ChunkImporterPtr;
-	
-class ChunkImporter 
+EditorBool::~EditorBool()
 {
-	private:
-		class Detail
-		{
-			public:
-				typedef std::vector<ChunkImporter::Detail*> Details;
-				
-				Detail() { }
-				~Detail() { }
-				
-				void append(const std::string& line) { m_description.push_back(line); }
-				void addDetail(Detail* detail) { m_details.push_back(detail); }
-				
-				std::string toString();
-				
-			private:
-				std::vector<std::string> m_description;
-				Details m_details;
-		};
-		
-	public:
-		ChunkImporter(const std::string& input);
-		
-		~ChunkImporter();
-		
-		void Apply(mud::ChunkPtr chunk);
-		const std::string& getResult();
+	m_target = m_result;
+}
 
-	private:
-		ChunkImporter(const ChunkImporter& rhs);
-		ChunkImporter& operator=(const ChunkImporter& rhs);
+void EditorBool::OnLine(const std::string& line)
+{	
+	switch(m_state)
+	{
+	default:
+	{
+		Global::Get()->bug("EditorBool::OnLine(), default m_state!\n");
+		m_sock->Send("BUG! Disconnecting you now...\n");
+		m_sock->SetCloseAndDelete();
+		return;
+	} /* default */
+
+	case M_FIRST:
+	{
+		m_state = M_WAITNG_FOR_CHOICE;
+		// fallthrough
+	} /* case M_FIRST: */
+	
+	case M_WAITNG_FOR_CHOICE:
+	{
+		if(line.size() == 0)
+		{
+			m_sock->Send("Please choose 'yes' or 'no'.\n");
+			return;
+		}
 		
-		void Parse();
+		if(!line.compare("yes") || !line.compare("y"))
+		{
+			m_result = true;
+			m_state = M_DONE;
+		}
 		
-		// mud::ChunkPtr m_chunk;
-		std::string m_input;
+		if(!line.compare("no") || !line.compare("n"))
+		{
+			m_result = false;
+			m_state = M_DONE;
+		}
 		
-		std::vector<std::string> m_description;
+		if(m_state != M_DONE)	
+		{
+			OnLine(Global::Get()->EmptyString);
+			return;
+		}
 		
-		ChunkImporter::Detail* m_result;
-		std::string m_resultstring;
-};
+		// fallthrough
+	}
+	
+	case M_DONE:
+	{
+		m_sock->PopEditor();
+		return;
+	}
+	} // switch(m_state)
+}

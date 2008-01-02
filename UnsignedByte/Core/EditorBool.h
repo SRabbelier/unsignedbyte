@@ -17,64 +17,37 @@
  *   Free Software Foundation, Inc.,                                       *
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
-
 #pragma once
 
 #include <string>
-#include <vector>
-#include <stack>
+#include "OLCEditor.h"
+#include "singleton.h"
+#include "Interpreter.h"
+#include "Action.h"
 
-#include "smart_ptr.h"
+class UBSocket;
 
-namespace mud
+class EditorBool : public Editor
 {
-	class Chunk;
-	typedef SmartPtr<Chunk> ChunkPtr;
-}
+public:
+	EditorBool(UBSocket* sock, bool& target);
+	~EditorBool(void);
 
-class ChunkImporter;
-typedef SmartPtr<ChunkImporter> ChunkImporterPtr;
+	void OnLine(const std::string& line);
+	std::string name() { return "Bool"; };
 	
-class ChunkImporter 
-{
-	private:
-		class Detail
-		{
-			public:
-				typedef std::vector<ChunkImporter::Detail*> Details;
-				
-				Detail() { }
-				~Detail() { }
-				
-				void append(const std::string& line) { m_description.push_back(line); }
-				void addDetail(Detail* detail) { m_details.push_back(detail); }
-				
-				std::string toString();
-				
-			private:
-				std::vector<std::string> m_description;
-				Details m_details;
-		};
-		
-	public:
-		ChunkImporter(const std::string& input);
-		
-		~ChunkImporter();
-		
-		void Apply(mud::ChunkPtr chunk);
-		const std::string& getResult();
-
-	private:
-		ChunkImporter(const ChunkImporter& rhs);
-		ChunkImporter& operator=(const ChunkImporter& rhs);
-		
-		void Parse();
-		
-		// mud::ChunkPtr m_chunk;
-		std::string m_input;
-		
-		std::vector<std::string> m_description;
-		
-		ChunkImporter::Detail* m_result;
-		std::string m_resultstring;
+private:
+	EditorBool(const EditorBool& rhs);
+	EditorBool operator=(const EditorBool& rhs);
+	
+	enum E_STATE
+	{
+		M_FIRST,
+		M_WAITNG_FOR_CHOICE,
+		M_DONE,
+	};
+	
+	E_STATE m_state;
+	bool& m_target;
+	bool m_result;
 };

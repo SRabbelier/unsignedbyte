@@ -33,6 +33,9 @@ namespace mud
 	typedef SmartPtr<Chunk> ChunkPtr;
 };
 
+class ChunkImporter;
+typedef SmartPtr<ChunkImporter> ChunkImporterPtr;
+
 class EditorChunk : public OLCEditor
 {
 public:
@@ -71,11 +74,15 @@ private:
 	{
 		M_NONE,
 		M_IMPORT,
+		M_IMPORTACCEPT,
+		M_IMPORTSAVECHUNK,
 	};
 	
 	mud::ChunkPtr m_chunk;
 	std::string m_value;
+	bool m_yesno;
 	EditorChunk::E_TARGET m_target;
+	ChunkImporterPtr m_importer;
 	
 	class ChunkInterpreter : public Interpreter<ChunkCommand>, public Singleton<ChunkInterpreter> {
 	private:
