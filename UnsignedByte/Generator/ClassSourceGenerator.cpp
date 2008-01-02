@@ -153,7 +153,19 @@ void ClassSourceGenerator::AppendKeyFactory()
 	for(TableMap::const_iterator it = m_table->keybegin(); it != m_table->keyend(); it++)
 		(*m_file) << m_tabs << "result->m_" << it->first << " = " << it->first<< ";" << endl;
 	
+	if(!m_table->hasSingularPrimaryKey())
+	{
+		(*m_file) << m_tabs << "try" << endl;
+		(*m_file) << m_tabs << "{" << endl;
+		(*m_file) << m_tabs;
+	}
 	(*m_file) << m_tabs << "SqliteMgr::Get()->doSelect(result);" << endl;
+	if(!m_table->hasSingularPrimaryKey())
+	{
+		(*m_file) << m_tabs << "}" << endl;
+		(*m_file) << m_tabs << "catch(RowNotFoundException& e) { }" << endl;
+		(*m_file) << endl;
+	}
 	(*m_file) << m_tabs << "return result;" << endl;
 	(*m_file) << "}" << endl;
 	(*m_file) << endl;
@@ -183,7 +195,7 @@ void ClassSourceGenerator::AppendCtorFactory()
 		(*m_file) << endl;
 	}
 	
-	if(m_table->hasSinglularPrimaryKey())
+	if(m_table->hasSingularPrimaryKey())
 	{	
 		for(Fields::const_iterator it = m_table->lookupbegin(); it != m_table->lookupend(); it++)
 		{
@@ -331,7 +343,7 @@ void ClassSourceGenerator::AppendParseInsert()
 	(*m_file) << "void " << m_name << "::parseInsert(sqlite3* db)" << endl;
 	(*m_file) << "{" << endl;
 
-	if(m_table->hasSinglularPrimaryKey())
+	if(m_table->hasSingularPrimaryKey())
 		(*m_file) << m_tabs << "m_" << m_table->firstKey() << " = sqlite3_last_insert_rowid(db);" << endl;
 	else
 		(*m_file) << m_tabs << "// Do nothing" << endl;
