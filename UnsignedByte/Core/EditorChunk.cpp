@@ -212,6 +212,7 @@ void EditorChunk::importChunk(const std::string& argument)
 	
 	m_sock->Send("Importing:\n");
 	m_sock->Send(argument);
+	m_sock->Send("\n");
 	m_sock->Send("End of import.\n");
 }
 
