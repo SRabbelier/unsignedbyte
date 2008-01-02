@@ -45,7 +45,7 @@ void SqliteMgr::doInsert(Bindable* bindable)
 	sqlite3_stmt* insert = getInsertStmt(table);
 	sqlite3_reset(insert);
 	
-	if(!table->hasSinglularPrimaryKey())
+	if(!table->hasSingularPrimaryKey())
 		bindable->bindKeys(insert);	
 		
 	doStatement(insert);
@@ -208,10 +208,13 @@ sqlite3_stmt* SqliteMgr::getInsertStmt(Table* table)
 		sql.append(") VALUES(");
 		for(TableMap::const_iterator it = table->keybegin(); it != table->keyend(); it++)
 		{
-			   if(it != table->keybegin())
-					   sql.append(", ");
+			if(it != table->keybegin())
+				sql.append(", ");
 
-			   sql.append("NULL");
+			if(table->hasSingularPrimaryKey())
+				sql.append("NULL");
+			else
+				sql.append("?");
 		}
 		sql.append(");");
 			
@@ -323,10 +326,10 @@ sqlite3_stmt* SqliteMgr::getUpdateStmt(Table* table)
 	int errorcode = sqlite3_prepare_v2(m_odb->db, sql.c_str(), (int)sql.size(), &statement, &m_leftover);
 
 	if(errorcode != SQLITE_OK)
-		throw std::runtime_error("SqliteMgr::getUpdateStmt(), Could not prepare insertion query!");
+		throw std::runtime_error("SqliteMgr::getUpdateStmt(), Could not prepare update query!");
 		
 	if(m_leftover != NULL && strlen(m_leftover) > 0)
-		throw std::runtime_error("SqliteMgr::getUpdateStmt(), Leftover from insertion is not NULL!");
+		throw std::runtime_error("SqliteMgr::getUpdateStmt(), Leftover from update is not NULL!");
 
 		
 	statements->setUpdate(statement);
@@ -359,6 +362,12 @@ sqlite3_stmt* SqliteMgr::getSelectStmt(Table* table)
 
 			sql.append((*it)->getName());
 		}
+		
+		/**
+		 * Prevent queries in the form "SELECT  FROM ....", this is for tables that consist of only primary keys.
+		 */ 
+		if(!table->size())
+			sql.append("*");
 		 
 		sql.append(" FROM ");
 		sql.append(table->tableName());
@@ -367,7 +376,7 @@ sqlite3_stmt* SqliteMgr::getSelectStmt(Table* table)
 		for(TableMap::const_iterator it = table->keybegin(); it != table->keyend(); it++)
 		{
 			if(it != table->keybegin())
-				sql.append(", ");
+				sql.append(" AND ");
 
 			sql.append(it->first);
 			sql.append("=?");
