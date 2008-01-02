@@ -28,7 +28,7 @@
 Strings String::lines(const std::string& input, const char* separator)
 {
 	Strings result;
-	Parse p(input, separator);
+	Parse p(input, separator, 1);
 
 	while(true)
 	{
@@ -49,7 +49,7 @@ std::string String::unlines(const Strings& input, const char* filler, int extra)
 	for(Strings::const_iterator it = input.begin(); it != input.end(); it++)
 	{
 		i++;
-		if(i != 0 && i%extra == 0)
+		if(i != 0 && extra && i%extra == 0)
 			result += "\n";
 
 		result += (*it);
