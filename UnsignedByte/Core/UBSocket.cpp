@@ -204,8 +204,12 @@ void UBSocket::SwitchEditors()
 		SetPrompt(m_editors.top()->prompt());
 	}
 	
-	SendPrompt();
 	m_editors.top()->OnFocus();
+	
+	if(m_nexteditor)
+		SwitchEditors();
+	else
+		SendPrompt();
 }
 
 void UBSocket::PopEditor()
