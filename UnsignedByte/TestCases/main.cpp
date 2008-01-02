@@ -22,6 +22,7 @@
 #include <vector>
 
 #include "smart_ptr.h"
+#include "chunkimporter.h"
 
 class Base
 {
@@ -139,8 +140,31 @@ void TestPointerPass()
 	printf("\n");
 }
 
-int main()
+void TestChunkImporter()
 {
+	printf("Creating importer...\n");
+	std::string input;
+	input.append("Algemene beschrijving.\n");
+	input.append("*Eerste detail.\n");
+	input.append("\tMet wat extra beschrijving.\n");
+	input.append("\tDrie regels in totaal.\n");
+	input.append("*Tweede detail.\n");
+	input.append("*Derde detail.\n");
+	input.append("**Met een subdetail\n");
+	input.append("\tMet wat extra text in subdetail\n");
+	input.append("**Nog een subdetail\n");
+	input.append("*Vierde detail\n");
+	input.append("**Subdetail\n");
+	input.append("***Subsub detail\n");
+	input.append("**Subdetail\n");
+	ChunkImporterPtr importer(new ChunkImporter(input));
+	printf(importer->getResult().c_str());
+	printf("\n");
+}
+
+int main()
+{ 
+	/*
 	printf("[starttest:Simple]\n");
 	TestSimple();
 	printf("[endtest:Simple]\n");
@@ -164,6 +188,12 @@ int main()
 	printf("[starttest:PointerPass]\n");
 	TestPointerPass();
 	printf("[endtest:PointerPass]\n");
+	printf("\n");
+	*/
+	
+	printf("[starttest:ChunkImporter]\n");
+	TestChunkImporter();
+	printf("[endtest:ChunkImporter]\n");
 	printf("\n");
 	
 	return 0;

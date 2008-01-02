@@ -28,13 +28,13 @@ Preprocessors=
 CmpOptions=-g $(Preprocessors)
 RcCmpOptions=
 LinkOptions=
-IncludePath=$(IncludeSwitch). $(IncludeSwitch)../include 
+IncludePath=$(IncludeSwitch). $(IncludeSwitch)../include $(IncludeSwitch)../Core 
 RcIncludePath=
-Libs=
-LibPath=
+Libs=$(LibrarySwitch)ubresource 
+LibPath=$(LibraryPathSwitch)../lib 
 endif
 
-Objects=$(IntermediateDirectory)/main$(ObjectSuffix) 
+Objects=$(IntermediateDirectory)/main$(ObjectSuffix) $(IntermediateDirectory)/chunkimporter$(ObjectSuffix) 
 
 ##
 ## Main Build Tragets 
@@ -62,12 +62,19 @@ $(IntermediateDirectory)/main$(ObjectSuffix): main.cpp $(IntermediateDirectory)/
 $(IntermediateDirectory)/main$(ObjectSuffix).d:
 	@$(CompilerName) $(CmpOptions) $(IncludePath) -MT$(IntermediateDirectory)/main$(ObjectSuffix) -MF$(IntermediateDirectory)/main$(ObjectSuffix).d -MM main.cpp
 
+$(IntermediateDirectory)/chunkimporter$(ObjectSuffix): ../Core/chunkimporter.cpp $(IntermediateDirectory)/chunkimporter$(ObjectSuffix).d
+	$(CompilerName) $(SourceSwitch)../Core/chunkimporter.cpp $(CmpOptions)   $(OutputSwitch)$(IntermediateDirectory)/chunkimporter$(ObjectSuffix) $(IncludePath)
+$(IntermediateDirectory)/chunkimporter$(ObjectSuffix).d:
+	@$(CompilerName) $(CmpOptions) $(IncludePath) -MT$(IntermediateDirectory)/chunkimporter$(ObjectSuffix) -MF$(IntermediateDirectory)/chunkimporter$(ObjectSuffix).d -MM ../Core/chunkimporter.cpp
+
 ##
 ## Clean
 ##
 clean:
 	$(RM) $(IntermediateDirectory)/main$(ObjectSuffix)
 	$(RM) $(IntermediateDirectory)/main$(ObjectSuffix).d
+	$(RM) $(IntermediateDirectory)/chunkimporter$(ObjectSuffix)
+	$(RM) $(IntermediateDirectory)/chunkimporter$(ObjectSuffix).d
 	$(RM) $(OutputFile)
 
 -include $(IntermediateDirectory)/*.d
