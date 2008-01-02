@@ -19,6 +19,7 @@
     <File Name="GrantGroup.cpp"/>
     <File Name="Permission.cpp"/>
     <File Name="Chunk.cpp"/>
+    <File Name="chunkimporter.cpp"/>
   </VirtualDirectory>
   <VirtualDirectory Name="Header Files">
     <File Name="Account.h"/>
@@ -41,6 +42,7 @@
     <File Name="Permission.h"/>
     <File Name="CommandObject.h"/>
     <File Name="Chunk.h"/>
+    <File Name="chunkimporter.h"/>
   </VirtualDirectory>
   <VirtualDirectory Name="Editors">
     <File Name="EditorOLC.cpp"/>
@@ -136,14 +138,12 @@
       <PreBuild/>
       <PostBuild/>
       <CustomBuild Enabled="no">
-        <CleanCommand></CleanCommand>
-        <BuildCommand></BuildCommand>
+        <CleanCommand/>
+        <BuildCommand/>
       </CustomBuild>
       <AdditionalRules>
-        <CustomPostBuild></CustomPostBuild>
-        <CustomPreBuild>
-
-</CustomPreBuild>
+        <CustomPostBuild/>
+        <CustomPreBuild/>
       </AdditionalRules>
     </Configuration>
   </Settings>
