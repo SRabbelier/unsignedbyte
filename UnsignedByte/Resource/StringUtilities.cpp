@@ -46,16 +46,37 @@ std::string String::unlines(const Strings& input, const char* filler, int extra)
 {
 	std::string result;
 	int i = 0;
+	
 	for(Strings::const_iterator it = input.begin(); it != input.end(); it++)
 	{
-		i++;
 		if(i != 0 && extra && i%extra == 0)
 			result += "\n";
 
 		result += (*it);
 		result += filler;
+		i++;
 	}
 
+	return result;
+}
+
+Strings String::unlines(const Strings& input)
+{
+	Strings result;
+	
+	for(Strings::const_iterator it = input.begin(); it != input.end(); it++)
+	{
+		Parse p(*it, "\n", 1);
+		while(true)
+		{
+			std::string line = p.getword();
+			if(line.size())
+				result.push_back(line);
+			else
+				break;
+		}
+	}
+	
 	return result;
 }
 
@@ -71,9 +92,10 @@ size_t String::maxlength(const Strings& input)
 	return champ;
 }
 
-std::string String::box(const Strings& content, const std::string& header)
+std::string String::box(const Strings& unparsedcontent, const std::string& header)
 {
 	bool useheader = (header != Global::Get()->EmptyString);
+	Strings content = unlines(unparsedcontent);
 
 	size_t length = maxlength(content);
 	if(useheader && header.size() > length)
@@ -107,6 +129,9 @@ std::string String::box(const Strings& content, const std::string& header)
 	result.append(body);
 	for(Strings::const_iterator it = content.begin(); it != content.end(); it++)
 	{		
+		if(!it->size())
+			continue;
+			
 		result.append(Global::Get()->sprintf("||  %s%.*s||\n",it->c_str(), length - it->size() - 2, spacefill.c_str()));
 	}
 	result.append(footlet);
