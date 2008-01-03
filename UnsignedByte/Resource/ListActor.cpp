@@ -34,16 +34,24 @@ void ListActor::parseRow(sqlite3_stmt* statement, Table* table)
 	{
 		int type = sqlite3_column_type(statement, i);
 		std::ostringstream str;
+		
+		if(i != 0)
+			str << ", ";
+
 		switch(type)
 		{
 		case SQLITE_TEXT:			
-			str << ", " << sqlite3_column_text(statement, i);
+			str << sqlite3_column_text(statement, i);
 			break;
 
 		case SQLITE_INTEGER:
-			str << ", " << sqlite3_column_int64(statement, i);
+			str << sqlite3_column_int64(statement, i);
 			break;
-
+			
+		case SQLITE_NULL:
+			str << "empty";
+			break;
+			
 		default:
 			std::ostringstream err;
 			err << "Unknown data type '" << type << "'.";
