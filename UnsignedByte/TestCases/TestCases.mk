@@ -30,7 +30,7 @@ RcCmpOptions=
 LinkOptions=
 IncludePath=$(IncludeSwitch). $(IncludeSwitch)../include $(IncludeSwitch)../Core 
 RcIncludePath=
-Libs=$(LibrarySwitch)ubresource 
+Libs=$(LibrarySwitch)ubdal $(LibrarySwitch)ubresource $(LibrarySwitch)sqlite3 
 LibPath=$(LibraryPathSwitch)../lib 
 endif
 

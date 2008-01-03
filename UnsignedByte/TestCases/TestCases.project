@@ -17,7 +17,9 @@
       </Compiler>
       <Linker Required="yes" Options="">
         <LibraryPath Value="../lib"/>
+        <Library Value="ubdal"/>
         <Library Value="ubresource"/>
+        <Library Value="sqlite3"/>
       </Linker>
       <ResourceCompiler Required="no" Options=""/>
       <PreBuild/>

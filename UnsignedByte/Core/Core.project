@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <CodeLite_Project Name="Core">
-  <VirtualDirectory Name="Source Files">
+  <VirtualDirectory Name="Core Source Files">
     <File Name="Account.cpp"/>
     <File Name="Area.cpp"/>
     <File Name="Cache.cpp"/>
@@ -21,7 +21,7 @@
     <File Name="Chunk.cpp"/>
     <File Name="chunkimporter.cpp"/>
   </VirtualDirectory>
-  <VirtualDirectory Name="Header Files">
+  <VirtualDirectory Name="Core Header Files">
     <File Name="Account.h"/>
     <File Name="Action.h"/>
     <File Name="Area.h"/>
@@ -44,7 +44,7 @@
     <File Name="Chunk.h"/>
     <File Name="chunkimporter.h"/>
   </VirtualDirectory>
-  <VirtualDirectory Name="Editors">
+  <VirtualDirectory Name="Editor Source Files">
     <File Name="EditorOLC.cpp"/>
     <File Name="Editor.cpp"/>
     <File Name="EditorPermission.cpp"/>
@@ -67,7 +67,7 @@
     <File Name="EditorChunk.cpp"/>
     <File Name="EditorBool.cpp"/>
   </VirtualDirectory>
-  <VirtualDirectory Name="Editor Header">
+  <VirtualDirectory Name="Editor Header Files">
     <File Name="EditorPermission.h"/>
     <File Name="EditorString.h"/>
     <File Name="EditorGrantGroup.h"/>
@@ -89,8 +89,9 @@
     <File Name="EditorOOC.h"/>
     <File Name="EditorChunk.h"/>
     <File Name="EditorBool.h"/>
+    <File Name="EditorDetail.h"/>
   </VirtualDirectory>
-  <VirtualDirectory Name="Managers">
+  <VirtualDirectory Name="Manager Source Files">
     <File Name="AccountManager.cpp"/>
     <File Name="AreaManager.cpp"/>
     <File Name="CharacterManager.cpp"/>
@@ -105,7 +106,7 @@
     <File Name="SectorManager.cpp"/>
     <File Name="ChunkManager.cpp"/>
   </VirtualDirectory>
-  <VirtualDirectory Name="Manager Header">
+  <VirtualDirectory Name="Manager Header Files">
     <File Name="AccountManager.h"/>
     <File Name="AreaManager.h"/>
     <File Name="CharacterManager.h"/>
