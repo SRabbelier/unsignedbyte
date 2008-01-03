@@ -32,7 +32,8 @@
 
 Table::Table(std::string name) :
 m_name(name),
-m_spkey(false)
+m_spkey(false),
+m_lastchange(time(NULL))
 {
 	std::string foreignname;
 	foreignname.append("fk");
@@ -152,7 +153,7 @@ const std::string& Table::tableForeignName() const
 
 const std::vector<std::string>& Table::tableList()
 {
-	if(m_listcache > m_lastchange)
+	if(m_listcache > m_lastchange || !m_list.size())
 	{
 		ListActor act;
 		SqliteMgr::Get()->doForEach(this, act);
