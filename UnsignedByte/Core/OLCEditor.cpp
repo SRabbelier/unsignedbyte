@@ -128,7 +128,11 @@ void OLCEditor::listSavable(const std::string& argument)
 {
 	std::string name = this->name();
 	name.append("s");
-	m_sock->Send(String::Get()->box(getList(),name));
+	Strings list = getList();
+	if(list.size())
+		m_sock->Send(String::Get()->box(list,name));
+	else
+		m_sock->Sendf("No %ss.\n", this->name().c_str());
 	return;
 }
 
