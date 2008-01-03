@@ -23,6 +23,7 @@
 
 #include "smart_ptr.h"
 #include "chunkimporter.h"
+#include "StringUtilities.h"
 
 class Base
 {
@@ -162,6 +163,73 @@ void TestChunkImporter()
 	printf("\n");
 }
 
+void TestStringUtilities()
+{
+	std::string input;
+	input.append("Dit is de eerste regel.\n");
+	input.append("Dit is de tweede regel.\n");
+	input.append("Derde regel.\n");
+	input.append("Regel vier.\n");
+	input.append("Laatste regel.\n");
+	
+	Strings results = String::Get()->lines(input,"\n");
+	for(Strings::iterator it = results.begin(); it != results.end(); it++)
+	{
+		printf(it->c_str());
+		printf("|\n");
+	}
+	printf("\n\n");
+	
+	Strings inputs;
+	inputs.push_back("Dit is de eerste regel.");
+	inputs.push_back("Dit is de tweede regel.");
+	inputs.push_back("Derde regel.");
+	inputs.push_back("Regel vier.");
+	inputs.push_back("Laatste regel.");
+	
+	printf("\n=========\n");
+	printf(String::Get()->unlines(inputs, "+", 0).c_str());
+	printf("\n=========\n");
+	printf(String::Get()->unlines(inputs, "~", 1).c_str());
+	printf("\n=========\n");
+	printf(String::Get()->unlines(inputs, "#", 2).c_str());
+	printf("\n=========\n");
+	printf(String::Get()->unlines(inputs, "@", 3).c_str());
+	printf("\n=========\n");
+	printf(String::Get()->unlines(inputs, "=", 4).c_str());
+	printf("\n=========\n");
+	printf(String::Get()->unlines(inputs, "&", 5).c_str());
+	printf("\n=========\n");
+	printf(String::Get()->unlines(inputs, "&", 6).c_str());
+	printf("\n=========\n");
+	printf("\n\n");
+	
+	Strings inputs_two;
+	inputs_two.push_back("Dit is de eerste regel.\nMet wat extra's.");
+	inputs_two.push_back("Dit is de tweede regel.");
+	inputs_two.push_back("Derde regel.\nMet iets erachter.\nTwee ietsen zelfs");
+	inputs_two.push_back("Regel vier.\nZit.\nVol.\nMet.\nExtra.\nRegels.\nZes in totaal.");
+	inputs_two.push_back("Lege regels!\n\n\n\n\n\n\n\n");
+	inputs_two.push_back("Laatste regel.");
+	
+	Strings results_two = String::Get()->unlines(inputs_two);
+	
+	printf("\n=========\n");
+	for(Strings::iterator it = results_two.begin(); it != results_two.end(); it++)
+	{
+		printf(it->c_str());
+		printf("|\n");
+	}
+	printf("\n=========\n");
+	printf("\n\n");
+	
+	printf("\n=========\n");
+	printf(String::Get()->box(inputs_two).c_str());
+	printf("\n=========\n");
+	
+	printf("\n");
+}
+
 int main()
 { 
 	/*
@@ -189,11 +257,16 @@ int main()
 	TestPointerPass();
 	printf("[endtest:PointerPass]\n");
 	printf("\n");
-	*/
 	
 	printf("[starttest:ChunkImporter]\n");
 	TestChunkImporter();
 	printf("[endtest:ChunkImporter]\n");
+	printf("\n");
+	*/
+	
+	printf("[starttest:StringUtilities]\n");
+	TestStringUtilities();
+	printf("[endtest:StringUtilities]\n");
 	printf("\n");
 	
 	return 0;

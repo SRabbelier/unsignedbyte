@@ -38,6 +38,7 @@ private:
 public:
 	Strings lines(const std::string& input, const char* separator);
 	std::string unlines(const Strings& input, const char* filler, int newlineat = 1);
+	Strings unlines(const Strings& input); // convert all '\n' into new lines
 	
 	size_t maxlength(const Strings& content);
 	std::string box(const Strings& content, const std::string& header = Global::Get()->EmptyString);
