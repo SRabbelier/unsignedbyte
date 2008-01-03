@@ -28,7 +28,7 @@ std::string ChunkImporter::Detail::toString()
 	std::string result;
 	result.append("[\n");
 	result.append(String::Get()->unlines(m_description , "\n", 0));
-	for(Details::iterator it = m_details.begin(); it != m_details.end(); it++)
+	for(DetailVector::iterator it = m_details.begin(); it != m_details.end(); it++)
 	{
 		result.append((*it)->toString());
 	}
@@ -38,12 +38,12 @@ std::string ChunkImporter::Detail::toString()
 
 void ChunkImporter::Detail::apply(db::DetailsPtr detail)
 {	
-	Details details = getDetails();
-	for(Details::iterator it = details.begin(); it != details.end(); it++)
+	DetailVector details = getDetails();
+	for(DetailVector::iterator it = details.begin(); it != details.end(); it++)
 	{
-		ChunkImporter::Detail* onedetail = *it;
+		DetailPtr onedetail = *it;
 		
-		SmartPtr<db::Details> newdetail = new db::Details();
+		SmartPtr<db::Details> newdetail(new db::Details());
 		newdetail->setdescription(String::Get()->unlines(onedetail->getDescription() , " ", 0));
 		newdetail->save();
 				
@@ -130,8 +130,8 @@ void ChunkImporter::Parse()
 	size_t i = 0;
 	int lastDepth = 0;
 	
-	std::stack<Detail*> details;
-	Detail* current = new ChunkImporter::Detail();
+	std::stack<DetailPtr> details;
+	SmartPtr<Detail> current(new ChunkImporter::Detail());
 	
 	Strings lines = String::Get()->lines(m_input, "\n");
 	
@@ -222,7 +222,7 @@ void ChunkImporter::Parse()
 		if(depth > lastDepth)
 		{			
 			details.push(current);
-			current = new ChunkImporter::Detail();
+			current.reset(new Detail());
 		}
 
 		/**
@@ -231,7 +231,7 @@ void ChunkImporter::Parse()
 		if(lastDepth >= depth && details.size())
 		{
 			details.top()->addDetail(current);
-			current = new ChunkImporter::Detail();
+			current.reset(new Detail());
 		}
 		
 		current->append(line);
@@ -259,12 +259,12 @@ void ChunkImporter::Apply(mud::ChunkPtr chunk)
 	/**
 	 * Add all the details as details of the chunk
 	 */ 
-	Details details = m_result->getDetails();
-	for(Details::iterator it = details.begin(); it != details.end(); it++)
+	DetailVector details = m_result->getDetails();
+	for(DetailVector::iterator it = details.begin(); it != details.end(); it++)
 	{
-		ChunkImporter::Detail* onedetail = *it;
+		SmartPtr<Detail> onedetail = *it;
 		
-		SmartPtr<db::Details> detail = new db::Details();
+		SmartPtr<db::Details> detail(new db::Details());
 		detail->setdescription(String::Get()->unlines(onedetail->getDescription() , " ", 0));
 		detail->save();
 		

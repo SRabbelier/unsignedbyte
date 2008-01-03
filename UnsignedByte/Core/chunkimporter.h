@@ -44,7 +44,8 @@ typedef SmartPtr<ChunkImporter> ChunkImporterPtr;
 class ChunkImporter 
 {
 	class Detail;
-	typedef std::vector<ChunkImporter::Detail*> Details;
+	typedef SmartPtr<Detail> DetailPtr;
+	typedef std::vector<DetailPtr> DetailVector; // not called 'Details' to prevent confusion with db::Details
 	private:
 		class Detail
 		{
@@ -53,17 +54,17 @@ class ChunkImporter
 				~Detail() { }
 				
 				void append(const std::string& line) { m_description.push_back(line); }
-				void addDetail(Detail* detail) { m_details.push_back(detail); }
+				void addDetail(SmartPtr<Detail> detail) { m_details.push_back(detail); }
 				
 				const std::vector<std::string>& getDescription() { return m_description; }
-				const Details& getDetails() { return m_details; }
+				const DetailVector& getDetails() { return m_details; }
 				
 				std::string toString();
 				void apply(db::DetailsPtr detail);
 				
 			private:
 				std::vector<std::string> m_description;
-				Details m_details;
+				DetailVector m_details;
 		};
 		
 	public:
@@ -85,6 +86,6 @@ class ChunkImporter
 		
 		std::vector<std::string> m_description;
 		
-		ChunkImporter::Detail* m_result;
+		SmartPtr<ChunkImporter::Detail> m_result;
 		std::string m_resultstring;
 };
