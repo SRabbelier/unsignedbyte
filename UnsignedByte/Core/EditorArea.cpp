@@ -154,12 +154,6 @@ void EditorArea::editName(const std::string& argument)
 
 void EditorArea::editDescription(const std::string& argument)
 {
-	if(!m_area->Exists())
-	{
-		m_sock->Send("For some reason the area you are editing does not exist.\n");
-		return;
-	}
-
 	if(argument.size() == 0)
 	{
 		m_sock->Send("No argument, dropping you into the string editor!\n");
@@ -223,4 +217,3 @@ void EditorArea::saveArea(const std::string& argument)
 	m_sock->Send("Saved.\n");
 	return;
 }
-
