@@ -181,15 +181,20 @@ void Initializer::InitColours()
 	int size = sizeof(colours) / sizeof(colours[0]);
 	printf("Colours: %d.\n", size);
 
-	/*
 	for(int i = 0; i < size; i++)
 	{
-		hp::Colours col(m_db);
-		col.setname(colours[i].name);
-		col.setcode(colours[i].code);
-		col.setcolourstring(colours[i].cstr);
-		col.setansi(1);
-		col.save();
+		try
+		{
+			db::Colours::bycode(colours[i].code);
+		}
+		catch(RowNotFoundException& e)
+		{
+			db::Colours col;
+			col.setname(colours[i].name);
+			col.setcode(colours[i].code);
+			col.setcolourstring(colours[i].cstr);
+			col.setansi(1);
+			col.save();
+		}
 	}
-	*/
 }
