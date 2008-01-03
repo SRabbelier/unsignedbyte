@@ -118,7 +118,8 @@ void SqliteMgr::doForEach(Table* table, Actor& act)
 	for(int i = 0; good; i++)
 	{
 		good = doStatement(forEach);
-		act.parseRow(forEach, table);
+		if(good)
+			act.parseRow(forEach, table);
 	}
 }
 
