@@ -25,78 +25,61 @@
 #include "Interpreter.h"
 #include "CommandObject.h"
 #include "smart_ptr.h"
+#include "db.h"
 
 class UBSocket;
 namespace mud 
 { 
-	class Chunk; 
-	typedef SmartPtr<Chunk> ChunkPtr;
+	class Detail; 
+	typedef SmartPtr<Detail> DetailPtr;
 };
 
-class ChunkImporter;
-typedef SmartPtr<ChunkImporter> ChunkImporterPtr;
-
-class EditorChunk : public OLCEditor
+class EditorDetail : public Editor
 {
 public:
-	typedef CommandObject<EditorChunk> ChunkCommand;
+	typedef CommandObject<EditorDetail> DetailCommand;
 
-	EditorChunk(UBSocket* sock);
-	~EditorChunk(void);
+	EditorDetail(UBSocket* sock, SmartPtr<db::Details> detail);
+	~EditorDetail(void);
 	
 	void OnFocus();
 
-	std::string name() { return "Chunk"; };
-	std::string prompt() { return "Chunk> "; };
+	std::string name() { return "Detail"; };
+	std::string prompt() { return "Detail> "; };
 	
 	std::string lookup(const std::string& action);
 	void dispatch(const std::string& action, const std::string& argument);
 	
-	SavablePtr getEditing();
-	TablePtr getTable();
-	long addNew();
-	std::vector<std::string> getList();
-	std::vector<std::string> getCommands();
-	void setEditing(long id);
-	
-	void editName(const std::string& argument);
+	void listCommands(const std::string& argument);
+	void editKey(const std::string& argument);
 	void editDescription(const std::string& argument);
-	void editRoom(const std::string& argument);
-	void listDetails(const std::string& argument);
-	void importChunk(const std::string& argument);
-	void showChunk(const std::string& argument);
-	void saveChunk(const std::string& argument);
+	void showDetail(const std::string& argument);
+	void saveDetail(const std::string& argument);
 
 private:
-	EditorChunk(const EditorChunk& rhs);
-	EditorChunk operator=(const EditorChunk& rhs);
+	EditorDetail(const EditorDetail& rhs);
+	EditorDetail operator=(const EditorDetail& rhs);
 	
 	enum E_TARGET
 	{
 		M_NONE,
-		M_IMPORT,
-		M_IMPORTACCEPT,
-		M_IMPORTSAVECHUNK,
+		M_DESCRIPTION,
 	};
 	
-	mud::ChunkPtr m_chunk;
+	SmartPtr<db::Details> m_detail;
 	std::string m_value;
-	bool m_yesno;
-	EditorChunk::E_TARGET m_target;
-	ChunkImporterPtr m_importer;
+	EditorDetail::E_TARGET m_target;
 	
-	class ChunkInterpreter : public Interpreter<ChunkCommand>, public Singleton<ChunkInterpreter> {
+	class DetailInterpreter : public Interpreter<DetailCommand>, public Singleton<DetailInterpreter> {
 	private:
-		ChunkInterpreter(void);
-		~ChunkInterpreter(void);
-		friend class Singleton<ChunkInterpreter>;
+		DetailInterpreter(void);
+		~DetailInterpreter(void);
+		friend class Singleton<DetailInterpreter>;
 	};
 
-	static ChunkCommand m_editName;
-	static ChunkCommand m_editDescription;
-	static ChunkCommand m_editRoom;
-	static ChunkCommand m_importChunk;
-	static ChunkCommand m_listDetails;
-	static ChunkCommand m_showChunk;
-	static ChunkCommand m_saveChunk;
+	static DetailCommand m_listCommands;
+	static DetailCommand m_editKey;
+	static DetailCommand m_editDescription;
+	static DetailCommand m_showDetail;
+	static DetailCommand m_saveDetail;
 };

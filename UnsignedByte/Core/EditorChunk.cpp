@@ -41,6 +41,7 @@
 EditorChunk::ChunkCommand EditorChunk::m_editName("Name", &EditorChunk::editName);
 EditorChunk::ChunkCommand EditorChunk::m_editDescription("Description", &EditorChunk::editDescription);
 EditorChunk::ChunkCommand EditorChunk::m_editRoom("Room", &EditorChunk::editRoom);
+EditorChunk::ChunkCommand EditorChunk::m_listDetails("Details", &EditorChunk::listDetails);
 EditorChunk::ChunkCommand EditorChunk::m_importChunk("Import", &EditorChunk::importChunk);
 EditorChunk::ChunkCommand EditorChunk::m_showChunk("Show", &EditorChunk::showChunk);
 EditorChunk::ChunkCommand EditorChunk::m_saveChunk("Save", &EditorChunk::saveChunk);
@@ -286,6 +287,11 @@ void EditorChunk::importChunk(const std::string& argument)
 	}
 	
 	m_sock->Send("Unknown action.\n");
+}
+
+void EditorChunk::listDetails(const std::string& argument)
+{
+	
 }
 
 void EditorChunk::showChunk(const std::string& argument)

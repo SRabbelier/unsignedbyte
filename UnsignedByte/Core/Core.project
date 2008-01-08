@@ -66,6 +66,7 @@
     <File Name="EditorOOC.cpp"/>
     <File Name="EditorChunk.cpp"/>
     <File Name="EditorBool.cpp"/>
+    <File Name="EditorDetail.cpp"/>
   </VirtualDirectory>
   <VirtualDirectory Name="Editor Header Files">
     <File Name="EditorPermission.h"/>
