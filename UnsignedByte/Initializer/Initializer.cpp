@@ -18,17 +18,17 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#include <string>
-#include <vector>
-#include <stdexcept>
-
 #include "Initializer.h"
-#include "sqlite3.h"
+#include "SavableManager.h"
 #include "Database.h"
 #include "Query.h"
 #include "Global.h"
+#include "TableImpl.h"
+#include "TableDef.h"
 #include "Tables.h"
-#include "Table.h"
+#include "FieldImpl.h"
+#include "KeyDef.h"
+#include "Value.h"
 #include "db.h"
 
 bool Initializer::DatabasePopulated()
@@ -49,34 +49,34 @@ bool Initializer::VerifyDatabaseVersion()
 {
 	bool equal = true;
 
-	db::Version* ver = db::Version::bykey(1);
+	SavableManagerPtr manager = SavableManager::bykeys(db::TableImpls::Get()->VERSION, 1);
 
-	if(ver->getmajor() != game::major)
+	if(manager->getfield(db::VersionFields::Get()->MAJOR) != game::major)
 	{
 		Global::Get()->logf("Major / Major mismatch.\n");
 		equal = false;
 	}
 	
-	if(ver->getminor() != game::minor)
+	if(manager->getfield(db::VersionFields::Get()->MINOR) != game::minor)
 	{
 		Global::Get()->logf("Minor / Minor mismatch.\n");
 		equal = false;
 	}
 	
-	if(ver->getmicro() != game::micro)
+	if(manager->getfield(db::VersionFields::Get()->MICRO) != game::micro)
 	{
 		Global::Get()->logf("Micro / Micro mismatch.\n");
 		equal = false;
 	}
 	
-	if(ver->getversiontext().compare(game::vstring))
+	if(manager->getfield(db::VersionFields::Get()->VERSIONTEXT)->getStringValue().compare(game::vstring))
 	{
 		Global::Get()->logf("Versiontext / Vstring mismatch.\n");
-		Global::Get()->logf("dbversion is: '%s', ours is '%s'\n", ver->getversiontext().c_str(), game::vstring);
+		Global::Get()->logf("dbversion is: '%s', ours is '%s'\n", 
+			manager->getfield(db::VersionFields::Get()->VERSIONTEXT)->getStringValue().c_str(), game::vstring);
 		equal = false;
 	}
 
-	delete ver;
 	return equal;
 }
 
@@ -84,9 +84,9 @@ void Initializer::InitTables()
 {
 	Query q(*m_db);
 	
-	for(TableVector::const_iterator it = Tables::Get()->begin(); it != Tables::Get()->end(); it++)
+	for(TableDefVector::const_iterator it = Tables::Get()->begin(); it != Tables::Get()->end(); it++)
 	{
-		std::string sql = (*it)->creationQuery();
+		std::string sql = SqliteMgr::Get()->creationQuery(*it);
 		Global::Get()->logf("%s\n", sql.c_str());
 		q.execute(sql);
 	}
@@ -99,9 +99,9 @@ bool Initializer::VerifyTables()
 	bool good = true;
 	
 	Query q(*m_db);
-	for(TableVector::const_iterator it = Tables::Get()->begin(); it != Tables::Get()->end(); it++)
+	for(TableDefVector::const_iterator it = Tables::Get()->begin(); it != Tables::Get()->end(); it++)
 	{
-		std::string sql = (*it)->tableQuery();
+		std::string sql = SqliteMgr::Get()->tableQuery(*it);
 		std::string result = q.get_string(sql);
 		if(result.compare("table"))
 		{
@@ -117,40 +117,61 @@ void Initializer::InitDatabase()
 {	
 	try
 	{
-		db::Version::bykey(1);
+		SavableManagerPtr manager = SavableManager::bykeys(db::TableImpls::Get()->VERSION, 1);
 	}
 	catch(RowNotFoundException& e)
 	{
-		db::Version ver;
-		ver.setmajor(game::major);
-		ver.setminor(game::minor);
-		ver.setmicro(game::micro);
-		ver.setversiontext(game::vstring);
-		ver.save();
+		SavableManagerPtr manager = SavableManager::getnew(db::TableImpls::Get()->VERSION);
+		
+		ValuePtr value;
+		
+		value = new Value(db::VersionFields::Get()->MAJOR, game::major);
+		manager->setvalue(value);
+
+		value = new Value(db::VersionFields::Get()->MINOR, game::minor);
+		manager->setvalue(value);
+
+		value = new Value(db::VersionFields::Get()->MICRO, game::micro);
+		manager->setvalue(value);
+		
+		value = new Value(db::VersionFields::Get()->VERSIONTEXT, game::vstring);
+		manager->setvalue(value);
+		
+		manager->save();
 	}
 		
 	try
 	{
-		db::Accounts::bykey(1);
+		SavableManagerPtr manager = SavableManager::bykeys(db::TableImpls::Get()->ACCOUNTS, 1);
 	}
 	catch(RowNotFoundException& e)
 	{
-		db::Accounts acc;
-		acc.setname(game::vname);
-		acc.setpassword("qq");
-		acc.save();
+		SavableManagerPtr manager = SavableManager::getnew(db::TableImpls::Get()->ACCOUNTS);
+		
+		ValuePtr value = new Value(db::AccountsFields::Get()->NAME, game::vname);
+		manager->setvalue(value);
+		
+		value = new Value(db::AccountsFields::Get()->PASSWORD, "qq");
+		manager->setvalue(value);
+		
+		manager->save();
 	}
 	
 	try
 	{
-		db::Rooms::bykey(1);
+		SavableManagerPtr manager = SavableManager::bykeys(db::TableImpls::Get()->ROOMS, 1);
 	}
 	catch(RowNotFoundException& e)
 	{
-		db::Rooms room;
-		room.setname("The Void");
-		room.setdescription("You are in The Void.");
-		room.save();
+		SavableManagerPtr manager = SavableManager::getnew(db::TableImpls::Get()->ACCOUNTS);
+		
+		ValuePtr value = new Value(db::RoomsFields::Get()->NAME, "The Void");
+		manager->setvalue(value);
+		
+		value = new Value(db::RoomsFields::Get()->DESCRIPTION, "You are in The Void.");
+		manager->setvalue(value);
+		
+		manager->save();
 	}
 }
 
@@ -185,16 +206,28 @@ void Initializer::InitColours()
 	{
 		try
 		{
-			db::Colours::bycode(colours[i].code);
+			ValuePtr value = new Value(db::ColoursFields::Get()->CODE, colours[i].code);
+			SavableManagerPtr manager = SavableManager::byvalue(value);
 		}
 		catch(RowNotFoundException& e)
 		{
-			db::Colours col;
-			col.setname(colours[i].name);
-			col.setcode(colours[i].code);
-			col.setcolourstring(colours[i].cstr);
-			col.setansi(1);
-			col.save();
+			SavableManagerPtr manager = SavableManager::getnew(db::TableImpls::Get()->COLOURS);
+		
+			ValuePtr value;
+			
+			value = new Value(db::ColoursFields::Get()->NAME, colours[i].name);
+			manager->setvalue(value);
+			
+			value = new Value(db::ColoursFields::Get()->CODE, colours[i].code);
+			manager->setvalue(value);
+		
+			value = new Value(db::ColoursFields::Get()->COLOURSTRING, colours[i].cstr);
+			manager->setvalue(value);
+
+			value = new Value(db::ColoursFields::Get()->ANSI, 1);
+			manager->setvalue(value);
+			
+			manager->save();
 		}
 	}
 }

@@ -18,12 +18,12 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#include <string>
-#include <stdexcept>
-
 #include "Character.h"
 #include "CharacterManager.h"
 #include "Global.h"
+
+#include "Table.h"
+#include "Tables.h"
 
 using mud::CharacterManager;
 using mud::Character;

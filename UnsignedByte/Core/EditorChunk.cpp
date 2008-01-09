@@ -18,9 +18,6 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#include <vector>
-#include <string>
-
 #include "EditorChunk.h"
 #include "EditorString.h"
 #include "EditorBool.h"
@@ -37,6 +34,9 @@
 #include "RoomManager.h"
 
 #include "chunkimporter.h"
+
+#include "Table.h"
+#include "Tables.h"
 
 EditorChunk::ChunkCommand EditorChunk::m_editName("Name", &EditorChunk::editName);
 EditorChunk::ChunkCommand EditorChunk::m_editDescription("Description", &EditorChunk::editDescription);

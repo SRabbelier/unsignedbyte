@@ -31,6 +31,5 @@
   </Settings>
   <Dependencies>
     <Project Name="Resource"/>
-    <Project Name="Generator"/>
   </Dependencies>
 </CodeLite_Project>

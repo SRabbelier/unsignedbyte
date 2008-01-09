@@ -43,11 +43,6 @@ all: $(OutputFile)
 
 $(OutputFile): makeDirStep  $(Objects)
 	$(LinkerName) $(OutputSwitch)$(OutputFile) $(Objects) $(LibPath) $(Libs) $(LinkOptions)
-	@echo Executing Post Build commands ...
-	../bin/Generator
-	mv db.cpp ../DAL
-	mv db.h ../include
-	@echo Done
 
 makeDirStep:
 	@test -d ./Debug || mkdir ./Debug

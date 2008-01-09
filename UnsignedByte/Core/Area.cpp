@@ -25,6 +25,9 @@
 #include "Global.h"
 #include "Cache.h"
 
+#include "Table.h"
+#include "Tables.h"
+
 using mud::Area;
 
 Area::Area(db::Areas* area) :

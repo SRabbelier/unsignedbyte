@@ -18,9 +18,6 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#include <string>
-#include <stdexcept>
-
 #include "UBSocket.h"
 #include "Command.h"
 #include "Global.h"
@@ -31,6 +28,9 @@
 #include "GrantGroupManager.h"
 #include "PermissionManager.h"
 #include "Account.h"
+
+#include "Table.h"
+#include "Tables.h"
 
 using mud::Command;
 

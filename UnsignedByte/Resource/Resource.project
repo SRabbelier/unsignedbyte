@@ -45,6 +45,11 @@
     <File Name="ListActor.cpp"/>
     <File Name="CountActor.cpp"/>
     <File Name="SPKCriteria.cpp"/>
+    <File Name="SavableManager.cpp"/>
+    <File Name="FieldDef.cpp"/>
+    <File Name="FieldImpl.cpp"/>
+    <File Name="TableDef.cpp"/>
+    <File Name="TableImpl.cpp"/>
   </VirtualDirectory>
   <VirtualDirectory Name="Header Files">
     <File Name="../include/Base64.h"/>
@@ -94,6 +99,7 @@
     <File Name="../include/UdpSocket.h"/>
     <File Name="../include/Utility.h"/>
     <File Name="../include/Tables.h"/>
+    <File Name="../include/TableImpl.h"/>
     <File Name="../include/Field.h"/>
     <File Name="../include/Table.h"/>
     <File Name="../include/DatabaseMgr.h"/>
@@ -102,13 +108,21 @@
     <File Name="../include/SqliteMgr.h"/>
     <File Name="../include/Statements.h"/>
     <File Name="../include/Bindable.h"/>
-    <File Name="Actor.h"/>
-    <File Name="ListActor.h"/>
-    <File Name="CountActor.h"/>
-    <File Name="Criteria.h"/>
-    <File Name="SPKCriteria.h"/>
+    <File Name="../include/Actor.h"/>
+    <File Name="../include/ListActor.h"/>
+    <File Name="../include/CountActor.h"/>
+    <File Name="../include/Criteria.h"/>
+    <File Name="../include/SPKCriteria.h"/>
     <File Name="../include/smart_ptr.h"/>
-    <File Name="StatementStrings.h"/>
+    <File Name="../include/StatementStrings.h"/>
+    <File Name="../include/Value.h"/>
+    <File Name="../include/Types.h"/>
+    <File Name="../include/SavableManager.h"/>
+    <File Name="../include/FieldDef.h"/>
+    <File Name="../include/FieldImpl.h"/>
+    <File Name="../include/TableDef.h"/>
+    <File Name="Key.h"/>
+    <File Name="../include/KeyDef.h"/>
   </VirtualDirectory>
   <Settings Type="Static Library">
     <Configuration Name="Debug" CompilerType="gnu g++" DebuggerType="GNU gdb debugger">

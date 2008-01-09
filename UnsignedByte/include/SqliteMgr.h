@@ -20,13 +20,9 @@
 
 #pragma once
 
-#include <map>
-#include <stdexcept>
+#include "Types.h"
 
-#include <sqlite3.h>
 #include <Database.h>
-#include <Bindable.h>
-#include <smart_ptr.h>
 #include <singleton.h>
 
 class Table;
@@ -52,12 +48,16 @@ class RowNotFoundException : public std::runtime_error
 class SqliteMgr : public Singleton<SqliteMgr>
 {
 	public:
-		void doInsert(Bindable* bindable);
-		void doErase(Bindable* bindable);
-		void doUpdate(Bindable* bindable);
-		void doSelect(Bindable* bindable);
-		void doLookup(Bindable* bindable, const std::string& field);
+		void doInsert(SavableManager* bindable);
+		void doErase(SavableManager* bindable);
+		void doUpdate(SavableManager* bindable);
+		void doSelect(SavableManagerPtr bindable);
+		void doLookup(SavableManagerPtr bindable, FieldPtr field);
 		void doForEach(Table* table, Actor& act);
+		
+		std::string tableQuery(TableDefPtr table) const;
+		std::string creationQuery(TableDefPtr table, bool verify = false) const;
+		std::string creationString(FieldDefPtr table) const;
 	
 	private:
 		Database* m_db;
@@ -76,7 +76,7 @@ class SqliteMgr : public Singleton<SqliteMgr>
 		sqlite3_stmt* getEraseStmt(Table* table);
 		sqlite3_stmt* getUpdateStmt(Table* table);
 		sqlite3_stmt* getSelectStmt(Table* table);
-		sqlite3_stmt* getLookupStmt(Table* table, const std::string& field);
+		sqlite3_stmt* getLookupStmt(Table* table, FieldPtr field);
 		sqlite3_stmt* getForEachStmt(Table* table);		
 		
 		friend class Singleton<SqliteMgr>;

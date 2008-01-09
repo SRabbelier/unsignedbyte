@@ -23,6 +23,8 @@
 #include "Generator.h"
 #include "Global.h"
 #include "Tables.h"
+#include "TableDef.h"
+#include "StringUtilities.h"
 
 #include "ClassHeaderGenerator.h"
 #include "ClassSourceGenerator.h"
@@ -116,10 +118,9 @@ void Generator::AppendHeaderIncludes()
 	m_headerfile << "#endif" << endl;
 	m_headerfile << endl;
 	
-	m_headerfile << "#include <string>" << endl;
-	m_headerfile << "#include <sqlite3.h>" << endl;
+	m_headerfile << "#include \"Types.h\"" << endl;
+	m_headerfile << endl;
 	m_headerfile << "#include <Database.h>" << endl;
-	m_headerfile << "#include <Tables.h>" << endl;
 	m_headerfile << "#include <SqliteMgr.h>" << endl;
 	m_headerfile << "#include <Bindable.h>" << endl;
 	m_headerfile << endl;
@@ -130,7 +131,35 @@ void Generator::AppendHeaderIncludes()
 	return;
 }
 
-void Generator::AppendHeaderClass(TablePtr table)
+void Generator::AppendHeaderTableImpls()
+{
+	m_headerfile << m_tabs << "class TableImpls : public Singleton<TableImpls>" << endl;
+	m_headerfile << m_tabs << "{" << endl;
+	m_headerfile << m_tabs << "public:" << endl;
+	
+	for(TableDefVector::const_iterator it = Tables::Get()->begin(); it != Tables::Get()->end(); it++)
+	{
+		TableDefPtr table = *it;
+		m_headerfile << m_tabs << m_tabs << "TableImplPtr " << String::Get()->toupper(table->tableName()) << ";" << endl;
+	}
+	m_headerfile << endl;
+	m_headerfile << m_tabs << m_tabs << "TableImplVector::const_iterator begin() const { return m_tables.begin(); }" << endl;
+	m_headerfile << m_tabs << m_tabs << "TableImplVector::const_iterator end() const { return m_tables.end(); }" << endl;
+	m_headerfile << endl;
+	
+	m_headerfile << m_tabs << "private:" << endl;
+	m_headerfile << m_tabs << m_tabs << "TableImpls();" << endl;
+	m_headerfile << m_tabs << m_tabs << "~TableImpls() { }" << endl;
+	m_headerfile << m_tabs << m_tabs << "TableImpls(const TableImpls& rhs);" << endl;
+	m_headerfile << m_tabs << m_tabs << "TableImpls operator=(const TableImpls& rhs);" << endl;
+	m_headerfile << m_tabs << m_tabs << "friend class Singleton<TableImpls>;" << endl;
+	m_headerfile << endl;
+	m_headerfile << m_tabs << m_tabs << "TableImplVector m_tables;" << endl;
+	m_headerfile << m_tabs << "};" << endl;
+	m_headerfile << endl;
+}
+
+void Generator::AppendHeaderClass(TableDefPtr table)
 {
 	try
 	{
@@ -154,8 +183,6 @@ void Generator::AppendHeaderFooter()
 	m_headerfile << "} // end of namespace" << endl;
 	m_headerfile << endl;
 	
-	m_tabs.erase();
-	
 	return;
 }
 
@@ -165,8 +192,9 @@ void Generator::CreateHeader()
 	{
 		AppendLicense(m_headerfile);
 		AppendHeaderIncludes();
+		AppendHeaderTableImpls();
 		
-		for(TableVector::const_iterator it = Tables::Get()->begin(); it != Tables::Get()->end(); it++)
+		for(TableDefVector::const_iterator it = Tables::Get()->begin(); it != Tables::Get()->end(); it++)
 			AppendHeaderClass(*it);
 			
 		AppendHeaderFooter();
@@ -191,16 +219,17 @@ void Generator::AppendSourceIncludes()
 	m_sourcefile << "#endif" << endl;
 	m_sourcefile << endl;
 	
-	m_sourcefile << "#include <string>" << endl;
-	m_sourcefile << "#include <stdexcept>" << endl;
-	m_sourcefile << endl;
-	
 	m_sourcefile << "#include \"" << m_name << ".h\"" << endl;
 	m_sourcefile << endl;
 	
-	m_sourcefile << "#include <sqlite3.h>" << endl;
 	m_sourcefile << "#include <Database.h>" << endl;
 	m_sourcefile << "#include <Query.h>" << endl;
+	m_sourcefile << endl;
+	
+	m_sourcefile << "#include \"TableImpl.h\"" << endl;
+	m_sourcefile << "#include \"Tables.h\"" << endl;
+	m_sourcefile << "#include \"FieldImpl.h\"" << endl;
+	m_sourcefile << "#include \"KeyDef.h\"" << endl;
 	m_sourcefile << endl;
 	
 	m_sourcefile << "using namespace " << m_name << ";" << endl;
@@ -209,7 +238,7 @@ void Generator::AppendSourceIncludes()
 	return;
 }
 
-void Generator::AppendSourceClass(TablePtr table)
+void Generator::AppendSourceClass(TableDefPtr table)
 {
 	try
 	{
@@ -235,14 +264,37 @@ void Generator::AppendSourceFooter()
 	return;
 }
 
+void Generator::AppendSourceTableImpls()
+{
+	m_sourcefile << "TableImpls::TableImpls() :" << endl;
+	for(TableDefVector::const_iterator it = Tables::Get()->begin(); it != Tables::Get()->end(); it++)
+	{
+		if(it != Tables::Get()->begin())
+			m_sourcefile << "," << endl;
+		
+		TableDefPtr table = *it;
+		m_sourcefile << String::Get()->toupper(table->tableName()) << "(new TableImpl(Tables::Get()->" << String::Get()->toupper(table->tableName()) << ", \"" << table->tableName() << "\"))";
+	}
+	
+	m_sourcefile << endl;
+	m_sourcefile << "{" << endl;
+	for(TableDefVector::const_iterator it = Tables::Get()->begin(); it != Tables::Get()->end(); it++)
+	{
+		m_sourcefile << m_tabs << "m_tables.push_back(" << String::Get()->toupper((*it)->tableName()) << ");" << endl;
+	}
+	m_sourcefile << "}" << endl;
+	m_sourcefile << endl;
+}
+
 void Generator::CreateSource()
 {
 	try
 	{
 		AppendLicense(m_sourcefile);
 		AppendSourceIncludes();
+		AppendSourceTableImpls();
 		
-		for(TableVector::const_iterator it = Tables::Get()->begin(); it != Tables::Get()->end(); it++)
+		for(TableDefVector::const_iterator it = Tables::Get()->begin(); it != Tables::Get()->end(); it++)
 			AppendSourceClass(*it);
 			
 		AppendSourceFooter();

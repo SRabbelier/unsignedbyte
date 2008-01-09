@@ -18,13 +18,13 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#include <string>
-#include <stdexcept>
-
 #include "GrantGroupManager.h"
 #include "GrantGroup.h"
 #include "Global.h"
 #include "GrantGroup.h"
+
+#include "Table.h"
+#include "Tables.h"
 
 using mud::GrantGroupManager;
 using mud::GrantGroup;

@@ -19,87 +19,45 @@
  ***************************************************************************/
 #pragma once
 
-#include <string>
-#include <vector>
-#include <map>
-#include <smart_ptr.h>
-#include "sqlite3.h"
+#include "Types.h"
 
-class Field;
-class Table;
-
-typedef SmartPtr<Field> FieldPtr;
-typedef SmartPtr<Table> TablePtr;
-
-typedef std::vector<FieldPtr> Fields;
+typedef std::vector<FieldPtr> FieldVector;
 typedef std::map<std::string, TablePtr> TableMap;
-typedef unsigned long value_type;
 
 class Table
 {
 public:
+	const std::string& tableName() const;
+	
+	virtual FieldVector::const_iterator lookupbegin() const = 0;
+	virtual FieldVector::const_iterator lookupend() const = 0;
+	virtual size_t lookupsize() const = 0;
+	
+	virtual FieldDefVector::const_iterator defbegin() const = 0;
+	virtual FieldDefVector::const_iterator defend() const = 0;
+	virtual size_t defsize() const = 0;
+	
+	virtual FieldVector::const_iterator begin() const = 0;
+	virtual FieldVector::const_iterator end() const = 0;
+	virtual size_t size() const = 0;
+	virtual bool hasfield(FieldPtr field) const = 0;
+	
+	virtual std::string firstKey() const = 0;
+	virtual TableMap::const_iterator keybegin() const = 0;
+	virtual TableMap::const_iterator keyend() const = 0;
+	virtual size_t keysize() const = 0;
+	
+	virtual bool hasSingularPrimaryKey() const = 0;
+	
+protected:
 	Table(std::string name);
 	~Table();
-	
-	// Add Primary Key
-	void addPK(const std::string& name);
-	void addFPK(TablePtr table);
-	void addFPK(TablePtr table, const std::string& suffix);
-
-	// Add Field
-	void addValue(const std::string& name);
-	void addValue(const std::string& name, value_type defaultvalue);
-	void addTextField(const std::string& name);
-	void addLookupTextField(const std::string& name);
-	void addTextField(const std::string& name, const std::string& defaulttext);
-	
-	// Add Foreign Key
-	void addFK(TablePtr table);
-	void addFK(TablePtr table, const std::string& suffix);
-	
-	// Provide lookup functionality for the last 'count' entries
-	// void provideLookup(unsigned int count);
-
-	const std::string& tableName() const;
-	const std::string& tableForeignName() const;
-	const std::vector<std::string>& tableList();
-	
-	std::string tableQuery() const;
-	std::string creationQuery(bool verify = false) const;
-
-	void parseRow(sqlite3_stmt* statement);
-
-	void modify();
-	
-	Fields::const_iterator begin() const { return m_fields.begin(); }
-	Fields::const_iterator end() const { return m_fields.end(); }
-	size_t size() const { return m_fields.size(); }
-	
-	std::string firstKey() const { return m_primarykeys.begin()->first; }
-	TableMap::const_iterator keybegin() const { return m_primarykeys.begin(); }
-	TableMap::const_iterator keyend() const { return m_primarykeys.end(); }
-	size_t keysize() const { return m_primarykeys.size(); }
-	
-	Fields::const_iterator lookupbegin() const { return m_lookupfields.begin(); }
-	Fields::const_iterator lookupend() const { return m_lookupfields.end(); }
-	size_t lookupsize() const { return m_lookupfields.size(); }
-	
-	bool hasSingularPrimaryKey() const { return m_spkey; }
-	
-private:
-	void addField(const std::string& name, bool text, const std::string& defaulttext, bool providelookup);
+	friend SmartPtrDelete(Table);
 
 	std::string m_name;
-	std::string m_foreignname;
 	
 	bool m_spkey; // singular primary key
 
-	Fields m_fields;
-	Fields m_lookupfields;
+	FieldVector m_fields;
 	TableMap m_primarykeys; // All keys added with addFPK()
-
-	time_t m_lastchange;
-	
-	std::vector<std::string> m_list; // a list representation of all elements in the table
-	time_t m_listcache; // the moment the list was cached
 };

@@ -22,9 +22,7 @@
 #include <winsock2.h>
 #endif
 
-#include <string>
 #include <stdarg.h>
-#include <stdexcept>
 
 #include "Global.h"
 #include "DatabaseMgr.h"
@@ -36,6 +34,9 @@
 #include "Sector.h"
 #include "SectorManager.h"
 #include "Character.h"
+
+#include "Table.h"
+#include "Tables.h"
 
 using mud::Room;
 

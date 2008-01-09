@@ -19,17 +19,14 @@
  ***************************************************************************/
 #pragma once
 
-#include <string>
-#include <fstream>
-#include <smart_ptr.h>
+#include "Types.h"
 
-class Table;
-typedef SmartPtr<Table> TablePtr;
+#include <fstream>
 
 class ClassHeaderGenerator
 {
 public:
-	ClassHeaderGenerator(TablePtr table, std::ofstream* file);
+	ClassHeaderGenerator(TableDefPtr table, std::ofstream* file);
 	~ClassHeaderGenerator();
 	
 	void GenerateClass();
@@ -45,6 +42,7 @@ private:
 	void AppendFooter();
 	
 	std::string m_tabs;
-	TablePtr m_table;
+	std::string m_name;
+	TableDefPtr m_table;
 	std::ofstream* m_file;
 };

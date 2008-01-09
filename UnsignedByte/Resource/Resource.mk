@@ -38,7 +38,7 @@ Objects=$(IntermediateDirectory)/Base64$(ObjectSuffix) $(IntermediateDirectory)/
 	$(IntermediateDirectory)/Lock$(ObjectSuffix) $(IntermediateDirectory)/MemFile$(ObjectSuffix) $(IntermediateDirectory)/Mutex$(ObjectSuffix) $(IntermediateDirectory)/Parse$(ObjectSuffix) $(IntermediateDirectory)/Query$(ObjectSuffix) $(IntermediateDirectory)/RandomNumber$(ObjectSuffix) $(IntermediateDirectory)/ResolvServer$(ObjectSuffix) $(IntermediateDirectory)/ResolvSocket$(ObjectSuffix) $(IntermediateDirectory)/SmtpdSocket$(ObjectSuffix) $(IntermediateDirectory)/Socket$(ObjectSuffix) \
 	$(IntermediateDirectory)/SocketHandler$(ObjectSuffix) $(IntermediateDirectory)/socket_include$(ObjectSuffix) $(IntermediateDirectory)/SSLInitializer$(ObjectSuffix) $(IntermediateDirectory)/StderrLog$(ObjectSuffix) $(IntermediateDirectory)/StdoutLog$(ObjectSuffix) $(IntermediateDirectory)/StreamSocket$(ObjectSuffix) $(IntermediateDirectory)/TcpSocket$(ObjectSuffix) $(IntermediateDirectory)/Thread$(ObjectSuffix) $(IntermediateDirectory)/UdpSocket$(ObjectSuffix) $(IntermediateDirectory)/Utility$(ObjectSuffix) \
 	$(IntermediateDirectory)/Coordinate$(ObjectSuffix) $(IntermediateDirectory)/Path$(ObjectSuffix) $(IntermediateDirectory)/Global$(ObjectSuffix) $(IntermediateDirectory)/sha2$(ObjectSuffix) $(IntermediateDirectory)/StringUtilities$(ObjectSuffix) $(IntermediateDirectory)/Tables$(ObjectSuffix) $(IntermediateDirectory)/Table$(ObjectSuffix) $(IntermediateDirectory)/Field$(ObjectSuffix) $(IntermediateDirectory)/DatabaseMgr$(ObjectSuffix) $(IntermediateDirectory)/SqliteMgr$(ObjectSuffix) \
-	$(IntermediateDirectory)/Statements$(ObjectSuffix) $(IntermediateDirectory)/ListActor$(ObjectSuffix) $(IntermediateDirectory)/CountActor$(ObjectSuffix) $(IntermediateDirectory)/SPKCriteria$(ObjectSuffix) 
+	$(IntermediateDirectory)/Statements$(ObjectSuffix) $(IntermediateDirectory)/ListActor$(ObjectSuffix) $(IntermediateDirectory)/CountActor$(ObjectSuffix) $(IntermediateDirectory)/SPKCriteria$(ObjectSuffix) $(IntermediateDirectory)/SavableManager$(ObjectSuffix) $(IntermediateDirectory)/FieldDef$(ObjectSuffix) $(IntermediateDirectory)/FieldImpl$(ObjectSuffix) $(IntermediateDirectory)/TableDef$(ObjectSuffix) $(IntermediateDirectory)/TableImpl$(ObjectSuffix) 
 
 ##
 ## Main Build Tragets 
@@ -278,6 +278,31 @@ $(IntermediateDirectory)/SPKCriteria$(ObjectSuffix): SPKCriteria.cpp $(Intermedi
 $(IntermediateDirectory)/SPKCriteria$(ObjectSuffix).d:
 	@$(CompilerName) $(CmpOptions) $(IncludePath) -MT$(IntermediateDirectory)/SPKCriteria$(ObjectSuffix) -MF$(IntermediateDirectory)/SPKCriteria$(ObjectSuffix).d -MM SPKCriteria.cpp
 
+$(IntermediateDirectory)/SavableManager$(ObjectSuffix): SavableManager.cpp $(IntermediateDirectory)/SavableManager$(ObjectSuffix).d
+	$(CompilerName) $(SourceSwitch)SavableManager.cpp $(CmpOptions)   $(OutputSwitch)$(IntermediateDirectory)/SavableManager$(ObjectSuffix) $(IncludePath)
+$(IntermediateDirectory)/SavableManager$(ObjectSuffix).d:
+	@$(CompilerName) $(CmpOptions) $(IncludePath) -MT$(IntermediateDirectory)/SavableManager$(ObjectSuffix) -MF$(IntermediateDirectory)/SavableManager$(ObjectSuffix).d -MM SavableManager.cpp
+
+$(IntermediateDirectory)/FieldDef$(ObjectSuffix): FieldDef.cpp $(IntermediateDirectory)/FieldDef$(ObjectSuffix).d
+	$(CompilerName) $(SourceSwitch)FieldDef.cpp $(CmpOptions)   $(OutputSwitch)$(IntermediateDirectory)/FieldDef$(ObjectSuffix) $(IncludePath)
+$(IntermediateDirectory)/FieldDef$(ObjectSuffix).d:
+	@$(CompilerName) $(CmpOptions) $(IncludePath) -MT$(IntermediateDirectory)/FieldDef$(ObjectSuffix) -MF$(IntermediateDirectory)/FieldDef$(ObjectSuffix).d -MM FieldDef.cpp
+
+$(IntermediateDirectory)/FieldImpl$(ObjectSuffix): FieldImpl.cpp $(IntermediateDirectory)/FieldImpl$(ObjectSuffix).d
+	$(CompilerName) $(SourceSwitch)FieldImpl.cpp $(CmpOptions)   $(OutputSwitch)$(IntermediateDirectory)/FieldImpl$(ObjectSuffix) $(IncludePath)
+$(IntermediateDirectory)/FieldImpl$(ObjectSuffix).d:
+	@$(CompilerName) $(CmpOptions) $(IncludePath) -MT$(IntermediateDirectory)/FieldImpl$(ObjectSuffix) -MF$(IntermediateDirectory)/FieldImpl$(ObjectSuffix).d -MM FieldImpl.cpp
+
+$(IntermediateDirectory)/TableDef$(ObjectSuffix): TableDef.cpp $(IntermediateDirectory)/TableDef$(ObjectSuffix).d
+	$(CompilerName) $(SourceSwitch)TableDef.cpp $(CmpOptions)   $(OutputSwitch)$(IntermediateDirectory)/TableDef$(ObjectSuffix) $(IncludePath)
+$(IntermediateDirectory)/TableDef$(ObjectSuffix).d:
+	@$(CompilerName) $(CmpOptions) $(IncludePath) -MT$(IntermediateDirectory)/TableDef$(ObjectSuffix) -MF$(IntermediateDirectory)/TableDef$(ObjectSuffix).d -MM TableDef.cpp
+
+$(IntermediateDirectory)/TableImpl$(ObjectSuffix): TableImpl.cpp $(IntermediateDirectory)/TableImpl$(ObjectSuffix).d
+	$(CompilerName) $(SourceSwitch)TableImpl.cpp $(CmpOptions)   $(OutputSwitch)$(IntermediateDirectory)/TableImpl$(ObjectSuffix) $(IncludePath)
+$(IntermediateDirectory)/TableImpl$(ObjectSuffix).d:
+	@$(CompilerName) $(CmpOptions) $(IncludePath) -MT$(IntermediateDirectory)/TableImpl$(ObjectSuffix) -MF$(IntermediateDirectory)/TableImpl$(ObjectSuffix).d -MM TableImpl.cpp
+
 ##
 ## Clean
 ##
@@ -370,6 +395,16 @@ clean:
 	$(RM) $(IntermediateDirectory)/CountActor$(ObjectSuffix).d
 	$(RM) $(IntermediateDirectory)/SPKCriteria$(ObjectSuffix)
 	$(RM) $(IntermediateDirectory)/SPKCriteria$(ObjectSuffix).d
+	$(RM) $(IntermediateDirectory)/SavableManager$(ObjectSuffix)
+	$(RM) $(IntermediateDirectory)/SavableManager$(ObjectSuffix).d
+	$(RM) $(IntermediateDirectory)/FieldDef$(ObjectSuffix)
+	$(RM) $(IntermediateDirectory)/FieldDef$(ObjectSuffix).d
+	$(RM) $(IntermediateDirectory)/FieldImpl$(ObjectSuffix)
+	$(RM) $(IntermediateDirectory)/FieldImpl$(ObjectSuffix).d
+	$(RM) $(IntermediateDirectory)/TableDef$(ObjectSuffix)
+	$(RM) $(IntermediateDirectory)/TableDef$(ObjectSuffix).d
+	$(RM) $(IntermediateDirectory)/TableImpl$(ObjectSuffix)
+	$(RM) $(IntermediateDirectory)/TableImpl$(ObjectSuffix).d
 	$(RM) $(OutputFile)
 
 -include $(IntermediateDirectory)/*.d

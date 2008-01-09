@@ -34,6 +34,9 @@
 #include "Race.h"
 #include "RaceManager.h"
 
+#include "Table.h"
+#include "Tables.h"
+
 EditorNewCharacter::EditorNewCharacter(UBSocket* sock) :
 Editor(sock),
 m_state(0)

@@ -18,9 +18,6 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#include <vector>
-#include <string>
-
 #include "EditorArea.h"
 #include "EditorOLC.h"
 
@@ -35,6 +32,9 @@
 #include "Account.h"
 #include "Area.h"
 #include "AreaManager.h"
+
+#include "Table.h"
+#include "Tables.h"
 
 EditorArea::AreaCommand EditorArea::m_editName("Name", &EditorArea::editName);
 EditorArea::AreaCommand EditorArea::m_editDescription("Description", &EditorArea::editDescription);

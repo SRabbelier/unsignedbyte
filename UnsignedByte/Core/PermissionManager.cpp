@@ -18,12 +18,12 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#include <string>
-#include <stdexcept>
-
 #include "PermissionManager.h"
 #include "Permission.h"
 #include "Global.h"
+
+#include "Table.h"
+#include "Tables.h"
 
 using mud::PermissionManager;
 using mud::Permission;

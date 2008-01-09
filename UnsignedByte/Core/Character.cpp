@@ -47,6 +47,9 @@
 #include "Account.h" // needed because UBSocket.h is included
 #include "AreaManager.h"
 
+#include "Table.h"
+#include "Tables.h"
+
 using mud::Character;
 
 Character::Character(db::Characters* character) :

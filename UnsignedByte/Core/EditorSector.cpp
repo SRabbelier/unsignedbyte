@@ -18,9 +18,6 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#include <vector>
-#include <string>
-
 #include "EditorSector.h"
 #include "EditorOLC.h"
 
@@ -37,6 +34,9 @@
 #include "Account.h"
 #include "Sector.h"
 #include "SectorManager.h"
+
+#include "Table.h"
+#include "Tables.h"
 
 using mud::Sector;
 

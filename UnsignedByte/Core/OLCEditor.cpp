@@ -31,6 +31,9 @@
 #include "Cache.h"
 #include "Account.h" // needed because we include UBSocket.h
 
+#include "Table.h"
+#include "Tables.h"
+
 OLCEditor::SavableCommand OLCEditor::m_listCommands("Commands", &OLCEditor::listCommands);
 OLCEditor::SavableCommand OLCEditor::m_newSavable("New", &OLCEditor::newSavable);
 OLCEditor::SavableCommand OLCEditor::m_editSavable("Edit", &OLCEditor::editSavable);

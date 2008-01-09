@@ -19,15 +19,11 @@
  ***************************************************************************/
 #pragma once
 
-#include <string>
-#include <vector>
-#include <map>
+#include "Types.h"
 
 #include "singleton.h"
-#include "sqlite3.h"
 #include "Database.h"
 #include "Global.h"
-#include "Tables.h"
 
 typedef std::vector<std::string> Strings;
 typedef std::vector<long> Longs;

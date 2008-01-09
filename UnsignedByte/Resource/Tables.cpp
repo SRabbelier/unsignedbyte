@@ -19,38 +19,38 @@
  ***************************************************************************/
 
 #include "Tables.h"
-#include "Table.h"
+#include "TableDef.h"
 
 Tables::Tables() :
-	ACCOUNTS( new Table("Accounts") ),
-	AREAS( new Table("Areas") ),
-	BRANCHES( new Table("Branches") ),
-	CHARACTERACCOUNT( new Table("CharacterAccount") ),
-	CHARACTERBRANCH( new Table("CharacterBranch") ),
-	CHARACTERCLUSTER( new Table("CharacterCluster") ),
-	CHARACTERS( new Table("Characters") ),
-	CHARACTERSKILL( new Table("CharacterSkill") ),
-	CHARACTERSTAT( new Table("CharacterStat") ),
-	CHARACTERTREE( new Table("CharacterTree") ),
-	CHUNKS( new Table("Chunks") ),
-	CLUSTERS( new Table("Clusters") ),
-	COLOURS( new Table("Colours") ),
-	COMMANDS( new Table("Commands") ),
-	DETAILS( new Table("Details") ),
-	DETAILROOM( new Table("DetailRoom") ),
-	DETAILCHUNK( new Table("DetailChunk") ),
-	DETAILCHARACTER( new Table("DetailCharacter") ),
-	DETAILDETAIL( new Table("DetailDetail") ),
-	EXITS( new Table("Exits") ),
-	GRANTGROUPS( new Table("GrantGroups") ),
-	PERMISSIONS( new Table("Permissions") ),
-	RACES( new Table("Races") ),
-	ROOMS( new Table("Rooms") ),
-	SECTORS( new Table("Sectors") ),
-	SKILLS( new Table("Skills") ),
-	STATS( new Table("Stats") ),
-	TREES( new Table("Trees") ),
-	VERSION( new Table("Version") )
+	ACCOUNTS( new TableDef("Accounts") ),
+	AREAS( new TableDef("Areas") ),
+	BRANCHES( new TableDef("Branches") ),
+	CHARACTERACCOUNT( new TableDef("CharacterAccount") ),
+	CHARACTERBRANCH( new TableDef("CharacterBranch") ),
+	CHARACTERCLUSTER( new TableDef("CharacterCluster") ),
+	CHARACTERS( new TableDef("Characters") ),
+	CHARACTERSKILL( new TableDef("CharacterSkill") ),
+	CHARACTERSTAT( new TableDef("CharacterStat") ),
+	CHARACTERTREE( new TableDef("CharacterTree") ),
+	CHUNKS( new TableDef("Chunks") ),
+	CLUSTERS( new TableDef("Clusters") ),
+	COLOURS( new TableDef("Colours") ),
+	COMMANDS( new TableDef("Commands") ),
+	DETAILS( new TableDef("Details") ),
+	DETAILROOM( new TableDef("DetailRoom") ),
+	DETAILCHUNK( new TableDef("DetailChunk") ),
+	DETAILCHARACTER( new TableDef("DetailCharacter") ),
+	DETAILDETAIL( new TableDef("DetailDetail") ),
+	EXITS( new TableDef("Exits") ),
+	GRANTGROUPS( new TableDef("GrantGroups") ),
+	PERMISSIONS( new TableDef("Permissions") ),
+	RACES( new TableDef("Races") ),
+	ROOMS( new TableDef("Rooms") ),
+	SECTORS( new TableDef("Sectors") ),
+	SKILLS( new TableDef("Skills") ),
+	STATS( new TableDef("Stats") ),
+	TREES( new TableDef("Trees") ),
+	VERSION( new TableDef("Version") )
 {	
 	ACCOUNTS->addPK("accountid");
 	ACCOUNTS->addLookupTextField("name");

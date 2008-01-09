@@ -18,13 +18,13 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#include <string>
-#include <stdexcept>
-
 #include "CommandManager.h"
 #include "Command.h"
 #include "Global.h"
 #include "Command.h"
+
+#include "Table.h"
+#include "Tables.h"
 
 using mud::CommandManager;
 using mud::Command;

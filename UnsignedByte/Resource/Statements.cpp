@@ -20,6 +20,8 @@
 
 #include "Statements.h"
 #include "sqlite3.h"
+#include "Field.h"
+#include "Table.h"
 
 Statements::Statements() :
 m_insert(NULL),
