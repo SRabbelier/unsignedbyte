@@ -32,7 +32,17 @@ m_table(table),
 m_newentry(true),
 m_dirty(false)
 {
+	for(FieldImplVector::const_iterator it = table->implbegin(); it != table->implend(); it++)
+	{
+		ValuePtr value(new Value(*it));
+		m_fields[it->get()] = value;
+	}
 	
+	for(KeyDefs::const_iterator it = table->keyimplbegin(); it != table->keyimplend(); it++)
+	{
+		KeyPtr key(new Key(*it, 0));
+		m_keys.push_back(key);
+	}
 }
 
 SavableManager::~SavableManager()
@@ -114,10 +124,10 @@ void SavableManager::bindKeys(sqlite3_stmt* stmt, int startpos) const
 	int rc = 0;
 	for(Keys::const_iterator it = m_keys.begin(); it != m_keys.end(); it++)
 	{
-		rc = sqlite3_bind_int64(stmt, pos, *it);
+		rc = sqlite3_bind_int64(stmt, pos, (*it)->getValue());
 		
 		if(rc != SQLITE_OK)
-			throw new std::runtime_error("SavableManager::bindLookup(), rc != SQLITE_OK.");
+			throw new std::runtime_error("SavableManager::bindKeys(), rc != SQLITE_OK.");
 		pos++;
 	}
 }
@@ -128,13 +138,19 @@ void SavableManager::bindFields(sqlite3_stmt* stmt, int startpos) const
 	int rc = 0;
 	for(Fields::const_iterator it = m_fields.begin(); it != m_fields.end(); it++)
 	{
+		if(!it->second)
+		{
+			printf("Empty field '%s'\n", it->first->getName().c_str());
+			continue;
+		}
+		
 		if(it->first->isText())
 			rc = sqlite3_bind_text(stmt, pos, it->second->getStringValue().c_str(), it->second->getStringValue().size(), SQLITE_TRANSIENT);
 		else
 			rc = sqlite3_bind_int64(stmt, pos, it->second->getIntegerValue());
 			
 		if(rc != SQLITE_OK)
-			throw new std::runtime_error("SavableManager::bindLookup(), rc != SQLITE_OK.");
+			throw new std::runtime_error("SavableManager::bindFields(), rc != SQLITE_OK.");
 		pos++;
 	}
 }
@@ -148,7 +164,11 @@ void SavableManager::bindUpdate(sqlite3_stmt* stmt) const
 void SavableManager::bindLookup(sqlite3_stmt* stmt) const
 {
 	int rc = 0;
-	rc = sqlite3_bind_text(stmt, 1, m_lookupvalue.c_str(), m_lookupvalue.size(), SQLITE_TRANSIENT);
+	if(m_lookupvalue->getField()->isText())
+		rc = sqlite3_bind_text(stmt, 1, m_lookupvalue->getStringValue().c_str(), m_lookupvalue->getStringValue().size(), SQLITE_TRANSIENT);
+	else
+		rc = sqlite3_bind_int64(stmt, 1, m_lookupvalue->getIntegerValue());
+		
 	if(rc != SQLITE_OK)
 		throw new std::runtime_error("SavableManager::bindLookup(), rc != SQLITE_OK.");
 }
@@ -158,12 +178,14 @@ void SavableManager::parseInsert(sqlite3* db)
 	// assert(m_keys.size() == 0);
 	
 	KeyPtr key(new Key(m_table->firstImplKey(), sqlite3_last_insert_rowid(db)));
-	m_keys.push_back(key);
+	Keys keys;
+	keys.push_back(key);
+	m_keys = keys;
 }
 
 void SavableManager::parseSelect(sqlite3_stmt* stmt)
 {
-	int pos = 1;
+	int pos = 0;
 	const unsigned char * text;
 	for(Fields::const_iterator it = m_fields.begin(); it != m_fields.end(); it++)
 	{
@@ -192,7 +214,9 @@ void SavableManager::parseLookup(sqlite3_stmt* stmt)
 {
 	// assert(m_keys.size() == 0);
 	KeyPtr key(new Key(m_table->firstImplKey(), sqlite3_column_int64(stmt, 0)));
-	m_keys.push_back(key);
+	Keys keys;
+	keys.push_back(key);
+	m_keys = keys;
 }
 
 TablePtr SavableManager::getTable() const
@@ -207,7 +231,7 @@ const Keys& SavableManager::getkeys() const
 
 ValuePtr SavableManager::getfield(FieldImplPtr field) const
 {
-	Fields::const_iterator it = m_fields.find(field);
+	Fields::const_iterator it = m_fields.find(field.get());
 	if(it != m_fields.end())
 		return it->second;
 	else
@@ -219,7 +243,14 @@ void SavableManager::setkeys(Keys keys)
 	if(keys.size() != m_table->keysize())
 		throw std::invalid_argument("SavableManager::setkeys(), key sizes don't match.");
 		
+	for(Keys::const_iterator it = keys.begin(); it != keys.end(); it++)
+	{
+		if((*it)->getKeyDef()->getTable() != m_table)
+			throw std::invalid_argument("SavableManager::setkeys(), key type is not m_table.");
+	}
+		
 	m_keys = keys;
+	m_dirty = true;
 }
 
 void SavableManager::setvalue(ValuePtr value)
@@ -227,5 +258,9 @@ void SavableManager::setvalue(ValuePtr value)
 	if(!m_table->hasfield(value->getField()))
 		throw std::invalid_argument("SavableManager::setfield(), field not in m_table.");
 	
-	m_fields[value->getField()] = value;
+	if(m_fields.find(value->getField().get()) == m_fields.end())
+		throw std::invalid_argument("SavableManager::setfield(), field not in m_fields.");
+	
+	m_fields[value->getField().get()] = value;
+	m_dirty = true;
 }

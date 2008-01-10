@@ -26,6 +26,9 @@ class Key
 public:
 	Key(KeyDefPtr key, value_type value) : m_key(key), m_value(value) { }
 	~Key() { }
+	
+	KeyDefPtr getKeyDef() const { return m_key; }
+	value_type getValue() const { return m_value; }
 
 private:
 	KeyDefPtr m_key;

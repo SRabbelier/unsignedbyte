@@ -29,9 +29,9 @@ typedef unsigned long value_type;
 namespace game
 {
 	const char vname[] = "hp";
-	const char vstring[] = "0.2.0";
-	const value_type major = 0;
-	const value_type minor = 2;
+	const char vstring[] = "1.0.0";
+	const value_type major = 1;
+	const value_type minor = 0;
 	const value_type micro = 0;
 };
 

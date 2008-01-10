@@ -53,19 +53,19 @@ bool Initializer::VerifyDatabaseVersion()
 	KeyPtr key(new Key(db::VersionFields::Get()->VERSIONID, 1));
 	SavableManagerPtr manager = SavableManager::bykeys(db::TableImpls::Get()->VERSION, key);
 
-	if(manager->getfield(db::VersionFields::Get()->MAJOR) != game::major)
+	if(manager->getfield(db::VersionFields::Get()->MAJOR)->getIntegerValue() != game::major)
 	{
 		Global::Get()->logf("Major / Major mismatch.\n");
 		equal = false;
 	}
 	
-	if(manager->getfield(db::VersionFields::Get()->MINOR) != game::minor)
+	if(manager->getfield(db::VersionFields::Get()->MINOR)->getIntegerValue() != game::minor)
 	{
 		Global::Get()->logf("Minor / Minor mismatch.\n");
 		equal = false;
 	}
 	
-	if(manager->getfield(db::VersionFields::Get()->MICRO) != game::micro)
+	if(manager->getfield(db::VersionFields::Get()->MICRO)->getIntegerValue() != game::micro)
 	{
 		Global::Get()->logf("Micro / Micro mismatch.\n");
 		equal = false;
@@ -137,7 +137,7 @@ void Initializer::InitDatabase()
 		value = new Value(db::VersionFields::Get()->MICRO, game::micro);
 		manager->setvalue(value);
 		
-		value = new Value(db::VersionFields::Get()->VERSIONTEXT, game::vstring);
+		value = new Value(db::VersionFields::Get()->VERSIONTEXT, std::string(game::vstring));
 		manager->setvalue(value);
 		
 		manager->save();
@@ -168,7 +168,7 @@ void Initializer::InitDatabase()
 	}
 	catch(RowNotFoundException& e)
 	{
-		SavableManagerPtr manager = SavableManager::getnew(db::TableImpls::Get()->ACCOUNTS);
+		SavableManagerPtr manager = SavableManager::getnew(db::TableImpls::Get()->ROOMS);
 		
 		ValuePtr value = new Value(db::RoomsFields::Get()->NAME, "The Void");
 		manager->setvalue(value);

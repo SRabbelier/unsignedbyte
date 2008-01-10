@@ -63,7 +63,7 @@ typedef std::vector<FieldDefPtr> FieldDefVector;
 class FieldImpl;
 typedef SmartPtr<FieldImpl> FieldImplPtr;
 typedef std::vector<FieldImplPtr> FieldImplVector;
-typedef std::map<FieldImplPtr, ValuePtr> Fields;
+typedef std::map<FieldImpl*, ValuePtr> Fields;
 
 class Field;
 typedef SmartPtr<Field> FieldPtr;

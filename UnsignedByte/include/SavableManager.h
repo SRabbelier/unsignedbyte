@@ -62,7 +62,7 @@ class SavableManager
 		friend SmartPtrDelete(SavableManager);
 		
 		TableImplPtr m_table;		
-		std::string m_lookupvalue;
+		ValuePtr m_lookupvalue;
 		
 		Keys m_keys;
 		Fields m_fields;

@@ -24,6 +24,7 @@
 class Value
 {
 public:
+	Value(FieldImplPtr field) : m_field(field) {}
 	Value(FieldImplPtr field, cstring value) : m_field(field), m_textvalue(value) {}
 	Value(FieldImplPtr field, value_type value) : m_field(field), m_integervalue(value) {}
 	~Value() {}

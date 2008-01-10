@@ -38,7 +38,7 @@ public:
 	cstring getInsert() const {return m_insert;}
 	cstring getUpdate() const {return m_update;}
 	cstring getSelect() const {return m_select;}
-	cstring getLookup(FieldPtr field) {return m_lookup[field];}
+	cstring getLookup(FieldPtr field) {return m_lookup[field.get()];}
 	cstring getList() const {return m_list;}
 	cstring getForEach() const {return m_foreach;}
 	
@@ -47,12 +47,12 @@ public:
 	void setInsert(cstring insert) { m_insert = insert; }
 	void setUpdate(cstring update) { m_update = update; }
 	void setSelect(cstring select) { m_select = select; }
-	void setLookup(FieldPtr field, cstring lookup) { m_lookup[field] = lookup; }
+	void setLookup(FieldPtr field, cstring lookup) { m_lookup[field.get()] = lookup; }
 	void setList(cstring list) { m_list = list; }
 	void setForEach(cstring forEach) { m_foreach = forEach; }
 	
 private:
-	typedef std::map<FieldPtr, std::string> fieldmap;
+	typedef std::map<Field*, std::string> fieldmap;
 	
 	std::string m_insert;
 	std::string m_erase;

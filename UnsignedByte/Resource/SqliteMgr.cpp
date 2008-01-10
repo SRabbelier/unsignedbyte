@@ -50,7 +50,9 @@ void SqliteMgr::doInsert(SavableManager* bindable)
 		bindable->bindKeys(insert);	
 		
 	doStatement(insert);
-	bindable->parseInsert(m_odb->db);
+	
+	if(table->hasSingularPrimaryKey())
+		bindable->parseInsert(m_odb->db);
 	
 	commit(table);
 }
