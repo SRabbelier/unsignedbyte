@@ -49,18 +49,13 @@ public:
 	const std::string& tableForeignName() const;
 	
 	// Lookup fields
-	FieldVector::const_iterator lookupbegin() const { return m_lookupfields.begin(); }
-	FieldVector::const_iterator lookupend() const { return m_lookupfields.end(); }
+	FieldDefVector::const_iterator lookupbegin() const { return m_lookupfields.begin(); }
+	FieldDefVector::const_iterator lookupend() const { return m_lookupfields.end(); }
 	size_t lookupsize() const { return m_lookupfields.size(); }
 	
 	FieldDefVector::const_iterator defbegin() const { return m_deffields.begin(); }
 	FieldDefVector::const_iterator defend() const { return m_deffields.end(); }
 	size_t defsize() const { return m_deffields.size(); }
-	
-	FieldVector::const_iterator begin() const { return m_fields.begin(); }
-	FieldVector::const_iterator end() const { return m_fields.end(); }
-	size_t size() const { return m_fields.size(); }
-	bool hasfield(FieldPtr field) const;
 	
 	std::string firstKey() const { return m_primarykeys.begin()->first; }
 	TableMap::const_iterator keybegin() const { return m_primarykeys.begin(); }
@@ -73,6 +68,8 @@ private:
 	void addField(const std::string& name, bool text, const std::string& defaulttext, bool providelookup);
 	
 	std::string m_foreignname;
-	FieldVector m_lookupfields;
+	FieldDefVector m_lookupfields;
 	FieldDefVector m_deffields;
+	TableMap m_primarykeys; // All keys added with addFPK()
+	bool m_spkey; // singular primary key
 };

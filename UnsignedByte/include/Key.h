@@ -19,10 +19,15 @@
  ***************************************************************************/
 #pragma once
 
+#include "Types.h"
+
 class Key
 {
 public:
+	Key(KeyDefPtr key, value_type value) : m_key(key), m_value(value) { }
+	~Key() { }
 
 private:
-	value_type m_key;
+	KeyDefPtr m_key;
+	value_type m_value;
 };

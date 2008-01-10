@@ -303,9 +303,9 @@ sqlite3_stmt* SqliteMgr::getUpdateStmt(Table* table)
 		sql.append("UPDATE ");
 		sql.append(table->tableName());
 		sql.append(" SET ");
-		for(FieldVector::const_iterator it = table->begin(); it != table->end(); it++)
+		for(FieldDefVector::const_iterator it = table->defbegin(); it != table->defend(); it++)
 		{
-			if(it != table->begin())
+			if(it != table->defbegin())
 				sql.append(", ");
 
 			sql.append((*it)->getName());
@@ -357,9 +357,9 @@ sqlite3_stmt* SqliteMgr::getSelectStmt(Table* table)
 	else
 	{
 		sql.append("SELECT ");
-		for(FieldVector::const_iterator it = table->begin(); it != table->end(); it++)
+		for(FieldDefVector::const_iterator it = table->defbegin(); it != table->defend(); it++)
 		{
-			if(it != table->begin())
+			if(it != table->defbegin())
 				sql.append(", ");
 
 			sql.append((*it)->getName());
@@ -368,7 +368,7 @@ sqlite3_stmt* SqliteMgr::getSelectStmt(Table* table)
 		/**
 		 * Prevent queries in the form "SELECT  FROM ....", this is for tables that consist of only primary keys.
 		 */ 
-		if(!table->size())
+		if(!table->defsize())
 			sql.append("*");
 		 
 		sql.append(" FROM ");
@@ -476,7 +476,7 @@ sqlite3_stmt* SqliteMgr::getForEachStmt(Table* table)
 			sql.append(it->first);
 			comspace = true;
 		}
-		for(FieldVector::const_iterator it = table->begin(); it != table->end(); it++)
+		for(FieldDefVector::const_iterator it = table->defbegin(); it != table->defend(); it++)
 		{
 			if(comspace)
 				sql.append(", ");

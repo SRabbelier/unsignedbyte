@@ -23,8 +23,7 @@
 #include "FieldDef.h"
 
 Table::Table(std::string name) :
-m_name(name),
-m_spkey(false)
+m_name(name)
 {
 
 }

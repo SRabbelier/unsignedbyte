@@ -24,7 +24,7 @@
 #include "Global.h"
 #include "Tables.h"
 #include "TableDef.h"
-#include "Field.h"
+#include "FieldDef.h"
 #include "StringUtilities.h"
 
 using std::endl;
@@ -76,7 +76,7 @@ void ClassSourceGenerator::AppendCtorGeneral()
 		(*m_file) << "new KeyDef(TableImpls::Get()->" << String::Get()->toupper(m_table->tableName()) << ", \"" << it->first << "\"" << "))";
 	}
 	
-	for(FieldVector::const_iterator it = m_table->begin(); it != m_table->end(); it++)
+	for(FieldDefVector::const_iterator it = m_table->defbegin(); it != m_table->defend(); it++)
 	{
 		(*m_file) << "," << endl;
 			
@@ -90,7 +90,18 @@ void ClassSourceGenerator::AppendCtorGeneral()
 	(*m_file) << endl;
 	
 	(*m_file) << "{" << endl;
-	(*m_file) << endl;
+	for(TableMap::const_iterator it = m_table->keybegin(); it != m_table->keyend(); it++)
+	{
+		(*m_file) << m_tabs << "TableImpls::Get()->" << String::Get()->toupper(m_table->tableName());
+		(*m_file) << "->addKey(" << String::Get()->toupper(it->first) << ");" << endl;
+	}
+	
+	for(FieldDefVector::const_iterator it = m_table->defbegin(); it != m_table->defend(); it++)
+	{			
+		(*m_file) << m_tabs << "TableImpls::Get()->" << String::Get()->toupper(m_table->tableName());
+		(*m_file) << "->addField(" << String::Get()->toupper((*it)->getName()) << ");" << endl;
+	}
+
 	(*m_file) << "}" << endl;
 	(*m_file) << endl;
 }

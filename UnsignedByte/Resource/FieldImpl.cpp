@@ -20,6 +20,7 @@
 
 #include "FieldImpl.h"
 #include "TableImpl.h"
+#include "KeyDef.h"
 
 FieldImpl::FieldImpl(TableImplPtr table, const std::string& name, bool text) :
 Field(name, text),

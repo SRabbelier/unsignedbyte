@@ -29,18 +29,13 @@ class Table
 public:
 	const std::string& tableName() const;
 	
-	virtual FieldVector::const_iterator lookupbegin() const = 0;
-	virtual FieldVector::const_iterator lookupend() const = 0;
+	virtual FieldDefVector::const_iterator lookupbegin() const = 0;
+	virtual FieldDefVector::const_iterator lookupend() const = 0;
 	virtual size_t lookupsize() const = 0;
 	
 	virtual FieldDefVector::const_iterator defbegin() const = 0;
 	virtual FieldDefVector::const_iterator defend() const = 0;
 	virtual size_t defsize() const = 0;
-	
-	virtual FieldVector::const_iterator begin() const = 0;
-	virtual FieldVector::const_iterator end() const = 0;
-	virtual size_t size() const = 0;
-	virtual bool hasfield(FieldPtr field) const = 0;
 	
 	virtual std::string firstKey() const = 0;
 	virtual TableMap::const_iterator keybegin() const = 0;
@@ -55,9 +50,4 @@ protected:
 	friend SmartPtrDelete(Table);
 
 	std::string m_name;
-	
-	bool m_spkey; // singular primary key
-
-	FieldVector m_fields;
-	TableMap m_primarykeys; // All keys added with addFPK()
 };

@@ -27,6 +27,7 @@
 #include "TableDef.h"
 #include "Tables.h"
 #include "FieldImpl.h"
+#include "Key.h"
 #include "KeyDef.h"
 #include "Value.h"
 #include "db.h"
@@ -49,7 +50,8 @@ bool Initializer::VerifyDatabaseVersion()
 {
 	bool equal = true;
 
-	SavableManagerPtr manager = SavableManager::bykeys(db::TableImpls::Get()->VERSION, 1);
+	KeyPtr key(new Key(db::VersionFields::Get()->VERSIONID, 1));
+	SavableManagerPtr manager = SavableManager::bykeys(db::TableImpls::Get()->VERSION, key);
 
 	if(manager->getfield(db::VersionFields::Get()->MAJOR) != game::major)
 	{
@@ -117,7 +119,8 @@ void Initializer::InitDatabase()
 {	
 	try
 	{
-		SavableManagerPtr manager = SavableManager::bykeys(db::TableImpls::Get()->VERSION, 1);
+		KeyPtr key(new Key(db::VersionFields::Get()->VERSIONID, 1));
+		SavableManagerPtr manager = SavableManager::bykeys(db::TableImpls::Get()->VERSION, key);
 	}
 	catch(RowNotFoundException& e)
 	{
@@ -142,7 +145,8 @@ void Initializer::InitDatabase()
 		
 	try
 	{
-		SavableManagerPtr manager = SavableManager::bykeys(db::TableImpls::Get()->ACCOUNTS, 1);
+		KeyPtr key(new Key(db::AccountsFields::Get()->ACCOUNTID, 1));
+		SavableManagerPtr manager = SavableManager::bykeys(db::TableImpls::Get()->ACCOUNTS, key);
 	}
 	catch(RowNotFoundException& e)
 	{
@@ -159,7 +163,8 @@ void Initializer::InitDatabase()
 	
 	try
 	{
-		SavableManagerPtr manager = SavableManager::bykeys(db::TableImpls::Get()->ROOMS, 1);
+		KeyPtr key(new Key(db::RoomsFields::Get()->ROOMID, 1));
+		SavableManagerPtr manager = SavableManager::bykeys(db::TableImpls::Get()->ROOMS, key);
 	}
 	catch(RowNotFoundException& e)
 	{

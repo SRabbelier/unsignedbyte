@@ -24,6 +24,8 @@
 #include "TableImpl.h"
 #include "Value.h"
 #include "FieldImpl.h"
+#include "Key.h"
+#include "KeyDef.h"
 
 SavableManager::SavableManager(TableImplPtr table) :
 m_table(table),
@@ -44,7 +46,7 @@ SavableManagerPtr SavableManager::getnew(TableImplPtr table)
 	return result;
 }
 
-SavableManagerPtr SavableManager::bykeys(TableImplPtr table, value_type key)
+SavableManagerPtr SavableManager::bykeys(TableImplPtr table, KeyPtr key)
 {
 	Keys keys;
 	keys.push_back(key);
@@ -154,7 +156,8 @@ void SavableManager::bindLookup(sqlite3_stmt* stmt) const
 void SavableManager::parseInsert(sqlite3* db)
 {	
 	// assert(m_keys.size() == 0);
-	Key key(sqlite3_last_insert_rowid(db));
+	
+	KeyPtr key(new Key(m_table->firstImplKey(), sqlite3_last_insert_rowid(db)));
 	m_keys.push_back(key);
 }
 
@@ -188,7 +191,7 @@ void SavableManager::parseSelect(sqlite3_stmt* stmt)
 void SavableManager::parseLookup(sqlite3_stmt* stmt)
 {
 	// assert(m_keys.size() == 0);
-	Key key(sqlite3_column_int64(stmt, 0));
+	KeyPtr key(new Key(m_table->firstImplKey(), sqlite3_column_int64(stmt, 0)));
 	m_keys.push_back(key);
 }
 

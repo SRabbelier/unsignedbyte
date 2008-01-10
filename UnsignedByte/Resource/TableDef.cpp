@@ -26,7 +26,8 @@
 #include "Global.h"
 
 TableDef::TableDef(std::string name) :
-Table(name)
+Table(name),
+m_spkey(false)
 {
 	std::string foreignname;
 	foreignname.append("fk");
@@ -113,7 +114,6 @@ void TableDef::addTextField(const std::string& name, const std::string& defaultt
 void TableDef::addField(const std::string& name, bool text, const std::string& defaulttext, bool providelookup)
 {
 	FieldDefPtr field(new FieldDef(name, text, defaulttext));
-	m_fields.push_back(field);
 	m_deffields.push_back(field);
 	
 	if(providelookup)
@@ -138,15 +138,4 @@ void TableDef::addFK(TableDefPtr table, const std::string& suffix)
 const std::string& TableDef::tableForeignName() const
 {	
 	return m_foreignname;
-}
-
-bool TableDef::hasfield(FieldPtr field) const
-{
-	for(FieldVector::const_iterator it = m_fields.begin(); it != m_fields.end(); it++)
-	{
-		if((*it) == field)
-			return true;
-	}
-	
-	return false;
 }

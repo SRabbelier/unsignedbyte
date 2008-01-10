@@ -21,7 +21,8 @@
 #include "TableImpl.h"
 #include "ListActor.h"
 #include "SqliteMgr.h"
-#include "Field.h"
+#include "FieldImpl.h"
+#include "KeyDef.h"
 
 TableImpl::TableImpl(TableDefPtr table, std::string name) :
 Table(name),
@@ -47,4 +48,15 @@ const std::vector<std::string>& TableImpl::tableList()
 void TableImpl::modify()
 {
 	m_lastchange = time(NULL);
+}
+
+bool TableImpl::hasfield(FieldImplPtr field) const
+{
+	for(FieldImplVector::const_iterator it = m_implfields.begin(); it != m_implfields.end(); it++)
+	{
+		if((*it) == field)
+			return true;
+	}
+	
+	return false;
 }

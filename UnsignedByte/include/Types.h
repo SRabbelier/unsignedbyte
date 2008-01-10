@@ -24,7 +24,6 @@
 #include <map>
 #include <stdexcept>
 
-#include <smart_ptr.h>
 #include <sqlite3.h>
 
 #include "smart_ptr.h"
@@ -46,8 +45,9 @@ class TableImpl;
 typedef SmartPtr<TableImpl> TableImplPtr;
 typedef std::vector<TableImplPtr> TableImplVector;
 
-typedef value_type Key;
-typedef std::vector<Key> Keys;
+class Key;
+typedef SmartPtr<Key> KeyPtr;
+typedef std::vector<KeyPtr> Keys;
 
 class KeyDef;
 typedef SmartPtr<KeyDef> KeyDefPtr;
