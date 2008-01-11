@@ -123,6 +123,7 @@
     <File Name="../include/TableDef.h"/>
     <File Name="../include/KeyDef.h"/>
     <File Name="../include/Key.h"/>
+    <File Name="../include/SavableHeaders.h"/>
   </VirtualDirectory>
   <Settings Type="Static Library">
     <Configuration Name="Debug" CompilerType="gnu g++" DebuggerType="GNU gdb debugger">

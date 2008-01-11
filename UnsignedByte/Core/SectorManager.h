@@ -19,11 +19,8 @@
  ***************************************************************************/
 #pragma once
 
-#include <string>
-#include <vector>
-
 #include "singleton.h"
-#include "db.h"
+#include "SavableHeaders.h"
 
 namespace mud 
 { 
@@ -31,34 +28,19 @@ namespace mud
 	typedef SmartPtr<Sector> SectorPtr;
 }
 
-typedef const std::string& cstring;
-typedef std::map<value_type,mud::SectorPtr> sectors_m;
-typedef std::map<std::string,mud::SectorPtr> sectors_ms;
-typedef std::map<std::string, value_type> reverseStringKey;
-
 namespace mud
 {
 	class SectorManager : public Singleton<mud::SectorManager>
 	{
 	public:
-		TablePtr GetTable();
+		TableImplPtr GetTable();
 		std::vector<std::string> List();
-		void Close(SectorPtr sector);
 		
 		value_type Add();
 		mud::SectorPtr GetByKey(value_type id);
 		mud::SectorPtr GetByName(cstring name);
 		
 		value_type lookupByName(cstring value);
-		
-		void Close(value_type Sectorid);
-		
-	private:
-		SectorPtr cacheSector(db::Sectors* d);
-		
-		sectors_m m_byKey;
-		sectors_ms m_byName;
-		reverseStringKey m_lookupByName;
 
 	private:
 		SectorManager(void) {};

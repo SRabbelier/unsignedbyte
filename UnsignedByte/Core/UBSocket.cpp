@@ -19,9 +19,7 @@
  ***************************************************************************/
 
 #include <assert.h>
-#include <string>
 #include <stdarg.h>
-#include <stdexcept>
 
 #include <Parse.h>
 
@@ -34,7 +32,6 @@
 #include "Global.h"
 #include "Account.h"
 #include "AccountManager.h"
-#include "Cache.h"
 #include "Colour.h"
 #include "ColourManager.h"
 
@@ -68,12 +65,6 @@ UBSocket::~UBSocket(void)
 	{
 		delete m_nexteditor;
 		m_nexteditor = NULL;
-	}
-
-	if(m_account)
-	{
-		mud::AccountManager::Get()->Close(m_account);
-		m_account.reset();
 	}
 }
 

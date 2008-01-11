@@ -19,28 +19,66 @@
  ***************************************************************************/
 
 #include "Sector.h"
-#include "Global.h"
-#include "DatabaseMgr.h"
-#include "Cache.h"
-#include "db.h"
-
-#include "Table.h"
-#include "Tables.h"
 
 using mud::Sector;
 
-Sector::Sector(db::Sectors* Sector) :
+Sector::Sector(SavableManagerPtr Sector) :
 m_sector(Sector)
 {
-	if(m_sector == NULL)
+	if(!m_sector)
 		throw std::invalid_argument("Sector::Sector(), m_sector == NULL!");
 }
 
 Sector::~Sector(void)
 {
-	delete m_sector;
-	m_sector = NULL;
+
 }
+
+const std::string& Sector::getName() const
+{
+	return m_sector->getfield(db::SectorsFields::Get()->NAME)->getStringValue();
+}
+
+const std::string& Sector::getSymbol() const
+{
+	return m_sector->getfield(db::SectorsFields::Get()->SYMBOL)->getStringValue();
+}
+
+long Sector::getMoveCost() const
+{
+	return m_sector->getfield(db::SectorsFields::Get()->MOVECOST)->getIntegerValue();
+}
+
+bool Sector::isWater() const
+{
+	return m_sector->getfield(db::SectorsFields::Get()->WATER)->getBoolValue();
+}
+
+
+void Sector::setName(const std::string& name)
+{
+	ValuePtr value(new Value(db::SectorsFields::Get()->NAME, name));
+	m_sector->setvalue(value);
+}
+
+void Sector::setSymbol(const std::string& symbol)
+{
+	ValuePtr value(new Value(db::SectorsFields::Get()->SYMBOL, symbol));
+	m_sector->setvalue(value);
+}
+
+void Sector::setMoveCost(long movecost)
+{
+	ValuePtr value(new Value(db::SectorsFields::Get()->MOVECOST, movecost));
+	m_sector->setvalue(value);	
+}
+
+void Sector::setWater(bool water)
+{
+	ValuePtr value(new Value(db::SectorsFields::Get()->WATER, water ? 0 : 1));
+	m_sector->setvalue(value);	
+}
+
 
 void Sector::Delete()
 {
@@ -54,7 +92,7 @@ void Sector::Save()
 
 bool Sector::Exists()
 {
-	return m_sector->getsectorid();
+	return m_sector->exists();
 }
 
 std::vector<std::string> Sector::Show()

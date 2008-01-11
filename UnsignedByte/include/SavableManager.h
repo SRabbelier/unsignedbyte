@@ -49,7 +49,9 @@ class SavableManager
 		// Getters
 		TablePtr getTable() const;
 		const Keys& getkeys() const;
+		
 		ValuePtr getfield(FieldImplPtr field) const;
+		KeyPtr getkey(KeyDefPtr keydef) const;
 		
 		// Setters
 		void setkeys(Keys keys);

@@ -27,11 +27,14 @@
 #include <sqlite3.h>
 
 #include "smart_ptr.h"
+#include "singleton.h"
 
 typedef unsigned long value_type;
 typedef const std::string& cstring;
 
 typedef std::vector<std::string> Strings;
+
+class UBSocket;
 
 class Table;
 typedef SmartPtr<Table> TablePtr;
@@ -45,13 +48,13 @@ class TableImpl;
 typedef SmartPtr<TableImpl> TableImplPtr;
 typedef std::vector<TableImplPtr> TableImplVector;
 
-class Key;
-typedef SmartPtr<Key> KeyPtr;
-typedef std::vector<KeyPtr> Keys;
-
 class KeyDef;
 typedef SmartPtr<KeyDef> KeyDefPtr;
 typedef std::vector<KeyDefPtr> KeyDefs;
+
+class Key;
+typedef SmartPtr<Key> KeyPtr;
+typedef std::map<KeyDef*, KeyPtr> Keys;
 
 class Value;
 typedef SmartPtr<Value> ValuePtr;

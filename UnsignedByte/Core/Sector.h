@@ -19,10 +19,7 @@
  ***************************************************************************/
 #pragma once
 
-#include <string>
-#include "smart_ptr.h"
-#include "Savable.h"
-#include "db.h"
+#include "SavableHeaders.h"
 
 namespace mud
 {
@@ -36,18 +33,18 @@ namespace mud
 		/** 
 		 * \brief Getters
 		 */ 
-		const std::string& getName() const { return m_sector->getname(); }
-		const std::string& getSymbol() const { return m_sector->getsymbol(); }
-		long getMoveCost() const { return m_sector->getmovecost(); }
-		bool isWater() const { return m_sector->getwater(); }
+		const std::string& getName() const;
+		const std::string& getSymbol() const;
+		long getMoveCost() const;
+		bool isWater() const;
 		
 		/**
 		 * \brief Setters
 		 */ 
-		void setName(const std::string& name) { m_sector->setname(name); }
-		void setSymbol(const std::string& symbol) { m_sector->setsymbol(symbol); }
-		void setMoveCost(long movecost) { m_sector->setmovecost(movecost); }
-		void setWater(bool water) { m_sector->setwater(water); }
+		void setName(const std::string& name);
+		void setSymbol(const std::string& symbol);
+		void setMoveCost(long movecost);
+		void setWater(bool water);
 
 		/**
 		 * \brief Utilities
@@ -64,12 +61,12 @@ namespace mud
 		bool Exists();
 
 	private:
-		db::Sectors* m_sector;
+		SavableManagerPtr m_sector;
 
 		/**
 		 * \brief Ctors
 		 */ 
-		Sector(db::Sectors* Sector);
+		Sector(SavableManagerPtr Sector);
 		Sector(const Sector& rhs);
 		Sector operator=(const Sector& rhs);
 		~Sector(void);

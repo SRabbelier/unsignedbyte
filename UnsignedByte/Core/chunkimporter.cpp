@@ -36,22 +36,30 @@ std::string ChunkImporter::Detail::toString()
 	return result;
 }
 
-void ChunkImporter::Detail::apply(db::DetailsPtr detail)
+void ChunkImporter::Detail::apply(SavableManagerPtr detail)
 {	
 	DetailVector details = getDetails();
 	for(DetailVector::iterator it = details.begin(); it != details.end(); it++)
 	{
 		DetailPtr onedetail = *it;
 		
-		SmartPtr<db::Details> newdetail(new db::Details());
-		newdetail->setdescription(String::Get()->unlines(onedetail->getDescription() , " ", 0));
-		newdetail->save();
+		SavableManagerPtr newmanager = SavableManager::getnew(db::TableImpls::Get()->DETAILS);
+		ValuePtr value(new Value(db::DetailsFields::Get()->DESCRIPTION, String::Get()->unlines(onedetail->getDescription() , " ", 0)));
+		newmanager->setvalue(value);
+		newmanager->save();
 				
 		/**
 		 * Connect the detail to the chunk
 		 */ 
-		SmartPtr<db::DetailDetail> detaildetail(db::DetailDetail::bykey(newdetail->getdetailid(), detail->getdetailid()));
-		detaildetail->save();
+		Keys keys;
+		KeyPtr key;
+		key = new Key(db::DetailDetailFields::Get()->FKDETAILSPRIMARY, newmanager->getkey(db::DetailsFields::Get()->DETAILID));
+		keys[db::DetailDetailFields::Get()->FKDETAILSPRIMARY.get()] = key;
+		key = new Key(db::DetailDetailFields::Get()->FKDETAILSSECONDARY, detail->getkey(db::DetailsFields::Get()->DETAILID));
+		keys[db::DetailDetailFields::Get()->FKDETAILSSECONDARY.get()] = key;
+		
+		SavableManagerPtr manager = SavableManager::bykeys(db::TableImpls::Get()->DETAILDETAIL, keys);
+		manager->save();
 		
 		onedetail->apply(detail);
 	}
@@ -264,17 +272,25 @@ void ChunkImporter::Apply(mud::ChunkPtr chunk)
 	{
 		SmartPtr<Detail> onedetail = *it;
 		
-		SmartPtr<db::Details> detail(new db::Details());
-		detail->setdescription(String::Get()->unlines(onedetail->getDescription() , " ", 0));
-		detail->save();
+		SavableManagerPtr detailmanager = SavableManager::getnew(db::TableImpls::Get()->DETAILS);
+		ValuePtr value(new Value(db::DetailsFields::Get()->DESCRIPTION, String::Get()->unlines(onedetail->getDescription() , " ", 0)));
+		detailmanager->setvalue(value);
+		detailmanager->save();
 		
 		/**
 		 * Connect the new detail to the chunk
 		 */ 
-		SmartPtr<db::DetailChunk> detailchunk(db::DetailChunk::bykey(chunk->getID(), detail->getdetailid()));
-		detailchunk->save();
+		Keys keys;
+		KeyPtr key;
+		key = new Key(db::DetailsFields::Get()->DETAILID, chunk->getID());
+		keys[db::DetailsFields::Get()->DETAILID.get()] = key;
+		key = new Key(db::ChunksFields::Get()->CHUNKID, detailmanager->getkey(db::DetailsFields::Get()->DETAILID));
+		keys[db::ChunksFields::Get()->CHUNKID.get()] = key;
 		
-		onedetail->apply(detail);
+		SavableManagerPtr manager = SavableManager::bykeys(db::TableImpls::Get()->DETAILCHUNK, keys);
+		manager->save();
+		
+		onedetail->apply(detailmanager);
 	}
 }
 

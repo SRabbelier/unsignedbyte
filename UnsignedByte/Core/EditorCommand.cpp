@@ -170,7 +170,7 @@ void EditorCommand::editGrantGroups(const std::string& argument)
 	
 	try
 	{
-		long id = db::GrantGroups::lookupname(argument);
+		long id = mud::GrantGroupManager::Get()->lookupByName(argument);
 		m_sock->Sendf("Grantgroup changed from '%d' to '%d'.\n", m_command->getGrantGroup(), id);
 		m_command->setGrantGroup(id);
 	}

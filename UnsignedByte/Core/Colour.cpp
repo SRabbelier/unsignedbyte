@@ -29,24 +29,51 @@
 
 using namespace mud;
 
-Colour::Colour(db::Colours* object) :
+Colour::Colour(SavableManagerPtr object) :
 m_colour(object)
 {
-	if(m_colour == NULL)
+	if(!m_colour)
 		throw std::invalid_argument("Colour::Colour(), m_colour == NULL");
 }
 
 Colour::~Colour(void)
 {
-	delete m_colour;
-	m_colour = 0;
+
+}
+
+const std::string& Colour::getName() const
+{
+	return m_colour->getfield(db::ColoursFields::Get()->NAME)->getStringValue();
+}
+
+const std::string& Colour::getCode() const
+{
+	return m_colour->getfield(db::ColoursFields::Get()->CODE)->getStringValue();
+}
+
+void Colour::setName(const std::string& name)
+{
+	ValuePtr value(new Value(db::ColoursFields::Get()->NAME, name));
+	m_colour->setvalue(value);	
+}
+
+void Colour::setColourString(const std::string& colourstring)
+{
+	ValuePtr value(new Value(db::ColoursFields::Get()->COLOURSTRING, colourstring));
+	m_colour->setvalue(value);
+}
+
+void Colour::setCode(const std::string& code)
+{
+	ValuePtr value(new Value(db::ColoursFields::Get()->CODE, code));
+	m_colour->setvalue(value);	
 }
 
 std::string Colour::getColourString()
 {
 	std::string restore = "\x1B[0;0m";
 	std::string prefix = "\x1B[";
-	std::string str = m_colour->getcolourstring();
+	std::string str = m_colour->getfield(db::ColoursFields::Get()->COLOURSTRING)->getStringValue();
 	
 	std::string result = restore;
 	result.append(prefix);

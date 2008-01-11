@@ -409,6 +409,7 @@ namespace db
 		KeyDefPtr GRANTGROUPID;
 		FieldImplPtr NAME;
 		FieldImplPtr DEFAULTGRANT;
+		FieldImplPtr DEFAULTLOG;
 		FieldImplPtr IMPLIES;
 
 	private:
@@ -426,6 +427,7 @@ namespace db
 		KeyDefPtr FKACCOUNTS;
 		KeyDefPtr FKGRANTGROUPS;
 		FieldImplPtr GRANT;
+		FieldImplPtr LOG;
 
 	private:
 		// Hide constructor and assignment operator

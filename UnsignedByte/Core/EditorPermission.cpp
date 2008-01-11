@@ -157,7 +157,7 @@ void EditorPermission::editAccount(const std::string& argument)
 
 	try
 	{
-		long id = db::Accounts::lookupname(argument);
+		long id = mud::AccountManager::Get()->lookupByName(argument);
 		m_sock->Sendf("Preparing to edit permission with account '%d'.\n", id);
 		m_account = id;
 	}
@@ -178,7 +178,7 @@ void EditorPermission::editGrantGroup(const std::string& argument)
 
 	try
 	{
-		long id = db::GrantGroups::lookupname(argument);
+		long id = mud::GrantGroupManager::Get()->lookupByName(argument);
 		m_sock->Sendf("Preparing to edit permission with grangroup '%d'.\n", id);
 		m_grantgroup = id;
 	}

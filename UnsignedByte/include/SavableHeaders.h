@@ -17,58 +17,16 @@
  *   Free Software Foundation, Inc.,                                       *
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
- 
-#include "RaceManager.h"
-#include "Race.h"
-#include "Global.h"
+#pragma once
 
-using mud::RaceManager;
-using mud::Race;
-using mud::RacePtr;
-
-std::vector<std::string> RaceManager::List()
-{
-	return GetTable()->tableList();
-}
-
-TableImplPtr RaceManager::GetTable()
-{
-	return db::TableImpls::Get()->RACES;
-}
-
-value_type RaceManager::Add()
-{
-	SavableManagerPtr manager = SavableManager::getnew(db::TableImpls::Get()->RACES);
-	manager->save();
-	value_type id = manager->getkey(db::RacesFields::Get()->RACEID);
-	if(id == 0)
-		Global::Get()->bug("RaceManager::Add(), id = 0");
-		
-	return id;
-}
-
-mud::RacePtr RaceManager::GetByKey(value_type id)
-{
-	KeyPtr key(new Key(db::RacesFields::Get()->RACEID, id));
-	Keys keys;
-	keys[db::RacesFields::Get()->RACEID.get()] = key;
-	SavableManagerPtr manager = SavableManager::bykeys(db::TableImpls::Get()->RACES, keys);
-	RacePtr p(new Race(manager));
-	return p;
-}
-
-mud::RacePtr RaceManager::GetByName(cstring value)
-{
-	ValuePtr val(new Value(db::RacesFields::Get()->NAME, value));
-	SavableManagerPtr manager = SavableManager::byvalue(val);
-	RacePtr p(new Race(manager));
-	return p;
-}
-
-value_type RaceManager::lookupByName(cstring value)
-{
-	ValuePtr val(new Value(db::RacesFields::Get()->NAME, value));
-	Keys keys = SavableManager::lookupvalue(val);
-	value_type id = keys[db::RacesFields::Get()->RACEID.get()];
-	return id;
-}
+#include "Types.h"
+#include "db.h"
+#include "Table.h"
+#include "Tables.h"
+#include "Key.h"
+#include "KeyDef.h"
+#include "TableImpl.h"
+#include "FieldImpl.h"
+#include "Value.h"
+#include "Savable.h"
+#include "SavableManager.h"

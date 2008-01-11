@@ -19,11 +19,7 @@
  ***************************************************************************/
 #pragma once
 
-#include <string>
-#include <map>
-#include <vector>
-#include "Savable.h"
-#include "db.h"
+#include "SavableHeaders.h"
 
 namespace mud
 {
@@ -51,19 +47,19 @@ namespace mud
 		/**
 		 * \brief Getters
 		 */ 
-		long getID() { return m_character->getcharacterid(); }
-		const std::string& getName() { return m_character->getname(); }
-		const std::string& getDescription() { return m_character->getdescription(); }
-		long getRace() { return m_character->getfkRaces(); }
-		long getRoom() { return m_character->getfkRooms(); }
+		value_type getID() const;
+		const std::string& getName() const;
+		const std::string& getDescription() const;
+		value_type getRace() const;
+		value_type getRoom() const;
 
 		/**
 		 * \brief Setters
 		 */ 
-		void setName(const std::string& name) { m_character->setname(name); }
-		void setDescription(const std::string& description) { m_character->setdescription(description); }
-		void setRace(long race) { m_character->setfkRaces(race); }
-		void setRoom(long room) { m_character->setfkRooms(room); }
+		void setName(const std::string& name);
+		void setDescription(const std::string& description);
+		void setRace(value_type race);
+		void setRoom(value_type room);
 		
 		/**
 		 * \brief Database operations
@@ -80,9 +76,9 @@ namespace mud
 		TablePtr getTable() const;
 
 	protected:
-		db::Characters* m_character;
+		SavableManagerPtr m_character;
 
-		Character(db::Characters* character);
+		Character(SavableManagerPtr character);
 		virtual ~Character(void);
 		
 		friend class mud::CharacterManager; // for constructor

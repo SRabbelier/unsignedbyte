@@ -22,9 +22,6 @@
 #include "Sector.h"
 #include "Global.h"
 
-#include "Table.h"
-#include "Tables.h"
-
 using mud::SectorManager;
 using mud::Sector;
 using mud::SectorPtr;
@@ -34,67 +31,44 @@ std::vector<std::string> SectorManager::List()
 	return GetTable()->tableList();
 }
 
-TablePtr SectorManager::GetTable()
+TableImplPtr SectorManager::GetTable()
 {
-	return Tables::Get()->SECTORS;
+	return db::TableImpls::Get()->SECTORS;
 }
 
 value_type SectorManager::Add()
 {	
-	db::Sectors d;
-	d.save();
-	value_type id = d.getsectorid();
+	SavableManagerPtr manager = SavableManager::getnew(db::TableImpls::Get()->SECTORS);
+	manager->save();
+	value_type id = manager->getkey(db::SectorsFields::Get()->SECTORID);
 	if(id == 0)
-		Global::Get()->bug("SectorManager::AddSector(), id = 0");
+		Global::Get()->bug("SectorManager::Add(), id = 0");
 	
 	return id;	
 }
 
 mud::SectorPtr SectorManager::GetByKey(value_type id)
-{
-	SectorPtr p = m_byKey[id];
-	if(p)
-		return p;
-		
-	db::Sectors* d = db::Sectors::bykey(id);
-	p = cacheSector(d);
+{		
+	KeyPtr key(new Key(db::SectorsFields::Get()->SECTORID, id));
+	Keys keys;
+	keys[db::SectorsFields::Get()->SECTORID.get()] = key;
+	SavableManagerPtr manager = SavableManager::bykeys(db::TableImpls::Get()->SECTORS, keys);
+	SectorPtr p(new Sector(manager));
 	return p;
 }
 
 mud::SectorPtr SectorManager::GetByName(cstring value)
-{
-	SectorPtr p = m_byName[value];
-	if(p)
-		return p;
-		
-	db::Sectors* d = db::Sectors::byname(value);
-	p = cacheSector(d);
+{		
+	ValuePtr val(new Value(db::SectorsFields::Get()->NAME, value));
+	SavableManagerPtr manager = SavableManager::byvalue(val);
+	SectorPtr p(new Sector(manager));
 	return p;
 } 
 
 value_type SectorManager::lookupByName(cstring value)
-{
-	reverseStringKey::iterator it = m_lookupByName.find(value);
-	if(it != m_lookupByName.end())
-		return it->second;
-	
-	value_type id = db::Sectors::lookupname(value);
-	m_lookupByName[value] = id;
+{	
+	ValuePtr val(new Value(db::SectorsFields::Get()->NAME, value));
+	Keys keys = SavableManager::lookupvalue(val);
+	value_type id = keys[db::SectorsFields::Get()->SECTORID.get()];
 	return id;
-}
-
-void SectorManager::Close(value_type id)
-{
-	sectors_m::iterator key = m_byKey.find(id);
-	sectors_ms::iterator name = m_byName.find(key->second->getName());
-	m_byKey.erase(key);
-	m_byName.erase(name);	
-}
-
-SectorPtr SectorManager::cacheSector(db::Sectors* d)
-{
-	SectorPtr p(new Sector(d));
-	m_byKey[d->getsectorid()] = p;
-	m_byName[d->getname()] = p;
-	return p;
 }

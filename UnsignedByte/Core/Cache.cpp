@@ -18,34 +18,12 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#ifdef _WIN32
-	#include "winsock2.h"
-#endif
-
-#include <stdexcept>
-
 #include "Cache.h"
-#include "UBSocket.h"
-#include "DatabaseMgr.h"
-#include "Global.h"
-#include "db.h"
-
-#include "Account.h"
-#include "PCharacter.h"
-#include "MCharacter.h"
-#include "Race.h"
-#include "Room.h"
-#include "Sector.h"
-#include "Colour.h"
-#include "Command.h"
-#include "GrantGroup.h"
-#include "Permission.h"
-
-using namespace mud;
 
 /**
  * Belongs to CharacterAccount
  */ 
+/* 
 bool Cache::existsCharacterWithAccount(value_type characterid, value_type accountid)
 {
 	twoValueKey key(accountid, characterid);
@@ -57,3 +35,4 @@ bool Cache::existsCharacterWithAccount(value_type characterid, value_type accoun
 	m_characteraccountByKey[key] = d;
 	return d->exists();
 }
+*/

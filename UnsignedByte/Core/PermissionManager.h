@@ -43,22 +43,12 @@ namespace mud
 		bool defaultGrant;
 		bool defaultLog;
 	
-		TablePtr GetTable();
+		TableImplPtr GetTable();
 		std::vector<std::string> List();
-		void Close(PermissionPtr permission);
-		bool isGrant(long grant);
-		bool isLog(long grant);
 		
 		mud::PermissionPtr GetByKeys(value_type account, value_type grantgroup);
 		
 		value_type lookupByName(cstring value);
-		
-		void Close(value_type account, value_type permission);
-		
-	private:
-		PermissionPtr cachePermission(db::Permissions* d);
-		
-		permissions_m m_byKeys;
 
 	private:
 		PermissionManager(void);

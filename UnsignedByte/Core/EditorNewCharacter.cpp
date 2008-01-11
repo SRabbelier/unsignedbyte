@@ -130,7 +130,7 @@ void EditorNewCharacter::OnLine(const std::string &line)
 			
 			try
 			{
-				int id = db::Races::lookupname(line);
+				int id = mud::RaceManager::Get()->lookupByName(line);
 				m_raceid = id;
 
 				m_sock->Sendf("Your race is now %s.\n", line.c_str());

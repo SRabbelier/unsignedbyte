@@ -20,26 +20,19 @@
 
 #include "Race.h"
 #include "Global.h"
-#include "DatabaseMgr.h"
-#include "Cache.h"
-#include "db.h"
-
-#include "Table.h"
-#include "Tables.h"
 
 using mud::Race;
 
-Race::Race(db::Races* race) :
+Race::Race(SavableManagerPtr race) :
 m_race(race)
 {
-	if(m_race == NULL)
+	if(!m_race)
 		throw std::invalid_argument("Race::Race(), m_race == NULL!");
 }
 
 Race::~Race(void)
 {
-	delete m_race;
-	m_race = NULL;
+	
 }
 
 void Race::Delete()
@@ -54,7 +47,7 @@ void Race::Save()
 
 bool Race::Exists()
 {
-	return m_race->getraceid();
+	return m_race->exists();
 }
 
 std::vector<std::string> Race::Show()

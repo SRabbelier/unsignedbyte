@@ -19,9 +19,7 @@
  ***************************************************************************/
 #pragma once
 
-#include <string>
-#include "Savable.h"
-#include "db.h"
+#include "SavableHeaders.h"
 
 namespace mud
 {
@@ -32,17 +30,17 @@ namespace mud
 		/**
 		 * \brief Getters
 		 */ 
-		const std::string& getName() const { return m_grantgroup->getname(); }
-		long getImplication() const { return m_grantgroup->getimplies(); }
+		const std::string& getName() const;
+		long getImplication() const;
 		
-		bool getDefaultGrant();
-		bool getDefaultLog();
+		bool getDefaultGrant() const;
+		bool getDefaultLog() const;
 
 		/**
 		 * \brief Setters
 		 */ 
-		void setName(const std::string& name) { m_grantgroup->setname(name); }
-		void setImplication(long implication) { m_grantgroup->setimplies(implication); }
+		void setName(const std::string& name);
+		void setImplication(long implication);
 		
 		void setDefaultGrant(bool defaultgrant);
 		void setDefaultLog(bool defaultlog);
@@ -62,12 +60,12 @@ namespace mud
 		bool Exists();
 
 	private:
-		db::GrantGroups* m_grantgroup;
+		SavableManagerPtr m_grantgroup;
 
 		/**
 		 * \brief Ctors
 		 */ 
-		GrantGroup(db::GrantGroups* GrantGroup);
+		GrantGroup(SavableManagerPtr GrantGroup);
 		GrantGroup(const GrantGroup& rhs);
 		GrantGroup operator=(const GrantGroup& rhs);
 		~GrantGroup(void);

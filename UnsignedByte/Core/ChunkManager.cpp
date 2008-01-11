@@ -22,9 +22,6 @@
 #include "Chunk.h"
 #include "Global.h"
 
-#include "Table.h"
-#include "Tables.h"
-
 using mud::ChunkManager;
 using mud::Chunk;
 using mud::ChunkPtr;
@@ -34,42 +31,29 @@ std::vector<std::string> ChunkManager::List()
 	return GetTable()->tableList();
 }
 
-TablePtr ChunkManager::GetTable()
+TableImplPtr ChunkManager::GetTable()
 {
-	return Tables::Get()->CHUNKS;
+	return db::TableImpls::Get()->CHUNKS;
 }
 
 value_type ChunkManager::Add()
 {
-	db::Chunks d;
-	d.save();
-	value_type id = d.getchunkid();
+	SavableManagerPtr manager = SavableManager::getnew(db::TableImpls::Get()->CHUNKS);
+	manager->save();
+	value_type id = manager->getkey(db::ChunksFields::Get()->CHUNKID);
 	if(id == 0)
-		Global::Get()->bug("ChunkManager::AddChunk(), id = 0");
-		
+		Global::Get()->bug("ChunkManager::Add(), id = 0");
+	
 	return id;
 }
 
 mud::ChunkPtr ChunkManager::GetByKey(value_type id)
 {
-	ChunkPtr p = m_byKey[id];
-	if(p)
-		return p;
-
-	db::Chunks* d = db::Chunks::bykey(id);
-	p = cacheChunk(d);
+	KeyPtr key(new Key(db::ChunksFields::Get()->CHUNKID, id));
+	Keys keys;
+	keys[db::ChunksFields::Get()->CHUNKID.get()] = key;
+	SavableManagerPtr manager = SavableManager::bykeys(db::TableImpls::Get()->CHUNKS, keys);
+	ChunkPtr p(new Chunk(manager));
 	return p;
 }
 
-void ChunkManager::Close(value_type id)
-{
-	chunks_m::iterator key = m_byKey.find(id);
-	m_byKey.erase(key);
-}
-
-ChunkPtr ChunkManager::cacheChunk(db::Chunks* d)
-{
-	ChunkPtr p(new Chunk(d));
-	m_byKey[d->getchunkid()] = p;
-	return p;
-}

@@ -19,11 +19,9 @@
  ***************************************************************************/
 #pragma once
 
-#include <string>
+#include "Types.h"
 #include "Savable.h"
 #include "db.h"
-#include "smart_ptr.h"
-#include <boost/checked_delete.hpp>
 
 class UBSocket;
 
@@ -37,15 +35,15 @@ namespace mud
 		/**
 		 * \brief Getters
 		 */
-		long getID() const { return m_account->getaccountid() ; }
-		const std::string& getName() const { return m_account->getname(); }
-		const std::string& getPassword() const { return m_account->getpassword(); }
+		value_type getID() const;
+		const std::string& getName() const;
+		const std::string& getPassword() const;
 
 		/**
 		 * \brief Setters
 		 */
-		void setName(const std::string& name) { m_account->setname(name); };
-		void setPassword(const std::string& password) { m_account->setpassword(password); };
+		void setName(const std::string& name);
+		void setPassword(const std::string& password);
 
 		/**
 		 * \brief Utilities
@@ -62,12 +60,12 @@ namespace mud
 		bool Exists();
 
 	private:
-		db::Accounts* m_account;
+		SavableManagerPtr m_account;
 
 		/**
 		 * \brief Ctors
 		 */
-		Account(db::Accounts* account);	
+		Account(SavableManagerPtr account);	
 		Account(const Account& rhs);
 		Account operator=(const Account& rhs);
 		~Account(void);

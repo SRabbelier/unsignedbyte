@@ -133,6 +133,7 @@
         <LibraryPath Value="../lib"/>
         <Library Value="pthread"/>
         <Library Value="dl"/>
+        <Library Value="ubdal"/>
         <Library Value="ubresource"/>
         <Library Value="MySqlite3"/>
       </Linker>
@@ -151,5 +152,6 @@
   </Settings>
   <Dependencies>
     <Project Name="Resource"/>
+    <Project Name="DAL"/>
   </Dependencies>
 </CodeLite_Project>

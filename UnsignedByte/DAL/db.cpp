@@ -313,22 +313,26 @@ GrantGroupsFields::GrantGroupsFields() :
 GRANTGROUPID(new KeyDef(TableImpls::Get()->GRANTGROUPS, "grantgroupid")),
 NAME(new FieldImpl(TableImpls::Get()->GRANTGROUPS, "name", true)),
 DEFAULTGRANT(new FieldImpl(TableImpls::Get()->GRANTGROUPS, "defaultgrant")),
+DEFAULTLOG(new FieldImpl(TableImpls::Get()->GRANTGROUPS, "defaultlog")),
 IMPLIES(new FieldImpl(TableImpls::Get()->GRANTGROUPS, "implies"))
 {
 	TableImpls::Get()->GRANTGROUPS->addKey(GRANTGROUPID);
 	TableImpls::Get()->GRANTGROUPS->addField(NAME);
 	TableImpls::Get()->GRANTGROUPS->addField(DEFAULTGRANT);
+	TableImpls::Get()->GRANTGROUPS->addField(DEFAULTLOG);
 	TableImpls::Get()->GRANTGROUPS->addField(IMPLIES);
 }
 
 PermissionsFields::PermissionsFields() :
 FKACCOUNTS(new KeyDef(TableImpls::Get()->PERMISSIONS, "fkAccounts")),
 FKGRANTGROUPS(new KeyDef(TableImpls::Get()->PERMISSIONS, "fkGrantGroups")),
-GRANT(new FieldImpl(TableImpls::Get()->PERMISSIONS, "grant"))
+GRANT(new FieldImpl(TableImpls::Get()->PERMISSIONS, "grant")),
+LOG(new FieldImpl(TableImpls::Get()->PERMISSIONS, "log"))
 {
 	TableImpls::Get()->PERMISSIONS->addKey(FKACCOUNTS);
 	TableImpls::Get()->PERMISSIONS->addKey(FKGRANTGROUPS);
 	TableImpls::Get()->PERMISSIONS->addField(GRANT);
+	TableImpls::Get()->PERMISSIONS->addField(LOG);
 }
 
 RacesFields::RacesFields() :

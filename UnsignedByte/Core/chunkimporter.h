@@ -20,22 +20,15 @@
 
 #pragma once
 
-#include <string>
-#include <vector>
+#include "SavableHeaders.h"
+
 #include <stack>
 
-#include "smart_ptr.h"
 
 namespace mud
 {
 	class Chunk;
 	typedef SmartPtr<Chunk> ChunkPtr;
-}
-
-namespace db
-{
-	class Details;
-	typedef SmartPtr<Details> DetailsPtr;
 }
 
 class ChunkImporter;
@@ -60,7 +53,7 @@ class ChunkImporter
 				const DetailVector& getDetails() { return m_details; }
 				
 				std::string toString();
-				void apply(db::DetailsPtr detail);
+				void apply(SavableManagerPtr detail);
 				
 			private:
 				std::vector<std::string> m_description;

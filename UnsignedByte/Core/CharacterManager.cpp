@@ -22,9 +22,6 @@
 #include "CharacterManager.h"
 #include "Global.h"
 
-#include "Table.h"
-#include "Tables.h"
-
 using mud::CharacterManager;
 using mud::Character;
 using mud::CharacterPtr;
@@ -34,20 +31,9 @@ std::vector<std::string> CharacterManager::List()
 	return GetTable()->tableList();
 }
 
-void CharacterManager::Close(mud::Character* Ch)
-{
-	if(Ch == NULL)
-	{
-		throw std::invalid_argument("CharacterManager::Close(), Ch == NULL");
-		return;
-	}
-	
-	Close(Ch->getID());
-}
-
-TablePtr CharacterManager::GetTable()
+TableImplPtr CharacterManager::GetTable()
 { 
-	return Tables::Get()->CHARACTERS; 
+	return db::TableImpls::Get()->CHARACTERS; 
 }
 
 bool CharacterManager::IllegalName(const std::string& name)
@@ -60,60 +46,37 @@ bool CharacterManager::IllegalName(const std::string& name)
 
 value_type CharacterManager::Add()
 {
-	db::Characters d;
-	d.save();
-	value_type id = d.getcharacterid();
+	SavableManagerPtr manager = SavableManager::getnew(db::TableImpls::Get()->CHARACTERS);
+	manager->save();
+	value_type id = manager->getkey(db::CharactersFields::Get()->CHARACTERID);
 	if(id == 0)
-		Global::Get()->bug("CharacterManager::AddCharacter(), id = 0");
-		
-	return id;
+		Global::Get()->bug("CharacterManager::Add(), id = 0");
+	
+	return id;	
 }
 
 mud::CharacterPtr CharacterManager::GetByKey(value_type id)
 {
-	CharacterPtr p(m_byKey[id]);
-	if(p)
-		return p;
-
-	db::Characters* d = db::Characters::bykey(id);
-	p = cacheCharacter(d);
+	KeyPtr key(new Key(db::CharactersFields::Get()->CHARACTERID, id));
+	Keys keys;
+	keys[db::CommandsFields::Get()->COMMANDID.get()] = key;
+	SavableManagerPtr manager = SavableManager::bykeys(db::TableImpls::Get()->CHARACTERS, keys);
+	CharacterPtr p(new Character(manager));
 	return p;
 }
 
 mud::CharacterPtr CharacterManager::GetByName(cstring value)
 {
-	CharacterPtr p(m_byName[value]);
-	if(p)
-		return p;
-		
-	db::Characters* d = db::Characters::byname(value);
-	p = cacheCharacter(d);
+	ValuePtr val(new Value(db::CharactersFields::Get()->NAME, value));
+	SavableManagerPtr manager = SavableManager::byvalue(val);
+	CharacterPtr p(new Character(manager));
 	return p;
 }
 
 value_type CharacterManager::lookupByName(cstring value)
 {
-	reverseStringKey::iterator it = m_lookupByName.find(value);
-	if(it != m_lookupByName.end())
-		return it->second;
-	
-	value_type id = db::Characters::lookupname(value);
-	m_lookupByName[value] = id;
+	ValuePtr val(new Value(db::CharactersFields::Get()->NAME, value));
+	Keys keys = SavableManager::lookupvalue(val);
+	value_type id = keys[db::CharactersFields::Get()->CHARACTERID.get()];
 	return id;
-}
-
-void CharacterManager::Close(value_type id)
-{
-	characters_m::iterator key = m_byKey.find(id);
-	characters_ms::iterator name = m_byName.find(key->second->getName());
-	m_byKey.erase(key);
-	m_byName.erase(name);
-}
-
-CharacterPtr CharacterManager::cacheCharacter(db::Characters *d)
-{
-	CharacterPtr p(new Character(d));
-	m_byKey[d->getcharacterid()] = p;
-	m_byName[d->getname()] = p;
-	return p;
 }

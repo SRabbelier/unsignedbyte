@@ -23,9 +23,6 @@
 #include "Global.h"
 #include "GrantGroup.h"
 
-#include "Table.h"
-#include "Tables.h"
-
 using mud::GrantGroupManager;
 using mud::GrantGroup;
 using mud::GrantGroupPtr;
@@ -35,67 +32,44 @@ std::vector<std::string> GrantGroupManager::List()
 	return GetTable()->tableList();
 }
 
-TablePtr GrantGroupManager::GetTable()
+TableImplPtr GrantGroupManager::GetTable()
 {
-	return Tables::Get()->GRANTGROUPS;
+	return db::TableImpls::Get()->GRANTGROUPS;
 }
 
 value_type GrantGroupManager::Add()
 {
-	db::GrantGroups d;
-	d.save();
-	value_type id = d.getgrantgroupid();
+	SavableManagerPtr manager = SavableManager::getnew(db::TableImpls::Get()->GRANTGROUPS);
+	manager->save();
+	value_type id = manager->getkey(db::GrantGroupsFields::Get()->GRANTGROUPID);
 	if(id == 0)
-		Global::Get()->bug("GrantGroupManager::AddGrantGroup(), id = 0");
+		Global::Get()->bug("GrantGroupManager::Add(), id = 0");
 	
-	return id;
+	return id;	
 }
 
 mud::GrantGroupPtr GrantGroupManager::GetByKey(value_type id)
 {
-	GrantGroupPtr p = m_byKey[id];
-	if(p)
-		return p;
-		
-	db::GrantGroups* d = db::GrantGroups::bykey(id);
-	p = cacheGrantGroup(d);
+	KeyPtr key(new Key(db::GrantGroupsFields::Get()->GRANTGROUPID, id));
+	Keys keys;
+	keys[db::GrantGroupsFields::Get()->GRANTGROUPID.get()] = key;
+	SavableManagerPtr manager = SavableManager::bykeys(db::TableImpls::Get()->GRANTGROUPS, keys);
+	GrantGroupPtr p(new GrantGroup(manager));
 	return p;
 }
 
 mud::GrantGroupPtr GrantGroupManager::GetByName(cstring value)
 {
-	GrantGroupPtr p = m_byName[value];
-	if(p)
-		return p;
-		
-	db::GrantGroups* d = db::GrantGroups::byname(value);
-	p = cacheGrantGroup(d);
+	ValuePtr val(new Value(db::GrantGroupsFields::Get()->NAME, value));
+	SavableManagerPtr manager = SavableManager::byvalue(val);
+	GrantGroupPtr p(new GrantGroup(manager));
 	return p;
 }
 
 value_type GrantGroupManager::lookupByName(cstring value)
 {
-	reverseStringKey::iterator it = m_lookupByName.find(value);
-	if(it != m_lookupByName.end())
-		return it->second;
-	
-	value_type id = db::GrantGroups::lookupname(value);
-	m_lookupByName[value] = id;
+	ValuePtr val(new Value(db::GrantGroupsFields::Get()->NAME, value));
+	Keys keys = SavableManager::lookupvalue(val);
+	value_type id = keys[db::GrantGroupsFields::Get()->GRANTGROUPID.get()];
 	return id;
-}
-
-void GrantGroupManager::Close(value_type id)
-{
-	grantgroups_m::iterator key = m_byKey.find(id);
-	grantgroups_ms::iterator name = m_byName.find(key->second->getName());
-	m_byKey.erase(key);
-	m_byName.erase(name);
-}
-
-GrantGroupPtr GrantGroupManager::cacheGrantGroup(db::GrantGroups* d)
-{
-	GrantGroupPtr p(new GrantGroup(d));
-	m_byKey[d->getgrantgroupid()] = p;
-	m_byName[d->getname()] = p;
-	return p;
 }

@@ -19,11 +19,7 @@
  ***************************************************************************/
 #pragma once
 
-#include <string>
-#include <vector>
-
-#include "singleton.h"
-#include "db.h"
+#include "SavableHeaders.h"
 
 namespace mud 
 { 
@@ -31,34 +27,19 @@ namespace mud
 	typedef SmartPtr<Race> RacePtr;
 }
 
-typedef const std::string& cstring;
-typedef std::map<value_type,mud::RacePtr> races_m;
-typedef std::map<std::string,mud::RacePtr> races_ms;
-typedef std::map<std::string, value_type> reverseStringKey;
-
 namespace mud
 {
 	class RaceManager : public Singleton<mud::RaceManager>
 	{
 	public:
-		TablePtr GetTable();
+		TableImplPtr GetTable();
 		std::vector<std::string> List();
-		void Close(RacePtr race);
 		
 		value_type Add();
 		mud::RacePtr GetByKey(value_type id);
 		mud::RacePtr GetByName(cstring name);
 		
 		value_type lookupByName(cstring value);
-		
-		void Close(value_type Raceid);
-		
-	private:
-		RacePtr cacheRace(db::Races* d);
-		
-		races_m m_byKey;
-		races_ms m_byName;
-		reverseStringKey m_lookupByName;
 
 	private:
 		RaceManager(void) {};

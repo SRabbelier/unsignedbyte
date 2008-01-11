@@ -20,46 +20,66 @@
 
 #include "GrantGroup.h"
 #include "Global.h"
-#include "DatabaseMgr.h"
-#include "Cache.h"
-#include "db.h"
 #include "Permission.h"
 #include "PermissionManager.h"
 
-#include "Table.h"
-#include "Tables.h"
-
 using mud::GrantGroup;
 
-GrantGroup::GrantGroup(db::GrantGroups* area) :
+GrantGroup::GrantGroup(SavableManagerPtr area) :
 m_grantgroup(area)
 {
-	if(m_grantgroup == NULL)
+	if(m_grantgroup)
 		throw std::invalid_argument("GrantGroup::GrantGroup(), m_grantgroup == NULL!");
 }
 
 GrantGroup::~GrantGroup(void)
 {
-	delete m_grantgroup;
-	m_grantgroup = NULL;
+
 }
 
-bool GrantGroup::getDefaultGrant()
+const std::string& GrantGroup::getName() const
 {
-	return mud::PermissionManager::Get()->isGrant(m_grantgroup->getdefaultgrant());
+	return m_grantgroup->getfield(db::GrantGroupsFields::Get()->NAME)->getStringValue();
 }
 
-bool GrantGroup::getDefaultLog()
+long GrantGroup::getImplication() const
 {
-	return mud::PermissionManager::Get()->isLog(m_grantgroup->getdefaultgrant());
+	return m_grantgroup->getfield(db::GrantGroupsFields::Get()->IMPLIES)->getIntegerValue();
 }
 
-/*void GrantGroup::setDefaultGrant(bool defaultgrant)
+bool GrantGroup::getDefaultGrant() const
 {
-	UBASSERT(m_grantgroup != NULL);
-	if(m_grantgroup)
-		m_grantgroup->defaultgrant = defaultgrant;
-}*/
+	return m_grantgroup->getfield(db::GrantGroupsFields::Get()->DEFAULTGRANT)->getBoolValue();
+}
+
+bool GrantGroup::getDefaultLog() const
+{
+	return m_grantgroup->getfield(db::GrantGroupsFields::Get()->DEFAULTLOG)->getBoolValue();
+}
+
+void GrantGroup::setName(const std::string& name)
+{
+	ValuePtr value(new Value(db::GrantGroupsFields::Get()->NAME, name));
+	m_grantgroup->setvalue(value);
+}
+
+void GrantGroup::setImplication(long implication)
+{
+	ValuePtr value(new Value(db::GrantGroupsFields::Get()->IMPLIES, implication));
+	m_grantgroup->setvalue(value);
+}
+
+void GrantGroup::setDefaultGrant(bool defaultgrant)
+{
+	ValuePtr value(new Value(db::GrantGroupsFields::Get()->DEFAULTGRANT, defaultgrant));
+	m_grantgroup->setvalue(value);
+}
+
+void GrantGroup::setDefaultLog(bool defaultlog)
+{
+	ValuePtr value(new Value(db::GrantGroupsFields::Get()->DEFAULTLOG, defaultlog));
+	m_grantgroup->setvalue(value);
+}
 
 void GrantGroup::Delete()
 {

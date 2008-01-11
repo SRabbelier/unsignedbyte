@@ -41,7 +41,7 @@ m_dirty(false)
 	for(KeyDefs::const_iterator it = table->keyimplbegin(); it != table->keyimplend(); it++)
 	{
 		KeyPtr key(new Key(*it, 0));
-		m_keys.push_back(key);
+		m_keys[it->get()] = key;
 	}
 }
 
@@ -59,7 +59,7 @@ SavableManagerPtr SavableManager::getnew(TableImplPtr table)
 SavableManagerPtr SavableManager::bykeys(TableImplPtr table, KeyPtr key)
 {
 	Keys keys;
-	keys.push_back(key);
+	keys[key->getKeyDef().get()] = key;
 	return bykeys(table, keys);
 }
 
@@ -124,7 +124,7 @@ void SavableManager::bindKeys(sqlite3_stmt* stmt, int startpos) const
 	int rc = 0;
 	for(Keys::const_iterator it = m_keys.begin(); it != m_keys.end(); it++)
 	{
-		rc = sqlite3_bind_int64(stmt, pos, (*it)->getValue());
+		rc = sqlite3_bind_int64(stmt, pos, it->second->getValue());
 		
 		if(rc != SQLITE_OK)
 			throw new std::runtime_error("SavableManager::bindKeys(), rc != SQLITE_OK.");
@@ -179,7 +179,7 @@ void SavableManager::parseInsert(sqlite3* db)
 	
 	KeyPtr key(new Key(m_table->firstImplKey(), sqlite3_last_insert_rowid(db)));
 	Keys keys;
-	keys.push_back(key);
+	keys[key->getKeyDef().get()] = key;
 	m_keys = keys;
 }
 
@@ -215,7 +215,7 @@ void SavableManager::parseLookup(sqlite3_stmt* stmt)
 	// assert(m_keys.size() == 0);
 	KeyPtr key(new Key(m_table->firstImplKey(), sqlite3_column_int64(stmt, 0)));
 	Keys keys;
-	keys.push_back(key);
+	keys[key->getKeyDef().get()] = key;
 	m_keys = keys;
 }
 
@@ -227,6 +227,15 @@ TablePtr SavableManager::getTable() const
 const Keys& SavableManager::getkeys() const
 {
 	return m_keys;
+}
+
+KeyPtr SavableManager::getkey(KeyDefPtr keydef) const
+{
+	Keys::const_iterator it = m_keys.find(keydef.get());
+	if(it != m_keys.end())
+		return it->second;
+	else
+		throw std::invalid_argument("SavableManager::getkey(), key not in m_keys.");
 }
 
 ValuePtr SavableManager::getfield(FieldImplPtr field) const
@@ -245,7 +254,7 @@ void SavableManager::setkeys(Keys keys)
 		
 	for(Keys::const_iterator it = keys.begin(); it != keys.end(); it++)
 	{
-		if((*it)->getKeyDef()->getTable() != m_table)
+		if(it->first->getTable() != m_table)
 			throw std::invalid_argument("SavableManager::setkeys(), key type is not m_table.");
 	}
 		

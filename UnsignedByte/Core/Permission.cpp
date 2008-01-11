@@ -21,72 +21,41 @@
 #include "Permission.h"
 #include "PermissionManager.h"
 #include "Global.h"
-#include "DatabaseMgr.h"
-#include "Cache.h"
-#include "db.h"
-
-#include "Table.h"
-#include "Tables.h"
 
 using mud::Permission;
 
-Permission::Permission(db::Permissions* area) :
+Permission::Permission(SavableManagerPtr area) :
 m_permission(area)
 {
-	if(m_permission == NULL)
+	if(!m_permission)
 		throw std::invalid_argument("Permission::Permission(), m_permission == NULL!");
 }
 
 Permission::~Permission(void)
 {
-	delete m_permission;
-	m_permission = NULL;
+
 }
 
 bool Permission::hasGrant() const
 {
-	return mud::PermissionManager::Get()->isGrant(m_permission->getgrant());
+	return m_permission->getfield(db::PermissionsFields::Get()->GRANT)->getBoolValue();
 }
 
 bool Permission::hasLog() const
 {
-	return mud::PermissionManager::Get()->isLog(m_permission->getgrant());
+	return m_permission->getfield(db::PermissionsFields::Get()->LOG)->getBoolValue();
 }
 
 void Permission::setGrant(bool grant)
 {
-	if(grant)
-	{
-		if(hasLog())
-			m_permission->setgrant(GRANT_ENABLEANDLOG);
-		else
-			m_permission->setgrant(GRANT_ENABLE);
-	}
-	else
-	{
-		if(hasLog())
-			m_permission->setgrant(GRANT_DISABLEANDLOG);
-		else
-			m_permission->setgrant(GRANT_DISABLE);
-	}
+	ValuePtr value(new Value(db::PermissionsFields::Get()->GRANT, grant ? 1 : 0));
+	m_permission->setvalue(value);
 }
 
 void Permission::setLog(bool log)
 {
-	if(log)
-	{
-		if(hasGrant())
-			m_permission->setgrant(GRANT_ENABLEANDLOG);
-		else
-			m_permission->setgrant(GRANT_DISABLEANDLOG);
-	}
-	else
-	{
-		if(hasGrant())
-			m_permission->setgrant(GRANT_ENABLE);
-		else
-			m_permission->setgrant(GRANT_DISABLE);
-	}
+	ValuePtr value(new Value(db::PermissionsFields::Get()->LOG, log ? 1 : 0));
+	m_permission->setvalue(value);
 }
 
 void Permission::Delete()

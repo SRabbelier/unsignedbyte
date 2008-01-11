@@ -19,11 +19,7 @@
  ***************************************************************************/
 #pragma once
 
-#include <string>
-#include <vector>
-
-#include "singleton.h"
-#include "db.h"
+#include "SavableHeaders.h"
 
 namespace mud 
 { 
@@ -31,17 +27,12 @@ namespace mud
 	typedef SmartPtr<Chunk> ChunkPtr;
 }
 
-typedef const std::string& cstring;
-typedef std::map<value_type,mud::ChunkPtr> chunks_m;
-typedef std::map<std::string,mud::ChunkPtr> chunks_ms;
-typedef std::map<std::string, value_type> reverseStringKey;
-
 namespace mud
 {
 	class ChunkManager : public Singleton<mud::ChunkManager>
 	{
 	public:
-		TablePtr GetTable();
+		TableImplPtr GetTable();
 		std::vector<std::string> List();
 		void Close(ChunkPtr chunk);
 		
@@ -49,15 +40,6 @@ namespace mud
 		mud::ChunkPtr GetByKey(value_type id);
 		
 		value_type lookupByName(cstring value);
-		
-		void Close(value_type Chunkid);
-		
-	private:
-		ChunkPtr cacheChunk(db::Chunks* d);
-		
-		chunks_m m_byKey;
-		chunks_ms m_byName;
-		reverseStringKey m_lookupByName;
 
 	private:
 		ChunkManager(void) {};

@@ -22,9 +22,6 @@
 #include "Account.h"
 #include "Global.h"
 
-#include "Table.h"
-#include "Tables.h"
-
 using mud::AccountManager;
 using mud::Account;
 using mud::AccountPtr;
@@ -45,83 +42,44 @@ std::vector<std::string> AccountManager::List()
 	return GetTable()->tableList();
 }
 
-TablePtr AccountManager::GetTable()
+TableImplPtr AccountManager::GetTable()
 {
-	return Tables::Get()->ACCOUNTS;
+	return db::TableImpls::Get()->ACCOUNTS;
 }
 
 value_type AccountManager::Add()
 {
-	db::Accounts d;
-	d.save();
-	value_type id = d.getaccountid();
+	SavableManagerPtr manager = SavableManager::getnew(db::TableImpls::Get()->ACCOUNTS);
+	manager->save();
+	value_type id = manager->getkey(db::AccountsFields::Get()->ACCOUNTID);
 	if(id == 0)
-		Global::Get()->bug("AccountManager::AddAcount(), id = 0");
-		
-	return id;
-}
-
-void AccountManager::Close(AccountPtr account)
-{
-	if(!account)
-	{
-		throw std::invalid_argument("Account::Close(), Ch == NULL");
-		return;	
-	}
-
-	Close(account->getID());
-}
-
-void AccountManager::Close(value_type id)
-{
-	accounts_m::iterator key = m_byKey.find(id);
-	if(key != m_byKey.end())
-	{
-		m_byKey.erase(key);
-		accounts_ms::iterator name = m_byName.find(key->second->getName());
-		if(name != m_byName.end())
-			m_byName.erase(name);
-	}
+		Global::Get()->bug("AccountManager::Add(), id = 0");
+	
+	return id;	
 }
 
 AccountPtr AccountManager::GetByKey(value_type id)
 {
-	AccountPtr p = m_byKey[id];
-	if (p)
-		return p;
-
-	db::Accounts* d = db::Accounts::bykey(id);
-	p = cacheAccount(d);
+	KeyPtr key(new Key(db::AccountsFields::Get()->ACCOUNTID, id));
+	Keys keys;
+	keys[db::AccountsFields::Get()->ACCOUNTID.get()] = key;
+	SavableManagerPtr manager = SavableManager::bykeys(db::TableImpls::Get()->ACCOUNTS, keys);
+	AccountPtr p(new Account(manager));
 	return p;
 }
 
 AccountPtr AccountManager::GetByName(cstring value)
 {
-	AccountPtr p = m_byName[value];
-	if(p)
-		return p;
-
-	db::Accounts* d = db::Accounts::byname(value);
-	p = cacheAccount(d);
-	
+	ValuePtr val(new Value(db::AccountsFields::Get()->NAME, value));
+	SavableManagerPtr manager = SavableManager::byvalue(val);
+	AccountPtr p(new Account(manager));
 	return p;
 }
 
 value_type AccountManager::lookupByName(cstring value)
 {
-	reverseStringKey::iterator it = m_lookupByName.find(value);
-	if(it != m_lookupByName.end())
-		return it->second;
-	
-	value_type id = db::Accounts::lookupname(value);
-	m_lookupByName[value] = id;
+	ValuePtr val(new Value(db::AccountsFields::Get()->NAME, value));
+	Keys keys = SavableManager::lookupvalue(val);
+	value_type id = keys[db::AccountsFields::Get()->ACCOUNTID.get()];
 	return id;
-}
-
-AccountPtr AccountManager::cacheAccount(db::Accounts* d)
-{
-	AccountPtr p(new Account(d));
-	m_byKey[d->getaccountid()] = p;
-	m_byName[d->getname()] = p;
-	return p;
 }

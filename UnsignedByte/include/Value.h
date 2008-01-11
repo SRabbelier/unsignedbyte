@@ -33,9 +33,11 @@ public:
 
 	const std::string& getStringValue() const { return m_textvalue; }
 	value_type getIntegerValue() const { return m_integervalue; }
+	bool getBoolValue() const { return m_integervalue == 1 ? true : false; }
 	
 	void setTextValue(const std::string& value) { m_textvalue = value; }
 	void setIntegerValue(value_type value) { m_integervalue = value; }
+	void setBoolValue(bool value) { m_integervalue = (value ? 1 : 0); }
 	
 private:
 	FieldImplPtr m_field;

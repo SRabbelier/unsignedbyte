@@ -19,9 +19,7 @@
  ***************************************************************************/
 #pragma once
 
-#include <string>
-#include "Savable.h"
-#include "db.h"
+#include "SavableHeaders.h"
 
 namespace mud
 {
@@ -29,9 +27,8 @@ namespace mud
 	class Race : public Savable
 	{
 	public:
-		const std::string& getName() const { return m_race->getname(); }
-
-		void setName(const std::string& name) { m_race->setname(name); }
+		const std::string& getName() const;
+		void setName(const std::string& name);
 
 		/**
 		 * \brief Utilities
@@ -48,12 +45,12 @@ namespace mud
 		bool Exists();
 
 	private:
-		db::Races* m_race;
+		SavableManagerPtr m_race;
 
 		/**
 		 * \brief Ctors
 		 */ 
-		Race(db::Races* race);
+		Race(SavableManagerPtr race);
 		Race(const Race& rhs);
 		Race operator=(const Race& rhs);
 		~Race(void);

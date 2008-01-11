@@ -24,34 +24,110 @@
 
 #include <stdarg.h>
 
-#include "Global.h"
-#include "DatabaseMgr.h"
-#include "Cache.h"
-#include "db.h"
-
 #include "Room.h"
 #include "Area.h"
 #include "Sector.h"
 #include "SectorManager.h"
 #include "Character.h"
-
-#include "Table.h"
-#include "Tables.h"
+#include "Global.h"
 
 using mud::Room;
 
-Room::Room(db::Rooms* room) :
+Room::Room(SavableManagerPtr room) :
 m_room(room)
 {
-	if(m_room == NULL)
+	if(m_room)
 		throw std::invalid_argument("Room::Room(), m_room == NULL!");
 }
 
 Room::~Room(void)
 {	
-	delete m_room;
-	m_room = NULL;
+	
 }
+
+value_type Room::getID() const
+{
+	return m_room->getkey(db::RoomsFields::Get()->ROOMID)->getValue();
+}
+
+const std::string& Room::getName() const
+{
+	return m_room->getfield(db::RoomsFields::Get()->NAME)->getStringValue();
+}
+
+const std::string& Room::getDescription() const
+{
+	return m_room->getfield(db::RoomsFields::Get()->DESCRIPTION)->getStringValue();
+}
+
+value_type Room::getSector() const
+{
+	return m_room->getfield(db::RoomsFields::Get()->FKSECTORS)->getIntegerValue();
+}
+
+value_type Room::getArea() const
+{
+	return m_room->getfield(db::RoomsFields::Get()->FKAREAS)->getIntegerValue();
+}
+
+value_type Room::getHeight() const
+{
+	return m_room->getfield(db::RoomsFields::Get()->HEIGHT)->getIntegerValue();
+}
+
+value_type Room::getWidth() const
+{
+	return m_room->getfield(db::RoomsFields::Get()->WIDTH)->getIntegerValue();
+}
+
+value_type Room::getLength() const
+{
+	return m_room->getfield(db::RoomsFields::Get()->NAME)->getIntegerValue();
+}
+
+
+void Room::setName(const std::string name)
+{
+	ValuePtr value(new Value(db::RoomsFields::Get()->NAME, name));
+	m_room->setvalue(value);
+}
+
+void Room::setDescription(const std::string description)
+{
+	ValuePtr value(new Value(db::RoomsFields::Get()->DESCRIPTION, description));
+	m_room->setvalue(value);
+}
+
+void Room::setSector(value_type sector)
+{
+	ValuePtr value(new Value(db::RoomsFields::Get()->FKSECTORS, sector));
+	m_room->setvalue(value);	
+}
+
+void Room::setArea(value_type area)
+{
+	ValuePtr value(new Value(db::RoomsFields::Get()->FKAREAS, area));
+	m_room->setvalue(value);	
+}
+
+void Room::setHeight(value_type height)
+{
+	ValuePtr value(new Value(db::RoomsFields::Get()->HEIGHT, height));
+	m_room->setvalue(value);
+}
+
+void Room::setWidth(value_type width)
+{
+	ValuePtr value(new Value(db::RoomsFields::Get()->WIDTH, width));
+	m_room->setvalue(value);	
+}
+
+void Room::setLength(value_type length)
+{
+	ValuePtr value(new Value(db::RoomsFields::Get()->LENGTH, length));
+	m_room->setvalue(value);	
+}
+
 
 const mud::Characters& mud::Room::getCharactersInRoom()
 {
@@ -86,10 +162,10 @@ void Room::Save()
 
 bool Room::Exists()
 {
-	return m_room->getroomid();
+	return m_room->exists();
 }
 /*
-std::string Room::CreateMap(long id, long origx, long origy)
+std::string Room::CreateMap(value_type id, long origx, long origy)
 {
 	std::string result;
 
@@ -109,13 +185,13 @@ std::string Room::CreateMap(long id, long origx, long origy)
 
 	Area* p = Cache::Get()->GetArea(id);
 
-	for(long y = 1; y <= p->getHeight(); y++)
+	for(value_type y = 1; y <= p->getHeight(); y++)
 	{
 		std::string toprow;
 		std::string thisrow;
 		std::string bottomrow;
 
-		for(long x = 1; x <= p->getWidth(); x++)
+		for(value_type x = 1; x <= p->getWidth(); x++)
 		{
 			long rid = Cache::Get()->GetRoomID(id, x, y);
 			long count = DatabaseMgr::Get()->CountSavable(Tables::Get()->ROOMS, rid);

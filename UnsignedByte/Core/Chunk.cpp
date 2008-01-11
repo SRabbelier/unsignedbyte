@@ -20,25 +20,66 @@
 
 #include "Chunk.h"
 #include "Global.h"
-#include "Cache.h"
-
-#include "Table.h"
-#include "Tables.h"
 
 using mud::Chunk;
 
-Chunk::Chunk(db::Chunks* chunk) :
+Chunk::Chunk(SavableManagerPtr chunk) :
 m_chunk(chunk)
 {
-	if(m_chunk == NULL)
+	if(m_chunk)
 		throw new std::invalid_argument("Chunk::Chunk(), m_chunk == NULL!");
 }
 
 Chunk::~Chunk(void)
 {
-	delete m_chunk;
-	m_chunk = NULL;
+
 }
+
+value_type Chunk::getID() const
+{
+	return m_chunk->getkey(db::ChunksFields::Get()->CHUNKID)->getValue();
+}
+
+const std::string& Chunk::getName() const
+{
+	return m_chunk->getfield(db::ChunksFields::Get()->NAME)->getStringValue();	
+}
+
+const std::string& Chunk::getDescription() const
+{
+	return m_chunk->getfield(db::ChunksFields::Get()->DESCRIPTION)->getStringValue();	
+}
+
+const std::string& Chunk::getTags() const
+{
+	return m_chunk->getfield(db::ChunksFields::Get()->TAGS)->getStringValue();	
+}
+
+value_type Chunk::getRoom() const
+{
+	return m_chunk->getfield(db::ChunksFields::Get()->FKROOMS)->getIntegerValue();
+}
+
+void Chunk::setName(const std::string& name)
+{
+	
+}
+
+void Chunk::setDescription(const std::string& description)
+{
+	
+}
+
+void Chunk::setTags(const std::string& description)
+{
+	
+}
+
+void Chunk::setRoom(value_type room)
+{
+	
+}
+
 
 void Chunk::Delete()
 {

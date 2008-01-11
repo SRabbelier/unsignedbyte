@@ -18,8 +18,6 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#include <string>
-#include <stdexcept>
 #include <sstream>
 
 #include "PCharacterManager.h"
@@ -31,27 +29,19 @@ using mud::PCharacterManager;
 using mud::PCharacter;
 using mud::PCharacterPtr;
 
-void PCharacterManager::Close(PCharacterPtr Ch)
-{
-	if(!Ch)
-		throw std::invalid_argument("PCharacter::Close(), Ch == NULL!");
-	
-	Close(Ch->getID());
-}
-
 bool PCharacterManager::isActive(value_type id)
 {
-	return m_pcharactersByKey.find(id) != m_pcharactersByKey.end();
+	return m_activeCharactersByKey.find(id) != m_activeCharactersByKey.end();
 }
 
 bool PCharacterManager::isActive(cstring value)
 {
-	return m_pcharactersByName.find(value) != m_pcharactersByName.end();
+	return m_activeCharactersByName.find(value) != m_activeCharactersByName.end();
 }
 
 mud::PCharacterPtr PCharacterManager::GetByKey(value_type id)
 {
-	PCharacterPtr p = m_byKey[id];
+	PCharacterPtr p = m_activeCharactersByKey[id];
 	if(p)
 		return p;
 		
@@ -62,7 +52,7 @@ mud::PCharacterPtr PCharacterManager::GetByKey(value_type id)
 
 mud::PCharacterPtr PCharacterManager::GetByName(cstring value)
 {
-	PCharacterPtr p = m_byName[value];
+	PCharacterPtr p = m_activeCharactersByName[value];
 	if(p)
 		return p;
 		
@@ -73,48 +63,32 @@ mud::PCharacterPtr PCharacterManager::GetByName(cstring value)
 
 mud::PCharacterPtr PCharacterManager::LoadByKey(UBSocket* sock, value_type id)
 {
-	PCharacterPtr p = m_byKey[id];
-	if(p)
+	if(m_activeCharactersByKey.find(id) != m_activeCharactersByKey.end())
 	{
 		std::ostringstream err;
 		err << "PCharacterManager::LoadPCharacterByKey(), id '" << id << "' has already been loaded.";
 		throw std::invalid_argument(err.str());
 	}
 	
-	db::Characters* d = db::Characters::bykey(id);
-	p = cachePCharacter(sock, d);
+	SavableManagerPtr manager = SavableManager::getnew(db::TableImpls::Get()->CHARACTERS);
+	PCharacterPtr p(new PCharacter(sock, manager));
+	m_activeCharactersByKey[id] = p;
+	m_activeCharactersByName[p->getName()] = p;
 	return p;
 }
 
 mud::PCharacterPtr PCharacterManager::LoadByName(UBSocket* sock, cstring value)
 {
-	PCharacterPtr p = m_byName[value];
-	if(p)
+	if(m_activeCharactersByName.find(value) != m_activeCharactersByName.end())
 	{
 		std::ostringstream err;
 		err << "PCharacterManager::LoadPCharacterByKey(), A character with name '" << value << "' has already been loaded.";
 		throw std::invalid_argument(err.str());
 	}	
 	
-	db::Characters* d = db::Characters::byname(value);
-	p = cachePCharacter(sock, d);
-	return p;
-}
-
-void PCharacterManager::Close(value_type id)
-{
-	players_m::iterator key = m_byKey.find(id);
-	players_ms::iterator name = m_byName.find(key->second->getName());
-	m_byKey.erase(key);
-	m_byName.erase(name);
-}
-
-PCharacterPtr PCharacterManager::cachePCharacter(UBSocket* sock, db::Characters* d)
-{
-	PCharacterPtr p(new PCharacter(sock, d));
-	m_byKey[d->getcharacterid()] = p;
-	m_pcharactersByKey.insert(d->getcharacterid());
-	m_byName[d->getname()] = p;
-	m_pcharactersByName.insert(d->getname());
+	SavableManagerPtr manager = SavableManager::getnew(db::TableImpls::Get()->CHARACTERS);
+	PCharacterPtr p(new PCharacter(sock, manager));
+	m_activeCharactersByName[value] = p;
+	m_activeCharactersByKey[p->getID()] = p;
 	return p;
 }

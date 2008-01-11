@@ -254,7 +254,7 @@ void EditorRoom::editSector(const std::string& argument)
 
 	try
 	{
-		long id = db::Sectors::lookupname(argument);
+		long id = mud::SectorManager::Get()->lookupByName(argument);
 		mud::SectorPtr sector = mud::SectorManager::Get()->GetByKey(id);
 		m_sock->Sendf("Sector type changed from '%s' to '%s'.\n", sector->getName().c_str(), argument.c_str());
 		m_room->setSector(id);

@@ -19,10 +19,8 @@
  ***************************************************************************/
 #pragma once
 
-#include <string>
 #include "Character.h"
-
-class UBSocket;
+#include "SavableHeaders.h"
 
 namespace mud
 {
@@ -38,7 +36,7 @@ namespace mud
 	private:
 		UBSocket* m_sock;
 
-		PCharacter(UBSocket* sock, db::Characters* character);
+		PCharacter(UBSocket* sock, SavableManagerPtr character);
 		PCharacter(const PCharacter& rhs);
 		PCharacter operator=(const PCharacter& rhs);
 		virtual ~PCharacter(void);

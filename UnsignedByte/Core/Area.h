@@ -19,9 +19,7 @@
  ***************************************************************************/
 #pragma once
 
-#include <string>
-#include "Savable.h"
-#include "db.h"
+#include "SavableHeaders.h"
 
 namespace mud
 {
@@ -33,18 +31,18 @@ namespace mud
 		/**
 		 * \brief Getters
 		 */
-		const std::string& getName() const { return m_area->getname(); }
-		const std::string& getDescription() const { return m_area->getdescription(); }
-		long getHeight() const { return m_area->getheight(); }
-		long getWidth() const { return m_area->getwidth(); }
+		const std::string& getName() const;
+		const std::string& getDescription() const;
+		value_type getHeight() const;
+		value_type getWidth() const;
 
 		/**
 		 * \brief Setters
 		 */
-		void setName(const std::string& name) { m_area->setname(name); }
-		void setDescription(const std::string& description) { m_area->setdescription(description); }
-		void setHeight(long height) { m_area->setheight(height); }
-		void setWidth(long width) { m_area->setwidth(width); }
+		void setName(const std::string& name);
+		void setDescription(const std::string& description);
+		void setHeight(value_type height);
+		void setWidth(value_type width);
 
 		/**
 		 * \brief Utilities
@@ -64,14 +62,14 @@ namespace mud
 		friend class mud::AreaManager; // For constructor
 		friend SmartPtrDelete(mud::Area);
 		
-		db::Areas* m_area;
+		SavableManagerPtr m_area;
 
 		/**
 		 * \brief Constructor
 		 * \param area The DB object
 		 * \return 
 		 */
-		Area(db::Areas* area);
+		Area(SavableManagerPtr area);
 		
 		Area(const Area& rhs);
 		Area operator=(const Area& rhs);

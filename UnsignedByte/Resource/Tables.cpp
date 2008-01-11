@@ -141,11 +141,13 @@ Tables::Tables() :
 	GRANTGROUPS->addPK("grantgroupid");
 	GRANTGROUPS->addLookupTextField("name");
 	GRANTGROUPS->addValue("defaultgrant");
+	GRANTGROUPS->addValue("defaultlog");
 	GRANTGROUPS->addValue("implies");
 	
 	PERMISSIONS->addFPK(ACCOUNTS);
 	PERMISSIONS->addFPK(GRANTGROUPS);
 	PERMISSIONS->addValue("grant");
+	PERMISSIONS->addValue("log");
 	
 	RACES->addPK("raceid");
 	RACES->addLookupTextField("name");

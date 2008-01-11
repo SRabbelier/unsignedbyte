@@ -19,11 +19,7 @@
  ***************************************************************************/
 #pragma once
 
-#include <string>
-#include <vector>
-
-#include "singleton.h"
-#include "db.h"
+#include "SavableHeaders.h"
 
 namespace mud 
 { 
@@ -31,20 +27,13 @@ namespace mud
 	typedef SmartPtr<Character> CharacterPtr;
 }
 
-typedef const std::string& cstring;
-typedef std::pair<value_type, value_type> twoValueKey;
-typedef std::map<value_type,mud::CharacterPtr> characters_m;
-typedef std::map<std::string,mud::CharacterPtr> characters_ms;
-typedef std::map<std::string, value_type> reverseStringKey;
-
 namespace mud
 {
 	class CharacterManager : public Singleton<mud::CharacterManager>
 	{
 	public:
-		TablePtr GetTable();
+		TableImplPtr GetTable();
 		std::vector<std::string> List();
-		void Close(Character* Ch);
 		bool IllegalName(const std::string& name);
 		
 		value_type Add();
@@ -52,15 +41,6 @@ namespace mud
 		mud::CharacterPtr GetByName(cstring name);
 		
 		value_type lookupByName(cstring value);
-		
-		void Close(value_type Characterid);
-		
-	private:
-		CharacterPtr cacheCharacter(db::Characters* d);
-		
-		characters_m m_byKey;
-		characters_ms m_byName;
-		reverseStringKey m_lookupByName;
 
 	private:
 		CharacterManager(void) {};

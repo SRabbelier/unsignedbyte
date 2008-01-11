@@ -34,50 +34,28 @@ std::vector<std::string> RoomManager::List()
 	return GetTable()->tableList();
 }
 
-void RoomManager::Close(RoomPtr room)
+TableImplPtr RoomManager::GetTable()
 {
-	if(!room)
-		throw std::invalid_argument("Room::Close(), !rooms!");
-	
-	Close(room->getID());
-}
-
-TablePtr RoomManager::GetTable()
-{
-	return Tables::Get()->ROOMS;
+	return db::TableImpls::Get()->ROOMS;
 }
 
 value_type RoomManager::Add()
 {
-	db::Rooms d;
-	d.save();
-	value_type id = d.getroomid();
+	SavableManagerPtr manager = SavableManager::getnew(db::TableImpls::Get()->ROOMS);
+	manager->save();
+	value_type id = manager->getkey(db::RoomsFields::Get()->ROOMID);
 	if(id == 0)
-		Global::Get()->bug("RoomManager::AddRoom(), id = 0");
+		Global::Get()->bug("RoomManager::Add(), id = 0");
 	
-	return id;
+	return id;	
 }
 
 mud::RoomPtr RoomManager::GetByKey(value_type id)
 {
-	RoomPtr p = m_byKey[id];
-	if(p)
-		return p;
-		
-	db::Rooms* d = db::Rooms::bykey(id);
-	p = cacheRoom(d);
-	return p;
-}
-
-void RoomManager::Close(value_type id)
-{
-	rooms_m::iterator key = m_byKey.find(id);
-	m_byKey.erase(key);
-}
-
-RoomPtr RoomManager::cacheRoom(db::Rooms* d)
-{
-	RoomPtr p(new Room(d));
-	m_byKey[d->getroomid()] = p;
+	KeyPtr key(new Key(db::RoomsFields::Get()->ROOMID, id));
+	Keys keys;
+	keys[db::RoomsFields::Get()->ROOMID.get()] = key;
+	SavableManagerPtr manager = SavableManager::bykeys(db::TableImpls::Get()->ROOMS, keys);
+	RoomPtr p(new Room(manager));
 	return p;
 }

@@ -22,19 +22,14 @@
 #include <winsock2.h>
 #endif
 
-#include <string>
-
 #include "MCharacter.h"
 #include "UBSocket.h"
-#include "DatabaseMgr.h"
-#include "Cache.h"
-#include "db.h"
 #include "Account.h"
 #include "EditorAccount.h"
 
 using mud::MCharacter;
 
-MCharacter::MCharacter(db::Characters* character) :
+MCharacter::MCharacter(SavableManagerPtr character) :
 Character(character)
 {
 

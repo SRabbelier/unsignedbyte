@@ -20,7 +20,6 @@
 #pragma once
 
 #include "Types.h"
-#include "singleton.h"
 
 class Tables : public Singleton<Tables>
 {
