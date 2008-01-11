@@ -19,18 +19,12 @@
  ***************************************************************************/
 #pragma once
 
-#include <string>
+#include "SavableHeaders.h"
+
 #include "Global.h"
 #include "Editor.h"
 #include "Interpreter.h"
-#include "singleton.h"
 #include "CommandObject.h"
-
-class Savable;
-class Table;
-
-typedef SmartPtr<Savable> SavablePtr;
-typedef SmartPtr<Table> TablePtr;
 
 class OLCEditor : public Editor
 {
@@ -44,7 +38,7 @@ public:
 	virtual void dispatch(const std::string& action, const std::string& argument);
 	
 	virtual SavablePtr getEditing() = 0;
-	virtual TablePtr getTable() = 0;
+	virtual TableImplPtr getTable() = 0;
 	virtual long addNew() = 0;
 
 	virtual std::vector<std::string> getList() = 0;

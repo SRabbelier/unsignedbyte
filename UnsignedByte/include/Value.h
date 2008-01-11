@@ -24,9 +24,9 @@
 class Value
 {
 public:
-	Value(FieldImplPtr field) : m_field(field) {}
-	Value(FieldImplPtr field, cstring value) : m_field(field), m_textvalue(value) {}
-	Value(FieldImplPtr field, value_type value) : m_field(field), m_integervalue(value) {}
+	Value(FieldImplPtr field) : m_field(field), m_textvalue(""), m_integervalue(0) {}
+	Value(FieldImplPtr field, cstring value) : m_field(field), m_textvalue(value), m_integervalue(0) {}
+	Value(FieldImplPtr field, value_type value) : m_field(field), m_textvalue(""), m_integervalue(value) {}
 	~Value() {}
 	
 	FieldImplPtr getField() const { return m_field; }

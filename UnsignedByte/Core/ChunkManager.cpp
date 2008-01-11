@@ -40,7 +40,7 @@ value_type ChunkManager::Add()
 {
 	SavableManagerPtr manager = SavableManager::getnew(db::TableImpls::Get()->CHUNKS);
 	manager->save();
-	value_type id = manager->getkey(db::ChunksFields::Get()->CHUNKID);
+	value_type id = manager->getkey(db::ChunksFields::Get()->CHUNKID)->getValue();
 	if(id == 0)
 		Global::Get()->bug("ChunkManager::Add(), id = 0");
 	

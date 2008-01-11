@@ -31,52 +31,6 @@
 
 namespace db
 {
-	class TableImpls : public Singleton<TableImpls>
-	{
-	public:
-		TableImplPtr ACCOUNTS;
-		TableImplPtr AREAS;
-		TableImplPtr BRANCHES;
-		TableImplPtr CHARACTERACCOUNT;
-		TableImplPtr CHARACTERBRANCH;
-		TableImplPtr CHARACTERCLUSTER;
-		TableImplPtr CHARACTERS;
-		TableImplPtr CHARACTERSKILL;
-		TableImplPtr CHARACTERSTAT;
-		TableImplPtr CHARACTERTREE;
-		TableImplPtr CLUSTERS;
-		TableImplPtr CHUNKS;
-		TableImplPtr COLOURS;
-		TableImplPtr COMMANDS;
-		TableImplPtr DETAILS;
-		TableImplPtr DETAILROOM;
-		TableImplPtr DETAILCHUNK;
-		TableImplPtr DETAILCHARACTER;
-		TableImplPtr DETAILDETAIL;
-		TableImplPtr EXITS;
-		TableImplPtr GRANTGROUPS;
-		TableImplPtr PERMISSIONS;
-		TableImplPtr RACES;
-		TableImplPtr ROOMS;
-		TableImplPtr SECTORS;
-		TableImplPtr SKILLS;
-		TableImplPtr STATS;
-		TableImplPtr TREES;
-		TableImplPtr VERSION;
-
-		TableImplVector::const_iterator begin() const { return m_tables.begin(); }
-		TableImplVector::const_iterator end() const { return m_tables.end(); }
-
-	private:
-		TableImpls();
-		~TableImpls() { }
-		TableImpls(const TableImpls& rhs);
-		TableImpls operator=(const TableImpls& rhs);
-		friend class Singleton<TableImpls>;
-
-		TableImplVector m_tables;
-	};
-
 	class AccountsFields : public Singleton<AccountsFields>
 	{
 	public:

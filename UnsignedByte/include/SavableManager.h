@@ -47,7 +47,7 @@ class SavableManager
 		void parseLookup(sqlite3_stmt* stmt);
 
 		// Getters
-		TablePtr getTable() const;
+		TableImplPtr getTable() const;
 		const Keys& getkeys() const;
 		
 		ValuePtr getfield(FieldImplPtr field) const;

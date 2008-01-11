@@ -41,7 +41,7 @@ value_type GrantGroupManager::Add()
 {
 	SavableManagerPtr manager = SavableManager::getnew(db::TableImpls::Get()->GRANTGROUPS);
 	manager->save();
-	value_type id = manager->getkey(db::GrantGroupsFields::Get()->GRANTGROUPID);
+	value_type id = manager->getkey(db::GrantGroupsFields::Get()->GRANTGROUPID)->getValue();
 	if(id == 0)
 		Global::Get()->bug("GrantGroupManager::Add(), id = 0");
 	

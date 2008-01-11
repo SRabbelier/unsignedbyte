@@ -53,9 +53,9 @@ void ChunkImporter::Detail::apply(SavableManagerPtr detail)
 		 */ 
 		Keys keys;
 		KeyPtr key;
-		key = new Key(db::DetailDetailFields::Get()->FKDETAILSPRIMARY, newmanager->getkey(db::DetailsFields::Get()->DETAILID));
+		key = new Key(db::DetailDetailFields::Get()->FKDETAILSPRIMARY, newmanager->getkey(db::DetailsFields::Get()->DETAILID)->getValue());
 		keys[db::DetailDetailFields::Get()->FKDETAILSPRIMARY.get()] = key;
-		key = new Key(db::DetailDetailFields::Get()->FKDETAILSSECONDARY, detail->getkey(db::DetailsFields::Get()->DETAILID));
+		key = new Key(db::DetailDetailFields::Get()->FKDETAILSSECONDARY, detail->getkey(db::DetailsFields::Get()->DETAILID)->getValue());
 		keys[db::DetailDetailFields::Get()->FKDETAILSSECONDARY.get()] = key;
 		
 		SavableManagerPtr manager = SavableManager::bykeys(db::TableImpls::Get()->DETAILDETAIL, keys);
@@ -284,7 +284,7 @@ void ChunkImporter::Apply(mud::ChunkPtr chunk)
 		KeyPtr key;
 		key = new Key(db::DetailsFields::Get()->DETAILID, chunk->getID());
 		keys[db::DetailsFields::Get()->DETAILID.get()] = key;
-		key = new Key(db::ChunksFields::Get()->CHUNKID, detailmanager->getkey(db::DetailsFields::Get()->DETAILID));
+		key = new Key(db::ChunksFields::Get()->CHUNKID, detailmanager->getkey(db::DetailsFields::Get()->DETAILID)->getValue());
 		keys[db::ChunksFields::Get()->CHUNKID.get()] = key;
 		
 		SavableManagerPtr manager = SavableManager::bykeys(db::TableImpls::Get()->DETAILCHUNK, keys);

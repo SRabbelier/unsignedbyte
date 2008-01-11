@@ -41,7 +41,7 @@ value_type CommandManager::Add()
 {
 	SavableManagerPtr manager = SavableManager::getnew(db::TableImpls::Get()->COMMANDS);
 	manager->save();
-	value_type id = manager->getkey(db::CommandsFields::Get()->COMMANDID);
+	value_type id = manager->getkey(db::CommandsFields::Get()->COMMANDID)->getValue();
 	if(id == 0)
 		Global::Get()->bug("CommandManager::Add(), id = 0");
 	

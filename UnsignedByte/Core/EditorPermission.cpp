@@ -99,9 +99,9 @@ SavablePtr EditorPermission::getEditing()
 	return m_permission;
 }
 
-TablePtr EditorPermission::getTable()
+TableImplPtr EditorPermission::getTable()
 {
-	return Tables::Get()->PERMISSIONS;
+	return db::TableImpls::Get()->PERMISSIONS;
 }
 
 long EditorPermission::addNew()

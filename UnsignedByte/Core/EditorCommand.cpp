@@ -99,9 +99,9 @@ SavablePtr EditorCommand::getEditing()
 	return m_command;
 }
 
-TablePtr EditorCommand::getTable()
+TableImplPtr EditorCommand::getTable()
 {
-	return Tables::Get()->COMMANDS;
+	return db::TableImpls::Get()->COMMANDS;
 }
 
 long EditorCommand::addNew()

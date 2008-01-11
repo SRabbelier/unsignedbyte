@@ -92,9 +92,9 @@ SavablePtr EditorArea::getEditing()
 	return m_area;
 }
 
-TablePtr EditorArea::getTable()
+TableImplPtr EditorArea::getTable()
 {
-	return Tables::Get()->AREAS;
+	return db::TableImpls::Get()->AREAS;
 }
 
 long EditorArea::addNew()

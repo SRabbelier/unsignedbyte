@@ -19,18 +19,10 @@
  ***************************************************************************/
 
 #include "Initializer.h"
-#include "SavableManager.h"
+#include "SavableHeaders.h"
 #include "Database.h"
 #include "Query.h"
 #include "Global.h"
-#include "TableImpl.h"
-#include "TableDef.h"
-#include "Tables.h"
-#include "FieldImpl.h"
-#include "Key.h"
-#include "KeyDef.h"
-#include "Value.h"
-#include "db.h"
 
 bool Initializer::DatabasePopulated()
 {

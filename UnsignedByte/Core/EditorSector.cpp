@@ -89,9 +89,9 @@ SavablePtr EditorSector::getEditing()
 	return m_sector;
 }
 
-TablePtr EditorSector::getTable()
+TableImplPtr EditorSector::getTable()
 {
-	return Tables::Get()->SECTORS;
+	return db::TableImpls::Get()->SECTORS;
 }
 
 long EditorSector::addNew()

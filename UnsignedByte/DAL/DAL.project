@@ -2,9 +2,11 @@
 <CodeLite_Project Name="DAL">
   <VirtualDirectory Name="Source Files">
     <File Name="db.cpp"/>
+    <File Name="TableImpls.cpp"/>
   </VirtualDirectory>
   <VirtualDirectory Name="Header Files">
     <File Name="../include/db.h"/>
+    <File Name="../include/TableImpls.h"/>
   </VirtualDirectory>
   <Settings Type="Static Library">
     <Configuration Name="Debug" CompilerType="gnu g++" DebuggerType="GNU gdb debugger">

@@ -40,17 +40,21 @@ private:
 	void AppendHeaderIncludes();
 	void AppendHeaderClass(TableDefPtr table);
 	void AppendHeaderFooter();
-	void AppendHeaderTableImpls();
 	void CreateHeader();
 	
 	void AppendSourceIncludes();
 	void AppendSourceClass(TableDefPtr table);
 	void AppendSourceFooter();
-	void AppendSourceTableImpls();
 	void CreateSource();
+	
+	void AppendHeaderTableImpls();
+	void AppendSourceTableImpls();
+	void CreateTI();
 	
 	std::string m_name;
 	std::string m_tabs;
 	std::ofstream m_headerfile;
 	std::ofstream m_sourcefile;
+	std::ofstream m_tiheaderfile;
+	std::ofstream m_tisourcefile;
 };

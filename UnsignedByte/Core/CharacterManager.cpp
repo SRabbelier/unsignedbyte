@@ -48,7 +48,7 @@ value_type CharacterManager::Add()
 {
 	SavableManagerPtr manager = SavableManager::getnew(db::TableImpls::Get()->CHARACTERS);
 	manager->save();
-	value_type id = manager->getkey(db::CharactersFields::Get()->CHARACTERID);
+	value_type id = manager->getkey(db::CharactersFields::Get()->CHARACTERID)->getValue();
 	if(id == 0)
 		Global::Get()->bug("CharacterManager::Add(), id = 0");
 	

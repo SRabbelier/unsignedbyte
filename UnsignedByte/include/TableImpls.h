@@ -17,39 +17,61 @@
  *   Free Software Foundation, Inc.,                                       *
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
+
 #pragma once
 
 #include "Types.h"
 
-#include "Database.h"
-#include "Global.h"
-
-typedef std::vector<std::string> Strings;
-typedef std::vector<long> Longs;
-class IError;
-
-class DatabaseMgr : public Singleton<DatabaseMgr>
+namespace db
 {
-public:
-	// allow to set a specific path
-	static void Initialize(const std::string& path);
-	friend class Singleton<DatabaseMgr>;
-	Database* DB();
-	Database& DBref();
+	class TableImpls : public Singleton<TableImpls>
+	{
+	public:
+		static TableImpls* Get();
+		static void Free();
 
-	/**
-	 * Savable Interaction
-	 */
-	long CountSavable(const TableImplPtr table, const long id);
+		TableImplPtr ACCOUNTS;
+		TableImplPtr AREAS;
+		TableImplPtr BRANCHES;
+		TableImplPtr CHARACTERACCOUNT;
+		TableImplPtr CHARACTERBRANCH;
+		TableImplPtr CHARACTERCLUSTER;
+		TableImplPtr CHARACTERS;
+		TableImplPtr CHARACTERSKILL;
+		TableImplPtr CHARACTERSTAT;
+		TableImplPtr CHARACTERTREE;
+		TableImplPtr CLUSTERS;
+		TableImplPtr CHUNKS;
+		TableImplPtr COLOURS;
+		TableImplPtr COMMANDS;
+		TableImplPtr DETAILS;
+		TableImplPtr DETAILROOM;
+		TableImplPtr DETAILCHUNK;
+		TableImplPtr DETAILCHARACTER;
+		TableImplPtr DETAILDETAIL;
+		TableImplPtr EXITS;
+		TableImplPtr GRANTGROUPS;
+		TableImplPtr PERMISSIONS;
+		TableImplPtr RACES;
+		TableImplPtr ROOMS;
+		TableImplPtr SECTORS;
+		TableImplPtr SKILLS;
+		TableImplPtr STATS;
+		TableImplPtr TREES;
+		TableImplPtr VERSION;
 
-private: // functions
-	DatabaseMgr();
-	DatabaseMgr(const DatabaseMgr& rhs) {};
-	DatabaseMgr operator=(const DatabaseMgr& rhs) { return *this; };
-	~DatabaseMgr();
+		TableImplVector::const_iterator begin() const { return m_tables.begin(); }
+		TableImplVector::const_iterator end() const { return m_tables.end(); }
 
-	std::string m_path;
-	Database* m_db;
+	private:
+		TableImpls();
+		~TableImpls() { }
+		TableImpls(const TableImpls& rhs);
+		TableImpls operator=(const TableImpls& rhs);
+		friend class Singleton<TableImpls>;
 
-	static std::string m_staticpath;
-};
+		TableImplVector m_tables;
+		static TableImpls* ms_instance;
+	};
+} // end of namespace
+

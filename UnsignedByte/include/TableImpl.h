@@ -25,7 +25,7 @@
 class TableImpl : public Table
 {
 public:
-	TableImpl(TableDefPtr table, std::string name);
+	TableImpl(TableDefPtr table);
 	~TableImpl() { }
 	
 	void modify();
@@ -48,7 +48,7 @@ public:
 	size_t implsize() const { return m_implfields.size(); }
 	bool hasfield(FieldImplPtr field) const;
 	
-	KeyDefPtr firstImplKey() const { return m_keys[0]; }
+	KeyDefPtr firstImplKey() const { return *(m_keys.begin()); }
 	KeyDefs::const_iterator keyimplbegin() const { return m_keys.begin(); }
 	KeyDefs::const_iterator keyimplend() const { return m_keys.end(); }
 	size_t keyimplsize() const { return m_keys.size(); }

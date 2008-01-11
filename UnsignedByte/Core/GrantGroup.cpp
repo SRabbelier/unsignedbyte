@@ -28,7 +28,7 @@ using mud::GrantGroup;
 GrantGroup::GrantGroup(SavableManagerPtr area) :
 m_grantgroup(area)
 {
-	if(m_grantgroup)
+	if(!m_grantgroup)
 		throw std::invalid_argument("GrantGroup::GrantGroup(), m_grantgroup == NULL!");
 }
 

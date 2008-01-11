@@ -44,7 +44,7 @@ value_type ColourManager::Add()
 {
 	SavableManagerPtr manager = SavableManager::getnew(db::TableImpls::Get()->COLOURS);
 	manager->save();
-	value_type id = manager->getkey(db::ColoursFields::Get()->COLOURID);
+	value_type id = manager->getkey(db::ColoursFields::Get()->COLOURID)->getValue();
 	if(id == 0)
 		Global::Get()->bug("ColourManager::Add(), id = 0");
 	

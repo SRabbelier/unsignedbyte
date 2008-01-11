@@ -95,9 +95,9 @@ SavablePtr EditorColour::getEditing()
 	return m_colour;
 }
 
-TablePtr EditorColour::getTable()
+TableImplPtr EditorColour::getTable()
 {
-	return Tables::Get()->COLOURS;
+	return db::TableImpls::Get()->COLOURS;
 }
 
 long EditorColour::addNew()

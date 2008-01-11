@@ -84,8 +84,7 @@ void EditorAccountLogin::OnLine(const std::string &line)
 		
 		try
 		{
-			int id = mud::AccountManager::Get()->lookupByName(line);
-			m_account = mud::AccountManager::Get()->GetByKey(id);
+			m_account = mud::AccountManager::Get()->GetByName(line);
 			m_state++;
 			OnLine(Global::Get()->EmptyString);
 		}

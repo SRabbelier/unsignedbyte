@@ -40,7 +40,7 @@ value_type RaceManager::Add()
 {
 	SavableManagerPtr manager = SavableManager::getnew(db::TableImpls::Get()->RACES);
 	manager->save();
-	value_type id = manager->getkey(db::RacesFields::Get()->RACEID);
+	value_type id = manager->getkey(db::RacesFields::Get()->RACEID)->getValue();
 	if(id == 0)
 		Global::Get()->bug("RaceManager::Add(), id = 0");
 		

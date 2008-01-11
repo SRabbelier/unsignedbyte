@@ -94,9 +94,9 @@ SavablePtr EditorGrantGroup::getEditing()
 	return m_grantgroup;
 }
 
-TablePtr EditorGrantGroup::getTable()
+TableImplPtr EditorGrantGroup::getTable()
 {
-	return Tables::Get()->GRANTGROUPS;
+	return db::TableImpls::Get()->GRANTGROUPS;
 }
 
 long EditorGrantGroup::addNew()

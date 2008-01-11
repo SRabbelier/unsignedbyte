@@ -143,9 +143,9 @@ SavablePtr EditorRoom::getEditing()
 	return m_room;
 }
 
-TablePtr EditorRoom::getTable()
+TableImplPtr EditorRoom::getTable()
 {
-	return Tables::Get()->ROOMS;
+	return db::TableImpls::Get()->ROOMS;
 }
 
 long EditorRoom::addNew()

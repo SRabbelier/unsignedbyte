@@ -153,7 +153,7 @@ void EditorNewCharacter::OnLine(const std::string &line)
 			return;
 		}
 
-		if(DatabaseMgr::Get()->CountSavable(Tables::Get()->ROOMS, 1) <= 0)
+		if(DatabaseMgr::Get()->CountSavable(db::TableImpls::Get()->ROOMS, 1) <= 0)
 		{
 			m_sock->Sendf("Could not fetch room 1!\n");
 			m_sock->Send("Closing your connection now.\n");

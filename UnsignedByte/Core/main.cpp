@@ -78,6 +78,8 @@ int main(int argc, char** argv)
 	dbname.append(".db");
 	DatabaseMgr::Initialize(dbname);
 	printf("Done.\n");
+	
+	db::TableImpls::Get();
 
 	add(UBHandler::Get(), 4000);
 	add(UBHandler::Get(), 4040);

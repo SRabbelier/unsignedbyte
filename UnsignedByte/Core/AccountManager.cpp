@@ -51,7 +51,7 @@ value_type AccountManager::Add()
 {
 	SavableManagerPtr manager = SavableManager::getnew(db::TableImpls::Get()->ACCOUNTS);
 	manager->save();
-	value_type id = manager->getkey(db::AccountsFields::Get()->ACCOUNTID);
+	value_type id = manager->getkey(db::AccountsFields::Get()->ACCOUNTID)->getValue();
 	if(id == 0)
 		Global::Get()->bug("AccountManager::Add(), id = 0");
 	
@@ -69,7 +69,7 @@ AccountPtr AccountManager::GetByKey(value_type id)
 }
 
 AccountPtr AccountManager::GetByName(cstring value)
-{
+{	
 	ValuePtr val(new Value(db::AccountsFields::Get()->NAME, value));
 	SavableManagerPtr manager = SavableManager::byvalue(val);
 	AccountPtr p(new Account(manager));

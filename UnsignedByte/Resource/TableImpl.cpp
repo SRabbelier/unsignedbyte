@@ -22,10 +22,11 @@
 #include "ListActor.h"
 #include "SqliteMgr.h"
 #include "FieldImpl.h"
+#include "FieldDef.h"
 #include "KeyDef.h"
 
-TableImpl::TableImpl(TableDefPtr table, std::string name) :
-Table(name),
+TableImpl::TableImpl(TableDefPtr table) :
+Table(table->tableName()),
 m_table(table),
 m_lastchange(time(NULL))
 {

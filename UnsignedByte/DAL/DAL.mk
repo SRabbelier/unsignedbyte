@@ -34,7 +34,7 @@ Libs=
 LibPath=$(LibraryPathSwitch). 
 endif
 
-Objects=$(IntermediateDirectory)/db$(ObjectSuffix) 
+Objects=$(IntermediateDirectory)/db$(ObjectSuffix) $(IntermediateDirectory)/TableImpls$(ObjectSuffix) 
 
 ##
 ## Main Build Tragets 
@@ -59,12 +59,19 @@ $(IntermediateDirectory)/db$(ObjectSuffix): db.cpp $(IntermediateDirectory)/db$(
 $(IntermediateDirectory)/db$(ObjectSuffix).d:
 	@$(CompilerName) $(CmpOptions) $(IncludePath) -MT$(IntermediateDirectory)/db$(ObjectSuffix) -MF$(IntermediateDirectory)/db$(ObjectSuffix).d -MM db.cpp
 
+$(IntermediateDirectory)/TableImpls$(ObjectSuffix): TableImpls.cpp $(IntermediateDirectory)/TableImpls$(ObjectSuffix).d
+	$(CompilerName) $(SourceSwitch)TableImpls.cpp $(CmpOptions)   $(OutputSwitch)$(IntermediateDirectory)/TableImpls$(ObjectSuffix) $(IncludePath)
+$(IntermediateDirectory)/TableImpls$(ObjectSuffix).d:
+	@$(CompilerName) $(CmpOptions) $(IncludePath) -MT$(IntermediateDirectory)/TableImpls$(ObjectSuffix) -MF$(IntermediateDirectory)/TableImpls$(ObjectSuffix).d -MM TableImpls.cpp
+
 ##
 ## Clean
 ##
 clean:
 	$(RM) $(IntermediateDirectory)/db$(ObjectSuffix)
 	$(RM) $(IntermediateDirectory)/db$(ObjectSuffix).d
+	$(RM) $(IntermediateDirectory)/TableImpls$(ObjectSuffix)
+	$(RM) $(IntermediateDirectory)/TableImpls$(ObjectSuffix).d
 	$(RM) $(OutputFile)
 
 -include $(IntermediateDirectory)/*.d

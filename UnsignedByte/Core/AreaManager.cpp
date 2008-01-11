@@ -40,7 +40,7 @@ value_type AreaManager::Add()
 {
 	SavableManagerPtr manager = SavableManager::getnew(db::TableImpls::Get()->AREAS);
 	manager->save();
-	value_type id = manager->getkey(db::AreasFields::Get()->AREAID);
+	value_type id = manager->getkey(db::AreasFields::Get()->AREAID)->getValue();
 	if(id == 0)
 		Global::Get()->bug("AreaManager::Add(), id = 0");
 	

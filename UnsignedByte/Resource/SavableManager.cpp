@@ -105,7 +105,6 @@ void SavableManager::save()
 	if(m_dirty)
 	{
 		SqliteMgr::Get()->doUpdate(this);
-		m_table->modify();
 		m_dirty = false;
 	}
 }
@@ -176,11 +175,9 @@ void SavableManager::bindLookup(sqlite3_stmt* stmt) const
 void SavableManager::parseInsert(sqlite3* db)
 {	
 	// assert(m_keys.size() == 0);
-	
-	KeyPtr key(new Key(m_table->firstImplKey(), sqlite3_last_insert_rowid(db)));
-	Keys keys;
-	keys[key->getKeyDef().get()] = key;
-	m_keys = keys;
+	value_type value = sqlite3_last_insert_rowid(db);
+	KeyPtr key(new Key(m_table->firstImplKey(), value));
+	m_keys[key->getKeyDef().get()] = key;
 }
 
 void SavableManager::parseSelect(sqlite3_stmt* stmt)
@@ -219,7 +216,7 @@ void SavableManager::parseLookup(sqlite3_stmt* stmt)
 	m_keys = keys;
 }
 
-TablePtr SavableManager::getTable() const
+TableImplPtr SavableManager::getTable() const
 {
 	return m_table;
 }

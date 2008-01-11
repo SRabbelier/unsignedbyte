@@ -29,73 +29,12 @@
 #include <Query.h>
 
 #include "TableImpl.h"
+#include "TableImpls.h"
 #include "Tables.h"
 #include "FieldImpl.h"
 #include "KeyDef.h"
 
 using namespace db;
-
-TableImpls::TableImpls() :
-ACCOUNTS(new TableImpl(Tables::Get()->ACCOUNTS, "Accounts")),
-AREAS(new TableImpl(Tables::Get()->AREAS, "Areas")),
-BRANCHES(new TableImpl(Tables::Get()->BRANCHES, "Branches")),
-CHARACTERACCOUNT(new TableImpl(Tables::Get()->CHARACTERACCOUNT, "CharacterAccount")),
-CHARACTERBRANCH(new TableImpl(Tables::Get()->CHARACTERBRANCH, "CharacterBranch")),
-CHARACTERCLUSTER(new TableImpl(Tables::Get()->CHARACTERCLUSTER, "CharacterCluster")),
-CHARACTERS(new TableImpl(Tables::Get()->CHARACTERS, "Characters")),
-CHARACTERSKILL(new TableImpl(Tables::Get()->CHARACTERSKILL, "CharacterSkill")),
-CHARACTERSTAT(new TableImpl(Tables::Get()->CHARACTERSTAT, "CharacterStat")),
-CHARACTERTREE(new TableImpl(Tables::Get()->CHARACTERTREE, "CharacterTree")),
-CLUSTERS(new TableImpl(Tables::Get()->CLUSTERS, "Clusters")),
-CHUNKS(new TableImpl(Tables::Get()->CHUNKS, "Chunks")),
-COLOURS(new TableImpl(Tables::Get()->COLOURS, "Colours")),
-COMMANDS(new TableImpl(Tables::Get()->COMMANDS, "Commands")),
-DETAILS(new TableImpl(Tables::Get()->DETAILS, "Details")),
-DETAILROOM(new TableImpl(Tables::Get()->DETAILROOM, "DetailRoom")),
-DETAILCHUNK(new TableImpl(Tables::Get()->DETAILCHUNK, "DetailChunk")),
-DETAILCHARACTER(new TableImpl(Tables::Get()->DETAILCHARACTER, "DetailCharacter")),
-DETAILDETAIL(new TableImpl(Tables::Get()->DETAILDETAIL, "DetailDetail")),
-EXITS(new TableImpl(Tables::Get()->EXITS, "Exits")),
-GRANTGROUPS(new TableImpl(Tables::Get()->GRANTGROUPS, "GrantGroups")),
-PERMISSIONS(new TableImpl(Tables::Get()->PERMISSIONS, "Permissions")),
-RACES(new TableImpl(Tables::Get()->RACES, "Races")),
-ROOMS(new TableImpl(Tables::Get()->ROOMS, "Rooms")),
-SECTORS(new TableImpl(Tables::Get()->SECTORS, "Sectors")),
-SKILLS(new TableImpl(Tables::Get()->SKILLS, "Skills")),
-STATS(new TableImpl(Tables::Get()->STATS, "Stats")),
-TREES(new TableImpl(Tables::Get()->TREES, "Trees")),
-VERSION(new TableImpl(Tables::Get()->VERSION, "Version"))
-{
-	m_tables.push_back(ACCOUNTS);
-	m_tables.push_back(AREAS);
-	m_tables.push_back(BRANCHES);
-	m_tables.push_back(CHARACTERACCOUNT);
-	m_tables.push_back(CHARACTERBRANCH);
-	m_tables.push_back(CHARACTERCLUSTER);
-	m_tables.push_back(CHARACTERS);
-	m_tables.push_back(CHARACTERSKILL);
-	m_tables.push_back(CHARACTERSTAT);
-	m_tables.push_back(CHARACTERTREE);
-	m_tables.push_back(CLUSTERS);
-	m_tables.push_back(CHUNKS);
-	m_tables.push_back(COLOURS);
-	m_tables.push_back(COMMANDS);
-	m_tables.push_back(DETAILS);
-	m_tables.push_back(DETAILROOM);
-	m_tables.push_back(DETAILCHUNK);
-	m_tables.push_back(DETAILCHARACTER);
-	m_tables.push_back(DETAILDETAIL);
-	m_tables.push_back(EXITS);
-	m_tables.push_back(GRANTGROUPS);
-	m_tables.push_back(PERMISSIONS);
-	m_tables.push_back(RACES);
-	m_tables.push_back(ROOMS);
-	m_tables.push_back(SECTORS);
-	m_tables.push_back(SKILLS);
-	m_tables.push_back(STATS);
-	m_tables.push_back(TREES);
-	m_tables.push_back(VERSION);
-}
 
 AccountsFields::AccountsFields() :
 ACCOUNTID(new KeyDef(TableImpls::Get()->ACCOUNTS, "accountid")),

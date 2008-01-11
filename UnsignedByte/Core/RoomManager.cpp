@@ -43,7 +43,7 @@ value_type RoomManager::Add()
 {
 	SavableManagerPtr manager = SavableManager::getnew(db::TableImpls::Get()->ROOMS);
 	manager->save();
-	value_type id = manager->getkey(db::RoomsFields::Get()->ROOMID);
+	value_type id = manager->getkey(db::RoomsFields::Get()->ROOMID)->getValue();
 	if(id == 0)
 		Global::Get()->bug("RoomManager::Add(), id = 0");
 	

@@ -36,7 +36,7 @@ using mud::Room;
 Room::Room(SavableManagerPtr room) :
 m_room(room)
 {
-	if(m_room)
+	if(!m_room)
 		throw std::invalid_argument("Room::Room(), m_room == NULL!");
 }
 

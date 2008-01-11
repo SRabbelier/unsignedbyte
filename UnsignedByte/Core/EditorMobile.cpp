@@ -93,9 +93,9 @@ SavablePtr EditorMobile::getEditing()
 	return m_mobile;
 }
 
-TablePtr EditorMobile::getTable()
+TableImplPtr EditorMobile::getTable()
 {
-	return Tables::Get()->CHARACTERS;
+	return db::TableImpls::Get()->CHARACTERS;
 }
 
 long EditorMobile::addNew()

@@ -18,16 +18,13 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#include <stdexcept>
+#include "SavableHeaders.h"
 
 #include "SqliteMgr.h"
 #include "DatabaseMgr.h"
-#include "SavableManager.h"
 #include "Actor.h"
 #include "Statements.h"
 #include "StatementStrings.h"
-#include "FieldDef.h"
-#include "TableDef.h"
 
 SqliteMgr::SqliteMgr()
 {	
@@ -42,7 +39,7 @@ SqliteMgr::~SqliteMgr()
 
 void SqliteMgr::doInsert(SavableManager* bindable)
 {
-	Table* table = bindable->getTable().get();
+	TableImpl* table = bindable->getTable().get();
 	sqlite3_stmt* insert = getInsertStmt(table);
 	sqlite3_reset(insert);
 	
@@ -59,7 +56,7 @@ void SqliteMgr::doInsert(SavableManager* bindable)
 
 void SqliteMgr::doErase(SavableManager* bindable)
 {
-	Table* table = bindable->getTable().get();
+	TableImpl* table = bindable->getTable().get();
 	sqlite3_stmt* erase = getEraseStmt(table);
 	sqlite3_reset(erase);
 	
@@ -71,7 +68,7 @@ void SqliteMgr::doErase(SavableManager* bindable)
 
 void SqliteMgr::doUpdate(SavableManager* bindable)
 {
-	Table* table = bindable->getTable().get();
+	TableImpl* table = bindable->getTable().get();
 	sqlite3_stmt* update = getUpdateStmt(table);
 	sqlite3_reset(update);
 	
@@ -83,7 +80,7 @@ void SqliteMgr::doUpdate(SavableManager* bindable)
 
 void SqliteMgr::doSelect(SavableManagerPtr bindable)
 {
-	Table* table = bindable->getTable().get();
+	TableImpl* table = bindable->getTable().get();
 	sqlite3_stmt* select = getSelectStmt(table);
 	sqlite3_reset(select);
 	
@@ -97,7 +94,7 @@ void SqliteMgr::doSelect(SavableManagerPtr bindable)
 
 void SqliteMgr::doLookup(SavableManagerPtr bindable, FieldPtr field)
 {
-	Table* table = bindable->getTable().get();
+	TableImpl* table = bindable->getTable().get();
 	sqlite3_stmt* lookup = getLookupStmt(table, field);
 	sqlite3_reset(lookup);
 	
@@ -112,7 +109,7 @@ void SqliteMgr::doLookup(SavableManagerPtr bindable, FieldPtr field)
 		throw RowNotFoundException("SqliteMgr::doLookup(), no row.");
 }
 
-void SqliteMgr::doForEach(Table* table, Actor& act)
+void SqliteMgr::doForEach(TableImpl* table, Actor& act)
 {
 	sqlite3_stmt* forEach = getForEachStmt(table);
 	sqlite3_reset(forEach);
@@ -126,10 +123,11 @@ void SqliteMgr::doForEach(Table* table, Actor& act)
 	}
 }
 
-void SqliteMgr::commit(Table* table)
+void SqliteMgr::commit(TableImpl* table)
 {
 	//StatementsPtr statements = getStatements(table);
 	//statements->commit();
+	table->modify();
 	m_statements.clear();
 }
 		
@@ -157,7 +155,7 @@ bool SqliteMgr::doStatement(sqlite3_stmt* stmt)
 	}
 }
 
-StatementsPtr SqliteMgr::getStatements(Table* table)
+StatementsPtr SqliteMgr::getStatements(TableImpl* table)
 {
 	StatementsPtr statements = m_statements[table];
 	if(statements)
@@ -169,7 +167,7 @@ StatementsPtr SqliteMgr::getStatements(Table* table)
 	return statements;
 }
 
-StatementStringsPtr SqliteMgr::getStatementStrings(Table* table)
+StatementStringsPtr SqliteMgr::getStatementStrings(TableImpl* table)
 {
 	StatementStringsPtr statements = m_statementstrings[table];
 	if(statements)
@@ -181,7 +179,7 @@ StatementStringsPtr SqliteMgr::getStatementStrings(Table* table)
 	return statements;
 }
 
-sqlite3_stmt* SqliteMgr::getInsertStmt(Table* table)
+sqlite3_stmt* SqliteMgr::getInsertStmt(TableImpl* table)
 {
 	StatementsPtr statements = getStatements(table);
 	sqlite3_stmt* statement = statements->getInsert();
@@ -237,7 +235,7 @@ sqlite3_stmt* SqliteMgr::getInsertStmt(Table* table)
 	return statement;
 }
 
-sqlite3_stmt* SqliteMgr::getEraseStmt(Table* table)
+sqlite3_stmt* SqliteMgr::getEraseStmt(TableImpl* table)
 {
 	StatementsPtr statements = getStatements(table);
 	sqlite3_stmt* statement = statements->getErase();
@@ -284,7 +282,7 @@ sqlite3_stmt* SqliteMgr::getEraseStmt(Table* table)
 	return statement;
 }
 
-sqlite3_stmt* SqliteMgr::getUpdateStmt(Table* table)
+sqlite3_stmt* SqliteMgr::getUpdateStmt(TableImpl* table)
 {
 	StatementsPtr statements = getStatements(table);
 	sqlite3_stmt* statement = statements->getUpdate();
@@ -340,7 +338,7 @@ sqlite3_stmt* SqliteMgr::getUpdateStmt(Table* table)
 	return statement;
 }
 
-sqlite3_stmt* SqliteMgr::getSelectStmt(Table* table)
+sqlite3_stmt* SqliteMgr::getSelectStmt(TableImpl* table)
 {
 	StatementsPtr statements = getStatements(table);
 	sqlite3_stmt* statement = statements->getSelect();
@@ -402,7 +400,7 @@ sqlite3_stmt* SqliteMgr::getSelectStmt(Table* table)
 	return statement;
 }
 
-sqlite3_stmt* SqliteMgr::getLookupStmt(Table* table, FieldPtr field)
+sqlite3_stmt* SqliteMgr::getLookupStmt(TableImpl* table, FieldPtr field)
 {
 	StatementsPtr statements = getStatements(table);
 	sqlite3_stmt* statement = statements->getLookup(field);
@@ -450,7 +448,7 @@ sqlite3_stmt* SqliteMgr::getLookupStmt(Table* table, FieldPtr field)
 	return statement;
 }
 
-sqlite3_stmt* SqliteMgr::getForEachStmt(Table* table)
+sqlite3_stmt* SqliteMgr::getForEachStmt(TableImpl* table)
 {
 	StatementsPtr statements = getStatements(table);
 	sqlite3_stmt* statement = statements->getForEach();

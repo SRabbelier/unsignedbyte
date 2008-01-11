@@ -40,7 +40,7 @@ value_type SectorManager::Add()
 {	
 	SavableManagerPtr manager = SavableManager::getnew(db::TableImpls::Get()->SECTORS);
 	manager->save();
-	value_type id = manager->getkey(db::SectorsFields::Get()->SECTORID);
+	value_type id = manager->getkey(db::SectorsFields::Get()->SECTORID)->getValue();
 	if(id == 0)
 		Global::Get()->bug("SectorManager::Add(), id = 0");
 	

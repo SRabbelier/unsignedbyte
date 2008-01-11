@@ -121,9 +121,9 @@ SavablePtr EditorChunk::getEditing()
 	return m_chunk;
 }
 
-TablePtr EditorChunk::getTable()
+TableImplPtr EditorChunk::getTable()
 {
-	return Tables::Get()->CHUNKS;
+	return db::TableImpls::Get()->CHUNKS;
 }
 
 long EditorChunk::addNew()
