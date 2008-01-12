@@ -22,16 +22,9 @@
 #include <winsock2.h>
 #endif
 
-#include <string>
-#include <map>
 #include <stdarg.h>
-#include <stdexcept>
 
 #include "Character.h"
-#include "DatabaseMgr.h"
-#include "db.h"
-#include "Global.h"
-#include "Cache.h"
 
 #include "Global.h"
 #include "StringUtilities.h"
@@ -49,18 +42,71 @@
 
 using mud::Character;
 
-Character::Character(db::Characters* character) :
+Character::Character(SavableManagerPtr character) :
 m_character(character)
 {
-	if(m_character == NULL)
+	if(!m_character)
 		throw std::invalid_argument("Character::Character(), m_character == NULL");
 }
 
 Character::~Character(void)
 {
-	delete m_character;
-	m_character = NULL;
+
 }
+
+value_type Character::getID() const
+{
+	return m_character->getkey(db::CharactersFields::Get()->CHARACTERID)->getValue();
+}
+
+const std::string& Character::getName() const
+{
+	return m_character->getfield(db::CharactersFields::Get()->NAME)->getStringValue();
+}
+
+const std::string& Character::getDescription() const
+{
+	return m_character->getfield(db::CharactersFields::Get()->DESCRIPTION)->getStringValue();
+}
+
+value_type Character::getRace() const
+{
+	return m_character->getfield(db::CharactersFields::Get()->FKRACES)->getIntegerValue();
+}
+
+value_type Character::getRoom() const
+{
+	return m_character->getfield(db::CharactersFields::Get()->FKROOMS)->getIntegerValue();
+}
+
+
+/**
+ * \brief Setters
+ */ 
+void Character::setName(const std::string& name)
+{
+	ValuePtr value(new Value(db::CharactersFields::Get()->NAME, name));
+	m_character->setvalue(value);	
+}
+
+void Character::setDescription(const std::string& description)
+{
+	ValuePtr value(new Value(db::CharactersFields::Get()->DESCRIPTION, description));
+	m_character->setvalue(value);
+}
+
+void Character::setRace(value_type race)
+{
+	ValuePtr value(new Value(db::CharactersFields::Get()->FKRACES, race));
+	m_character->setvalue(value);
+}
+
+void Character::setRoom(value_type room)
+{
+	ValuePtr value(new Value(db::CharactersFields::Get()->FKROOMS, room));
+	m_character->setvalue(value);
+}
+
 
 /**
  * Start of Output

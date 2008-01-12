@@ -19,9 +19,7 @@
  ***************************************************************************/
 #pragma once
 
-#include <string>
-#include "Savable.h"
-#include "db.h"
+#include "SavableHeaders.h"
 
 namespace mud
 {
@@ -33,19 +31,19 @@ namespace mud
 		/**
 		 * \brief Getters
 		 */
-		value_type getID() { return m_chunk->getchunkid(); } 
-		const std::string& getName() const { return m_chunk->getname(); }
-		const std::string& getDescription() const { return m_chunk->getdescription(); }
-		const std::string& getTags() const { return m_chunk->gettags(); }
-		const value_type getRoom() const { return m_chunk->getfkRooms(); }
+		value_type getID() const;
+		const std::string& getName() const;
+		const std::string& getDescription() const;
+		const std::string& getTags() const;
+		value_type getRoom() const;
 
 		/**
 		 * \brief Setters
 		 */
-		void setName(const std::string& name) { m_chunk->setname(name); }
-		void setDescription(const std::string& description) { m_chunk->setdescription(description); }
-		void setTags(const std::string& description) { m_chunk->settags(description); }
-		void setRoom(value_type room) { m_chunk->setfkRooms(room); }
+		void setName(const std::string& name);
+		void setDescription(const std::string& description);
+		void setTags(const std::string& tags);
+		void setRoom(value_type room);
 
 		/**
 		 * \brief Utilities
@@ -65,14 +63,14 @@ namespace mud
 		friend class mud::ChunkManager; // For constructor
 		friend SmartPtrDelete(mud::Chunk);
 		
-		db::Chunks* m_chunk;
+		SavableManagerPtr m_chunk;
 
 		/**
 		 * \brief Constructor
 		 * \param chunk The DB object
 		 * \return 
 		 */
-		Chunk(db::Chunks* chunk);
+		Chunk(SavableManagerPtr chunk);
 		
 		Chunk(const Chunk& rhs);
 		Chunk operator=(const Chunk& rhs);

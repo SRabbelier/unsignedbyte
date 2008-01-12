@@ -23,17 +23,20 @@
 #include "ClassHeaderGenerator.h"
 #include "Global.h"
 #include "Tables.h"
-#include "Table.h"
-#include "Field.h"
+#include "TableDef.h"
+#include "FieldDef.h"
+#include "StringUtilities.h"
 
 using std::endl;
 
-ClassHeaderGenerator::ClassHeaderGenerator(TablePtr table, std::ofstream* file) :
+ClassHeaderGenerator::ClassHeaderGenerator(TableDefPtr table, std::ofstream* file) :
 m_tabs("\t"),
 m_table(table),
 m_file(file)
 {
-
+	std::string name = m_table->tableName();
+	name.append("Fields");
+	m_name = name;
 }
 
 ClassHeaderGenerator::~ClassHeaderGenerator()
@@ -49,8 +52,6 @@ void ClassHeaderGenerator::GenerateClass()
 	try
 	{
 		AppendHeader();
-		AppendCtor();
-		AppendBody();
 		AppendFields();
 		AppendFooter();
 	}
@@ -66,175 +67,38 @@ void ClassHeaderGenerator::AppendHeader()
 	if(!m_file)
 		throw std::logic_error("Header file is not open for writing.\n");
 	
-	(*m_file) << m_tabs << "class " << m_table->tableName() << " : public Bindable" << endl;
+	(*m_file) << m_tabs << "class " << m_name << " : public Singleton<" << m_name << ">" << endl;
 	(*m_file) << m_tabs << "{" << endl;
 	(*m_file) << m_tabs << "public:" << endl;
 	
 	return;
 }
 
-void ClassHeaderGenerator::AppendCtor()
-{
-	if(!m_file)
-		throw std::logic_error("Header file is not open for writing.\n");
-	
-	std::string name = m_table->tableName();
-	
-	(*m_file) << m_tabs << m_tabs << "// Ctors" << endl;
-	
-	// Empty ctor for creating new objects
-	if(m_table->hasSingularPrimaryKey())
-		(*m_file) << m_tabs << m_tabs << name << "();" << endl;
-	
-	// Destructor
-	(*m_file) << m_tabs << m_tabs << "~" << name << "();" << endl;
-	(*m_file) << endl;
-		
-	// Factories
-	(*m_file) << m_tabs << m_tabs << "// Factories" << endl;
-	(*m_file) << m_tabs << m_tabs << "static " << name << "* bykey" << "(";
-	for(TableMap::const_iterator it = m_table->keybegin(); it != m_table->keyend(); it++)
-	{
-		if(it != m_table->keybegin())
-			(*m_file) << ", ";
-		
-		(*m_file) << "value_type " << it->first;
-	}
-	(*m_file) << ");" << endl;
-
-	for(Fields::const_iterator it = m_table->lookupbegin(); it != m_table->lookupend(); it++)
-	{
-		(*m_file) << m_tabs << m_tabs << "static " << name << "* by" << (*it)->getName() << "(";
-		if((*it)->isText())
-			(*m_file) << "const std::string& value);" << endl;
-		else
-			(*m_file) << "value_type value);" << endl;
-	}
-	
-	// Lookup
-	if(m_table->hasSingularPrimaryKey())
-	{
-		for(Fields::const_iterator it = m_table->lookupbegin(); it != m_table->lookupend(); it++)
-		{
-			(*m_file) << m_tabs << m_tabs << "static value_type lookup";
-			(*m_file) << (*it)->getName() << "(";
-			if((*it)->isText())
-				(*m_file) << "const std::string& value);" << endl;
-			else
-				(*m_file) << "value_type value);" << endl;;
-		}
-	}
-	(*m_file) << endl;
-	
-	return;
-}
-
-void ClassHeaderGenerator::AppendBody()
-{
-	if(!m_file)
-		throw std::logic_error("Header file is not open for writing.\n");
-
-	(*m_file) << m_tabs << m_tabs << "// Database interaction" << endl;
-	(*m_file) << m_tabs << m_tabs << "void erase();" << endl;
-	(*m_file) << m_tabs << m_tabs << "void save();" << endl;
-	(*m_file) << m_tabs << m_tabs << "bool exists();" << endl;
-	(*m_file) << endl;
-	
-	(*m_file) << m_tabs << m_tabs << "// Bindable interface" << endl;
-	(*m_file) << m_tabs << m_tabs << "void bindKeys(sqlite3_stmt* stmt) const;" << endl;
-	(*m_file) << m_tabs << m_tabs << "void bindUpdate(sqlite3_stmt* stmt) const;" << endl;
-	(*m_file) << m_tabs << m_tabs << "void bindLookup(sqlite3_stmt* stmt) const;" << endl;
-	(*m_file) << m_tabs << m_tabs << "void parseInsert(sqlite3* db);" << endl;
-	(*m_file) << m_tabs << m_tabs << "void parseSelect(sqlite3_stmt* stmt);" << endl;
-	(*m_file) << m_tabs << m_tabs << "void parseLookup(sqlite3_stmt* stmt);" << endl;
-	(*m_file) << m_tabs << m_tabs << "TablePtr getTable() const;" << endl;
-	(*m_file) << endl;
-
-	return;
-}
-
 void ClassHeaderGenerator::AppendFields()
 {
-	if(!m_file)
-		throw std::logic_error("Header file is not open for writing.\n");
-	
-	(*m_file) << m_tabs << m_tabs << "// Getters" << endl;
-
 	for(TableMap::const_iterator it = m_table->keybegin(); it != m_table->keyend(); it++)
-		(*m_file) << m_tabs << m_tabs << "value_type get" << it->first << "() const;" << endl;
-		
-	if(m_table->size() != 0)
 	{
-		for(Fields::const_iterator it = m_table->begin(); it != m_table->end(); it++)
-		{
-			FieldPtr field = *it;
-			if(field->isText())
-				(*m_file) << m_tabs << m_tabs << "const std::string& get" << field->getName() << "() const;" << endl;
-			else
-				(*m_file) << m_tabs << m_tabs << "value_type get" << field->getName() << "() const;" << endl;
-		}
-		(*m_file) << endl;
-
-		(*m_file) << m_tabs << m_tabs << "// Setters" << endl;
-		for(Fields::const_iterator it = m_table->begin(); it != m_table->end(); it++)
-		{
-			FieldPtr field = *it;
-			if(field->isText())
-				(*m_file) << m_tabs << m_tabs << "void set" << field->getName() << "(const std::string& value);" << endl;
-			else
-				(*m_file) << m_tabs << m_tabs << "void set" << field->getName() << "(value_type value);" << endl;
-		}
+		(*m_file) << m_tabs << m_tabs << "KeyDefPtr " << String::Get()->toupper(it->first) << ";" << endl;
+	}
+	for(FieldDefVector::const_iterator it = m_table->defbegin(); it != m_table->defend(); it++)
+	{
+		(*m_file) << m_tabs << m_tabs << "FieldImplPtr " << String::Get()->toupper((*it)->getName()) << ";" << endl;
 	}
 	(*m_file) << endl;
-	
-	(*m_file) << m_tabs << "private:" << endl;
-	(*m_file) << m_tabs << m_tabs << "// Database pointer" << endl;
-	(*m_file) << m_tabs << m_tabs << "Database* m_db;" << endl;
-	(*m_file) << endl;
-	
-	if(m_table->lookupsize())
-	{
-		(*m_file) << m_tabs << m_tabs << "// Lookup" << endl;
-		(*m_file) << m_tabs << m_tabs << "std::string m_lookupvalue;" << endl;
-		(*m_file) << endl;
-	}
-	
-	(*m_file) << m_tabs << m_tabs << "// Keys" << endl;
-	for(TableMap::const_iterator it = m_table->keybegin(); it != m_table->keyend(); it++)
-		(*m_file) << m_tabs << m_tabs << "value_type m_" << it->first << ";" << endl;
-	(*m_file) << endl;
-	
-	(*m_file) << m_tabs << m_tabs << "// Fields" << endl;
-	for(Fields::const_iterator it = m_table->begin(); it != m_table->end(); it++)
-	{
-		FieldPtr field = *it;
-		if(field->isText())
-			(*m_file) << m_tabs << m_tabs << "std::string m_" << field->getName() << ";" << endl;
-		else
-			(*m_file) << m_tabs << m_tabs << "value_type m_" << field->getName() << ";" << endl;
-	}
-	(*m_file) << endl;
-
-	(*m_file) << m_tabs << m_tabs << "// State flags" << endl;
-	(*m_file) << m_tabs << m_tabs << "bool m_newentry;" << endl;
-	(*m_file) << m_tabs << m_tabs << "bool m_dirty;" << endl;
-	(*m_file) << endl;
-		
-	return;
 }
 
 void ClassHeaderGenerator::AppendFooter()
 {
 	if(!m_file)
 		throw std::logic_error("Header file is not open for writing.\n");
-		
-	std::string name = m_table->tableName();
 	
+	(*m_file) << m_tabs << "private:" << endl;
 	(*m_file) << m_tabs << m_tabs << "// Hide constructor and assignment operator" << endl;
-	if(!m_table->hasSingularPrimaryKey())
-		(*m_file) << m_tabs << m_tabs << name << "();" << endl;
-	(*m_file) << m_tabs << m_tabs << name << "(const " << name << "& rhs);" << endl;
-	(*m_file) << m_tabs << m_tabs << name << " operator=(const " << name << "& rhs);" << endl;
+	(*m_file) << m_tabs << m_tabs << m_name << "();" << endl;
+	(*m_file) << m_tabs << m_tabs << "~" << m_name << "() { }" << endl;
+	(*m_file) << m_tabs << m_tabs << m_name << "(const " << m_name << "& rhs);" << endl;
+	(*m_file) << m_tabs << m_tabs << m_name << " operator=(const " << m_name << "& rhs);" << endl;
+	(*m_file) << m_tabs << m_tabs << "friend class Singleton<" << m_name << ">;" << endl;
 	
 	(*m_file) << m_tabs << "};" << endl;
 	(*m_file) << endl;

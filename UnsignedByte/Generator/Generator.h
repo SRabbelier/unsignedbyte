@@ -19,12 +19,9 @@
  ***************************************************************************/
 #pragma once
 
-#include <string>
-#include <fstream>
-#include <smart_ptr.h>
+#include "Types.h"
 
-class Table;
-typedef SmartPtr<Table> TablePtr;
+#include <fstream>
 
 class Generator
 {
@@ -41,17 +38,23 @@ private:
 	void AppendLicense(std::ofstream& file);
 	
 	void AppendHeaderIncludes();
-	void AppendHeaderClass(TablePtr table);
+	void AppendHeaderClass(TableDefPtr table);
 	void AppendHeaderFooter();
 	void CreateHeader();
 	
 	void AppendSourceIncludes();
-	void AppendSourceClass(TablePtr table);
+	void AppendSourceClass(TableDefPtr table);
 	void AppendSourceFooter();
 	void CreateSource();
+	
+	void AppendHeaderTableImpls();
+	void AppendSourceTableImpls();
+	void CreateTI();
 	
 	std::string m_name;
 	std::string m_tabs;
 	std::ofstream m_headerfile;
 	std::ofstream m_sourcefile;
+	std::ofstream m_tiheaderfile;
+	std::ofstream m_tisourcefile;
 };

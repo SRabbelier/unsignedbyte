@@ -19,11 +19,7 @@
  ***************************************************************************/
 #pragma once
 
-#include <string>
-#include <vector>
-
-#include "singleton.h"
-#include "db.h"
+#include "SavableHeaders.h"
 
 namespace mud 
 { 
@@ -31,34 +27,19 @@ namespace mud
 	typedef SmartPtr<Area> AreaPtr;
 }
 
-typedef const std::string& cstring;
-typedef std::map<value_type,mud::AreaPtr> areas_m;
-typedef std::map<std::string,mud::AreaPtr> areas_ms;
-typedef std::map<std::string, value_type> reverseStringKey;
-
 namespace mud
 {
 	class AreaManager : public Singleton<mud::AreaManager>
 	{
 	public:
-		TablePtr GetTable();
+		TableImplPtr GetTable();
 		std::vector<std::string> List();
-		void Close(AreaPtr area);
 		
 		value_type Add();
 		mud::AreaPtr GetByKey(value_type id);
 		mud::AreaPtr GetByName(cstring name);
 		
 		value_type lookupByName(cstring value);
-		
-		void Close(value_type Areaid);
-		
-	private:
-		AreaPtr cacheArea(db::Areas* d);
-		
-		areas_m m_byKey;
-		areas_ms m_byName;
-		reverseStringKey m_lookupByName;
 
 	private:
 		AreaManager(void) {};

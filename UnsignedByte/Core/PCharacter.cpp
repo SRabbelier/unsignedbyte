@@ -22,20 +22,14 @@
 #include <winsock2.h>
 #endif
 
-#include <string>
-#include <stdexcept>
-
 #include "PCharacter.h"
 #include "UBSocket.h"
-#include "DatabaseMgr.h"
-#include "Cache.h"
-#include "db.h"
 #include "Account.h"
 #include "EditorAccount.h"
 
 using mud::PCharacter;
 
-PCharacter::PCharacter(UBSocket* sock, db::Characters* character) :
+PCharacter::PCharacter(UBSocket* sock, SavableManagerPtr character) :
 Character(character),
 m_sock(sock)
 {

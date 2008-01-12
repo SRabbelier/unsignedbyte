@@ -17,50 +17,30 @@
  *   Free Software Foundation, Inc.,                                       *
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
-
 #pragma once
 
-#include <string>
-#include <map>
-#include <smart_ptr.h>
+#include "Types.h"
 
-typedef const std::string& cstring;
-
-class StatementStrings
+class Value
 {
 public:
-	// Constructors
-	StatementStrings() { }
-	~StatementStrings() { }
+	Value(FieldImplPtr field) : m_field(field), m_textvalue(""), m_integervalue(0) {}
+	Value(FieldImplPtr field, cstring value) : m_field(field), m_textvalue(value), m_integervalue(0) {}
+	Value(FieldImplPtr field, value_type value) : m_field(field), m_textvalue(""), m_integervalue(value) {}
+	~Value() {}
 	
-	// Getters
-	cstring getErase() const {return m_erase;}
-	cstring getInsert() const {return m_insert;}
-	cstring getUpdate() const {return m_update;}
-	cstring getSelect() const {return m_select;}
-	cstring getLookup(const std::string& field) {return m_lookup[field];}
-	cstring getList() const {return m_list;}
-	cstring getForEach() const {return m_foreach;}
+	FieldImplPtr getField() const { return m_field; }
+
+	const std::string& getStringValue() const { return m_textvalue; }
+	value_type getIntegerValue() const { return m_integervalue; }
+	bool getBoolValue() const { return m_integervalue == 1 ? true : false; }
 	
-	// Setters
-	void setErase(cstring erase) { m_erase = erase; }
-	void setInsert(cstring insert) { m_insert = insert; }
-	void setUpdate(cstring update) { m_update = update; }
-	void setSelect(cstring select) { m_select = select; }
-	void setLookup(cstring field, cstring lookup) { m_lookup[field] = lookup; }
-	void setList(cstring list) { m_list = list; }
-	void setForEach(cstring forEach) { m_foreach = forEach; }
+	void setTextValue(const std::string& value) { m_textvalue = value; }
+	void setIntegerValue(value_type value) { m_integervalue = value; }
+	void setBoolValue(bool value) { m_integervalue = (value ? 1 : 0); }
 	
 private:
-	typedef std::map<std::string, std::string> fieldmap;
-	
-	std::string m_insert;
-	std::string m_erase;
-	std::string m_update;
-	std::string m_select;
-	fieldmap m_lookup;
-	std::string m_list;
-	std::string m_foreach;
+	FieldImplPtr m_field;
+	std::string m_textvalue;
+	value_type m_integervalue;
 };
-
-typedef SmartPtr<StatementStrings> StatementStringsPtr;

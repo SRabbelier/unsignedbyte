@@ -19,13 +19,13 @@
  ***************************************************************************/
 #pragma once
 
-#include <string>
+#include "SavableHeaders.h"
+#include "Global.h"
+
 #include <stack>
 
 #include <TcpSocket.h>
 #include <ISocketHandler.h>
-#include "Global.h"
-#include "smart_ptr.h"
 
 namespace mud { 
 	class Account; 

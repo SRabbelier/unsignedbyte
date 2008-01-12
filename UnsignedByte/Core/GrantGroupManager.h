@@ -19,11 +19,7 @@
  ***************************************************************************/
 #pragma once
 
-#include <string>
-#include <vector>
-
-#include "singleton.h"
-#include "db.h"
+#include "SavableHeaders.h"
 
 namespace mud 
 { 
@@ -31,34 +27,19 @@ namespace mud
 	typedef SmartPtr<GrantGroup> GrantGroupPtr;
 }
 
-typedef const std::string& cstring;
-typedef std::map<value_type,mud::GrantGroupPtr> grantgroups_m;
-typedef std::map<std::string,mud::GrantGroupPtr> grantgroups_ms;
-typedef std::map<std::string, value_type> reverseStringKey;
-
 namespace mud
 {
 	class GrantGroupManager : public Singleton<mud::GrantGroupManager>
 	{
 	public:
-		TablePtr GetTable();
+		TableImplPtr GetTable();
 		std::vector<std::string> List();
-		void Close(GrantGroupPtr grantgroup);
 		
 		value_type Add();
 		mud::GrantGroupPtr GetByKey(value_type id);
 		mud::GrantGroupPtr GetByName(cstring name);
 		
 		value_type lookupByName(cstring value);
-		
-		void Close(value_type GrantGroupid);
-		
-	private:
-		GrantGroupPtr cacheGrantGroup(db::GrantGroups* d);
-		
-		grantgroups_m m_byKey;
-		grantgroups_ms m_byName;
-		reverseStringKey m_lookupByName;
 
 	private:
 		GrantGroupManager(void) {};

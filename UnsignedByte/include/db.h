@@ -23,1654 +23,495 @@
 	#pragma warning (disable:4800)
 #endif
 
-#include <string>
-#include <sqlite3.h>
+#include "Types.h"
+
 #include <Database.h>
-#include <Tables.h>
 #include <SqliteMgr.h>
 #include <Bindable.h>
 
 namespace db
 {
-	class Accounts : public Bindable
+	class AccountsFields : public Singleton<AccountsFields>
 	{
 	public:
-		// Ctors
-		Accounts();
-		~Accounts();
-
-		// Factories
-		static Accounts* bykey(value_type accountid);
-		static Accounts* byname(const std::string& value);
-		static value_type lookupname(const std::string& value);
-
-		// Database interaction
-		void erase();
-		void save();
-		bool exists();
-
-		// Bindable interface
-		void bindKeys(sqlite3_stmt* stmt) const;
-		void bindUpdate(sqlite3_stmt* stmt) const;
-		void bindLookup(sqlite3_stmt* stmt) const;
-		void parseInsert(sqlite3* db);
-		void parseSelect(sqlite3_stmt* stmt);
-		void parseLookup(sqlite3_stmt* stmt);
-		TablePtr getTable() const;
-
-		// Getters
-		value_type getaccountid() const;
-		const std::string& getname() const;
-		const std::string& getpassword() const;
-
-		// Setters
-		void setname(const std::string& value);
-		void setpassword(const std::string& value);
+		KeyDefPtr ACCOUNTID;
+		FieldImplPtr NAME;
+		FieldImplPtr PASSWORD;
 
 	private:
-		// Database pointer
-		Database* m_db;
-
-		// Lookup
-		std::string m_lookupvalue;
-
-		// Keys
-		value_type m_accountid;
-
-		// Fields
-		std::string m_name;
-		std::string m_password;
-
-		// State flags
-		bool m_newentry;
-		bool m_dirty;
-
 		// Hide constructor and assignment operator
-		Accounts(const Accounts& rhs);
-		Accounts operator=(const Accounts& rhs);
+		AccountsFields();
+		~AccountsFields() { }
+		AccountsFields(const AccountsFields& rhs);
+		AccountsFields operator=(const AccountsFields& rhs);
+		friend class Singleton<AccountsFields>;
 	};
 
-	class Areas : public Bindable
+	class AreasFields : public Singleton<AreasFields>
 	{
 	public:
-		// Ctors
-		Areas();
-		~Areas();
-
-		// Factories
-		static Areas* bykey(value_type areaid);
-		static Areas* byname(const std::string& value);
-		static value_type lookupname(const std::string& value);
-
-		// Database interaction
-		void erase();
-		void save();
-		bool exists();
-
-		// Bindable interface
-		void bindKeys(sqlite3_stmt* stmt) const;
-		void bindUpdate(sqlite3_stmt* stmt) const;
-		void bindLookup(sqlite3_stmt* stmt) const;
-		void parseInsert(sqlite3* db);
-		void parseSelect(sqlite3_stmt* stmt);
-		void parseLookup(sqlite3_stmt* stmt);
-		TablePtr getTable() const;
-
-		// Getters
-		value_type getareaid() const;
-		const std::string& getname() const;
-		const std::string& getdescription() const;
-		value_type getheight() const;
-		value_type getwidth() const;
-
-		// Setters
-		void setname(const std::string& value);
-		void setdescription(const std::string& value);
-		void setheight(value_type value);
-		void setwidth(value_type value);
+		KeyDefPtr AREAID;
+		FieldImplPtr NAME;
+		FieldImplPtr DESCRIPTION;
+		FieldImplPtr HEIGHT;
+		FieldImplPtr WIDTH;
 
 	private:
-		// Database pointer
-		Database* m_db;
-
-		// Lookup
-		std::string m_lookupvalue;
-
-		// Keys
-		value_type m_areaid;
-
-		// Fields
-		std::string m_name;
-		std::string m_description;
-		value_type m_height;
-		value_type m_width;
-
-		// State flags
-		bool m_newentry;
-		bool m_dirty;
-
 		// Hide constructor and assignment operator
-		Areas(const Areas& rhs);
-		Areas operator=(const Areas& rhs);
+		AreasFields();
+		~AreasFields() { }
+		AreasFields(const AreasFields& rhs);
+		AreasFields operator=(const AreasFields& rhs);
+		friend class Singleton<AreasFields>;
 	};
 
-	class Branches : public Bindable
+	class BranchesFields : public Singleton<BranchesFields>
 	{
 	public:
-		// Ctors
-		Branches();
-		~Branches();
-
-		// Factories
-		static Branches* bykey(value_type branchid);
-		static Branches* byname(const std::string& value);
-		static value_type lookupname(const std::string& value);
-
-		// Database interaction
-		void erase();
-		void save();
-		bool exists();
-
-		// Bindable interface
-		void bindKeys(sqlite3_stmt* stmt) const;
-		void bindUpdate(sqlite3_stmt* stmt) const;
-		void bindLookup(sqlite3_stmt* stmt) const;
-		void parseInsert(sqlite3* db);
-		void parseSelect(sqlite3_stmt* stmt);
-		void parseLookup(sqlite3_stmt* stmt);
-		TablePtr getTable() const;
-
-		// Getters
-		value_type getbranchid() const;
-		const std::string& getname() const;
-		value_type getfkTrees() const;
-		value_type getfkStatsPrimary() const;
-		value_type getfkStatsSecondary() const;
-
-		// Setters
-		void setname(const std::string& value);
-		void setfkTrees(value_type value);
-		void setfkStatsPrimary(value_type value);
-		void setfkStatsSecondary(value_type value);
+		KeyDefPtr BRANCHID;
+		FieldImplPtr NAME;
+		FieldImplPtr FKTREES;
+		FieldImplPtr FKSTATSPRIMARY;
+		FieldImplPtr FKSTATSSECONDARY;
 
 	private:
-		// Database pointer
-		Database* m_db;
-
-		// Lookup
-		std::string m_lookupvalue;
-
-		// Keys
-		value_type m_branchid;
-
-		// Fields
-		std::string m_name;
-		value_type m_fkTrees;
-		value_type m_fkStatsPrimary;
-		value_type m_fkStatsSecondary;
-
-		// State flags
-		bool m_newentry;
-		bool m_dirty;
-
 		// Hide constructor and assignment operator
-		Branches(const Branches& rhs);
-		Branches operator=(const Branches& rhs);
+		BranchesFields();
+		~BranchesFields() { }
+		BranchesFields(const BranchesFields& rhs);
+		BranchesFields operator=(const BranchesFields& rhs);
+		friend class Singleton<BranchesFields>;
 	};
 
-	class CharacterAccount : public Bindable
+	class CharacterAccountFields : public Singleton<CharacterAccountFields>
 	{
 	public:
-		// Ctors
-		~CharacterAccount();
-
-		// Factories
-		static CharacterAccount* bykey(value_type fkAccounts, value_type fkCharacters);
-
-		// Database interaction
-		void erase();
-		void save();
-		bool exists();
-
-		// Bindable interface
-		void bindKeys(sqlite3_stmt* stmt) const;
-		void bindUpdate(sqlite3_stmt* stmt) const;
-		void bindLookup(sqlite3_stmt* stmt) const;
-		void parseInsert(sqlite3* db);
-		void parseSelect(sqlite3_stmt* stmt);
-		void parseLookup(sqlite3_stmt* stmt);
-		TablePtr getTable() const;
-
-		// Getters
-		value_type getfkAccounts() const;
-		value_type getfkCharacters() const;
+		KeyDefPtr FKACCOUNTS;
+		KeyDefPtr FKCHARACTERS;
 
 	private:
-		// Database pointer
-		Database* m_db;
-
-		// Keys
-		value_type m_fkAccounts;
-		value_type m_fkCharacters;
-
-		// Fields
-
-		// State flags
-		bool m_newentry;
-		bool m_dirty;
-
 		// Hide constructor and assignment operator
-		CharacterAccount();
-		CharacterAccount(const CharacterAccount& rhs);
-		CharacterAccount operator=(const CharacterAccount& rhs);
+		CharacterAccountFields();
+		~CharacterAccountFields() { }
+		CharacterAccountFields(const CharacterAccountFields& rhs);
+		CharacterAccountFields operator=(const CharacterAccountFields& rhs);
+		friend class Singleton<CharacterAccountFields>;
 	};
 
-	class CharacterBranch : public Bindable
+	class CharacterBranchFields : public Singleton<CharacterBranchFields>
 	{
 	public:
-		// Ctors
-		~CharacterBranch();
-
-		// Factories
-		static CharacterBranch* bykey(value_type fkBranches, value_type fkCharacters);
-
-		// Database interaction
-		void erase();
-		void save();
-		bool exists();
-
-		// Bindable interface
-		void bindKeys(sqlite3_stmt* stmt) const;
-		void bindUpdate(sqlite3_stmt* stmt) const;
-		void bindLookup(sqlite3_stmt* stmt) const;
-		void parseInsert(sqlite3* db);
-		void parseSelect(sqlite3_stmt* stmt);
-		void parseLookup(sqlite3_stmt* stmt);
-		TablePtr getTable() const;
-
-		// Getters
-		value_type getfkBranches() const;
-		value_type getfkCharacters() const;
-		value_type getxp() const;
-
-		// Setters
-		void setxp(value_type value);
+		KeyDefPtr FKBRANCHES;
+		KeyDefPtr FKCHARACTERS;
+		FieldImplPtr XP;
 
 	private:
-		// Database pointer
-		Database* m_db;
-
-		// Keys
-		value_type m_fkBranches;
-		value_type m_fkCharacters;
-
-		// Fields
-		value_type m_xp;
-
-		// State flags
-		bool m_newentry;
-		bool m_dirty;
-
 		// Hide constructor and assignment operator
-		CharacterBranch();
-		CharacterBranch(const CharacterBranch& rhs);
-		CharacterBranch operator=(const CharacterBranch& rhs);
+		CharacterBranchFields();
+		~CharacterBranchFields() { }
+		CharacterBranchFields(const CharacterBranchFields& rhs);
+		CharacterBranchFields operator=(const CharacterBranchFields& rhs);
+		friend class Singleton<CharacterBranchFields>;
 	};
 
-	class CharacterCluster : public Bindable
+	class CharacterClusterFields : public Singleton<CharacterClusterFields>
 	{
 	public:
-		// Ctors
-		~CharacterCluster();
-
-		// Factories
-		static CharacterCluster* bykey(value_type fkCharacters, value_type fkClusters);
-
-		// Database interaction
-		void erase();
-		void save();
-		bool exists();
-
-		// Bindable interface
-		void bindKeys(sqlite3_stmt* stmt) const;
-		void bindUpdate(sqlite3_stmt* stmt) const;
-		void bindLookup(sqlite3_stmt* stmt) const;
-		void parseInsert(sqlite3* db);
-		void parseSelect(sqlite3_stmt* stmt);
-		void parseLookup(sqlite3_stmt* stmt);
-		TablePtr getTable() const;
-
-		// Getters
-		value_type getfkCharacters() const;
-		value_type getfkClusters() const;
-		value_type getxp() const;
-
-		// Setters
-		void setxp(value_type value);
+		KeyDefPtr FKCHARACTERS;
+		KeyDefPtr FKCLUSTERS;
+		FieldImplPtr XP;
 
 	private:
-		// Database pointer
-		Database* m_db;
-
-		// Keys
-		value_type m_fkCharacters;
-		value_type m_fkClusters;
-
-		// Fields
-		value_type m_xp;
-
-		// State flags
-		bool m_newentry;
-		bool m_dirty;
-
 		// Hide constructor and assignment operator
-		CharacterCluster();
-		CharacterCluster(const CharacterCluster& rhs);
-		CharacterCluster operator=(const CharacterCluster& rhs);
+		CharacterClusterFields();
+		~CharacterClusterFields() { }
+		CharacterClusterFields(const CharacterClusterFields& rhs);
+		CharacterClusterFields operator=(const CharacterClusterFields& rhs);
+		friend class Singleton<CharacterClusterFields>;
 	};
 
-	class Characters : public Bindable
+	class CharactersFields : public Singleton<CharactersFields>
 	{
 	public:
-		// Ctors
-		Characters();
-		~Characters();
-
-		// Factories
-		static Characters* bykey(value_type characterid);
-		static Characters* byname(const std::string& value);
-		static value_type lookupname(const std::string& value);
-
-		// Database interaction
-		void erase();
-		void save();
-		bool exists();
-
-		// Bindable interface
-		void bindKeys(sqlite3_stmt* stmt) const;
-		void bindUpdate(sqlite3_stmt* stmt) const;
-		void bindLookup(sqlite3_stmt* stmt) const;
-		void parseInsert(sqlite3* db);
-		void parseSelect(sqlite3_stmt* stmt);
-		void parseLookup(sqlite3_stmt* stmt);
-		TablePtr getTable() const;
-
-		// Getters
-		value_type getcharacterid() const;
-		value_type getfkRaces() const;
-		value_type getfkRooms() const;
-		const std::string& getname() const;
-		const std::string& getdescription() const;
-
-		// Setters
-		void setfkRaces(value_type value);
-		void setfkRooms(value_type value);
-		void setname(const std::string& value);
-		void setdescription(const std::string& value);
+		KeyDefPtr CHARACTERID;
+		FieldImplPtr FKRACES;
+		FieldImplPtr FKROOMS;
+		FieldImplPtr NAME;
+		FieldImplPtr DESCRIPTION;
 
 	private:
-		// Database pointer
-		Database* m_db;
-
-		// Lookup
-		std::string m_lookupvalue;
-
-		// Keys
-		value_type m_characterid;
-
-		// Fields
-		value_type m_fkRaces;
-		value_type m_fkRooms;
-		std::string m_name;
-		std::string m_description;
-
-		// State flags
-		bool m_newentry;
-		bool m_dirty;
-
 		// Hide constructor and assignment operator
-		Characters(const Characters& rhs);
-		Characters operator=(const Characters& rhs);
+		CharactersFields();
+		~CharactersFields() { }
+		CharactersFields(const CharactersFields& rhs);
+		CharactersFields operator=(const CharactersFields& rhs);
+		friend class Singleton<CharactersFields>;
 	};
 
-	class CharacterSkill : public Bindable
+	class CharacterSkillFields : public Singleton<CharacterSkillFields>
 	{
 	public:
-		// Ctors
-		~CharacterSkill();
-
-		// Factories
-		static CharacterSkill* bykey(value_type fkBranches, value_type fkCharacters);
-
-		// Database interaction
-		void erase();
-		void save();
-		bool exists();
-
-		// Bindable interface
-		void bindKeys(sqlite3_stmt* stmt) const;
-		void bindUpdate(sqlite3_stmt* stmt) const;
-		void bindLookup(sqlite3_stmt* stmt) const;
-		void parseInsert(sqlite3* db);
-		void parseSelect(sqlite3_stmt* stmt);
-		void parseLookup(sqlite3_stmt* stmt);
-		TablePtr getTable() const;
-
-		// Getters
-		value_type getfkBranches() const;
-		value_type getfkCharacters() const;
-		value_type getxp() const;
-
-		// Setters
-		void setxp(value_type value);
+		KeyDefPtr FKBRANCHES;
+		KeyDefPtr FKCHARACTERS;
+		FieldImplPtr XP;
 
 	private:
-		// Database pointer
-		Database* m_db;
-
-		// Keys
-		value_type m_fkBranches;
-		value_type m_fkCharacters;
-
-		// Fields
-		value_type m_xp;
-
-		// State flags
-		bool m_newentry;
-		bool m_dirty;
-
 		// Hide constructor and assignment operator
-		CharacterSkill();
-		CharacterSkill(const CharacterSkill& rhs);
-		CharacterSkill operator=(const CharacterSkill& rhs);
+		CharacterSkillFields();
+		~CharacterSkillFields() { }
+		CharacterSkillFields(const CharacterSkillFields& rhs);
+		CharacterSkillFields operator=(const CharacterSkillFields& rhs);
+		friend class Singleton<CharacterSkillFields>;
 	};
 
-	class CharacterStat : public Bindable
+	class CharacterStatFields : public Singleton<CharacterStatFields>
 	{
 	public:
-		// Ctors
-		~CharacterStat();
-
-		// Factories
-		static CharacterStat* bykey(value_type fkCharacters, value_type fkStats);
-
-		// Database interaction
-		void erase();
-		void save();
-		bool exists();
-
-		// Bindable interface
-		void bindKeys(sqlite3_stmt* stmt) const;
-		void bindUpdate(sqlite3_stmt* stmt) const;
-		void bindLookup(sqlite3_stmt* stmt) const;
-		void parseInsert(sqlite3* db);
-		void parseSelect(sqlite3_stmt* stmt);
-		void parseLookup(sqlite3_stmt* stmt);
-		TablePtr getTable() const;
-
-		// Getters
-		value_type getfkCharacters() const;
-		value_type getfkStats() const;
-		value_type getxp() const;
-
-		// Setters
-		void setxp(value_type value);
+		KeyDefPtr FKCHARACTERS;
+		KeyDefPtr FKSTATS;
+		FieldImplPtr XP;
 
 	private:
-		// Database pointer
-		Database* m_db;
-
-		// Keys
-		value_type m_fkCharacters;
-		value_type m_fkStats;
-
-		// Fields
-		value_type m_xp;
-
-		// State flags
-		bool m_newentry;
-		bool m_dirty;
-
 		// Hide constructor and assignment operator
-		CharacterStat();
-		CharacterStat(const CharacterStat& rhs);
-		CharacterStat operator=(const CharacterStat& rhs);
+		CharacterStatFields();
+		~CharacterStatFields() { }
+		CharacterStatFields(const CharacterStatFields& rhs);
+		CharacterStatFields operator=(const CharacterStatFields& rhs);
+		friend class Singleton<CharacterStatFields>;
 	};
 
-	class CharacterTree : public Bindable
+	class CharacterTreeFields : public Singleton<CharacterTreeFields>
 	{
 	public:
-		// Ctors
-		~CharacterTree();
-
-		// Factories
-		static CharacterTree* bykey(value_type fkCharacters, value_type fkTrees);
-
-		// Database interaction
-		void erase();
-		void save();
-		bool exists();
-
-		// Bindable interface
-		void bindKeys(sqlite3_stmt* stmt) const;
-		void bindUpdate(sqlite3_stmt* stmt) const;
-		void bindLookup(sqlite3_stmt* stmt) const;
-		void parseInsert(sqlite3* db);
-		void parseSelect(sqlite3_stmt* stmt);
-		void parseLookup(sqlite3_stmt* stmt);
-		TablePtr getTable() const;
-
-		// Getters
-		value_type getfkCharacters() const;
-		value_type getfkTrees() const;
-		value_type getxp() const;
-
-		// Setters
-		void setxp(value_type value);
+		KeyDefPtr FKCHARACTERS;
+		KeyDefPtr FKTREES;
+		FieldImplPtr XP;
 
 	private:
-		// Database pointer
-		Database* m_db;
-
-		// Keys
-		value_type m_fkCharacters;
-		value_type m_fkTrees;
-
-		// Fields
-		value_type m_xp;
-
-		// State flags
-		bool m_newentry;
-		bool m_dirty;
-
 		// Hide constructor and assignment operator
-		CharacterTree();
-		CharacterTree(const CharacterTree& rhs);
-		CharacterTree operator=(const CharacterTree& rhs);
+		CharacterTreeFields();
+		~CharacterTreeFields() { }
+		CharacterTreeFields(const CharacterTreeFields& rhs);
+		CharacterTreeFields operator=(const CharacterTreeFields& rhs);
+		friend class Singleton<CharacterTreeFields>;
 	};
 
-	class Clusters : public Bindable
+	class ClustersFields : public Singleton<ClustersFields>
 	{
 	public:
-		// Ctors
-		Clusters();
-		~Clusters();
-
-		// Factories
-		static Clusters* bykey(value_type clusterid);
-		static Clusters* byname(const std::string& value);
-		static value_type lookupname(const std::string& value);
-
-		// Database interaction
-		void erase();
-		void save();
-		bool exists();
-
-		// Bindable interface
-		void bindKeys(sqlite3_stmt* stmt) const;
-		void bindUpdate(sqlite3_stmt* stmt) const;
-		void bindLookup(sqlite3_stmt* stmt) const;
-		void parseInsert(sqlite3* db);
-		void parseSelect(sqlite3_stmt* stmt);
-		void parseLookup(sqlite3_stmt* stmt);
-		TablePtr getTable() const;
-
-		// Getters
-		value_type getclusterid() const;
-		const std::string& getname() const;
-
-		// Setters
-		void setname(const std::string& value);
+		KeyDefPtr CLUSTERID;
+		FieldImplPtr NAME;
 
 	private:
-		// Database pointer
-		Database* m_db;
-
-		// Lookup
-		std::string m_lookupvalue;
-
-		// Keys
-		value_type m_clusterid;
-
-		// Fields
-		std::string m_name;
-
-		// State flags
-		bool m_newentry;
-		bool m_dirty;
-
 		// Hide constructor and assignment operator
-		Clusters(const Clusters& rhs);
-		Clusters operator=(const Clusters& rhs);
+		ClustersFields();
+		~ClustersFields() { }
+		ClustersFields(const ClustersFields& rhs);
+		ClustersFields operator=(const ClustersFields& rhs);
+		friend class Singleton<ClustersFields>;
 	};
 
-	class Chunks : public Bindable
+	class ChunksFields : public Singleton<ChunksFields>
 	{
 	public:
-		// Ctors
-		Chunks();
-		~Chunks();
-
-		// Factories
-		static Chunks* bykey(value_type chunkid);
-
-		// Database interaction
-		void erase();
-		void save();
-		bool exists();
-
-		// Bindable interface
-		void bindKeys(sqlite3_stmt* stmt) const;
-		void bindUpdate(sqlite3_stmt* stmt) const;
-		void bindLookup(sqlite3_stmt* stmt) const;
-		void parseInsert(sqlite3* db);
-		void parseSelect(sqlite3_stmt* stmt);
-		void parseLookup(sqlite3_stmt* stmt);
-		TablePtr getTable() const;
-
-		// Getters
-		value_type getchunkid() const;
-		value_type getfkRooms() const;
-		const std::string& getname() const;
-		const std::string& getdescription() const;
-		const std::string& gettags() const;
-
-		// Setters
-		void setfkRooms(value_type value);
-		void setname(const std::string& value);
-		void setdescription(const std::string& value);
-		void settags(const std::string& value);
+		KeyDefPtr CHUNKID;
+		FieldImplPtr FKROOMS;
+		FieldImplPtr NAME;
+		FieldImplPtr DESCRIPTION;
+		FieldImplPtr TAGS;
 
 	private:
-		// Database pointer
-		Database* m_db;
-
-		// Keys
-		value_type m_chunkid;
-
-		// Fields
-		value_type m_fkRooms;
-		std::string m_name;
-		std::string m_description;
-		std::string m_tags;
-
-		// State flags
-		bool m_newentry;
-		bool m_dirty;
-
 		// Hide constructor and assignment operator
-		Chunks(const Chunks& rhs);
-		Chunks operator=(const Chunks& rhs);
+		ChunksFields();
+		~ChunksFields() { }
+		ChunksFields(const ChunksFields& rhs);
+		ChunksFields operator=(const ChunksFields& rhs);
+		friend class Singleton<ChunksFields>;
 	};
 
-	class Colours : public Bindable
+	class ColoursFields : public Singleton<ColoursFields>
 	{
 	public:
-		// Ctors
-		Colours();
-		~Colours();
-
-		// Factories
-		static Colours* bykey(value_type colourid);
-		static Colours* byname(const std::string& value);
-		static Colours* bycode(const std::string& value);
-		static value_type lookupname(const std::string& value);
-		static value_type lookupcode(const std::string& value);
-
-		// Database interaction
-		void erase();
-		void save();
-		bool exists();
-
-		// Bindable interface
-		void bindKeys(sqlite3_stmt* stmt) const;
-		void bindUpdate(sqlite3_stmt* stmt) const;
-		void bindLookup(sqlite3_stmt* stmt) const;
-		void parseInsert(sqlite3* db);
-		void parseSelect(sqlite3_stmt* stmt);
-		void parseLookup(sqlite3_stmt* stmt);
-		TablePtr getTable() const;
-
-		// Getters
-		value_type getcolourid() const;
-		const std::string& getname() const;
-		const std::string& getcode() const;
-		const std::string& getcolourstring() const;
-		value_type getansi() const;
-
-		// Setters
-		void setname(const std::string& value);
-		void setcode(const std::string& value);
-		void setcolourstring(const std::string& value);
-		void setansi(value_type value);
+		KeyDefPtr COLOURID;
+		FieldImplPtr NAME;
+		FieldImplPtr CODE;
+		FieldImplPtr COLOURSTRING;
+		FieldImplPtr ANSI;
 
 	private:
-		// Database pointer
-		Database* m_db;
-
-		// Lookup
-		std::string m_lookupvalue;
-
-		// Keys
-		value_type m_colourid;
-
-		// Fields
-		std::string m_name;
-		std::string m_code;
-		std::string m_colourstring;
-		value_type m_ansi;
-
-		// State flags
-		bool m_newentry;
-		bool m_dirty;
-
 		// Hide constructor and assignment operator
-		Colours(const Colours& rhs);
-		Colours operator=(const Colours& rhs);
+		ColoursFields();
+		~ColoursFields() { }
+		ColoursFields(const ColoursFields& rhs);
+		ColoursFields operator=(const ColoursFields& rhs);
+		friend class Singleton<ColoursFields>;
 	};
 
-	class Commands : public Bindable
+	class CommandsFields : public Singleton<CommandsFields>
 	{
 	public:
-		// Ctors
-		Commands();
-		~Commands();
-
-		// Factories
-		static Commands* bykey(value_type commandid);
-		static Commands* byname(const std::string& value);
-		static value_type lookupname(const std::string& value);
-
-		// Database interaction
-		void erase();
-		void save();
-		bool exists();
-
-		// Bindable interface
-		void bindKeys(sqlite3_stmt* stmt) const;
-		void bindUpdate(sqlite3_stmt* stmt) const;
-		void bindLookup(sqlite3_stmt* stmt) const;
-		void parseInsert(sqlite3* db);
-		void parseSelect(sqlite3_stmt* stmt);
-		void parseLookup(sqlite3_stmt* stmt);
-		TablePtr getTable() const;
-
-		// Getters
-		value_type getcommandid() const;
-		const std::string& getname() const;
-		value_type getgrantgroup() const;
-		value_type gethighforce() const;
-		value_type getforce() const;
-		value_type getlowforce() const;
-
-		// Setters
-		void setname(const std::string& value);
-		void setgrantgroup(value_type value);
-		void sethighforce(value_type value);
-		void setforce(value_type value);
-		void setlowforce(value_type value);
+		KeyDefPtr COMMANDID;
+		FieldImplPtr NAME;
+		FieldImplPtr GRANTGROUP;
+		FieldImplPtr HIGHFORCE;
+		FieldImplPtr FORCE;
+		FieldImplPtr LOWFORCE;
 
 	private:
-		// Database pointer
-		Database* m_db;
-
-		// Lookup
-		std::string m_lookupvalue;
-
-		// Keys
-		value_type m_commandid;
-
-		// Fields
-		std::string m_name;
-		value_type m_grantgroup;
-		value_type m_highforce;
-		value_type m_force;
-		value_type m_lowforce;
-
-		// State flags
-		bool m_newentry;
-		bool m_dirty;
-
 		// Hide constructor and assignment operator
-		Commands(const Commands& rhs);
-		Commands operator=(const Commands& rhs);
+		CommandsFields();
+		~CommandsFields() { }
+		CommandsFields(const CommandsFields& rhs);
+		CommandsFields operator=(const CommandsFields& rhs);
+		friend class Singleton<CommandsFields>;
 	};
 
-	class Details : public Bindable
+	class DetailsFields : public Singleton<DetailsFields>
 	{
 	public:
-		// Ctors
-		Details();
-		~Details();
-
-		// Factories
-		static Details* bykey(value_type detailid);
-		static Details* bykey(const std::string& value);
-		static value_type lookupkey(const std::string& value);
-
-		// Database interaction
-		void erase();
-		void save();
-		bool exists();
-
-		// Bindable interface
-		void bindKeys(sqlite3_stmt* stmt) const;
-		void bindUpdate(sqlite3_stmt* stmt) const;
-		void bindLookup(sqlite3_stmt* stmt) const;
-		void parseInsert(sqlite3* db);
-		void parseSelect(sqlite3_stmt* stmt);
-		void parseLookup(sqlite3_stmt* stmt);
-		TablePtr getTable() const;
-
-		// Getters
-		value_type getdetailid() const;
-		const std::string& getkey() const;
-		const std::string& getdescription() const;
-
-		// Setters
-		void setkey(const std::string& value);
-		void setdescription(const std::string& value);
+		KeyDefPtr DETAILID;
+		FieldImplPtr KEY;
+		FieldImplPtr DESCRIPTION;
 
 	private:
-		// Database pointer
-		Database* m_db;
-
-		// Lookup
-		std::string m_lookupvalue;
-
-		// Keys
-		value_type m_detailid;
-
-		// Fields
-		std::string m_key;
-		std::string m_description;
-
-		// State flags
-		bool m_newentry;
-		bool m_dirty;
-
 		// Hide constructor and assignment operator
-		Details(const Details& rhs);
-		Details operator=(const Details& rhs);
+		DetailsFields();
+		~DetailsFields() { }
+		DetailsFields(const DetailsFields& rhs);
+		DetailsFields operator=(const DetailsFields& rhs);
+		friend class Singleton<DetailsFields>;
 	};
 
-	class DetailRoom : public Bindable
+	class DetailRoomFields : public Singleton<DetailRoomFields>
 	{
 	public:
-		// Ctors
-		~DetailRoom();
-
-		// Factories
-		static DetailRoom* bykey(value_type fkDetails, value_type fkRooms);
-
-		// Database interaction
-		void erase();
-		void save();
-		bool exists();
-
-		// Bindable interface
-		void bindKeys(sqlite3_stmt* stmt) const;
-		void bindUpdate(sqlite3_stmt* stmt) const;
-		void bindLookup(sqlite3_stmt* stmt) const;
-		void parseInsert(sqlite3* db);
-		void parseSelect(sqlite3_stmt* stmt);
-		void parseLookup(sqlite3_stmt* stmt);
-		TablePtr getTable() const;
-
-		// Getters
-		value_type getfkDetails() const;
-		value_type getfkRooms() const;
+		KeyDefPtr FKDETAILS;
+		KeyDefPtr FKROOMS;
 
 	private:
-		// Database pointer
-		Database* m_db;
-
-		// Keys
-		value_type m_fkDetails;
-		value_type m_fkRooms;
-
-		// Fields
-
-		// State flags
-		bool m_newentry;
-		bool m_dirty;
-
 		// Hide constructor and assignment operator
-		DetailRoom();
-		DetailRoom(const DetailRoom& rhs);
-		DetailRoom operator=(const DetailRoom& rhs);
+		DetailRoomFields();
+		~DetailRoomFields() { }
+		DetailRoomFields(const DetailRoomFields& rhs);
+		DetailRoomFields operator=(const DetailRoomFields& rhs);
+		friend class Singleton<DetailRoomFields>;
 	};
 
-	class DetailChunk : public Bindable
+	class DetailChunkFields : public Singleton<DetailChunkFields>
 	{
 	public:
-		// Ctors
-		~DetailChunk();
-
-		// Factories
-		static DetailChunk* bykey(value_type fkChunks, value_type fkDetails);
-
-		// Database interaction
-		void erase();
-		void save();
-		bool exists();
-
-		// Bindable interface
-		void bindKeys(sqlite3_stmt* stmt) const;
-		void bindUpdate(sqlite3_stmt* stmt) const;
-		void bindLookup(sqlite3_stmt* stmt) const;
-		void parseInsert(sqlite3* db);
-		void parseSelect(sqlite3_stmt* stmt);
-		void parseLookup(sqlite3_stmt* stmt);
-		TablePtr getTable() const;
-
-		// Getters
-		value_type getfkChunks() const;
-		value_type getfkDetails() const;
+		KeyDefPtr FKCHUNKS;
+		KeyDefPtr FKDETAILS;
 
 	private:
-		// Database pointer
-		Database* m_db;
-
-		// Keys
-		value_type m_fkChunks;
-		value_type m_fkDetails;
-
-		// Fields
-
-		// State flags
-		bool m_newentry;
-		bool m_dirty;
-
 		// Hide constructor and assignment operator
-		DetailChunk();
-		DetailChunk(const DetailChunk& rhs);
-		DetailChunk operator=(const DetailChunk& rhs);
+		DetailChunkFields();
+		~DetailChunkFields() { }
+		DetailChunkFields(const DetailChunkFields& rhs);
+		DetailChunkFields operator=(const DetailChunkFields& rhs);
+		friend class Singleton<DetailChunkFields>;
 	};
 
-	class DetailCharacter : public Bindable
+	class DetailCharacterFields : public Singleton<DetailCharacterFields>
 	{
 	public:
-		// Ctors
-		~DetailCharacter();
-
-		// Factories
-		static DetailCharacter* bykey(value_type fkCharacters, value_type fkDetails);
-
-		// Database interaction
-		void erase();
-		void save();
-		bool exists();
-
-		// Bindable interface
-		void bindKeys(sqlite3_stmt* stmt) const;
-		void bindUpdate(sqlite3_stmt* stmt) const;
-		void bindLookup(sqlite3_stmt* stmt) const;
-		void parseInsert(sqlite3* db);
-		void parseSelect(sqlite3_stmt* stmt);
-		void parseLookup(sqlite3_stmt* stmt);
-		TablePtr getTable() const;
-
-		// Getters
-		value_type getfkCharacters() const;
-		value_type getfkDetails() const;
+		KeyDefPtr FKCHARACTERS;
+		KeyDefPtr FKDETAILS;
 
 	private:
-		// Database pointer
-		Database* m_db;
-
-		// Keys
-		value_type m_fkCharacters;
-		value_type m_fkDetails;
-
-		// Fields
-
-		// State flags
-		bool m_newentry;
-		bool m_dirty;
-
 		// Hide constructor and assignment operator
-		DetailCharacter();
-		DetailCharacter(const DetailCharacter& rhs);
-		DetailCharacter operator=(const DetailCharacter& rhs);
+		DetailCharacterFields();
+		~DetailCharacterFields() { }
+		DetailCharacterFields(const DetailCharacterFields& rhs);
+		DetailCharacterFields operator=(const DetailCharacterFields& rhs);
+		friend class Singleton<DetailCharacterFields>;
 	};
 
-	class DetailDetail : public Bindable
+	class DetailDetailFields : public Singleton<DetailDetailFields>
 	{
 	public:
-		// Ctors
-		~DetailDetail();
-
-		// Factories
-		static DetailDetail* bykey(value_type fkDetailsPrimary, value_type fkDetailsSecondary);
-
-		// Database interaction
-		void erase();
-		void save();
-		bool exists();
-
-		// Bindable interface
-		void bindKeys(sqlite3_stmt* stmt) const;
-		void bindUpdate(sqlite3_stmt* stmt) const;
-		void bindLookup(sqlite3_stmt* stmt) const;
-		void parseInsert(sqlite3* db);
-		void parseSelect(sqlite3_stmt* stmt);
-		void parseLookup(sqlite3_stmt* stmt);
-		TablePtr getTable() const;
-
-		// Getters
-		value_type getfkDetailsPrimary() const;
-		value_type getfkDetailsSecondary() const;
+		KeyDefPtr FKDETAILSPRIMARY;
+		KeyDefPtr FKDETAILSSECONDARY;
 
 	private:
-		// Database pointer
-		Database* m_db;
-
-		// Keys
-		value_type m_fkDetailsPrimary;
-		value_type m_fkDetailsSecondary;
-
-		// Fields
-
-		// State flags
-		bool m_newentry;
-		bool m_dirty;
-
 		// Hide constructor and assignment operator
-		DetailDetail();
-		DetailDetail(const DetailDetail& rhs);
-		DetailDetail operator=(const DetailDetail& rhs);
+		DetailDetailFields();
+		~DetailDetailFields() { }
+		DetailDetailFields(const DetailDetailFields& rhs);
+		DetailDetailFields operator=(const DetailDetailFields& rhs);
+		friend class Singleton<DetailDetailFields>;
 	};
 
-	class Exits : public Bindable
+	class ExitsFields : public Singleton<ExitsFields>
 	{
 	public:
-		// Ctors
-		Exits();
-		~Exits();
-
-		// Factories
-		static Exits* bykey(value_type exitid);
-
-		// Database interaction
-		void erase();
-		void save();
-		bool exists();
-
-		// Bindable interface
-		void bindKeys(sqlite3_stmt* stmt) const;
-		void bindUpdate(sqlite3_stmt* stmt) const;
-		void bindLookup(sqlite3_stmt* stmt) const;
-		void parseInsert(sqlite3* db);
-		void parseSelect(sqlite3_stmt* stmt);
-		void parseLookup(sqlite3_stmt* stmt);
-		TablePtr getTable() const;
-
-		// Getters
-		value_type getexitid() const;
-		value_type getdir() const;
-
-		// Setters
-		void setdir(value_type value);
+		KeyDefPtr EXITID;
+		FieldImplPtr DIR;
 
 	private:
-		// Database pointer
-		Database* m_db;
-
-		// Keys
-		value_type m_exitid;
-
-		// Fields
-		value_type m_dir;
-
-		// State flags
-		bool m_newentry;
-		bool m_dirty;
-
 		// Hide constructor and assignment operator
-		Exits(const Exits& rhs);
-		Exits operator=(const Exits& rhs);
+		ExitsFields();
+		~ExitsFields() { }
+		ExitsFields(const ExitsFields& rhs);
+		ExitsFields operator=(const ExitsFields& rhs);
+		friend class Singleton<ExitsFields>;
 	};
 
-	class GrantGroups : public Bindable
+	class GrantGroupsFields : public Singleton<GrantGroupsFields>
 	{
 	public:
-		// Ctors
-		GrantGroups();
-		~GrantGroups();
-
-		// Factories
-		static GrantGroups* bykey(value_type grantgroupid);
-		static GrantGroups* byname(const std::string& value);
-		static value_type lookupname(const std::string& value);
-
-		// Database interaction
-		void erase();
-		void save();
-		bool exists();
-
-		// Bindable interface
-		void bindKeys(sqlite3_stmt* stmt) const;
-		void bindUpdate(sqlite3_stmt* stmt) const;
-		void bindLookup(sqlite3_stmt* stmt) const;
-		void parseInsert(sqlite3* db);
-		void parseSelect(sqlite3_stmt* stmt);
-		void parseLookup(sqlite3_stmt* stmt);
-		TablePtr getTable() const;
-
-		// Getters
-		value_type getgrantgroupid() const;
-		const std::string& getname() const;
-		value_type getdefaultgrant() const;
-		value_type getimplies() const;
-
-		// Setters
-		void setname(const std::string& value);
-		void setdefaultgrant(value_type value);
-		void setimplies(value_type value);
+		KeyDefPtr GRANTGROUPID;
+		FieldImplPtr NAME;
+		FieldImplPtr DEFAULTGRANT;
+		FieldImplPtr DEFAULTLOG;
+		FieldImplPtr IMPLIES;
 
 	private:
-		// Database pointer
-		Database* m_db;
-
-		// Lookup
-		std::string m_lookupvalue;
-
-		// Keys
-		value_type m_grantgroupid;
-
-		// Fields
-		std::string m_name;
-		value_type m_defaultgrant;
-		value_type m_implies;
-
-		// State flags
-		bool m_newentry;
-		bool m_dirty;
-
 		// Hide constructor and assignment operator
-		GrantGroups(const GrantGroups& rhs);
-		GrantGroups operator=(const GrantGroups& rhs);
+		GrantGroupsFields();
+		~GrantGroupsFields() { }
+		GrantGroupsFields(const GrantGroupsFields& rhs);
+		GrantGroupsFields operator=(const GrantGroupsFields& rhs);
+		friend class Singleton<GrantGroupsFields>;
 	};
 
-	class Permissions : public Bindable
+	class PermissionsFields : public Singleton<PermissionsFields>
 	{
 	public:
-		// Ctors
-		~Permissions();
-
-		// Factories
-		static Permissions* bykey(value_type fkAccounts, value_type fkGrantGroups);
-
-		// Database interaction
-		void erase();
-		void save();
-		bool exists();
-
-		// Bindable interface
-		void bindKeys(sqlite3_stmt* stmt) const;
-		void bindUpdate(sqlite3_stmt* stmt) const;
-		void bindLookup(sqlite3_stmt* stmt) const;
-		void parseInsert(sqlite3* db);
-		void parseSelect(sqlite3_stmt* stmt);
-		void parseLookup(sqlite3_stmt* stmt);
-		TablePtr getTable() const;
-
-		// Getters
-		value_type getfkAccounts() const;
-		value_type getfkGrantGroups() const;
-		value_type getgrant() const;
-
-		// Setters
-		void setgrant(value_type value);
+		KeyDefPtr FKACCOUNTS;
+		KeyDefPtr FKGRANTGROUPS;
+		FieldImplPtr GRANT;
+		FieldImplPtr LOG;
 
 	private:
-		// Database pointer
-		Database* m_db;
-
-		// Keys
-		value_type m_fkAccounts;
-		value_type m_fkGrantGroups;
-
-		// Fields
-		value_type m_grant;
-
-		// State flags
-		bool m_newentry;
-		bool m_dirty;
-
 		// Hide constructor and assignment operator
-		Permissions();
-		Permissions(const Permissions& rhs);
-		Permissions operator=(const Permissions& rhs);
+		PermissionsFields();
+		~PermissionsFields() { }
+		PermissionsFields(const PermissionsFields& rhs);
+		PermissionsFields operator=(const PermissionsFields& rhs);
+		friend class Singleton<PermissionsFields>;
 	};
 
-	class Races : public Bindable
+	class RacesFields : public Singleton<RacesFields>
 	{
 	public:
-		// Ctors
-		Races();
-		~Races();
-
-		// Factories
-		static Races* bykey(value_type raceid);
-		static Races* byname(const std::string& value);
-		static value_type lookupname(const std::string& value);
-
-		// Database interaction
-		void erase();
-		void save();
-		bool exists();
-
-		// Bindable interface
-		void bindKeys(sqlite3_stmt* stmt) const;
-		void bindUpdate(sqlite3_stmt* stmt) const;
-		void bindLookup(sqlite3_stmt* stmt) const;
-		void parseInsert(sqlite3* db);
-		void parseSelect(sqlite3_stmt* stmt);
-		void parseLookup(sqlite3_stmt* stmt);
-		TablePtr getTable() const;
-
-		// Getters
-		value_type getraceid() const;
-		const std::string& getname() const;
-
-		// Setters
-		void setname(const std::string& value);
+		KeyDefPtr RACEID;
+		FieldImplPtr NAME;
 
 	private:
-		// Database pointer
-		Database* m_db;
-
-		// Lookup
-		std::string m_lookupvalue;
-
-		// Keys
-		value_type m_raceid;
-
-		// Fields
-		std::string m_name;
-
-		// State flags
-		bool m_newentry;
-		bool m_dirty;
-
 		// Hide constructor and assignment operator
-		Races(const Races& rhs);
-		Races operator=(const Races& rhs);
+		RacesFields();
+		~RacesFields() { }
+		RacesFields(const RacesFields& rhs);
+		RacesFields operator=(const RacesFields& rhs);
+		friend class Singleton<RacesFields>;
 	};
 
-	class Rooms : public Bindable
+	class RoomsFields : public Singleton<RoomsFields>
 	{
 	public:
-		// Ctors
-		Rooms();
-		~Rooms();
-
-		// Factories
-		static Rooms* bykey(value_type roomid);
-
-		// Database interaction
-		void erase();
-		void save();
-		bool exists();
-
-		// Bindable interface
-		void bindKeys(sqlite3_stmt* stmt) const;
-		void bindUpdate(sqlite3_stmt* stmt) const;
-		void bindLookup(sqlite3_stmt* stmt) const;
-		void parseInsert(sqlite3* db);
-		void parseSelect(sqlite3_stmt* stmt);
-		void parseLookup(sqlite3_stmt* stmt);
-		TablePtr getTable() const;
-
-		// Getters
-		value_type getroomid() const;
-		const std::string& getname() const;
-		const std::string& getdescription() const;
-		value_type getfkAreas() const;
-		value_type getfkSectors() const;
-		value_type getwidth() const;
-		value_type getlength() const;
-		value_type getheight() const;
-
-		// Setters
-		void setname(const std::string& value);
-		void setdescription(const std::string& value);
-		void setfkAreas(value_type value);
-		void setfkSectors(value_type value);
-		void setwidth(value_type value);
-		void setlength(value_type value);
-		void setheight(value_type value);
+		KeyDefPtr ROOMID;
+		FieldImplPtr NAME;
+		FieldImplPtr DESCRIPTION;
+		FieldImplPtr FKAREAS;
+		FieldImplPtr FKSECTORS;
+		FieldImplPtr WIDTH;
+		FieldImplPtr LENGTH;
+		FieldImplPtr HEIGHT;
 
 	private:
-		// Database pointer
-		Database* m_db;
-
-		// Keys
-		value_type m_roomid;
-
-		// Fields
-		std::string m_name;
-		std::string m_description;
-		value_type m_fkAreas;
-		value_type m_fkSectors;
-		value_type m_width;
-		value_type m_length;
-		value_type m_height;
-
-		// State flags
-		bool m_newentry;
-		bool m_dirty;
-
 		// Hide constructor and assignment operator
-		Rooms(const Rooms& rhs);
-		Rooms operator=(const Rooms& rhs);
+		RoomsFields();
+		~RoomsFields() { }
+		RoomsFields(const RoomsFields& rhs);
+		RoomsFields operator=(const RoomsFields& rhs);
+		friend class Singleton<RoomsFields>;
 	};
 
-	class Sectors : public Bindable
+	class SectorsFields : public Singleton<SectorsFields>
 	{
 	public:
-		// Ctors
-		Sectors();
-		~Sectors();
-
-		// Factories
-		static Sectors* bykey(value_type sectorid);
-		static Sectors* byname(const std::string& value);
-		static value_type lookupname(const std::string& value);
-
-		// Database interaction
-		void erase();
-		void save();
-		bool exists();
-
-		// Bindable interface
-		void bindKeys(sqlite3_stmt* stmt) const;
-		void bindUpdate(sqlite3_stmt* stmt) const;
-		void bindLookup(sqlite3_stmt* stmt) const;
-		void parseInsert(sqlite3* db);
-		void parseSelect(sqlite3_stmt* stmt);
-		void parseLookup(sqlite3_stmt* stmt);
-		TablePtr getTable() const;
-
-		// Getters
-		value_type getsectorid() const;
-		const std::string& getname() const;
-		const std::string& getsymbol() const;
-		value_type getmovecost() const;
-		value_type getwater() const;
-
-		// Setters
-		void setname(const std::string& value);
-		void setsymbol(const std::string& value);
-		void setmovecost(value_type value);
-		void setwater(value_type value);
+		KeyDefPtr SECTORID;
+		FieldImplPtr NAME;
+		FieldImplPtr SYMBOL;
+		FieldImplPtr MOVECOST;
+		FieldImplPtr WATER;
 
 	private:
-		// Database pointer
-		Database* m_db;
-
-		// Lookup
-		std::string m_lookupvalue;
-
-		// Keys
-		value_type m_sectorid;
-
-		// Fields
-		std::string m_name;
-		std::string m_symbol;
-		value_type m_movecost;
-		value_type m_water;
-
-		// State flags
-		bool m_newentry;
-		bool m_dirty;
-
 		// Hide constructor and assignment operator
-		Sectors(const Sectors& rhs);
-		Sectors operator=(const Sectors& rhs);
+		SectorsFields();
+		~SectorsFields() { }
+		SectorsFields(const SectorsFields& rhs);
+		SectorsFields operator=(const SectorsFields& rhs);
+		friend class Singleton<SectorsFields>;
 	};
 
-	class Skills : public Bindable
+	class SkillsFields : public Singleton<SkillsFields>
 	{
 	public:
-		// Ctors
-		Skills();
-		~Skills();
-
-		// Factories
-		static Skills* bykey(value_type skillid);
-		static Skills* byname(const std::string& value);
-		static value_type lookupname(const std::string& value);
-
-		// Database interaction
-		void erase();
-		void save();
-		bool exists();
-
-		// Bindable interface
-		void bindKeys(sqlite3_stmt* stmt) const;
-		void bindUpdate(sqlite3_stmt* stmt) const;
-		void bindLookup(sqlite3_stmt* stmt) const;
-		void parseInsert(sqlite3* db);
-		void parseSelect(sqlite3_stmt* stmt);
-		void parseLookup(sqlite3_stmt* stmt);
-		TablePtr getTable() const;
-
-		// Getters
-		value_type getskillid() const;
-		const std::string& getname() const;
-		value_type getfkBranches() const;
-
-		// Setters
-		void setname(const std::string& value);
-		void setfkBranches(value_type value);
+		KeyDefPtr SKILLID;
+		FieldImplPtr NAME;
+		FieldImplPtr FKBRANCHES;
 
 	private:
-		// Database pointer
-		Database* m_db;
-
-		// Lookup
-		std::string m_lookupvalue;
-
-		// Keys
-		value_type m_skillid;
-
-		// Fields
-		std::string m_name;
-		value_type m_fkBranches;
-
-		// State flags
-		bool m_newentry;
-		bool m_dirty;
-
 		// Hide constructor and assignment operator
-		Skills(const Skills& rhs);
-		Skills operator=(const Skills& rhs);
+		SkillsFields();
+		~SkillsFields() { }
+		SkillsFields(const SkillsFields& rhs);
+		SkillsFields operator=(const SkillsFields& rhs);
+		friend class Singleton<SkillsFields>;
 	};
 
-	class Stats : public Bindable
+	class StatsFields : public Singleton<StatsFields>
 	{
 	public:
-		// Ctors
-		Stats();
-		~Stats();
-
-		// Factories
-		static Stats* bykey(value_type statid);
-		static Stats* byname(const std::string& value);
-		static Stats* byshortname(const std::string& value);
-		static value_type lookupname(const std::string& value);
-		static value_type lookupshortname(const std::string& value);
-
-		// Database interaction
-		void erase();
-		void save();
-		bool exists();
-
-		// Bindable interface
-		void bindKeys(sqlite3_stmt* stmt) const;
-		void bindUpdate(sqlite3_stmt* stmt) const;
-		void bindLookup(sqlite3_stmt* stmt) const;
-		void parseInsert(sqlite3* db);
-		void parseSelect(sqlite3_stmt* stmt);
-		void parseLookup(sqlite3_stmt* stmt);
-		TablePtr getTable() const;
-
-		// Getters
-		value_type getstatid() const;
-		const std::string& getname() const;
-		const std::string& getshortname() const;
-
-		// Setters
-		void setname(const std::string& value);
-		void setshortname(const std::string& value);
+		KeyDefPtr STATID;
+		FieldImplPtr NAME;
+		FieldImplPtr SHORTNAME;
 
 	private:
-		// Database pointer
-		Database* m_db;
-
-		// Lookup
-		std::string m_lookupvalue;
-
-		// Keys
-		value_type m_statid;
-
-		// Fields
-		std::string m_name;
-		std::string m_shortname;
-
-		// State flags
-		bool m_newentry;
-		bool m_dirty;
-
 		// Hide constructor and assignment operator
-		Stats(const Stats& rhs);
-		Stats operator=(const Stats& rhs);
+		StatsFields();
+		~StatsFields() { }
+		StatsFields(const StatsFields& rhs);
+		StatsFields operator=(const StatsFields& rhs);
+		friend class Singleton<StatsFields>;
 	};
 
-	class Trees : public Bindable
+	class TreesFields : public Singleton<TreesFields>
 	{
 	public:
-		// Ctors
-		Trees();
-		~Trees();
-
-		// Factories
-		static Trees* bykey(value_type treeid);
-		static Trees* byname(const std::string& value);
-		static value_type lookupname(const std::string& value);
-
-		// Database interaction
-		void erase();
-		void save();
-		bool exists();
-
-		// Bindable interface
-		void bindKeys(sqlite3_stmt* stmt) const;
-		void bindUpdate(sqlite3_stmt* stmt) const;
-		void bindLookup(sqlite3_stmt* stmt) const;
-		void parseInsert(sqlite3* db);
-		void parseSelect(sqlite3_stmt* stmt);
-		void parseLookup(sqlite3_stmt* stmt);
-		TablePtr getTable() const;
-
-		// Getters
-		value_type gettreeid() const;
-		const std::string& getname() const;
-		value_type getfkClusters() const;
-		value_type getfkStatsPrimary() const;
-		value_type getfkStatsSecondary() const;
-
-		// Setters
-		void setname(const std::string& value);
-		void setfkClusters(value_type value);
-		void setfkStatsPrimary(value_type value);
-		void setfkStatsSecondary(value_type value);
+		KeyDefPtr TREEID;
+		FieldImplPtr NAME;
+		FieldImplPtr FKCLUSTERS;
+		FieldImplPtr FKSTATSPRIMARY;
+		FieldImplPtr FKSTATSSECONDARY;
 
 	private:
-		// Database pointer
-		Database* m_db;
-
-		// Lookup
-		std::string m_lookupvalue;
-
-		// Keys
-		value_type m_treeid;
-
-		// Fields
-		std::string m_name;
-		value_type m_fkClusters;
-		value_type m_fkStatsPrimary;
-		value_type m_fkStatsSecondary;
-
-		// State flags
-		bool m_newentry;
-		bool m_dirty;
-
 		// Hide constructor and assignment operator
-		Trees(const Trees& rhs);
-		Trees operator=(const Trees& rhs);
+		TreesFields();
+		~TreesFields() { }
+		TreesFields(const TreesFields& rhs);
+		TreesFields operator=(const TreesFields& rhs);
+		friend class Singleton<TreesFields>;
 	};
 
-	class Version : public Bindable
+	class VersionFields : public Singleton<VersionFields>
 	{
 	public:
-		// Ctors
-		Version();
-		~Version();
-
-		// Factories
-		static Version* bykey(value_type versionid);
-
-		// Database interaction
-		void erase();
-		void save();
-		bool exists();
-
-		// Bindable interface
-		void bindKeys(sqlite3_stmt* stmt) const;
-		void bindUpdate(sqlite3_stmt* stmt) const;
-		void bindLookup(sqlite3_stmt* stmt) const;
-		void parseInsert(sqlite3* db);
-		void parseSelect(sqlite3_stmt* stmt);
-		void parseLookup(sqlite3_stmt* stmt);
-		TablePtr getTable() const;
-
-		// Getters
-		value_type getversionid() const;
-		const std::string& getversiontext() const;
-		value_type getmajor() const;
-		value_type getminor() const;
-		value_type getmicro() const;
-
-		// Setters
-		void setversiontext(const std::string& value);
-		void setmajor(value_type value);
-		void setminor(value_type value);
-		void setmicro(value_type value);
+		KeyDefPtr VERSIONID;
+		FieldImplPtr VERSIONTEXT;
+		FieldImplPtr MAJOR;
+		FieldImplPtr MINOR;
+		FieldImplPtr MICRO;
 
 	private:
-		// Database pointer
-		Database* m_db;
-
-		// Keys
-		value_type m_versionid;
-
-		// Fields
-		std::string m_versiontext;
-		value_type m_major;
-		value_type m_minor;
-		value_type m_micro;
-
-		// State flags
-		bool m_newentry;
-		bool m_dirty;
-
 		// Hide constructor and assignment operator
-		Version(const Version& rhs);
-		Version operator=(const Version& rhs);
+		VersionFields();
+		~VersionFields() { }
+		VersionFields(const VersionFields& rhs);
+		VersionFields operator=(const VersionFields& rhs);
+		friend class Singleton<VersionFields>;
 	};
 
 } // end of namespace

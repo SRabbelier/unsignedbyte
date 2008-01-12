@@ -18,15 +18,13 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#include <stdexcept>
+#include "SavableHeaders.h"
 
 #include "SqliteMgr.h"
 #include "DatabaseMgr.h"
-#include "Bindable.h"
 #include "Actor.h"
 #include "Statements.h"
 #include "StatementStrings.h"
-#include "Field.h"
 
 SqliteMgr::SqliteMgr()
 {	
@@ -39,9 +37,9 @@ SqliteMgr::~SqliteMgr()
 	m_db->freedb(m_odb);
 }
 
-void SqliteMgr::doInsert(Bindable* bindable)
+void SqliteMgr::doInsert(SavableManager* bindable)
 {
-	Table* table = bindable->getTable().get();
+	TableImpl* table = bindable->getTable().get();
 	sqlite3_stmt* insert = getInsertStmt(table);
 	sqlite3_reset(insert);
 	
@@ -49,14 +47,16 @@ void SqliteMgr::doInsert(Bindable* bindable)
 		bindable->bindKeys(insert);	
 		
 	doStatement(insert);
-	bindable->parseInsert(m_odb->db);
+	
+	if(table->hasSingularPrimaryKey())
+		bindable->parseInsert(m_odb->db);
 	
 	commit(table);
 }
 
-void SqliteMgr::doErase(Bindable* bindable)
+void SqliteMgr::doErase(SavableManager* bindable)
 {
-	Table* table = bindable->getTable().get();
+	TableImpl* table = bindable->getTable().get();
 	sqlite3_stmt* erase = getEraseStmt(table);
 	sqlite3_reset(erase);
 	
@@ -66,9 +66,9 @@ void SqliteMgr::doErase(Bindable* bindable)
 	commit(table);
 }
 
-void SqliteMgr::doUpdate(Bindable* bindable)
+void SqliteMgr::doUpdate(SavableManager* bindable)
 {
-	Table* table = bindable->getTable().get();
+	TableImpl* table = bindable->getTable().get();
 	sqlite3_stmt* update = getUpdateStmt(table);
 	sqlite3_reset(update);
 	
@@ -78,9 +78,9 @@ void SqliteMgr::doUpdate(Bindable* bindable)
 	commit(table);
 }
 
-void SqliteMgr::doSelect(Bindable* bindable)
+void SqliteMgr::doSelect(SavableManagerPtr bindable)
 {
-	Table* table = bindable->getTable().get();
+	TableImpl* table = bindable->getTable().get();
 	sqlite3_stmt* select = getSelectStmt(table);
 	sqlite3_reset(select);
 	
@@ -92,9 +92,9 @@ void SqliteMgr::doSelect(Bindable* bindable)
 		throw RowNotFoundException("SqliteMgr::doSelect(), no row.");
 }
 
-void SqliteMgr::doLookup(Bindable* bindable, const std::string& field)
+void SqliteMgr::doLookup(SavableManagerPtr bindable, FieldPtr field)
 {
-	Table* table = bindable->getTable().get();
+	TableImpl* table = bindable->getTable().get();
 	sqlite3_stmt* lookup = getLookupStmt(table, field);
 	sqlite3_reset(lookup);
 	
@@ -109,7 +109,7 @@ void SqliteMgr::doLookup(Bindable* bindable, const std::string& field)
 		throw RowNotFoundException("SqliteMgr::doLookup(), no row.");
 }
 
-void SqliteMgr::doForEach(Table* table, Actor& act)
+void SqliteMgr::doForEach(TableImpl* table, Actor& act)
 {
 	sqlite3_stmt* forEach = getForEachStmt(table);
 	sqlite3_reset(forEach);
@@ -123,10 +123,11 @@ void SqliteMgr::doForEach(Table* table, Actor& act)
 	}
 }
 
-void SqliteMgr::commit(Table* table)
+void SqliteMgr::commit(TableImpl* table)
 {
 	//StatementsPtr statements = getStatements(table);
 	//statements->commit();
+	table->modify();
 	m_statements.clear();
 }
 		
@@ -154,7 +155,7 @@ bool SqliteMgr::doStatement(sqlite3_stmt* stmt)
 	}
 }
 
-StatementsPtr SqliteMgr::getStatements(Table* table)
+StatementsPtr SqliteMgr::getStatements(TableImpl* table)
 {
 	StatementsPtr statements = m_statements[table];
 	if(statements)
@@ -166,7 +167,7 @@ StatementsPtr SqliteMgr::getStatements(Table* table)
 	return statements;
 }
 
-StatementStringsPtr SqliteMgr::getStatementStrings(Table* table)
+StatementStringsPtr SqliteMgr::getStatementStrings(TableImpl* table)
 {
 	StatementStringsPtr statements = m_statementstrings[table];
 	if(statements)
@@ -178,7 +179,7 @@ StatementStringsPtr SqliteMgr::getStatementStrings(Table* table)
 	return statements;
 }
 
-sqlite3_stmt* SqliteMgr::getInsertStmt(Table* table)
+sqlite3_stmt* SqliteMgr::getInsertStmt(TableImpl* table)
 {
 	StatementsPtr statements = getStatements(table);
 	sqlite3_stmt* statement = statements->getInsert();
@@ -234,7 +235,7 @@ sqlite3_stmt* SqliteMgr::getInsertStmt(Table* table)
 	return statement;
 }
 
-sqlite3_stmt* SqliteMgr::getEraseStmt(Table* table)
+sqlite3_stmt* SqliteMgr::getEraseStmt(TableImpl* table)
 {
 	StatementsPtr statements = getStatements(table);
 	sqlite3_stmt* statement = statements->getErase();
@@ -281,7 +282,7 @@ sqlite3_stmt* SqliteMgr::getEraseStmt(Table* table)
 	return statement;
 }
 
-sqlite3_stmt* SqliteMgr::getUpdateStmt(Table* table)
+sqlite3_stmt* SqliteMgr::getUpdateStmt(TableImpl* table)
 {
 	StatementsPtr statements = getStatements(table);
 	sqlite3_stmt* statement = statements->getUpdate();
@@ -302,9 +303,9 @@ sqlite3_stmt* SqliteMgr::getUpdateStmt(Table* table)
 		sql.append("UPDATE ");
 		sql.append(table->tableName());
 		sql.append(" SET ");
-		for(Fields::const_iterator it = table->begin(); it != table->end(); it++)
+		for(FieldDefVector::const_iterator it = table->defbegin(); it != table->defend(); it++)
 		{
-			if(it != table->begin())
+			if(it != table->defbegin())
 				sql.append(", ");
 
 			sql.append((*it)->getName());
@@ -337,7 +338,7 @@ sqlite3_stmt* SqliteMgr::getUpdateStmt(Table* table)
 	return statement;
 }
 
-sqlite3_stmt* SqliteMgr::getSelectStmt(Table* table)
+sqlite3_stmt* SqliteMgr::getSelectStmt(TableImpl* table)
 {
 	StatementsPtr statements = getStatements(table);
 	sqlite3_stmt* statement = statements->getSelect();
@@ -356,9 +357,9 @@ sqlite3_stmt* SqliteMgr::getSelectStmt(Table* table)
 	else
 	{
 		sql.append("SELECT ");
-		for(Fields::const_iterator it = table->begin(); it != table->end(); it++)
+		for(FieldDefVector::const_iterator it = table->defbegin(); it != table->defend(); it++)
 		{
-			if(it != table->begin())
+			if(it != table->defbegin())
 				sql.append(", ");
 
 			sql.append((*it)->getName());
@@ -367,7 +368,7 @@ sqlite3_stmt* SqliteMgr::getSelectStmt(Table* table)
 		/**
 		 * Prevent queries in the form "SELECT  FROM ....", this is for tables that consist of only primary keys.
 		 */ 
-		if(!table->size())
+		if(!table->defsize())
 			sql.append("*");
 		 
 		sql.append(" FROM ");
@@ -399,7 +400,7 @@ sqlite3_stmt* SqliteMgr::getSelectStmt(Table* table)
 	return statement;
 }
 
-sqlite3_stmt* SqliteMgr::getLookupStmt(Table* table, const std::string& field)
+sqlite3_stmt* SqliteMgr::getLookupStmt(TableImpl* table, FieldPtr field)
 {
 	StatementsPtr statements = getStatements(table);
 	sqlite3_stmt* statement = statements->getLookup(field);
@@ -428,7 +429,7 @@ sqlite3_stmt* SqliteMgr::getLookupStmt(Table* table, const std::string& field)
 		sql.append(" FROM ");
 		sql.append(table->tableName());
 		sql.append(" WHERE ");
-		sql.append(field);
+		sql.append(field->getName());
 		sql.append("=?");
 		sql.append(";");
 			
@@ -447,7 +448,7 @@ sqlite3_stmt* SqliteMgr::getLookupStmt(Table* table, const std::string& field)
 	return statement;
 }
 
-sqlite3_stmt* SqliteMgr::getForEachStmt(Table* table)
+sqlite3_stmt* SqliteMgr::getForEachStmt(TableImpl* table)
 {
 	StatementsPtr statements = getStatements(table);
 	sqlite3_stmt* statement = statements->getForEach();
@@ -475,7 +476,7 @@ sqlite3_stmt* SqliteMgr::getForEachStmt(Table* table)
 			sql.append(it->first);
 			comspace = true;
 		}
-		for(Fields::const_iterator it = table->begin(); it != table->end(); it++)
+		for(FieldDefVector::const_iterator it = table->defbegin(); it != table->defend(); it++)
 		{
 			if(comspace)
 				sql.append(", ");
@@ -501,4 +502,113 @@ sqlite3_stmt* SqliteMgr::getForEachStmt(Table* table)
 		
 	statements->setForEach(statement);
 	return statement;
+}
+
+std::string SqliteMgr::tableQuery(TableDefPtr table) const
+{
+	std::string result;
+	result.append("SELECT type FROM sqlite_master WHERE tbl_name='");
+	result.append(table->tableName());
+	result.append("' and sql='");
+	
+	result.append(creationQuery(table, true));
+	
+	result.append("';");
+	
+	return result;
+}
+
+/*
+	"CREATE TABLE IF NOT EXISTS %s("
+	"%s INTEGER PRIMARY KEY AUTOINCREMENT"
+	",versiontext TEXT"
+	",grantgroup INTEGER RESTRAINT grantgroup DEFAULT 1"
+	");",
+*/
+std::string SqliteMgr::creationQuery(TableDefPtr table, bool verify) const
+{
+	std::string result;
+	
+	if(verify)
+		result.append("CREATE TABLE ");
+	else
+		result.append("CREATE TABLE IF NOT EXISTS ");
+		
+	result.append(table->tableName());
+	result.append("(");
+	
+	bool comma = false;
+	
+	for(TableMap::const_iterator it = table->keybegin(); it != table->keyend(); it++)
+	{
+		if(table->hasSingularPrimaryKey() && it == table->keybegin())
+		{
+			result.append(it->first);
+			result.append(" INTEGER PRIMARY KEY AUTOINCREMENT, ");
+			continue;
+		}
+		
+		if(comma)
+			result.append(", ");
+			
+		result.append(it->first);
+		result.append(" INTEGER");
+		comma = true;
+	}
+	
+	for(FieldDefVector::const_iterator it = table->defbegin(); it != table->defend(); it++)
+	{
+		if(comma)
+			result.append(", ");
+			
+		result.append(creationString(*it));
+		comma = true;
+	}
+	
+	if(!table->hasSingularPrimaryKey())
+	{
+		result.append(", PRIMARY KEY(");
+		for(TableMap::const_iterator it = table->keybegin(); it != table->keyend(); it++)
+		{
+			if(it != table->keybegin())
+				result.append(", ");
+				
+			result.append(it->first);
+		}
+		result.append(")");
+	}
+	
+	if(verify)
+		result.append(")");
+	else
+		result.append(");");
+	
+	return result;
+}
+
+std::string SqliteMgr::creationString(FieldDefPtr field) const
+{
+	std::string result;
+	
+	result.append(field->getName());
+	
+	if(field->isText())
+		result.append(" TEXT");
+	else
+		result.append(" INTEGER");
+	
+	if(field->getDefaultValue().size() != 0)
+	{
+		result.append(" RESTRAINT ");
+		result.append(field->getName());
+		result.append(" DEFAULT ");
+		
+		if(field->isText())
+			result.append("'");
+		result.append(field->getDefaultValue());
+		if(field->isText())
+			result.append("'");		
+	}
+	
+	return result;
 }

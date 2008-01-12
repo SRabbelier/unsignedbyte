@@ -34,6 +34,9 @@
 #include "Race.h"
 #include "RaceManager.h"
 
+#include "Table.h"
+#include "Tables.h"
+
 EditorNewCharacter::EditorNewCharacter(UBSocket* sock) :
 Editor(sock),
 m_state(0)
@@ -127,7 +130,7 @@ void EditorNewCharacter::OnLine(const std::string &line)
 			
 			try
 			{
-				int id = db::Races::lookupname(line);
+				int id = mud::RaceManager::Get()->lookupByName(line);
 				m_raceid = id;
 
 				m_sock->Sendf("Your race is now %s.\n", line.c_str());
@@ -150,7 +153,7 @@ void EditorNewCharacter::OnLine(const std::string &line)
 			return;
 		}
 
-		if(DatabaseMgr::Get()->CountSavable(Tables::Get()->ROOMS, 1) <= 0)
+		if(DatabaseMgr::Get()->CountSavable(db::TableImpls::Get()->ROOMS, 1) <= 0)
 		{
 			m_sock->Sendf("Could not fetch room 1!\n");
 			m_sock->Send("Closing your connection now.\n");

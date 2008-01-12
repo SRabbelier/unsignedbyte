@@ -18,9 +18,6 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#include <string>
-#include <stdexcept>
-
 #include "AreaManager.h"
 #include "Area.h"
 #include "Global.h"
@@ -34,42 +31,28 @@ std::vector<std::string> AreaManager::List()
 	return GetTable()->tableList();
 }
 
-TablePtr AreaManager::GetTable()
+TableImplPtr AreaManager::GetTable()
 {
-	return Tables::Get()->AREAS;
+	return db::TableImpls::Get()->AREAS;
 }
 
 value_type AreaManager::Add()
 {
-	db::Areas d;
-	d.save();
-	value_type id = d.getareaid();
+	SavableManagerPtr manager = SavableManager::getnew(db::TableImpls::Get()->AREAS);
+	manager->save();
+	value_type id = manager->getkey(db::AreasFields::Get()->AREAID)->getValue();
 	if(id == 0)
-		Global::Get()->bug("AreaManager::AddArea(), id = 0");
-		
-	return id;
+		Global::Get()->bug("AreaManager::Add(), id = 0");
+	
+	return id;	
 }
 
 mud::AreaPtr AreaManager::GetByKey(value_type id)
 {
-	AreaPtr p = m_byKey[id];
-	if(p)
-		return p;
-
-	db::Areas* d = db::Areas::bykey(id);
-	p = cacheArea(d);
-	return p;
-}
-
-void AreaManager::Close(value_type id)
-{
-	areas_m::iterator key = m_byKey.find(id);
-	m_byKey.erase(key);
-}
-
-AreaPtr AreaManager::cacheArea(db::Areas* d)
-{
-	AreaPtr p(new Area(d));
-	m_byKey[d->getareaid()] = p;
+	KeyPtr key(new Key(db::AreasFields::Get()->AREAID, id));
+	Keys keys;
+	keys[db::AreasFields::Get()->AREAID.get()] = key;
+	SavableManagerPtr manager = SavableManager::bykeys(db::TableImpls::Get()->AREAS, keys);
+	AreaPtr p(new Area(manager));
 	return p;
 }

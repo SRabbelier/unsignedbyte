@@ -19,9 +19,7 @@
  ***************************************************************************/
 #pragma once
 
-#include <string>
-#include "Savable.h"
-#include "db.h"
+#include "SavableHeaders.h"
 
 namespace mud
 {
@@ -31,8 +29,8 @@ namespace mud
 		/**
 		 * \brief Getters
 		 */ 
-		long getAccount() const { return m_permission->getfkAccounts(); }
-		long getGrantGroup() const { return m_permission->getfkGrantGroups(); }
+		long getAccount() const;
+		long getGrantGroup() const;
 		
 		bool hasGrant() const;
 		bool hasLog() const;
@@ -55,9 +53,9 @@ namespace mud
 		bool Exists();
 
 	private:
-		db::Permissions* m_permission;
+		SavableManagerPtr m_permission;
 
-		Permission(db::Permissions* Permission);
+		Permission(SavableManagerPtr Permission);
 		Permission(const Permission& rhs);
 		Permission operator=(const Permission& rhs);
 		~Permission(void);

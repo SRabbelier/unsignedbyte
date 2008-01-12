@@ -18,15 +18,9 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#include <string>
-#include <stdexcept>
-
 #include "UBSocket.h"
 #include "Command.h"
 #include "Global.h"
-#include "DatabaseMgr.h"
-#include "Cache.h"
-#include "db.h"
 #include "GrantGroup.h"
 #include "GrantGroupManager.h"
 #include "PermissionManager.h"
@@ -38,18 +32,74 @@ bool Command::defaultHighForce = true;
 bool Command::defaultForce = true;
 bool Command::defaultLowForce = false;
 
-Command::Command(db::Commands* Command) :
+Command::Command(SavableManagerPtr Command) :
 m_command(Command)
 {
-	if(m_command == NULL)
+	if(!m_command)
 		throw std::invalid_argument("Command::Command(), m_command == NULL!");
 }
 
 Command::~Command(void)
 {
-	delete m_command;
-	m_command = NULL;
+
 }
+
+const std::string& Command::getName() const
+{
+	return m_command->getfield(db::CommandsFields::Get()->NAME)->getStringValue();
+}
+
+long Command::getGrantGroup() const
+{
+	return m_command->getfield(db::CommandsFields::Get()->GRANTGROUP)->getIntegerValue();
+}
+
+bool Command::canHighForce() const
+{
+	return m_command->getfield(db::CommandsFields::Get()->HIGHFORCE)->getBoolValue();
+}
+
+bool Command::canForce() const
+{
+	return m_command->getfield(db::CommandsFields::Get()->FORCE)->getBoolValue();
+}
+
+bool Command::canLowForce() const
+{
+	return m_command->getfield(db::CommandsFields::Get()->LOWFORCE)->getBoolValue();
+}
+
+
+void Command::setName(const std::string& name)
+{
+	ValuePtr value(new Value(db::CommandsFields::Get()->NAME, name));
+	m_command->setvalue(value);
+}
+
+void Command::setGrantGroup(long grantgroup)
+{
+	ValuePtr value(new Value(db::CommandsFields::Get()->GRANTGROUP, grantgroup));
+	m_command->setvalue(value);
+}
+
+void Command::setHighForce(bool highforce)
+{
+	ValuePtr value(new Value(db::CommandsFields::Get()->HIGHFORCE, highforce ? 0 : 1));
+	m_command->setvalue(value);
+}
+
+void Command::setForce(bool force)
+{
+	ValuePtr value(new Value(db::CommandsFields::Get()->FORCE, force ? 0 : 1));
+	m_command->setvalue(value);
+}
+
+void Command::setLowForce(bool lowforce)
+{
+	ValuePtr value(new Value(db::CommandsFields::Get()->LOWFORCE, lowforce ? 0 : 1));
+	m_command->setvalue(value);
+}
+
 
 bool Command::getGrant(UBSocket* sock)
 {
@@ -127,7 +177,7 @@ void Command::Save()
 
 bool Command::Exists()
 {
-	return m_command->getcommandid();
+	return m_command->exists();
 }
 
 std::vector<std::string> Command::Show()

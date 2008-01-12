@@ -28,8 +28,6 @@
 #include "UBSocket.h"
 
 #include "Global.h"
-#include "DatabaseMgr.h"
-#include "Cache.h"
 #include "Parse.h"
 #include "StringUtilities.h"
 
@@ -40,8 +38,6 @@
 #include "PCharacterManager.h"
 #include "CharacterManager.h"
 #include "Room.h"
-
-using mud::Cache;
 
 extern bool m_quit;
 
@@ -130,7 +126,21 @@ void EditorAccount::beginLogin(const std::string &argument)
 		return;
 	}
 	
-	bool hasAccount = mud::Cache::Get()->existsCharacterWithAccount(id, m_sock->GetAccount()->getID());
+	Keys keys;
+	KeyPtr key;
+	
+	key = new Key(db::CharacterAccountFields::Get()->FKACCOUNTS, id);
+	keys[db::CharacterAccountFields::Get()->FKACCOUNTS.get()] = key;
+	key = new Key(db::CharacterAccountFields::Get()->FKCHARACTERS, m_sock->GetAccount()->getID());
+	keys[db::CharacterAccountFields::Get()->FKCHARACTERS.get()] = key;	
+	
+	bool hasAccount = false;
+	try
+	{
+		SavableManagerPtr manager = SavableManager::bykeys(db::TableImpls::Get()->CHARACTERACCOUNT, keys);
+		hasAccount = true;
+	} catch(RowNotFoundException& e) { }
+	
 	if(hasAccount)
 	{
 		m_sock->Sendf("You don't have a character named '%s'!\n", argument.c_str());

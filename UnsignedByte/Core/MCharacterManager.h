@@ -19,22 +19,13 @@
  ***************************************************************************/
 #pragma once
 
-#include <string>
-#include <vector>
-
-#include "singleton.h"
-#include "db.h"
+#include "SavableHeaders.h"
 
 namespace mud 
 { 
 	class MCharacter; 
 	typedef SmartPtr<MCharacter> MCharacterPtr;
 }
-
-typedef const std::string& cstring;
-typedef std::map<value_type,mud::MCharacterPtr> mobiles_m;
-typedef std::map<std::string,mud::MCharacterPtr> mobiles_ms;
-typedef std::map<std::string, value_type> reverseStringKey;
 
 namespace mud
 {
@@ -44,14 +35,6 @@ namespace mud
 		value_type Add();
 		mud::MCharacterPtr GetByKey(value_type id);
 		mud::MCharacterPtr GetByName(cstring name);
-		void Close(value_type id);
-		
-	private:
-		MCharacterPtr cacheMCharacter(db::Characters* d);
-		
-		mobiles_m m_byKey;
-		mobiles_ms m_byName;
-		reverseStringKey m_lookupByName;
 
 	private:
 		MCharacterManager(void) {};

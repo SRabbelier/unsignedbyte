@@ -19,11 +19,11 @@
  ***************************************************************************/
 
 #include "Field.h"
+#include "Table.h"
 
-Field::Field(const std::string& name, bool text, const std::string& defaultvalue) :
+Field::Field(const std::string& name, bool text) :
 m_name(name),
-m_text(text),
-m_defaultvalue(defaultvalue)
+m_text(text)
 {
 	
 }
@@ -31,31 +31,4 @@ m_defaultvalue(defaultvalue)
 Field::~Field()
 {
 	
-}
-	
-std::string Field::creationString() const
-{
-	std::string result;
-	
-	result.append(m_name);
-	
-	if(m_text)
-		result.append(" TEXT");
-	else
-		result.append(" INTEGER");
-	
-	if(m_defaultvalue.size() != 0)
-	{
-		result.append(" RESTRAINT ");
-		result.append(m_name);
-		result.append(" DEFAULT ");
-		
-		if(m_text)
-			result.append("'");
-		result.append(m_defaultvalue);
-		if(m_text)
-			result.append("'");		
-	}
-	
-	return result;
 }

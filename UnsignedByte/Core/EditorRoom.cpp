@@ -17,10 +17,7 @@
  *   Free Software Foundation, Inc.,                                       *
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
-
-#include <vector>
-#include <string>
-
+ 
 #include "EditorRoom.h"
 #include "EditorOLC.h"
 #include "EditorArea.h"
@@ -43,6 +40,9 @@
 #include "RoomManager.h"
 #include "Sector.h"
 #include "SectorManager.h"
+
+#include "Table.h"
+#include "Tables.h"
 
 using mud::Room;
 
@@ -143,9 +143,9 @@ SavablePtr EditorRoom::getEditing()
 	return m_room;
 }
 
-TablePtr EditorRoom::getTable()
+TableImplPtr EditorRoom::getTable()
 {
-	return Tables::Get()->ROOMS;
+	return db::TableImpls::Get()->ROOMS;
 }
 
 long EditorRoom::addNew()
@@ -254,7 +254,7 @@ void EditorRoom::editSector(const std::string& argument)
 
 	try
 	{
-		long id = db::Sectors::lookupname(argument);
+		long id = mud::SectorManager::Get()->lookupByName(argument);
 		mud::SectorPtr sector = mud::SectorManager::Get()->GetByKey(id);
 		m_sock->Sendf("Sector type changed from '%s' to '%s'.\n", sector->getName().c_str(), argument.c_str());
 		m_room->setSector(id);

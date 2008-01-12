@@ -19,9 +19,7 @@
  ***************************************************************************/
 #pragma once
 
-#include <string>
-#include "Savable.h"
-#include "db.h"
+#include "SavableHeaders.h"
 
 namespace mud
 {
@@ -29,13 +27,13 @@ namespace mud
 	class Colour : public Savable
 	{
 	public:
-		const std::string& getName() const { return m_colour->getname(); }
+		const std::string& getName() const;
 		std::string getColourString();
-		const std::string& getCode() const { return m_colour->getcode(); }
+		const std::string& getCode() const;
 
-		void setName(const std::string& name) { m_colour->setname(name); }
-		void setColourString(const std::string& colourstring) { m_colour->setcolourstring(colourstring); }
-		void setCode(const std::string& code) { m_colour->setcode(code); };
+		void setName(const std::string& name);
+		void setColourString(const std::string& colourstring);
+		void setCode(const std::string& code);
 
 		/**
 		 * \brief Utilities
@@ -52,12 +50,12 @@ namespace mud
 		bool Exists();
 
 	private:
-		db::Colours* m_colour;
+		SavableManagerPtr m_colour;
 
 		/**
 		 * \brief Ctors
 		 */ 
-		Colour(db::Colours* object);
+		Colour(SavableManagerPtr object);
 		Colour(const Colour& rhs);
 		Colour operator=(const Colour& rhs);
 		~Colour(void);

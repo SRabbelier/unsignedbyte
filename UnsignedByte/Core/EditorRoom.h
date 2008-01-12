@@ -45,7 +45,7 @@ public:
 	void dispatch(const std::string& action, const std::string& argument);
 	
 	SavablePtr getEditing();
-	TablePtr getTable();
+	TableImplPtr getTable();
 	long addNew();
 	std::vector<std::string> getList();
 	std::vector<std::string> getCommands();

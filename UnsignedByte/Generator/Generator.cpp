@@ -23,6 +23,8 @@
 #include "Generator.h"
 #include "Global.h"
 #include "Tables.h"
+#include "TableDef.h"
+#include "StringUtilities.h"
 
 #include "ClassHeaderGenerator.h"
 #include "ClassSourceGenerator.h"
@@ -48,6 +50,20 @@ m_tabs("\t")
 	sourcename.append(m_name);
 	sourcename.append(".cpp");
 	m_sourcefile.open(sourcename.c_str());
+	
+	std::string tiheadername;
+	#ifdef _WIN32
+	tiheadername.append("../include/");
+	#endif
+	tiheadername.append("TableImpls.h");
+	m_tiheaderfile.open(tiheadername.c_str());
+	
+	std::string tisourcename;
+	#ifdef _WIN32
+	tisourcename.append("../DAL/");
+	#endif
+	tisourcename.append("TableImpls.cpp");
+	m_tisourcefile.open(tisourcename.c_str());
 }
 
 Generator::~Generator()
@@ -57,6 +73,12 @@ Generator::~Generator()
 
 	if(m_sourcefile.is_open())
 		m_sourcefile.close();
+	
+	if(m_tiheaderfile.is_open())
+		m_tiheaderfile.close();
+
+	if(m_tisourcefile.is_open())
+		m_tisourcefile.close();
 }
 
 bool Generator::GenerateDAL()
@@ -65,6 +87,7 @@ bool Generator::GenerateDAL()
 	{
 		CreateHeader();
 		CreateSource();
+		CreateTI();
 	}
 	catch(std::logic_error& e)
 	{
@@ -116,10 +139,9 @@ void Generator::AppendHeaderIncludes()
 	m_headerfile << "#endif" << endl;
 	m_headerfile << endl;
 	
-	m_headerfile << "#include <string>" << endl;
-	m_headerfile << "#include <sqlite3.h>" << endl;
+	m_headerfile << "#include \"Types.h\"" << endl;
+	m_headerfile << endl;
 	m_headerfile << "#include <Database.h>" << endl;
-	m_headerfile << "#include <Tables.h>" << endl;
 	m_headerfile << "#include <SqliteMgr.h>" << endl;
 	m_headerfile << "#include <Bindable.h>" << endl;
 	m_headerfile << endl;
@@ -130,7 +152,7 @@ void Generator::AppendHeaderIncludes()
 	return;
 }
 
-void Generator::AppendHeaderClass(TablePtr table)
+void Generator::AppendHeaderClass(TableDefPtr table)
 {
 	try
 	{
@@ -154,8 +176,6 @@ void Generator::AppendHeaderFooter()
 	m_headerfile << "} // end of namespace" << endl;
 	m_headerfile << endl;
 	
-	m_tabs.erase();
-	
 	return;
 }
 
@@ -166,7 +186,7 @@ void Generator::CreateHeader()
 		AppendLicense(m_headerfile);
 		AppendHeaderIncludes();
 		
-		for(TableVector::const_iterator it = Tables::Get()->begin(); it != Tables::Get()->end(); it++)
+		for(TableDefVector::const_iterator it = Tables::Get()->begin(); it != Tables::Get()->end(); it++)
 			AppendHeaderClass(*it);
 			
 		AppendHeaderFooter();
@@ -191,16 +211,18 @@ void Generator::AppendSourceIncludes()
 	m_sourcefile << "#endif" << endl;
 	m_sourcefile << endl;
 	
-	m_sourcefile << "#include <string>" << endl;
-	m_sourcefile << "#include <stdexcept>" << endl;
-	m_sourcefile << endl;
-	
 	m_sourcefile << "#include \"" << m_name << ".h\"" << endl;
 	m_sourcefile << endl;
 	
-	m_sourcefile << "#include <sqlite3.h>" << endl;
 	m_sourcefile << "#include <Database.h>" << endl;
 	m_sourcefile << "#include <Query.h>" << endl;
+	m_sourcefile << endl;
+	
+	m_sourcefile << "#include \"TableImpl.h\"" << endl;
+	m_sourcefile << "#include \"TableImpls.h\"" << endl;
+	m_sourcefile << "#include \"Tables.h\"" << endl;
+	m_sourcefile << "#include \"FieldImpl.h\"" << endl;
+	m_sourcefile << "#include \"KeyDef.h\"" << endl;
 	m_sourcefile << endl;
 	
 	m_sourcefile << "using namespace " << m_name << ";" << endl;
@@ -209,7 +231,7 @@ void Generator::AppendSourceIncludes()
 	return;
 }
 
-void Generator::AppendSourceClass(TablePtr table)
+void Generator::AppendSourceClass(TableDefPtr table)
 {
 	try
 	{
@@ -242,7 +264,7 @@ void Generator::CreateSource()
 		AppendLicense(m_sourcefile);
 		AppendSourceIncludes();
 		
-		for(TableVector::const_iterator it = Tables::Get()->begin(); it != Tables::Get()->end(); it++)
+		for(TableDefVector::const_iterator it = Tables::Get()->begin(); it != Tables::Get()->end(); it++)
 			AppendSourceClass(*it);
 			
 		AppendSourceFooter();
@@ -254,4 +276,133 @@ void Generator::CreateSource()
 	}
 	
 	return;
+}
+
+void Generator::CreateTI()
+{
+	try
+	{
+		AppendLicense(m_tiheaderfile);
+		AppendHeaderTableImpls();
+		
+		AppendLicense(m_tisourcefile);
+		AppendSourceTableImpls();
+	}
+	catch(std::logic_error& e)
+	{
+		Global::Get()->bug(e.what());
+		throw std::logic_error("Could not create TableImpls file.\n");
+	}
+}
+
+void Generator::AppendHeaderTableImpls()
+{
+	m_tiheaderfile << "#pragma once" << endl;
+	//m_tiheaderfile << "#ifdef _WIN32" << endl;
+	//m_tiheaderfile << m_tabs << "#pragma warning (disable:4800)" << endl;
+	//m_tiheaderfile << "#endif" << endl;
+	m_tiheaderfile << endl;
+	
+	m_tiheaderfile << "#include \"Types.h\"" << endl;
+	m_tiheaderfile << endl;
+	
+	m_tiheaderfile << "namespace " << m_name << endl;
+	m_tiheaderfile << "{" << endl;
+	
+	m_tiheaderfile << m_tabs << "class TableImpls : public Singleton<TableImpls>" << endl;
+	m_tiheaderfile << m_tabs << "{" << endl;
+	m_tiheaderfile << m_tabs << "public:" << endl;
+	m_tiheaderfile << m_tabs << m_tabs << "static TableImpls* Get();" << endl;
+	m_tiheaderfile << m_tabs << m_tabs << "static void Free();" << endl;
+	m_tiheaderfile << endl;
+	
+	for(TableDefVector::const_iterator it = Tables::Get()->begin(); it != Tables::Get()->end(); it++)
+	{
+		TableDefPtr table = *it;
+		m_tiheaderfile << m_tabs << m_tabs << "TableImplPtr " << String::Get()->toupper(table->tableName()) << ";" << endl;
+	}
+	m_tiheaderfile << endl;
+	m_tiheaderfile << m_tabs << m_tabs << "TableImplVector::const_iterator begin() const { return m_tables.begin(); }" << endl;
+	m_tiheaderfile << m_tabs << m_tabs << "TableImplVector::const_iterator end() const { return m_tables.end(); }" << endl;
+	m_tiheaderfile << endl;
+	
+	m_tiheaderfile << m_tabs << "private:" << endl;
+	m_tiheaderfile << m_tabs << m_tabs << "TableImpls();" << endl;
+	m_tiheaderfile << m_tabs << m_tabs << "~TableImpls() { }" << endl;
+	m_tiheaderfile << m_tabs << m_tabs << "TableImpls(const TableImpls& rhs);" << endl;
+	m_tiheaderfile << m_tabs << m_tabs << "TableImpls operator=(const TableImpls& rhs);" << endl;
+	m_tiheaderfile << m_tabs << m_tabs << "friend class Singleton<TableImpls>;" << endl;
+	m_tiheaderfile << endl;
+	
+	m_tiheaderfile << m_tabs << m_tabs << "TableImplVector m_tables;" << endl;
+	m_tiheaderfile << m_tabs << m_tabs << "static TableImpls* ms_instance;" << endl;
+	m_tiheaderfile << m_tabs << "};" << endl;
+	m_tiheaderfile << "} // end of namespace" << endl;
+	m_tiheaderfile << endl;
+}
+
+void Generator::AppendSourceTableImpls()
+{
+	//m_tisourcefile << "#ifdef _WIN32" << endl;
+	//m_tisourcefile << "#pragma warning (disable:4244)" << endl;
+	//m_tisourcefile << "#pragma warning (disable:4267)" << endl;
+	//m_tisourcefile << "#endif" << endl;
+	//m_tisourcefile << endl;
+	
+	m_tisourcefile << "#include \"TableImpl.h\"" << endl;
+	m_tisourcefile << "#include \"TableImpls.h\"" << endl;
+	m_tisourcefile << "#include \"Tables.h\"" << endl;
+	m_tisourcefile << "#include \"FieldImpl.h\"" << endl;
+	m_tisourcefile << "#include \"KeyDef.h\"" << endl;
+	m_tisourcefile << "#include \"db.h\"" << endl;
+	m_tisourcefile << endl;
+	
+	m_tisourcefile << "using namespace " << m_name << ";" << endl;
+	m_tisourcefile << endl;
+	m_tisourcefile << "TableImpls* TableImpls::ms_instance = 0;" << endl;
+	m_tisourcefile << endl;
+	
+	m_tisourcefile << "TableImpls* TableImpls::Get()" << endl;
+	m_tisourcefile << "{" << endl;
+	m_tisourcefile << m_tabs << "if(ms_instance == 0)" << endl;
+	m_tisourcefile << m_tabs << "{" << endl;
+	m_tisourcefile << m_tabs << m_tabs << "ms_instance = new TableImpls();" << endl;
+	m_tisourcefile << endl;
+	m_tisourcefile << m_tabs << m_tabs << "// Init the Fields" << endl;
+	
+	for(TableDefVector::const_iterator it = Tables::Get()->begin(); it != Tables::Get()->end(); it++)
+	{
+		m_tisourcefile << m_tabs << m_tabs << "db::" << (*it)->tableName() << "Fields::Get();" << endl;
+	}
+	
+	m_tisourcefile << m_tabs << "}" << endl;
+	m_tisourcefile << m_tabs << "return ms_instance;" << endl;
+	m_tisourcefile << "}" << endl;
+	m_tisourcefile << endl;
+	
+	m_tisourcefile << "void TableImpls::Free()" << endl;
+	m_tisourcefile << "{" << endl;
+	m_tisourcefile << m_tabs << "if(ms_instance != 0)" << endl;
+	m_tisourcefile << m_tabs << m_tabs << "delete ms_instance;" << endl;
+	m_tisourcefile << "}" << endl;
+	m_tisourcefile << endl;
+	
+	m_tisourcefile << "TableImpls::TableImpls() :" << endl;
+	for(TableDefVector::const_iterator it = Tables::Get()->begin(); it != Tables::Get()->end(); it++)
+	{
+		if(it != Tables::Get()->begin())
+			m_tisourcefile << "," << endl;
+		
+		TableDefPtr table = *it;
+		m_tisourcefile << String::Get()->toupper(table->tableName()) << "(new TableImpl(Tables::Get()->" << String::Get()->toupper(table->tableName()) << "))";
+	}
+	
+	m_tisourcefile << endl;
+	m_tisourcefile << "{" << endl;
+	for(TableDefVector::const_iterator it = Tables::Get()->begin(); it != Tables::Get()->end(); it++)
+	{
+		m_tisourcefile << m_tabs << "m_tables.push_back(" << String::Get()->toupper((*it)->tableName()) << ");" << endl;
+	}
+	m_tisourcefile << "}" << endl;
+	m_tisourcefile << endl;
 }

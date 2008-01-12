@@ -19,12 +19,9 @@
  ***************************************************************************/
 #pragma once
 
-#include <string>
-#include "Savable.h"
-#include "Permission.h"
-#include "db.h"
+#include "SavableHeaders.h"
 
-class UBSocket;
+#include "Permission.h"
 
 namespace mud
 {
@@ -41,11 +38,11 @@ namespace mud
 		/**
 		 * \brief Getters
 		 */ 
-		const std::string& getName() const { return m_command->getname(); }
-		long getGrantGroup() const { return m_command->getgrantgroup(); }
-		bool canHighForce() const { return m_command->gethighforce(); }
-		bool canForce() const { return m_command->getforce(); }
-		bool canLowForce() const { return m_command->getlowforce(); }
+		const std::string& getName() const;
+		long getGrantGroup() const;
+		bool canHighForce() const;
+		bool canForce() const;
+		bool canLowForce() const;
 		
 		bool getGrant(UBSocket* sock);
 		bool getDefaultGrant();
@@ -56,11 +53,11 @@ namespace mud
 		/**
 		 * \brief Setters
 		 */ 
-		void setName(const std::string& name) { m_command->setname(name); }
-		void setGrantGroup(long grantgroup) { m_command->setgrantgroup(grantgroup); }
-		void setHighForce(bool highforce) { m_command->sethighforce(highforce); }
-		void setForce(bool force) { m_command->setforce(force); }
-		void setLowForce(bool lowforce) { m_command->setlowforce(lowforce); }
+		void setName(const std::string& name);
+		void setGrantGroup(long grantgroup);
+		void setHighForce(bool highforce);
+		void setForce(bool force);
+		void setLowForce(bool lowforce);
 
 		/**
 		 * \brief Utilities
@@ -77,9 +74,9 @@ namespace mud
 		bool Exists();
 
 	private:
-		db::Commands* m_command;
+		SavableManagerPtr m_command;
 
-		Command(db::Commands* Command);
+		Command(SavableManagerPtr Command);
 		Command(const Command& rhs);
 		Command operator=(const Command& rhs);
 		~Command(void);

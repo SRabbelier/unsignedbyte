@@ -18,9 +18,6 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#include <vector>
-#include <string>
-
 #include "EditorGrantGroup.h"
 #include "EditorOLC.h"
 
@@ -37,6 +34,9 @@
 #include "Account.h"
 #include "GrantGroup.h"
 #include "GrantGroupManager.h"
+
+#include "Table.h"
+#include "Tables.h"
 
 using mud::GrantGroup;
 
@@ -94,9 +94,9 @@ SavablePtr EditorGrantGroup::getEditing()
 	return m_grantgroup;
 }
 
-TablePtr EditorGrantGroup::getTable()
+TableImplPtr EditorGrantGroup::getTable()
 {
-	return Tables::Get()->GRANTGROUPS;
+	return db::TableImpls::Get()->GRANTGROUPS;
 }
 
 long EditorGrantGroup::addNew()

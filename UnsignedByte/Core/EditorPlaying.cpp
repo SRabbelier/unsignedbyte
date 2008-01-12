@@ -71,8 +71,6 @@ m_char(character)
 EditorPlaying::~EditorPlaying(void)
 {
 	m_char->Save();
-	mud::PCharacterManager::Get()->Close(m_char);
-	m_char.reset();
 }
 
 std::string EditorPlaying::lookup(const std::string& action)
@@ -172,7 +170,6 @@ void EditorPlaying::quitEditor(const std::string& argument)
 	try
 	{
 		m_sock->SetEditor(new EditorAccount(m_sock));
-		mud::PCharacterManager::Get()->Close(m_char);
 	}
 	catch(std::exception& e)
 	{

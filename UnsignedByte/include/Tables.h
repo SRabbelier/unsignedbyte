@@ -19,54 +19,48 @@
  ***************************************************************************/
 #pragma once
 
-#include <string>
-#include <vector>
-
-#include "singleton.h"
-#include "Table.h"
-
-typedef std::vector<TablePtr> TableVector;
+#include "Types.h"
 
 class Tables : public Singleton<Tables>
 {
 public:
-	TablePtr ACCOUNTS;
-	TablePtr AREAS;
-	TablePtr BRANCHES;
-	TablePtr CHARACTERACCOUNT;
-	TablePtr CHARACTERBRANCH;
-	TablePtr CHARACTERCLUSTER;
-	TablePtr CHARACTERS;
-	TablePtr CHARACTERSKILL;
-	TablePtr CHARACTERSTAT;
-	TablePtr CHARACTERTREE;
-	TablePtr CHUNKS;
-	TablePtr CLUSTERS;
-	TablePtr COLOURS;
-	TablePtr COMMANDS;
-	TablePtr DETAILS;
-	TablePtr DETAILROOM;
-	TablePtr DETAILCHUNK;
-	TablePtr DETAILCHARACTER;
-	TablePtr DETAILDETAIL;
-	TablePtr EXITS;
-	TablePtr GRANTGROUPS;
-	TablePtr PERMISSIONS;
-	TablePtr RACES;
-	TablePtr ROOMS;
-	TablePtr SECTORS;
-	TablePtr SKILLS;
-	TablePtr STATS;
-	TablePtr TREES;
-	TablePtr VERSION;
+	TableDefPtr ACCOUNTS;
+	TableDefPtr AREAS;
+	TableDefPtr BRANCHES;
+	TableDefPtr CHARACTERACCOUNT;
+	TableDefPtr CHARACTERBRANCH;
+	TableDefPtr CHARACTERCLUSTER;
+	TableDefPtr CHARACTERS;
+	TableDefPtr CHARACTERSKILL;
+	TableDefPtr CHARACTERSTAT;
+	TableDefPtr CHARACTERTREE;
+	TableDefPtr CHUNKS;
+	TableDefPtr CLUSTERS;
+	TableDefPtr COLOURS;
+	TableDefPtr COMMANDS;
+	TableDefPtr DETAILS;
+	TableDefPtr DETAILROOM;
+	TableDefPtr DETAILCHUNK;
+	TableDefPtr DETAILCHARACTER;
+	TableDefPtr DETAILDETAIL;
+	TableDefPtr EXITS;
+	TableDefPtr GRANTGROUPS;
+	TableDefPtr PERMISSIONS;
+	TableDefPtr RACES;
+	TableDefPtr ROOMS;
+	TableDefPtr SECTORS;
+	TableDefPtr SKILLS;
+	TableDefPtr STATS;
+	TableDefPtr TREES;
+	TableDefPtr VERSION;
 	
-	TableVector::const_iterator begin() const { return m_tables.begin(); };
-	TableVector::const_iterator end() const { return m_tables.end(); };
+	TableDefVector::const_iterator begin() const { return m_tables.begin(); }
+	TableDefVector::const_iterator end() const { return m_tables.end(); }
 	
 private:
 	friend class Singleton<Tables>;
 	Tables();
 	~Tables();
 	
-	TableVector m_tables;
+	TableDefVector m_tables;
 };

@@ -17,10 +17,7 @@
  *   Free Software Foundation, Inc.,                                       *
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
-
-#include <string>
-#include <stdexcept>
-
+ 
 #include "RaceManager.h"
 #include "Race.h"
 #include "Global.h"
@@ -34,67 +31,44 @@ std::vector<std::string> RaceManager::List()
 	return GetTable()->tableList();
 }
 
-TablePtr RaceManager::GetTable()
+TableImplPtr RaceManager::GetTable()
 {
-	return Tables::Get()->RACES;
+	return db::TableImpls::Get()->RACES;
 }
 
 value_type RaceManager::Add()
 {
-	db::Races d;
-	d.save();
-	value_type id = d.getraceid();
+	SavableManagerPtr manager = SavableManager::getnew(db::TableImpls::Get()->RACES);
+	manager->save();
+	value_type id = manager->getkey(db::RacesFields::Get()->RACEID)->getValue();
 	if(id == 0)
-		Global::Get()->bug("RaceManager::AddRace(), id = 0");
-	
+		Global::Get()->bug("RaceManager::Add(), id = 0");
+		
 	return id;
 }
 
 mud::RacePtr RaceManager::GetByKey(value_type id)
 {
-	RacePtr p = m_byKey[id];
-	if(p)
-		return p;
-		
-	db::Races* d = db::Races::bykey(id);
-	p = cacheRace(d);
+	KeyPtr key(new Key(db::RacesFields::Get()->RACEID, id));
+	Keys keys;
+	keys[db::RacesFields::Get()->RACEID.get()] = key;
+	SavableManagerPtr manager = SavableManager::bykeys(db::TableImpls::Get()->RACES, keys);
+	RacePtr p(new Race(manager));
 	return p;
 }
 
 mud::RacePtr RaceManager::GetByName(cstring value)
 {
-	RacePtr p = m_byName[value];
-	if(p)
-		return p;
-		
-	db::Races* d = db::Races::byname(value);
-	p = cacheRace(d);
+	ValuePtr val(new Value(db::RacesFields::Get()->NAME, value));
+	SavableManagerPtr manager = SavableManager::byvalue(val);
+	RacePtr p(new Race(manager));
 	return p;
 }
 
 value_type RaceManager::lookupByName(cstring value)
 {
-	reverseStringKey::iterator it = m_lookupByName.find(value);
-	if(it != m_lookupByName.end())
-		return it->second;
-	
-	value_type id = db::Races::lookupname(value);
-	m_lookupByName[value] = id;
+	ValuePtr val(new Value(db::RacesFields::Get()->NAME, value));
+	Keys keys = SavableManager::lookupvalue(val);
+	value_type id = keys[db::RacesFields::Get()->RACEID.get()];
 	return id;
-}
-
-void RaceManager::Close(value_type id)
-{
-	races_m::iterator key = m_byKey.find(id);
-	races_ms::iterator name = m_byName.find(key->second->getName());
-	m_byKey.erase(key);
-	m_byName.erase(name);	
-}
-
-RacePtr RaceManager::cacheRace(db::Races* d)
-{
-	RacePtr p(new Race(d));
-	m_byKey[d->getraceid()] = p;
-	m_byName[d->getname()] = p;
-	return p;
 }

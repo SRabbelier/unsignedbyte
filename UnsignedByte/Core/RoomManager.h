@@ -19,11 +19,7 @@
  ***************************************************************************/
 #pragma once
 
-#include <string>
-#include <vector>
-
-#include "singleton.h"
-#include "db.h"
+#include "SavableHeaders.h"
 
 namespace mud 
 { 
@@ -31,19 +27,13 @@ namespace mud
 	typedef SmartPtr<Room> RoomPtr;
 }
 
-typedef const std::string& cstring;
-typedef std::map<value_type,mud::RoomPtr> rooms_m;
-typedef std::map<std::string,mud::RoomPtr> rooms_ms;
-typedef std::map<std::string, value_type> reverseStringKey;
-
 namespace mud
 {
 	class RoomManager : public Singleton<mud::RoomManager>
 	{
 	public:
-		TablePtr GetTable();
+		TableImplPtr GetTable();
 		std::vector<std::string> List();
-		void Close(RoomPtr room);
 		
 		value_type Add();
 		mud::RoomPtr GetByKey(value_type id);
@@ -51,15 +41,6 @@ namespace mud
 		
 		value_type lookupByName(cstring value);
 		
-		void Close(value_type Roomid);
-		
-	private:
-		RoomPtr cacheRoom(db::Rooms* d);
-		
-		rooms_m m_byKey;
-		rooms_ms m_byName;
-		reverseStringKey m_lookupByName;
-
 	private:
 		RoomManager(void) {};
 		RoomManager(const RoomManager& rhs);

@@ -25,20 +25,67 @@
 #include "Global.h"
 #include "Cache.h"
 
+#include "Table.h"
+#include "Tables.h"
+
 using mud::Area;
 
-Area::Area(db::Areas* area) :
+Area::Area(SavableManagerPtr area) :
 m_area(area)
 {
-	if(m_area == NULL)
+	if(!m_area)
 		throw new std::invalid_argument("Area::Area(), m_area == NULL!");
 }
 
 Area::~Area(void)
 {
-	delete m_area;
-	m_area = NULL;
+
 }
+
+const std::string& Area::getName() const
+{
+	return m_area->getfield(db::AreasFields::Get()->NAME)->getStringValue();
+}
+
+const std::string& Area::getDescription() const
+{
+	return m_area->getfield(db::AreasFields::Get()->DESCRIPTION)->getStringValue();
+}
+
+value_type Area::getHeight() const
+{
+	return m_area->getfield(db::AreasFields::Get()->HEIGHT)->getIntegerValue();
+}
+
+value_type Area::getWidth() const
+{
+	return m_area->getfield(db::AreasFields::Get()->WIDTH)->getIntegerValue();
+}
+
+void Area::setName(const std::string& name)
+{
+	ValuePtr value(new Value(db::AreasFields::Get()->NAME, name));
+	m_area->setvalue(value);
+}
+
+void Area::setDescription(const std::string& description)
+{
+	ValuePtr value(new Value(db::AreasFields::Get()->DESCRIPTION, description));
+	m_area->setvalue(value);
+}
+
+void Area::setHeight(value_type height)
+{
+	ValuePtr value(new Value(db::AreasFields::Get()->HEIGHT, height));
+	m_area->setvalue(value);
+}
+
+void Area::setWidth(value_type width)
+{
+	ValuePtr value(new Value(db::AreasFields::Get()->WIDTH, width));
+	m_area->setvalue(value);
+}
+
 
 void Area::Delete()
 {

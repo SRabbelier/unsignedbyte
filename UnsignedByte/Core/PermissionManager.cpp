@@ -18,9 +18,6 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#include <string>
-#include <stdexcept>
-
 #include "PermissionManager.h"
 #include "Permission.h"
 #include "Global.h"
@@ -41,60 +38,21 @@ std::vector<std::string> PermissionManager::List()
 	return GetTable()->tableList();
 }
 
-TablePtr PermissionManager::GetTable()
+TableImplPtr PermissionManager::GetTable()
 {
-	return Tables::Get()->PERMISSIONS;
-}
-
-bool PermissionManager::isGrant(long grant)
-{
-	switch(grant)
-	{
-		default:
-			return defaultGrant;
-			
-		case Permission::GRANT_ENABLE:
-		case Permission::GRANT_ENABLEANDLOG:
-			return true;
-			
-		case Permission::GRANT_DISABLE:
-		case Permission::GRANT_DISABLEANDLOG:
-			return false;
-	}
-}
-
-bool PermissionManager::isLog(long grant)
-{
-	switch(grant)
-	{
-		default:
-			return defaultLog;
-			
-		case Permission::GRANT_ENABLEANDLOG:
-		case Permission::GRANT_DISABLEANDLOG:
-			return true;
-			
-		case Permission::GRANT_ENABLE:
-		case Permission::GRANT_DISABLE:
-			return false;
-	}
+	return db::TableImpls::Get()->PERMISSIONS;
 }
 
 mud::PermissionPtr PermissionManager::GetByKeys(value_type account, value_type grantgroup)
 {
-	twoValueKey key(account, grantgroup);
-	PermissionPtr p(m_byKeys[key]);
-	if(p)
-		return p;
-		
-	db::Permissions* d = db::Permissions::bykey(account, grantgroup);
-	p = PermissionPtr(new Permission(d));
-	m_byKeys[key] = p.get();
+	Keys keys;
+	KeyPtr key;
+	key = new Key(db::PermissionsFields::Get()->FKACCOUNTS, account);
+	keys[db::PermissionsFields::Get()->FKACCOUNTS.get()] = key;
+	key = new Key(db::PermissionsFields::Get()->FKGRANTGROUPS, grantgroup);
+	keys[db::PermissionsFields::Get()->FKGRANTGROUPS.get()] = key;
+	
+	SavableManagerPtr manager = SavableManager::bykeys(db::TableImpls::Get()->PERMISSIONS, keys);
+	PermissionPtr p(new Permission(manager));
 	return p;	
-}
-
-void PermissionManager::Close(value_type account, value_type permission)
-{
-	permissions_m::iterator key = m_byKeys.find(twoValueKey(account, permission));
-	m_byKeys.erase(key);
 }

@@ -19,11 +19,7 @@
  ***************************************************************************/
 #pragma once
 
-#include <string>
-#include <vector>
-
-#include "singleton.h"
-#include "db.h"
+#include "SavableHeaders.h"
 
 namespace mud 
 { 
@@ -31,19 +27,13 @@ namespace mud
 	typedef SmartPtr<Colour> ColourPtr;
 }
 
-typedef const std::string& cstring;
-typedef std::map<value_type,mud::ColourPtr> colours_m;
-typedef std::map<std::string,mud::ColourPtr> colours_ms;
-typedef std::map<std::string, value_type> reverseStringKey;
-
 namespace mud
 {
 	class ColourManager : public Singleton<mud::ColourManager>
 	{
 	public:
-		TablePtr GetTable();
+		TableImplPtr GetTable();
 		std::vector<std::string> List();
-		void Close(ColourPtr area);
 		
 		value_type Add();
 		mud::ColourPtr GetByKey(value_type id);
@@ -52,17 +42,6 @@ namespace mud
 		
 		value_type lookupByName(cstring value);
 		value_type lookupByCode(cstring value);
-		
-		void Close(value_type colourid);
-		
-	private:
-		ColourPtr cacheColour(db::Colours* d);
-		
-		colours_m m_byKey;
-		colours_ms m_byName;
-		colours_ms m_byCode;
-		reverseStringKey m_lookupByName;
-		reverseStringKey m_lookupByCode;
 
 	private:
 		ColourManager(void) {};

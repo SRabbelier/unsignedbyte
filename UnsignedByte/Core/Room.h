@@ -19,10 +19,7 @@
  ***************************************************************************/
 #pragma once
 
-#include <string>
-#include <vector>
-#include "Savable.h"
-#include "db.h"
+#include "SavableHeaders.h"
 
 namespace mud
 {
@@ -34,22 +31,22 @@ namespace mud
 	class Room : public Savable
 	{
 	public:
-		long getID() const { return m_room->getroomid(); }
-		const std::string& getName() const { return m_room->getname(); }
-		const std::string& getDescription() const { return m_room->getdescription(); }
-		long getSector() const { return m_room->getfkSectors(); }
-		long getArea() const { return m_room->getfkAreas(); }
-		long getHeight() const { return m_room->getheight(); }
-		long getWidth() const { return m_room->getwidth(); }
-		long getLength() const { return m_room->getlength(); }
+		value_type getID() const;
+		const std::string& getName() const;
+		const std::string& getDescription() const;
+		value_type getSector() const;
+		value_type getArea() const;
+		value_type getHeight() const;
+		value_type getWidth() const;
+		value_type getLength() const;
 
-		void setName(const std::string name) { m_room->setname(name); }
-		void setDescription(const std::string description) { m_room->setdescription(description); }
-		void setSector(long sector) { m_room->setfkSectors(sector); }
-		void setArea(long area) { m_room->setfkAreas(area); }
-		void setHeight(long height) { m_room->setheight(height); }
-		void setWidth(long width) { m_room->setwidth(width); }
-		void setLength(long length) { m_room->setlength(length); }
+		void setName(const std::string name);
+		void setDescription(const std::string description);
+		void setSector(value_type sector);
+		void setArea(value_type area);
+		void setHeight(value_type height);
+		void setWidth(value_type width);
+		void setLength(value_type length);
 
 		const Characters& getCharactersInRoom();
 
@@ -71,10 +68,10 @@ namespace mud
 		bool Exists();
 
 	private:
-		db::Rooms* m_room;
+		SavableManagerPtr m_room;
 		Characters m_charactersInRoom;
 
-		Room(db::Rooms* room);
+		Room(SavableManagerPtr room);
 		Room(const Room& rhs);
 		Room operator=(const Room& rhs);
 		~Room(void);

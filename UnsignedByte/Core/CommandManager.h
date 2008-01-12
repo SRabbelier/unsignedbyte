@@ -19,11 +19,7 @@
  ***************************************************************************/
 #pragma once
 
-#include <string>
-#include <vector>
-
-#include "singleton.h"
-#include "db.h"
+#include "SavableHeaders.h"
 
 namespace mud 
 { 
@@ -31,34 +27,19 @@ namespace mud
 	typedef SmartPtr<Command> CommandPtr;
 }
 
-typedef const std::string& cstring;
-typedef std::map<value_type,mud::CommandPtr> commands_m;
-typedef std::map<std::string,mud::CommandPtr> commands_ms;
-typedef std::map<std::string, value_type> reverseStringKey;
-
 namespace mud
 {
 	class CommandManager : public Singleton<mud::CommandManager>
 	{
 	public:
-		TablePtr GetTable();
+		TableImplPtr GetTable();
 		std::vector<std::string> List();
-		void Close(CommandPtr command);
 		
 		value_type Add();
 		mud::CommandPtr GetByKey(value_type id);
 		mud::CommandPtr GetByName(cstring name);
 		
 		value_type lookupByName(cstring value);
-		
-		void Close(value_type Commandid);
-		
-	private:
-		CommandPtr cacheCommand(db::Commands* d);
-		
-		commands_m m_byKey;
-		commands_ms m_byName;
-		reverseStringKey m_lookupByName;
 
 	private:
 		CommandManager(void) {};

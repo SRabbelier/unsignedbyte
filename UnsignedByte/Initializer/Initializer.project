@@ -59,7 +59,6 @@
   </Settings>
   <Dependencies>
     <Project Name="Resource"/>
-    <Project Name="Generator"/>
     <Project Name="DAL"/>
   </Dependencies>
 </CodeLite_Project>

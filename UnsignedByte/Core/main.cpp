@@ -27,9 +27,9 @@
 #include "ListenSocket.h"
 #include "UBSocket.h"
 #include "SQLSocket.h"
-#include "Cache.h"
 #include "Global.h"
 #include "Account.h" // needed because we include UBSocket.h
+#include "SavableHeaders.h"
 #include <iostream>
 
 void exitfunc()
@@ -78,6 +78,8 @@ int main(int argc, char** argv)
 	dbname.append(".db");
 	DatabaseMgr::Initialize(dbname);
 	printf("Done.\n");
+	
+	db::TableImpls::Get();
 
 	add(UBHandler::Get(), 4000);
 	add(UBHandler::Get(), 4040);

@@ -19,24 +19,18 @@
  ***************************************************************************/
 #pragma once
 
-#include <string>
-#include <smart_ptr.h>
+#include "Types.h"
 
 class Field
 {
 public:
-	Field(const std::string& name, bool text = false, const std::string& defaultvalue = "");
+	Field(cstring name, bool text = false);
 	~Field();
 	
-	std::string creationString() const;
 	const std::string& getName() const { return m_name; };
-	const std::string& getDefaultVvalue() const { return m_defaultvalue; };
 	bool isText() const { return m_text; };
 	
-private:
+protected:
 	std::string m_name;
 	bool m_text;
-	std::string m_defaultvalue;
 };
-
-typedef SmartPtr<Field> FieldPtr;

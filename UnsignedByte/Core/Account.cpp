@@ -18,28 +18,51 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#include <string>
-#include <stdexcept>
-
 class UBSocket;
 #include "Cache.h"
 #include "Account.h"
 #include "DatabaseMgr.h"
-#include "db.h"
+#include "SavableHeaders.h"
 
 using mud::Account;
 
-Account::Account(db::Accounts* dbaccount) :
+Account::Account(SavableManagerPtr dbaccount) :
 m_account(dbaccount)
 {
-	if(m_account == NULL)
+	if(!m_account)
 		throw std::invalid_argument("Account::Account(), m_account == NULL!");
 }
 
 Account::~Account(void)
 {
-	delete m_account;
-	m_account = 0;
+
+}
+
+value_type Account::getID() const
+{
+	return m_account->getkey(db::AccountsFields::Get()->ACCOUNTID)->getValue();
+}
+
+const std::string& Account::getName() const
+{
+	return m_account->getfield(db::AccountsFields::Get()->NAME)->getStringValue();
+}
+
+const std::string& Account::getPassword() const
+{
+	return m_account->getfield(db::AccountsFields::Get()->PASSWORD)->getStringValue();
+}
+
+void Account::setName(const std::string& name)
+{
+	ValuePtr value(new Value(db::AccountsFields::Get()->NAME, name));
+	m_account->setvalue(value);
+}
+
+void Account::setPassword(const std::string& password)
+{
+	ValuePtr value(new Value(db::AccountsFields::Get()->PASSWORD, password));
+	m_account->setvalue(value);
 }
 
 void Account::Delete()
@@ -74,5 +97,5 @@ std::string Account::ShowShort()
 
 TablePtr Account::getTable() const
 {
-	return Tables::Get()->ACCOUNTS;
+	return m_account->getTable();
 }

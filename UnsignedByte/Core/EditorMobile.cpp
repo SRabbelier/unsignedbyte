@@ -18,9 +18,6 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#include <vector>
-#include <string>
-
 #include "EditorMobile.h"
 #include "EditorOLC.h"
 
@@ -38,6 +35,9 @@
 #include "MCharacter.h"
 #include "MCharacterManager.h"
 #include "CharacterManager.h"
+
+#include "Table.h"
+#include "Tables.h"
 
 EditorMobile::MobileCommand EditorMobile::m_editName("Name", &EditorMobile::editName);
 EditorMobile::MobileCommand EditorMobile::m_editDescription("Description", &EditorMobile::editDescription);
@@ -93,9 +93,9 @@ SavablePtr EditorMobile::getEditing()
 	return m_mobile;
 }
 
-TablePtr EditorMobile::getTable()
+TableImplPtr EditorMobile::getTable()
 {
-	return Tables::Get()->CHARACTERS;
+	return db::TableImpls::Get()->CHARACTERS;
 }
 
 long EditorMobile::addNew()

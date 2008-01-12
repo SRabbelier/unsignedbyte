@@ -20,13 +20,9 @@
 
 #pragma once
 
-#include <map>
-#include <stdexcept>
+#include "Types.h"
 
-#include <sqlite3.h>
 #include <Database.h>
-#include <Bindable.h>
-#include <smart_ptr.h>
 #include <singleton.h>
 
 class Table;
@@ -39,8 +35,8 @@ typedef SmartPtr<Table> TablePtr;
 typedef SmartPtr<Statements> StatementsPtr;
 typedef SmartPtr<StatementStrings> StatementStringsPtr;
 
-typedef std::map<Table*, StatementsPtr>  TableStatements;
-typedef std::map<Table*, StatementStringsPtr>  TableStatementStrings;
+typedef std::map<TableImpl*, StatementsPtr>  TableStatements;
+typedef std::map<TableImpl*, StatementStringsPtr>  TableStatementStrings;
 typedef unsigned long value_type;
 
 class RowNotFoundException : public std::runtime_error
@@ -52,12 +48,16 @@ class RowNotFoundException : public std::runtime_error
 class SqliteMgr : public Singleton<SqliteMgr>
 {
 	public:
-		void doInsert(Bindable* bindable);
-		void doErase(Bindable* bindable);
-		void doUpdate(Bindable* bindable);
-		void doSelect(Bindable* bindable);
-		void doLookup(Bindable* bindable, const std::string& field);
-		void doForEach(Table* table, Actor& act);
+		void doInsert(SavableManager* bindable);
+		void doErase(SavableManager* bindable);
+		void doUpdate(SavableManager* bindable);
+		void doSelect(SavableManagerPtr bindable);
+		void doLookup(SavableManagerPtr bindable, FieldPtr field);
+		void doForEach(TableImpl* table, Actor& act);
+		
+		std::string tableQuery(TableDefPtr table) const;
+		std::string creationQuery(TableDefPtr table, bool verify = false) const;
+		std::string creationString(FieldDefPtr table) const;
 	
 	private:
 		Database* m_db;
@@ -67,17 +67,17 @@ class SqliteMgr : public Singleton<SqliteMgr>
 		TableStatements m_statements;
 		TableStatementStrings m_statementstrings;
 		
-		void commit(Table* table);
+		void commit(TableImpl* table);
 		
-		StatementsPtr getStatements(Table* table);
-		StatementStringsPtr getStatementStrings(Table* table);
+		StatementsPtr getStatements(TableImpl* table);
+		StatementStringsPtr getStatementStrings(TableImpl* table);
 		
-		sqlite3_stmt* getInsertStmt(Table* table);
-		sqlite3_stmt* getEraseStmt(Table* table);
-		sqlite3_stmt* getUpdateStmt(Table* table);
-		sqlite3_stmt* getSelectStmt(Table* table);
-		sqlite3_stmt* getLookupStmt(Table* table, const std::string& field);
-		sqlite3_stmt* getForEachStmt(Table* table);		
+		sqlite3_stmt* getInsertStmt(TableImpl* table);
+		sqlite3_stmt* getEraseStmt(TableImpl* table);
+		sqlite3_stmt* getUpdateStmt(TableImpl* table);
+		sqlite3_stmt* getSelectStmt(TableImpl* table);
+		sqlite3_stmt* getLookupStmt(TableImpl* table, FieldPtr field);
+		sqlite3_stmt* getForEachStmt(TableImpl* table);		
 		
 		friend class Singleton<SqliteMgr>;
 		SqliteMgr();

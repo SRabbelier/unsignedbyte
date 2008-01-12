@@ -34,21 +34,18 @@ Libs=$(LibrarySwitch)ubdal $(LibrarySwitch)ubresource $(LibrarySwitch)sqlite3
 LibPath=$(LibraryPathSwitch)../lib 
 endif
 
-Objects=$(IntermediateDirectory)/main$(ObjectSuffix) $(IntermediateDirectory)/chunkimporter$(ObjectSuffix) 
+Objects=$(IntermediateDirectory)/main$(ObjectSuffix) $(IntermediateDirectory)/chunkimporter$(ObjectSuffix) $(IntermediateDirectory)/Chunk$(ObjectSuffix) $(IntermediateDirectory)/ChunkManager$(ObjectSuffix) 
 
 ##
 ## Main Build Tragets 
 ##
 all: $(OutputFile)
 
-$(OutputFile): makeDirStep PrePreBuild $(Objects)
+$(OutputFile): makeDirStep  $(Objects)
 	$(LinkerName) $(OutputSwitch)$(OutputFile) $(Objects) $(LibPath) $(Libs) $(LinkOptions)
 
 makeDirStep:
 	@test -d ./Debug || mkdir ./Debug
-
-PrePreBuild: 
-
 
 
 PreBuild:
@@ -67,6 +64,16 @@ $(IntermediateDirectory)/chunkimporter$(ObjectSuffix): ../Core/chunkimporter.cpp
 $(IntermediateDirectory)/chunkimporter$(ObjectSuffix).d:
 	@$(CompilerName) $(CmpOptions) $(IncludePath) -MT$(IntermediateDirectory)/chunkimporter$(ObjectSuffix) -MF$(IntermediateDirectory)/chunkimporter$(ObjectSuffix).d -MM ../Core/chunkimporter.cpp
 
+$(IntermediateDirectory)/Chunk$(ObjectSuffix): ../Core/Chunk.cpp $(IntermediateDirectory)/Chunk$(ObjectSuffix).d
+	$(CompilerName) $(SourceSwitch)../Core/Chunk.cpp $(CmpOptions)   $(OutputSwitch)$(IntermediateDirectory)/Chunk$(ObjectSuffix) $(IncludePath)
+$(IntermediateDirectory)/Chunk$(ObjectSuffix).d:
+	@$(CompilerName) $(CmpOptions) $(IncludePath) -MT$(IntermediateDirectory)/Chunk$(ObjectSuffix) -MF$(IntermediateDirectory)/Chunk$(ObjectSuffix).d -MM ../Core/Chunk.cpp
+
+$(IntermediateDirectory)/ChunkManager$(ObjectSuffix): ../Core/ChunkManager.cpp $(IntermediateDirectory)/ChunkManager$(ObjectSuffix).d
+	$(CompilerName) $(SourceSwitch)../Core/ChunkManager.cpp $(CmpOptions)   $(OutputSwitch)$(IntermediateDirectory)/ChunkManager$(ObjectSuffix) $(IncludePath)
+$(IntermediateDirectory)/ChunkManager$(ObjectSuffix).d:
+	@$(CompilerName) $(CmpOptions) $(IncludePath) -MT$(IntermediateDirectory)/ChunkManager$(ObjectSuffix) -MF$(IntermediateDirectory)/ChunkManager$(ObjectSuffix).d -MM ../Core/ChunkManager.cpp
+
 ##
 ## Clean
 ##
@@ -75,6 +82,10 @@ clean:
 	$(RM) $(IntermediateDirectory)/main$(ObjectSuffix).d
 	$(RM) $(IntermediateDirectory)/chunkimporter$(ObjectSuffix)
 	$(RM) $(IntermediateDirectory)/chunkimporter$(ObjectSuffix).d
+	$(RM) $(IntermediateDirectory)/Chunk$(ObjectSuffix)
+	$(RM) $(IntermediateDirectory)/Chunk$(ObjectSuffix).d
+	$(RM) $(IntermediateDirectory)/ChunkManager$(ObjectSuffix)
+	$(RM) $(IntermediateDirectory)/ChunkManager$(ObjectSuffix).d
 	$(RM) $(OutputFile)
 
 -include $(IntermediateDirectory)/*.d

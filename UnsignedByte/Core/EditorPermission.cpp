@@ -18,9 +18,6 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#include <vector>
-#include <string>
-
 #include "EditorPermission.h"
 #include "EditorOLC.h"
 
@@ -40,6 +37,9 @@
 #include "PermissionManager.h"
 #include "GrantGroup.h"
 #include "GrantGroupManager.h"
+
+#include "Table.h"
+#include "Tables.h"
 
 using mud::Permission;
 		
@@ -99,9 +99,9 @@ SavablePtr EditorPermission::getEditing()
 	return m_permission;
 }
 
-TablePtr EditorPermission::getTable()
+TableImplPtr EditorPermission::getTable()
 {
-	return Tables::Get()->PERMISSIONS;
+	return db::TableImpls::Get()->PERMISSIONS;
 }
 
 long EditorPermission::addNew()
@@ -157,7 +157,7 @@ void EditorPermission::editAccount(const std::string& argument)
 
 	try
 	{
-		long id = db::Accounts::lookupname(argument);
+		long id = mud::AccountManager::Get()->lookupByName(argument);
 		m_sock->Sendf("Preparing to edit permission with account '%d'.\n", id);
 		m_account = id;
 	}
@@ -178,7 +178,7 @@ void EditorPermission::editGrantGroup(const std::string& argument)
 
 	try
 	{
-		long id = db::GrantGroups::lookupname(argument);
+		long id = mud::GrantGroupManager::Get()->lookupByName(argument);
 		m_sock->Sendf("Preparing to edit permission with grangroup '%d'.\n", id);
 		m_grantgroup = id;
 	}

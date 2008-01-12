@@ -17,18 +17,15 @@
  *   Free Software Foundation, Inc.,                                       *
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
-
-#include <string>
-#include <vector>
+ 
 #include <iostream>
+#include "SavableHeaders.h"
 
-#include "sqlite3.h"
 #include "Database.h"
 #include "Query.h"
 #include "IError.h"
 #include "StderrLog.h"
 #include "Global.h"
-#include "Tables.h"
 #include "DatabaseMgr.h"
 #include "SqliteMgr.h"
 
@@ -54,12 +51,15 @@ int main()
 {	
 	atexit(exitfunc);
 	
+	db::TableImpls::Get();
+	
 	printf("%s database initializer for db v%s.\n", game::vname, game::vstring);
 	std::string dbname = game::vname;
 	dbname.append(".db");
 
 	printf("Opening or creating '%s'...\n", dbname.c_str());
 	DatabaseMgr::Initialize(dbname);
+	
 	Initializer init(DatabaseMgr::Get()->DB());
 	
 	printf("Checking if database exists...\n");

@@ -29,9 +29,9 @@
       <ResourceCompiler Required="no" Options=""/>
       <PreBuild/>
       <PostBuild>
-        <Command Enabled="yes">../bin/Generator</Command>
-        <Command Enabled="yes">mv db.cpp ../DAL</Command>
-        <Command Enabled="yes">mv db.h ../include</Command>
+        <Command Enabled="no">../bin/Generator</Command>
+        <Command Enabled="no">mv db.cpp ../DAL</Command>
+        <Command Enabled="no">mv db.h ../include</Command>
       </PostBuild>
       <CustomBuild Enabled="no">
         <CleanCommand/>

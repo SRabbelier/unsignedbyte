@@ -18,9 +18,6 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#include <vector>
-#include <string>
-
 #include "EditorCommand.h"
 #include "EditorOLC.h"
 
@@ -39,6 +36,9 @@
 #include "CommandManager.h"
 #include "GrantGroup.h"
 #include "GrantGroupManager.h"
+
+#include "Table.h"
+#include "Tables.h"
 
 using mud::Command;
 
@@ -99,9 +99,9 @@ SavablePtr EditorCommand::getEditing()
 	return m_command;
 }
 
-TablePtr EditorCommand::getTable()
+TableImplPtr EditorCommand::getTable()
 {
-	return Tables::Get()->COMMANDS;
+	return db::TableImpls::Get()->COMMANDS;
 }
 
 long EditorCommand::addNew()
@@ -170,7 +170,7 @@ void EditorCommand::editGrantGroups(const std::string& argument)
 	
 	try
 	{
-		long id = db::GrantGroups::lookupname(argument);
+		long id = mud::GrantGroupManager::Get()->lookupByName(argument);
 		m_sock->Sendf("Grantgroup changed from '%d' to '%d'.\n", m_command->getGrantGroup(), id);
 		m_command->setGrantGroup(id);
 	}

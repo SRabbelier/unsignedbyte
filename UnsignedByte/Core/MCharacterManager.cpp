@@ -32,38 +32,18 @@ using mud::MCharacterPtr;
 
 mud::MCharacterPtr MCharacterManager::GetByKey(value_type id)
 {
-	MCharacterPtr p = m_byKey[id];
-	if(p)
-		return p;
-		
-	db::Characters* d = db::Characters::bykey(id);
-	p = cacheMCharacter(d);
+	KeyPtr key(new Key(db::CharactersFields::Get()->CHARACTERID, id));
+	Keys keys;
+	keys[db::CharactersFields::Get()->CHARACTERID.get()] = key;
+	SavableManagerPtr manager = SavableManager::bykeys(db::TableImpls::Get()->CHARACTERS, keys);
+	MCharacterPtr p(new MCharacter(manager));
 	return p;
 }
 
 mud::MCharacterPtr MCharacterManager::GetByName(cstring value)
 {
-	MCharacterPtr p = m_byName[value];
-	if(p)
-		return p;
-		
-	db::Characters* d = db::Characters::byname(value);
-	p = cacheMCharacter(d);
-	return p;
-}
-
-void MCharacterManager::Close(value_type id)
-{
-	mobiles_m::iterator key = m_byKey.find(id);
-	mobiles_ms::iterator name = m_byName.find(key->second->getName());
-	m_byKey.erase(key);
-	m_byName.erase(name);
-}
-
-MCharacterPtr MCharacterManager::cacheMCharacter(db::Characters* d)
-{
-	MCharacterPtr p(new MCharacter(d));
-	m_byKey[d->getcharacterid()] = p;
-	m_byName[d->getname()] = p;
+	ValuePtr val(new Value(db::CharactersFields::Get()->NAME, value));
+	SavableManagerPtr manager = SavableManager::byvalue(val);
+	MCharacterPtr p(new MCharacter(manager));
 	return p;
 }

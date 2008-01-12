@@ -19,12 +19,7 @@
  ***************************************************************************/
 #pragma once
 
-#include <string>
-#include <vector>
-#include <set>
-
-#include "singleton.h"
-#include "db.h"
+#include "SavableHeaders.h"
 
 namespace mud 
 { 
@@ -32,14 +27,8 @@ namespace mud
 	typedef SmartPtr<PCharacter> PCharacterPtr;
 }
 
-class UBSocket;
-
-typedef const std::string& cstring;
-typedef std::map<value_type,mud::PCharacterPtr> players_m;
-typedef std::map<std::string,mud::PCharacterPtr> players_ms;
-typedef std::map<std::string, value_type> reverseStringKey;
-typedef std::set<value_type> valueset;
-typedef std::set<std::string> stringset;
+typedef std::map<value_type, mud::PCharacterPtr> charactersByKey;
+typedef std::map<std::string, mud::PCharacterPtr> charactersByName;
 
 namespace mud
 {
@@ -57,25 +46,14 @@ namespace mud
 		mud::PCharacterPtr LoadByKey(UBSocket* sock, value_type id);
 		mud::PCharacterPtr LoadByName(UBSocket* sock, cstring name);
 
-		void Close(value_type id);
-		void Close(PCharacterPtr Ch);
-		
-	private:
-		PCharacterPtr cachePCharacter(UBSocket* sock, db::Characters* d);
-		
-		players_m m_byKey;
-		players_ms m_byName;
-		
-		valueset m_pcharactersByKey;
-		stringset m_pcharactersByName;
-		
-		reverseStringKey m_lookupByName;
-
 	private:
 		PCharacterManager(void) {};
 		PCharacterManager(const PCharacterManager& rhs);
 		PCharacterManager operator=(const PCharacterManager& rhs);
 		~PCharacterManager(void) {};
+		
+		charactersByKey m_activeCharactersByKey;
+		charactersByName m_activeCharactersByName;
 		
 		friend class Singleton<mud::PCharacterManager>;
 	};

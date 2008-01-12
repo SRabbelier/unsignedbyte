@@ -19,33 +19,7 @@
  ***************************************************************************/
 #pragma once
 
-#include <string>
-#include <map>
-#include <set>
-
-#include "singleton.h"
-#include "db.h"
-#include "smart_ptr.h"
-
-namespace mud
-{
-	class Account;
-	class Area;
-	class Character;
-	class Command;
-	class Colour;
-	class GrantGroup;
-	class MCharacter;
-	class Race;
-	class Room;
-	class Sector;
-	class PCharacter;
-	class Permission; 
-}
-
-class UBSocket;
-
-typedef unsigned long value_type;
+/*
 
 typedef value_type oneValueKey;
 typedef std::string oneStringKey;
@@ -54,7 +28,7 @@ typedef std::pair<value_type, value_type> twoValueKey;
 
 typedef std::map<std::string, value_type> reverseStringKey;
 
-typedef std::map<twoValueKey,db::CharacterAccount*> characteraccount_m; // character, account
+// typedef std::map<twoValueKey,db::CharacterAccount*> characteraccount_m; // character, account
 
 typedef const std::string& cstring;
 
@@ -64,10 +38,10 @@ namespace mud
 	{
 	public:
 		
-		bool existsCharacterWithAccount(value_type characterid, value_type accountid);
+		// bool existsCharacterWithAccount(value_type characterid, value_type accountid);
 
 	private:	
-		characteraccount_m m_characteraccountByKey;
+		// characteraccount_m m_characteraccountByKey;
 		
 	private:
 		Cache(void) {};
@@ -78,3 +52,5 @@ namespace mud
 		friend class Singleton<Cache>;
 	};
 }
+
+*/
