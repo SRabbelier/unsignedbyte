@@ -104,7 +104,8 @@ void SavableManager::save()
 
 	if(m_dirty)
 	{
-		SqliteMgr::Get()->doUpdate(this);
+		if(m_fields.size())
+			SqliteMgr::Get()->doUpdate(this);
 		m_dirty = false;
 	}
 }

@@ -58,10 +58,11 @@ void ChunkImporter::Detail::apply(SavableManagerPtr detail)
 		key = new Key(db::DetailDetailFields::Get()->FKDETAILSSECONDARY, detail->getkey(db::DetailsFields::Get()->DETAILID)->getValue());
 		keys[db::DetailDetailFields::Get()->FKDETAILSSECONDARY.get()] = key;
 		
-		SavableManagerPtr manager = SavableManager::bykeys(db::TableImpls::Get()->DETAILDETAIL, keys);
+		SavableManagerPtr manager = SavableManager::getnew(db::TableImpls::Get()->DETAILDETAIL);
+		manager->setkeys(keys);
 		manager->save();
 		
-		onedetail->apply(detail);
+		onedetail->apply(newmanager);
 	}
 }
 
@@ -287,7 +288,8 @@ void ChunkImporter::Apply(mud::ChunkPtr chunk)
 		key = new Key(db::ChunksFields::Get()->CHUNKID, detailmanager->getkey(db::DetailsFields::Get()->DETAILID)->getValue());
 		keys[db::ChunksFields::Get()->CHUNKID.get()] = key;
 		
-		SavableManagerPtr manager = SavableManager::bykeys(db::TableImpls::Get()->DETAILCHUNK, keys);
+		SavableManagerPtr manager = SavableManager::getnew(db::TableImpls::Get()->DETAILCHUNK);
+		manager->setkeys(keys);
 		manager->save();
 		
 		onedetail->apply(detailmanager);

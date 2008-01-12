@@ -23,7 +23,10 @@
 
 #include "smart_ptr.h"
 #include "chunkimporter.h"
+#include "Chunk.h"
+#include "ChunkManager.h"
 #include "StringUtilities.h"
+#include "DatabaseMgr.h"
 
 class Base
 {
@@ -143,6 +146,13 @@ void TestPointerPass()
 
 void TestChunkImporter()
 {
+	value_type key = mud::ChunkManager::Get()->Add();
+	mud::ChunkPtr chunk = mud::ChunkManager::Get()->GetByKey(key);
+	
+	chunk->setDescription("Some chunk thingy.");
+	chunk->setTags("Chunk Thingy");
+	chunk->Save();
+	
 	printf("Creating importer...\n");
 	std::string input;
 	input.append("Algemene beschrijving.\n");
@@ -157,9 +167,15 @@ void TestChunkImporter()
 	input.append("*Vierde detail\n");
 	input.append("**Subdetail\n");
 	input.append("***Subsub detail\n");
+	input.append("***Subsub detail twee\n");
+	input.append("****Subsubsub detail\n");
 	input.append("**Subdetail\n");
 	ChunkImporterPtr importer(new ChunkImporter(input));
 	printf(importer->getResult().c_str());
+	printf("\n");
+	
+	printf("Applying chunk now...\n");
+	importer->Apply(chunk);
 	printf("\n");
 }
 
@@ -232,6 +248,12 @@ void TestStringUtilities()
 
 int main()
 { 
+	printf("Opening database...\n");
+	std::string dbname = "TestCase";
+	dbname.append(".db");
+	DatabaseMgr::Initialize(dbname);
+	printf("Done.\n");
+	
 	/*
 	printf("[starttest:Simple]\n");
 	TestSimple();
@@ -257,17 +279,19 @@ int main()
 	TestPointerPass();
 	printf("[endtest:PointerPass]\n");
 	printf("\n");
+	*/
 	
 	printf("[starttest:ChunkImporter]\n");
 	TestChunkImporter();
 	printf("[endtest:ChunkImporter]\n");
 	printf("\n");
-	*/
-	
+
+	/*
 	printf("[starttest:StringUtilities]\n");
 	TestStringUtilities();
 	printf("[endtest:StringUtilities]\n");
 	printf("\n");
+	*/
 	
 	return 0;
 }

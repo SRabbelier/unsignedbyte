@@ -3,6 +3,8 @@
   <VirtualDirectory Name="Source Files">
     <File Name="main.cpp"/>
     <File Name="../Core/chunkimporter.cpp"/>
+    <File Name="../Core/Chunk.cpp"/>
+    <File Name="../Core/ChunkManager.cpp"/>
   </VirtualDirectory>
   <VirtualDirectory Name="Header Files">
     <File Name="../Core/chunkimporter.h"/>
@@ -54,5 +56,6 @@
   </Settings>
   <Dependencies>
     <Project Name="Resource"/>
+    <Project Name="DAL"/>
   </Dependencies>
 </CodeLite_Project>

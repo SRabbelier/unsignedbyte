@@ -42,7 +42,7 @@ namespace mud
 		 */
 		void setName(const std::string& name);
 		void setDescription(const std::string& description);
-		void setTags(const std::string& description);
+		void setTags(const std::string& tags);
 		void setRoom(value_type room);
 
 		/**

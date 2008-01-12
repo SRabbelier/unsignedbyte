@@ -62,22 +62,26 @@ value_type Chunk::getRoom() const
 
 void Chunk::setName(const std::string& name)
 {
-	
+	ValuePtr value(new Value(db::ChunksFields::Get()->NAME, name));
+	m_chunk->setvalue(value);
 }
 
 void Chunk::setDescription(const std::string& description)
 {
-	
+	ValuePtr value(new Value(db::ChunksFields::Get()->DESCRIPTION, description));
+	m_chunk->setvalue(value);
 }
 
-void Chunk::setTags(const std::string& description)
+void Chunk::setTags(const std::string& tags)
 {
-	
+	ValuePtr value(new Value(db::ChunksFields::Get()->TAGS, tags));
+	m_chunk->setvalue(value);
 }
 
 void Chunk::setRoom(value_type room)
 {
-	
+	ValuePtr value(new Value(db::ChunksFields::Get()->FKROOMS, room));
+	m_chunk->setvalue(value);
 }
 
 
