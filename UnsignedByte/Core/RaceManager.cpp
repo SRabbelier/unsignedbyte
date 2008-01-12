@@ -36,22 +36,18 @@ TableImplPtr RaceManager::GetTable()
 	return db::TableImpls::Get()->RACES;
 }
 
-value_type RaceManager::Add()
+KeysPtr RaceManager::Add()
 {
 	SavableManagerPtr manager = SavableManager::getnew(db::TableImpls::Get()->RACES);
 	manager->save();
-	value_type id = manager->getkey(db::RacesFields::Get()->RACEID)->getValue();
-	if(id == 0)
-		Global::Get()->bug("RaceManager::Add(), id = 0");
-		
-	return id;
+	return manager->getkeys();
 }
 
 mud::RacePtr RaceManager::GetByKey(value_type id)
 {
+	KeysPtr keys(new Keys(db::TableImpls::Get()->RACES));
 	KeyPtr key(new Key(db::RacesFields::Get()->RACEID, id));
-	Keys keys;
-	keys[db::RacesFields::Get()->RACEID.get()] = key;
+	keys->addKey(key);
 	SavableManagerPtr manager = SavableManager::bykeys(db::TableImpls::Get()->RACES, keys);
 	RacePtr p(new Race(manager));
 	return p;
@@ -68,7 +64,7 @@ mud::RacePtr RaceManager::GetByName(cstring value)
 value_type RaceManager::lookupByName(cstring value)
 {
 	ValuePtr val(new Value(db::RacesFields::Get()->NAME, value));
-	Keys keys = SavableManager::lookupvalue(val);
-	value_type id = keys[db::RacesFields::Get()->RACEID.get()];
+	KeysPtr keys = SavableManager::lookupvalue(val);
+	value_type id = keys->getKey(db::RacesFields::Get()->RACEID);
 	return id;
 }

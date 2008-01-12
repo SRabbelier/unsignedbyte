@@ -19,35 +19,28 @@
  ***************************************************************************/
 #pragma once
 
-#include "SavableHeaders.h"
+#include "Types.h"
 
-namespace mud 
-{ 
-	class Account; 
-	typedef SmartPtr<Account> AccountPtr;
-}
-
-namespace mud
+class Keys
 {
-	class AccountManager : public Singleton<mud::AccountManager>
-	{
-	public:
-		TableImplPtr GetTable();
-		std::vector<std::string> List();
-		bool IllegalName(const std::string& name);
-		
-		KeysPtr Add();
-		mud::AccountPtr GetByKey(value_type id);
-		mud::AccountPtr GetByName(cstring name);
-		
-		value_type lookupByName(cstring value);
+public:
+	Keys(TableImplPtr table) : m_table(table) { }
+	Keys(TableImplPtr table, cstring initstring);
+	~Keys() { }
+	
+	TableImplPtr getTable() const { return m_table; }
+	void addKey(KeyPtr key);
+	
+	std::string toString() const;
+	
+	size_t size() const { return m_keys.size(); }
+	KeyPtr first() const { return m_keys.begin()->second; }
+	KeyMap::const_iterator begin() const { return m_keys.begin(); }
+	KeyMap::const_iterator end() const { return m_keys.end(); }
+	KeyMap::const_iterator find(KeyDefPtr key) const { return m_keys.find(key.get()); }
+	KeyPtr getKey(KeyDefPtr key) const;
 
-	private:
-		AccountManager(void) {};
-		AccountManager(const AccountManager& rhs);
-		AccountManager operator=(const AccountManager& rhs);
-		~AccountManager(void) {};
-		
-		friend class Singleton<mud::AccountManager>;
-	};
-}
+private:
+	TableImplPtr m_table;
+	KeyMap m_keys;
+};

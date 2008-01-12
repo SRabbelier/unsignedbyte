@@ -1,8 +1,8 @@
 Generator 
-hp.*
 Initialize 
 UnsignedByte
 db.*
+*.db
 Generator
 Initialize
 TestCase

@@ -40,22 +40,18 @@ TableImplPtr ColourManager::GetTable()
 }
 
 
-value_type ColourManager::Add()
+KeysPtr ColourManager::Add()
 {
 	SavableManagerPtr manager = SavableManager::getnew(db::TableImpls::Get()->COLOURS);
 	manager->save();
-	value_type id = manager->getkey(db::ColoursFields::Get()->COLOURID)->getValue();
-	if(id == 0)
-		Global::Get()->bug("ColourManager::Add(), id = 0");
-	
-	return id;
+	return manager->getkeys();
 }
 
 mud::ColourPtr ColourManager::GetByKey(value_type id)
 {
+	KeysPtr keys(new Keys(db::TableImpls::Get()->COLOURS));
 	KeyPtr key(new Key(db::ColoursFields::Get()->COLOURID, id));
-	Keys keys;
-	keys[db::ColoursFields::Get()->COLOURID.get()] = key;
+	keys->addKey(key);
 	SavableManagerPtr manager = SavableManager::bykeys(db::TableImpls::Get()->COLOURS, keys);
 	ColourPtr p(new Colour(manager));
 	return p;
@@ -80,15 +76,15 @@ mud::ColourPtr ColourManager::GetByCode(cstring value)
 value_type ColourManager::lookupByCode(cstring value)
 {
 	ValuePtr val(new Value(db::ColoursFields::Get()->CODE, value));
-	Keys keys = SavableManager::lookupvalue(val);
-	value_type id = keys[db::ColoursFields::Get()->COLOURID.get()];
+	KeysPtr keys = SavableManager::lookupvalue(val);
+	value_type id = keys->getKey(db::ColoursFields::Get()->COLOURID);
 	return id;
 }
 
 value_type ColourManager::lookupByName(cstring value)
 {
 	ValuePtr val(new Value(db::ColoursFields::Get()->NAME, value));
-	Keys keys = SavableManager::lookupvalue(val);
-	value_type id = keys[db::ColoursFields::Get()->COLOURID.get()];
+	KeysPtr keys = SavableManager::lookupvalue(val);
+	value_type id = keys->getKey(db::ColoursFields::Get()->COLOURID);
 	return id;
 }

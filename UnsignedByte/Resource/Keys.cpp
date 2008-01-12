@@ -17,37 +17,52 @@
  *   Free Software Foundation, Inc.,                                       *
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
-#pragma once
 
+#include "Keys.h"
 #include "SavableHeaders.h"
+#include "Parse.h"
 
-namespace mud 
-{ 
-	class Account; 
-	typedef SmartPtr<Account> AccountPtr;
+Keys::Keys(TableImplPtr table, cstring initstring) :
+m_table(table)
+{
+	Parse p(initstring);
+		
+	try
+	{
+		for(KeyDefs::const_iterator it = m_table->keyimplbegin(); it != m_table->keyimplend(); it++)
+		{
+			std::string keystring = p.getword();
+			int value = atoi(keystring.c_str());
+			KeyPtr key(new Key(*it, value));
+			addKey(key);
+		}
+	}
+	catch(std::exception& e) 
+	{
+		throw std::invalid_argument("Keys::Keys(), could not parse initstring.");
+	}
 }
 
-namespace mud
+KeyPtr Keys::getKey(KeyDefPtr key) const
 {
-	class AccountManager : public Singleton<mud::AccountManager>
-	{
-	public:
-		TableImplPtr GetTable();
-		std::vector<std::string> List();
-		bool IllegalName(const std::string& name);
+	KeyMap::const_iterator it = m_keys.find(key.get());
+	if(it == m_keys.end())
+		throw std::invalid_argument("Keys::getKey(), key not in m_keys.");
 		
-		KeysPtr Add();
-		mud::AccountPtr GetByKey(value_type id);
-		mud::AccountPtr GetByName(cstring name);
-		
-		value_type lookupByName(cstring value);
+	return it->second;
+}
 
-	private:
-		AccountManager(void) {};
-		AccountManager(const AccountManager& rhs);
-		AccountManager operator=(const AccountManager& rhs);
-		~AccountManager(void) {};
+void Keys::addKey(KeyPtr key)
+{
+	if(key->getKeyDef()->getTable() != m_table)
+		throw std::invalid_argument("Keys::addKey(), key->getTable() != m_table");
 		
-		friend class Singleton<mud::AccountManager>;
-	};
+	m_keys[key->getKeyDef().get()] = key;
+}
+	
+std::string Keys::toString() const
+{
+	std::string result;
+	
+	return result;
 }

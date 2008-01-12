@@ -36,22 +36,18 @@ TableImplPtr SectorManager::GetTable()
 	return db::TableImpls::Get()->SECTORS;
 }
 
-value_type SectorManager::Add()
+KeysPtr SectorManager::Add()
 {	
 	SavableManagerPtr manager = SavableManager::getnew(db::TableImpls::Get()->SECTORS);
 	manager->save();
-	value_type id = manager->getkey(db::SectorsFields::Get()->SECTORID)->getValue();
-	if(id == 0)
-		Global::Get()->bug("SectorManager::Add(), id = 0");
-	
-	return id;	
+	return manager->getkeys();
 }
 
 mud::SectorPtr SectorManager::GetByKey(value_type id)
 {		
+	KeysPtr keys(new Keys(db::TableImpls::Get()->SECTORS));
 	KeyPtr key(new Key(db::SectorsFields::Get()->SECTORID, id));
-	Keys keys;
-	keys[db::SectorsFields::Get()->SECTORID.get()] = key;
+	keys->addKey(key);
 	SavableManagerPtr manager = SavableManager::bykeys(db::TableImpls::Get()->SECTORS, keys);
 	SectorPtr p(new Sector(manager));
 	return p;
@@ -68,7 +64,7 @@ mud::SectorPtr SectorManager::GetByName(cstring value)
 value_type SectorManager::lookupByName(cstring value)
 {	
 	ValuePtr val(new Value(db::SectorsFields::Get()->NAME, value));
-	Keys keys = SavableManager::lookupvalue(val);
-	value_type id = keys[db::SectorsFields::Get()->SECTORID.get()];
+	KeysPtr keys = SavableManager::lookupvalue(val);
+	value_type id = keys->getKey(db::SectorsFields::Get()->SECTORID);
 	return id;
 }

@@ -5,6 +5,8 @@
     <File Name="../Core/chunkimporter.cpp"/>
     <File Name="../Core/Chunk.cpp"/>
     <File Name="../Core/ChunkManager.cpp"/>
+    <File Name="../Core/Detail.cpp"/>
+    <File Name="../Core/DetailManager.cpp"/>
   </VirtualDirectory>
   <VirtualDirectory Name="Header Files">
     <File Name="../Core/chunkimporter.h"/>

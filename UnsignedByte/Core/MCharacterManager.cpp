@@ -32,9 +32,9 @@ using mud::MCharacterPtr;
 
 mud::MCharacterPtr MCharacterManager::GetByKey(value_type id)
 {
+	KeysPtr keys(new Keys(db::TableImpls::Get()->CHARACTERS));
 	KeyPtr key(new Key(db::CharactersFields::Get()->CHARACTERID, id));
-	Keys keys;
-	keys[db::CharactersFields::Get()->CHARACTERID.get()] = key;
+	keys->addKey(key);
 	SavableManagerPtr manager = SavableManager::bykeys(db::TableImpls::Get()->CHARACTERS, keys);
 	MCharacterPtr p(new MCharacter(manager));
 	return p;

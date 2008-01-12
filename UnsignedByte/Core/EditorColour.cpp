@@ -100,10 +100,9 @@ TableImplPtr EditorColour::getTable()
 	return db::TableImpls::Get()->COLOURS;
 }
 
-long EditorColour::addNew()
+KeysPtr EditorColour::addNew()
 {
 	return mud::ColourManager::Get()->Add();
-	return 0;
 }
 
 std::vector<std::string> EditorColour::getList()
@@ -111,15 +110,15 @@ std::vector<std::string> EditorColour::getList()
 	return mud::ColourManager::Get()->List();
 }
 
-void EditorColour::setEditing(long id)
+void EditorColour::setEditing(KeysPtr keys)
 {
-	if(id == 0)
+	if(!keys->size())
 	{
 		m_colour.reset();
 		return;
 	}
 	
-	m_colour = mud::ColourManager::Get()->GetByKey(id);
+	m_colour = mud::ColourManager::Get()->GetByKey(keys->first()->getValue());
 	return;
 }
 

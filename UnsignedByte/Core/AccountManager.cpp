@@ -47,22 +47,18 @@ TableImplPtr AccountManager::GetTable()
 	return db::TableImpls::Get()->ACCOUNTS;
 }
 
-value_type AccountManager::Add()
+KeysPtr AccountManager::Add()
 {
 	SavableManagerPtr manager = SavableManager::getnew(db::TableImpls::Get()->ACCOUNTS);
 	manager->save();
-	value_type id = manager->getkey(db::AccountsFields::Get()->ACCOUNTID)->getValue();
-	if(id == 0)
-		Global::Get()->bug("AccountManager::Add(), id = 0");
-	
-	return id;	
+	return manager->getkeys();
 }
 
 AccountPtr AccountManager::GetByKey(value_type id)
 {
+	KeysPtr keys(new Keys(db::TableImpls::Get()->ACCOUNTS));
 	KeyPtr key(new Key(db::AccountsFields::Get()->ACCOUNTID, id));
-	Keys keys;
-	keys[db::AccountsFields::Get()->ACCOUNTID.get()] = key;
+	keys->addKey(key);
 	SavableManagerPtr manager = SavableManager::bykeys(db::TableImpls::Get()->ACCOUNTS, keys);
 	AccountPtr p(new Account(manager));
 	return p;
@@ -79,7 +75,7 @@ AccountPtr AccountManager::GetByName(cstring value)
 value_type AccountManager::lookupByName(cstring value)
 {
 	ValuePtr val(new Value(db::AccountsFields::Get()->NAME, value));
-	Keys keys = SavableManager::lookupvalue(val);
-	value_type id = keys[db::AccountsFields::Get()->ACCOUNTID.get()];
+	KeysPtr keys = SavableManager::lookupvalue(val);
+	value_type id = keys->getKey(db::AccountsFields::Get()->ACCOUNTID);
 	return id;
 }

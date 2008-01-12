@@ -36,7 +36,7 @@ namespace mud
 		TableImplPtr GetTable();
 		std::vector<std::string> List();
 		
-		value_type Add();
+		KeysPtr Add();
 		mud::SectorPtr GetByKey(value_type id);
 		mud::SectorPtr GetByName(cstring name);
 		

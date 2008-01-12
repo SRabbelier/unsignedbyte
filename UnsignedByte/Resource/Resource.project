@@ -50,6 +50,8 @@
     <File Name="FieldImpl.cpp"/>
     <File Name="TableDef.cpp"/>
     <File Name="TableImpl.cpp"/>
+    <File Name="Keys.cpp"/>
+    <File Name="MPKCriteria.cpp"/>
   </VirtualDirectory>
   <VirtualDirectory Name="Header Files">
     <File Name="../include/Base64.h"/>
@@ -124,6 +126,7 @@
     <File Name="../include/KeyDef.h"/>
     <File Name="../include/Key.h"/>
     <File Name="../include/SavableHeaders.h"/>
+    <File Name="../include/Keys.h"/>
   </VirtualDirectory>
   <Settings Type="Static Library">
     <Configuration Name="Debug" CompilerType="gnu g++" DebuggerType="GNU gdb debugger">

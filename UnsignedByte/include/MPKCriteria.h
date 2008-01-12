@@ -17,37 +17,22 @@
  *   Free Software Foundation, Inc.,                                       *
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
+
 #pragma once
 
-#include "SavableHeaders.h"
+#include "Types.h"
+#include "Criteria.h"
 
-namespace mud 
-{ 
-	class Account; 
-	typedef SmartPtr<Account> AccountPtr;
-}
-
-namespace mud
+class MPKCriteria : public Criteria
 {
-	class AccountManager : public Singleton<mud::AccountManager>
-	{
-	public:
-		TableImplPtr GetTable();
-		std::vector<std::string> List();
-		bool IllegalName(const std::string& name);
-		
-		KeysPtr Add();
-		mud::AccountPtr GetByKey(value_type id);
-		mud::AccountPtr GetByName(cstring name);
-		
-		value_type lookupByName(cstring value);
-
-	private:
-		AccountManager(void) {};
-		AccountManager(const AccountManager& rhs);
-		AccountManager operator=(const AccountManager& rhs);
-		~AccountManager(void) {};
-		
-		friend class Singleton<mud::AccountManager>;
-	};
-}
+public:
+	MPKCriteria(KeysPtr keys) : m_keys(keys) {}
+	~MPKCriteria() {}
+	
+	bool evaluate(sqlite3_stmt* statement, const TablePtr table);
+	
+private:
+	bool evaluate(sqlite3_stmt* statement);
+	
+	KeysPtr m_keys;
+};

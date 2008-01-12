@@ -37,22 +37,18 @@ TableImplPtr CommandManager::GetTable()
 	return db::TableImpls::Get()->COMMANDS;
 }
 
-value_type CommandManager::Add()
+KeysPtr CommandManager::Add()
 {
 	SavableManagerPtr manager = SavableManager::getnew(db::TableImpls::Get()->COMMANDS);
 	manager->save();
-	value_type id = manager->getkey(db::CommandsFields::Get()->COMMANDID)->getValue();
-	if(id == 0)
-		Global::Get()->bug("CommandManager::Add(), id = 0");
-	
-	return id;	
+	return manager->getkeys();
 }
 
 mud::CommandPtr CommandManager::GetByKey(value_type id)
 {
+	KeysPtr keys(new Keys(db::TableImpls::Get()->COMMANDS));
 	KeyPtr key(new Key(db::CommandsFields::Get()->COMMANDID, id));
-	Keys keys;
-	keys[db::CommandsFields::Get()->COMMANDID.get()] = key;
+	keys->addKey(key);
 	SavableManagerPtr manager = SavableManager::bykeys(db::TableImpls::Get()->COMMANDS, keys);
 	CommandPtr p(new Command(manager));
 	return p;
@@ -69,7 +65,7 @@ mud::CommandPtr CommandManager::GetByName(cstring value)
 value_type CommandManager::lookupByName(cstring value)
 {
 	ValuePtr val(new Value(db::CommandsFields::Get()->NAME, value));
-	Keys keys = SavableManager::lookupvalue(val);
-	value_type id = keys[db::CommandsFields::Get()->COMMANDID.get()];
+	KeysPtr keys = SavableManager::lookupvalue(val);
+	value_type id = keys->getKey(db::CommandsFields::Get()->COMMANDID);
 	return id;
 }

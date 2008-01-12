@@ -18,8 +18,7 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#include <vector>
-#include <string>
+#include "SavableHeaders.h"
 
 #include "EditorDetail.h"
 #include "EditorString.h"
@@ -31,8 +30,7 @@
 #include "StringUtilities.h"
 
 #include "Account.h"
-#include "Room.h"
-#include "RoomManager.h"
+#include "Detail.h"
 
 EditorDetail::DetailCommand EditorDetail::m_listCommands("?", &EditorDetail::listCommands);
 EditorDetail::DetailCommand EditorDetail::m_editKey("Key", &EditorDetail::editKey);
@@ -40,7 +38,7 @@ EditorDetail::DetailCommand EditorDetail::m_editDescription("Description", &Edit
 EditorDetail::DetailCommand EditorDetail::m_showDetail("Show", &EditorDetail::showDetail);
 EditorDetail::DetailCommand EditorDetail::m_saveDetail("Save", &EditorDetail::saveDetail);
 
-EditorDetail::EditorDetail(UBSocket* sock, SmartPtr<db::Details> detail) :
+EditorDetail::EditorDetail(UBSocket* sock, mud::DetailPtr detail) :
 Editor(sock),
 m_detail(detail),
 m_target(M_NONE)
@@ -61,7 +59,7 @@ void EditorDetail::OnFocus()
 			return;
 			
 		case M_DESCRIPTION:
-			m_detail->setdescription(m_value);
+			m_detail->setDescription(m_value);
 			break;
 	}
 	
@@ -119,8 +117,8 @@ void EditorDetail::editKey(const std::string& argument)
 		return;
 	}
 
-	m_sock->Sendf("Detail key changed from '%s' to '%s'.\n", m_detail->getkey().c_str(), argument.c_str());
-	m_detail->setkey(argument);
+	m_sock->Sendf("Detail key changed from '%s' to '%s'.\n", m_detail->getKey().c_str(), argument.c_str());
+	m_detail->setKey(argument);
 	return;
 }
 
@@ -134,8 +132,8 @@ void EditorDetail::editDescription(const std::string& argument)
 		return;
 	}
 
-	m_sock->Sendf("Detail description changed from '%s' to '%s'.\n", m_detail->getdescription().c_str(), argument.c_str());
-	m_detail->setdescription(argument);
+	m_sock->Sendf("Detail description changed from '%s' to '%s'.\n", m_detail->getDescription().c_str(), argument.c_str());
+	m_detail->setDescription(argument);
 	return;
 }
 
@@ -143,12 +141,12 @@ void EditorDetail::showDetail(const std::string& argument)
 {
 	std::vector<std::string> result;
 	std::string key = "Key: '";
-	key.append(m_detail->getkey());
+	key.append(m_detail->getKey());
 	key.append("'.");
 	result.push_back(key);
 	
 	std::string description = "Description: '";
-	description.append(m_detail->getdescription());
+	description.append(m_detail->getDescription());
 	description.append("'.");
 	result.push_back(description);
 	
@@ -157,8 +155,8 @@ void EditorDetail::showDetail(const std::string& argument)
 
 void EditorDetail::saveDetail(const std::string& argument)
 {
-	m_sock->Sendf("Saving detail '%s'.\n", m_detail->getkey().c_str());
-	m_detail->save();
+	m_sock->Sendf("Saving detail '%s'.\n", m_detail->getKey().c_str());
+	m_detail->Save();
 	m_sock->Send("Saved.\n");
 	return;
 }

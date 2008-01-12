@@ -97,7 +97,7 @@ TableImplPtr EditorArea::getTable()
 	return db::TableImpls::Get()->AREAS;
 }
 
-long EditorArea::addNew()
+KeysPtr EditorArea::addNew()
 {
 	return mud::AreaManager::Get()->Add();
 }
@@ -107,15 +107,15 @@ std::vector<std::string> EditorArea::getList()
 	return mud::AreaManager::Get()->List();
 }
 
-void EditorArea::setEditing(long id)
+void EditorArea::setEditing(KeysPtr keys)
 {
-	if(id == 0)
+	if(!keys->size())
 	{
 		m_area.reset();
 		return;
 	}
 	
-	m_area = mud::AreaManager::Get()->GetByKey(id);
+	m_area = mud::AreaManager::Get()->GetByKey(keys->first()->getValue());
 	return;
 }
 

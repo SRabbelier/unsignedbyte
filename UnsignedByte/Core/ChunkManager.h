@@ -36,7 +36,7 @@ namespace mud
 		std::vector<std::string> List();
 		void Close(ChunkPtr chunk);
 		
-		value_type Add();
+		KeysPtr Add();
 		mud::ChunkPtr GetByKey(value_type id);
 		
 		value_type lookupByName(cstring value);

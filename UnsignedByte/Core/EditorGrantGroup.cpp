@@ -99,7 +99,7 @@ TableImplPtr EditorGrantGroup::getTable()
 	return db::TableImpls::Get()->GRANTGROUPS;
 }
 
-long EditorGrantGroup::addNew()
+KeysPtr EditorGrantGroup::addNew()
 {
 	return mud::GrantGroupManager::Get()->Add();
 }
@@ -109,15 +109,15 @@ std::vector<std::string> EditorGrantGroup::getList()
 	return mud::GrantGroupManager::Get()->List();
 }
 
-void EditorGrantGroup::setEditing(long id)
+void EditorGrantGroup::setEditing(KeysPtr keys)
 {
-	if(id == 0)
+	if(!keys->size())
 	{
 		m_grantgroup.reset();
 		return;
 	}
 	
-	m_grantgroup = mud::GrantGroupManager::Get()->GetByKey(id);
+	m_grantgroup = mud::GrantGroupManager::Get()->GetByKey(keys->first()->getValue());
 	return;
 }
 

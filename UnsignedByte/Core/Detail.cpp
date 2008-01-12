@@ -18,55 +18,83 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#include "GrantGroupManager.h"
-#include "GrantGroup.h"
+#include "Detail.h"
 #include "Global.h"
-#include "GrantGroup.h"
 
-using mud::GrantGroupManager;
-using mud::GrantGroup;
-using mud::GrantGroupPtr;
+using mud::Detail;
 
-std::vector<std::string> GrantGroupManager::List()
+Detail::Detail(SavableManagerPtr detail) :
+m_detail(detail)
 {
-	return GetTable()->tableList();
+	if(!m_detail)
+		throw new std::invalid_argument("Detail::Detail(), m_detail == NULL!");
 }
 
-TableImplPtr GrantGroupManager::GetTable()
+Detail::~Detail(void)
 {
-	return db::TableImpls::Get()->GRANTGROUPS;
+
 }
 
-KeysPtr GrantGroupManager::Add()
+value_type Detail::getID() const
 {
-	SavableManagerPtr manager = SavableManager::getnew(db::TableImpls::Get()->GRANTGROUPS);
-	manager->save();
-	return manager->getkeys();
+	return m_detail->getkey(db::DetailsFields::Get()->DETAILID)->getValue();
 }
 
-mud::GrantGroupPtr GrantGroupManager::GetByKey(value_type id)
+const std::string& Detail::getKey() const
 {
-	KeysPtr keys(new Keys(db::TableImpls::Get()->GRANTGROUPS));
-	KeyPtr key(new Key(db::GrantGroupsFields::Get()->GRANTGROUPID, id));
-	keys->addKey(key);
+	return m_detail->getfield(db::DetailsFields::Get()->KEY)->getStringValue();	
+}
+
+const std::string& Detail::getDescription() const
+{
+	return m_detail->getfield(db::DetailsFields::Get()->DESCRIPTION)->getStringValue();	
+}
+
+void Detail::setKey(const std::string& key)
+{
+	ValuePtr value(new Value(db::DetailsFields::Get()->KEY, key));
+	m_detail->setvalue(value);
+}
+
+void Detail::setDescription(const std::string& description)
+{
+	ValuePtr value(new Value(db::DetailsFields::Get()->DESCRIPTION, description));
+	m_detail->setvalue(value);
+}
+
+void Detail::Delete()
+{
+	m_detail->erase();
+}
+
+void Detail::Save()
+{
+	m_detail->save();
+}
+
+bool Detail::Exists()
+{
+	return m_detail->exists();
+}
+
+std::vector<std::string> Detail::Show()
+{
+	std::vector<std::string> result;
 	
-	SavableManagerPtr manager = SavableManager::bykeys(db::TableImpls::Get()->GRANTGROUPS, keys);
-	GrantGroupPtr p(new GrantGroup(manager));
-	return p;
+	result.push_back(Global::Get()->sprintf("Key: '%s'.", getKey().c_str()));
+	result.push_back(Global::Get()->sprintf("Description: '%s'.", getDescription().c_str()));
+	
+	return result;
 }
 
-mud::GrantGroupPtr GrantGroupManager::GetByName(cstring value)
+std::string Detail::ShowShort()
 {
-	ValuePtr val(new Value(db::GrantGroupsFields::Get()->NAME, value));
-	SavableManagerPtr manager = SavableManager::byvalue(val);
-	GrantGroupPtr p(new GrantGroup(manager));
-	return p;
+	return Global::Get()->sprintf("%s: %s\n", 
+			getKey().c_str(),
+			getDescription().c_str());
 }
 
-value_type GrantGroupManager::lookupByName(cstring value)
+TablePtr Detail::getTable() const
 {
-	ValuePtr val(new Value(db::GrantGroupsFields::Get()->NAME, value));
-	KeysPtr keys = SavableManager::lookupvalue(val);
-	value_type id = keys->getKey(db::GrantGroupsFields::Get()->GRANTGROUPID);
-	return id;
+	return Tables::Get()->DETAILS;
 }

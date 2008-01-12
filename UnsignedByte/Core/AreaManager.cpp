@@ -36,22 +36,18 @@ TableImplPtr AreaManager::GetTable()
 	return db::TableImpls::Get()->AREAS;
 }
 
-value_type AreaManager::Add()
+KeysPtr AreaManager::Add()
 {
 	SavableManagerPtr manager = SavableManager::getnew(db::TableImpls::Get()->AREAS);
 	manager->save();
-	value_type id = manager->getkey(db::AreasFields::Get()->AREAID)->getValue();
-	if(id == 0)
-		Global::Get()->bug("AreaManager::Add(), id = 0");
-	
-	return id;	
+	return manager->getkeys();
 }
 
 mud::AreaPtr AreaManager::GetByKey(value_type id)
 {
+	KeysPtr keys(new Keys(db::TableImpls::Get()->AREAS));
 	KeyPtr key(new Key(db::AreasFields::Get()->AREAID, id));
-	Keys keys;
-	keys[db::AreasFields::Get()->AREAID.get()] = key;
+	keys->addKey(key);
 	SavableManagerPtr manager = SavableManager::bykeys(db::TableImpls::Get()->AREAS, keys);
 	AreaPtr p(new Area(manager));
 	return p;

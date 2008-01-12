@@ -36,24 +36,19 @@ TableImplPtr ChunkManager::GetTable()
 	return db::TableImpls::Get()->CHUNKS;
 }
 
-value_type ChunkManager::Add()
+KeysPtr ChunkManager::Add()
 {
 	SavableManagerPtr manager = SavableManager::getnew(db::TableImpls::Get()->CHUNKS);
 	manager->save();
-	value_type id = manager->getkey(db::ChunksFields::Get()->CHUNKID)->getValue();
-	if(id == 0)
-		Global::Get()->bug("ChunkManager::Add(), id = 0");
-	
-	return id;
+	return manager->getkeys();
 }
 
 mud::ChunkPtr ChunkManager::GetByKey(value_type id)
 {
+	KeysPtr keys(new Keys(db::TableImpls::Get()->CHUNKS));
 	KeyPtr key(new Key(db::ChunksFields::Get()->CHUNKID, id));
-	Keys keys;
-	keys[db::ChunksFields::Get()->CHUNKID.get()] = key;
+	keys->addKey(key);
 	SavableManagerPtr manager = SavableManager::bykeys(db::TableImpls::Get()->CHUNKS, keys);
 	ChunkPtr p(new Chunk(manager));
 	return p;
 }
-

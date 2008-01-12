@@ -44,10 +44,10 @@ public:
 	
 	SavablePtr getEditing();
 	TableImplPtr getTable();
-	long addNew();
+	KeysPtr addNew();
 	std::vector<std::string> getList();
 	std::vector<std::string> getCommands();
-	void setEditing(long id);
+	void setEditing(KeysPtr keys);
 	
 	void editName(const std::string& argument);
 	void editDescription(const std::string& argument);

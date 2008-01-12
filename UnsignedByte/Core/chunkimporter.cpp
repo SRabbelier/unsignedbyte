@@ -23,12 +23,15 @@
 
 #include "StringUtilities.h"
 
-std::string ChunkImporter::Detail::toString()
+#include "Detail.h"
+#include "DetailManager.h"
+
+std::string ChunkImporter::MyDetail::toString()
 {
 	std::string result;
 	result.append("[\n");
 	result.append(String::Get()->unlines(m_description , "\n", 0));
-	for(DetailVector::iterator it = m_details.begin(); it != m_details.end(); it++)
+	for(MyDetailVector::iterator it = m_details.begin(); it != m_details.end(); it++)
 	{
 		result.append((*it)->toString());
 	}
@@ -36,33 +39,33 @@ std::string ChunkImporter::Detail::toString()
 	return result;
 }
 
-void ChunkImporter::Detail::apply(SavableManagerPtr detail)
+void ChunkImporter::MyDetail::apply(mud::DetailPtr detail)
 {	
-	DetailVector details = getDetails();
-	for(DetailVector::iterator it = details.begin(); it != details.end(); it++)
+	MyDetailVector details = getDetails();
+	for(MyDetailVector::iterator it = details.begin(); it != details.end(); it++)
 	{
-		DetailPtr onedetail = *it;
+		MyDetailPtr onedetail = *it;
 		
-		SavableManagerPtr newmanager = SavableManager::getnew(db::TableImpls::Get()->DETAILS);
-		ValuePtr value(new Value(db::DetailsFields::Get()->DESCRIPTION, String::Get()->unlines(onedetail->getDescription() , " ", 0)));
-		newmanager->setvalue(value);
-		newmanager->save();
+		KeysPtr newdetailkeys = mud::DetailManager::Get()->Add();
+		mud::DetailPtr newdetail = mud::DetailManager::Get()->GetByKey(newdetailkeys->first()->getValue());
+		newdetail->setDescription(String::Get()->unlines(onedetail->getDescription() , " ", 0));
+		newdetail->Save();
 				
 		/**
 		 * Connect the detail to the chunk
 		 */ 
-		Keys keys;
+		KeysPtr keys(new Keys(db::TableImpls::Get()->DETAILDETAIL));
 		KeyPtr key;
-		key = new Key(db::DetailDetailFields::Get()->FKDETAILSPRIMARY, newmanager->getkey(db::DetailsFields::Get()->DETAILID)->getValue());
-		keys[db::DetailDetailFields::Get()->FKDETAILSPRIMARY.get()] = key;
-		key = new Key(db::DetailDetailFields::Get()->FKDETAILSSECONDARY, detail->getkey(db::DetailsFields::Get()->DETAILID)->getValue());
-		keys[db::DetailDetailFields::Get()->FKDETAILSSECONDARY.get()] = key;
+		key = new Key(db::DetailDetailFields::Get()->FKDETAILSPRIMARY, newdetail->getID());
+		keys->addKey(key);
+		key = new Key(db::DetailDetailFields::Get()->FKDETAILSSECONDARY, detail->getID());
+		keys->addKey(key);
 		
 		SavableManagerPtr manager = SavableManager::getnew(db::TableImpls::Get()->DETAILDETAIL);
 		manager->setkeys(keys);
 		manager->save();
 		
-		onedetail->apply(newmanager);
+		onedetail->apply(newdetail);
 	}
 }
 
@@ -139,8 +142,8 @@ void ChunkImporter::Parse()
 	size_t i = 0;
 	int lastDepth = 0;
 	
-	std::stack<DetailPtr> details;
-	SmartPtr<Detail> current(new ChunkImporter::Detail());
+	std::stack<MyDetailPtr> details;
+	MyDetailPtr current(new ChunkImporter::MyDetail());
 	
 	Strings lines = String::Get()->lines(m_input, "\n");
 	
@@ -231,7 +234,7 @@ void ChunkImporter::Parse()
 		if(depth > lastDepth)
 		{			
 			details.push(current);
-			current.reset(new Detail());
+			current.reset(new MyDetail());
 		}
 
 		/**
@@ -240,7 +243,7 @@ void ChunkImporter::Parse()
 		if(lastDepth >= depth && details.size())
 		{
 			details.top()->addDetail(current);
-			current.reset(new Detail());
+			current.reset(new MyDetail());
 		}
 		
 		current->append(line);
@@ -268,31 +271,31 @@ void ChunkImporter::Apply(mud::ChunkPtr chunk)
 	/**
 	 * Add all the details as details of the chunk
 	 */ 
-	DetailVector details = m_result->getDetails();
-	for(DetailVector::iterator it = details.begin(); it != details.end(); it++)
+	MyDetailVector details = m_result->getDetails();
+	for(MyDetailVector::iterator it = details.begin(); it != details.end(); it++)
 	{
-		SmartPtr<Detail> onedetail = *it;
+		MyDetailPtr onedetail = *it;
 		
-		SavableManagerPtr detailmanager = SavableManager::getnew(db::TableImpls::Get()->DETAILS);
-		ValuePtr value(new Value(db::DetailsFields::Get()->DESCRIPTION, String::Get()->unlines(onedetail->getDescription() , " ", 0)));
-		detailmanager->setvalue(value);
-		detailmanager->save();
+		KeysPtr detailkeys = mud::DetailManager::Get()->Add();
+		mud::DetailPtr detail = mud::DetailManager::Get()->GetByKey(detailkeys ->first()->getValue());
+		detail->setDescription(String::Get()->unlines(onedetail->getDescription() , " ", 0));
+		detail->Save();
 		
 		/**
 		 * Connect the new detail to the chunk
 		 */ 
-		Keys keys;
+		KeysPtr keys(new Keys(db::TableImpls::Get()->DETAILS));
 		KeyPtr key;
 		key = new Key(db::DetailsFields::Get()->DETAILID, chunk->getID());
-		keys[db::DetailsFields::Get()->DETAILID.get()] = key;
-		key = new Key(db::ChunksFields::Get()->CHUNKID, detailmanager->getkey(db::DetailsFields::Get()->DETAILID)->getValue());
-		keys[db::ChunksFields::Get()->CHUNKID.get()] = key;
+		keys->addKey(key);
+		key = new Key(db::ChunksFields::Get()->CHUNKID, detail->getID());
+		keys->addKey(key);
 		
 		SavableManagerPtr manager = SavableManager::getnew(db::TableImpls::Get()->DETAILCHUNK);
 		manager->setkeys(keys);
 		manager->save();
 		
-		onedetail->apply(detailmanager);
+		onedetail->apply(detail);
 	}
 }
 

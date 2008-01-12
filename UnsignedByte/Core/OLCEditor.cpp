@@ -36,6 +36,7 @@
 
 OLCEditor::SavableCommand OLCEditor::m_listCommands("Commands", &OLCEditor::listCommands);
 OLCEditor::SavableCommand OLCEditor::m_newSavable("New", &OLCEditor::newSavable);
+OLCEditor::SavableCommand OLCEditor::m_deleteSavable("Delete", &OLCEditor::deleteSavable);
 OLCEditor::SavableCommand OLCEditor::m_editSavable("Edit", &OLCEditor::editSavable);
 OLCEditor::SavableCommand OLCEditor::m_quitEditor("Quit", &OLCEditor::quitEditor);
 OLCEditor::SavableCommand OLCEditor::m_doneEditing("Done", &OLCEditor::doneEditing);
@@ -79,20 +80,22 @@ void OLCEditor::dispatch(const std::string& action, const std::string& argument)
 
 void OLCEditor::newSavable(const std::string& argument)
 {
-	long id = addNew();
-	if(!id)
+	KeysPtr keys = addNew();
+	if(!keys->size())
 	{
 		Sendf("Could not create a new %s!\n", name().c_str());
 		return;
 	}
 
-	Sendf("%s created (%d)!\n", name().c_str(), id);
-	setEditing(id);
+	Sendf("%s created!\n", name().c_str());
+	setEditing(keys);
 	return;
 }
 
 void OLCEditor::editSavable(const std::string& argument)
 {
+	TableImplPtr table = getTable();
+	
 	if(argument.size() == 0)
 	{
 		Send("Please specify an id to edit.\n");
@@ -100,29 +103,89 @@ void OLCEditor::editSavable(const std::string& argument)
 		Sendf("Type 'new' to create a new %s!\n", name().c_str());
 		return;
 	}
-
-	int id = atoi(argument.c_str());
-	int count = DatabaseMgr::Get()->CountSavable(getTable(), id);
+	
+	KeysPtr keys;
+	
+	try
+	{
+		keys = new Keys(table, argument);
+	}
+	catch(std::invalid_argument& e)
+	{
+		Send("Please specify an id to edit.\n");
+		Sendf("'%s' is not a valid id.\n", argument.c_str());
+		return;
+	}
+	
+	int count = DatabaseMgr::Get()->CountSavable(table, keys);
 
 	if(!count)
 	{
 		Send("Please specify an id to edit.\n");
-		Sendf("'%s' (%d) is not a valid id!\n", argument.c_str(), id);
+		Sendf("'%s' is not a valid id!\n", argument.c_str());
 		return;
 	}
 
 	if(count >= 2)
 	{
-		Global::Get()->bugf("OLCEditor::Edit::Run(), count for id '%d' is '%d'!\n", id, count);
-		Sendf("For some reason there are more than two copy's of id %d known!\n", id);
+		Global::Get()->bugf("OLCEditor::editSavable(), count for id '%s' is '%d'!\n", argument.c_str(), count);
+		Sendf("For some reason there are more than two copy's of id %s known!\n", argument.c_str());
 		Send("Disconnecting you now.\n");
 		Disconnect();
 		return;
 	}
 
-	setEditing(id);
-	m_sock->Sendf("You are now editing id %d> ", id);
+	setEditing(keys);
+	m_sock->Sendf("You are now editing id %s> ", argument.c_str());
 	m_sock->Send(getEditing()->ShowShort());
+	m_sock->Send("\n");
+	return;
+}
+
+void OLCEditor::deleteSavable(const std::string& argument)
+{
+	if(argument.size() == 0)
+	{
+		Send("Please specify an id to delete.\n");
+		Send("Type 'list' to see a list of available id's.\n");
+		return;
+	}
+
+	KeysPtr keys;
+
+	try
+	{
+		keys = new Keys(getTable(), argument);
+	}
+	catch(std::invalid_argument& e)
+	{
+		Send("Please specify an id to edit.\n");
+		Sendf("'%s' is not a valid id.\n", argument.c_str());
+	}
+
+
+	int count = DatabaseMgr::Get()->CountSavable(getTable(), keys);
+
+	if(!count)
+	{
+		Send("Please specify an id to delete.\n");
+		Sendf("'%s' (%d) is not a valid id!\n", argument.c_str(), keys->toString().c_str());
+		return;
+	}
+
+	if(count >= 2)
+	{
+		Global::Get()->bugf("OLCEditor::deleteSavable(), count for id '%s' is '%d'!\n", keys->toString().c_str(), count);
+		Sendf("For some reason there are more than two copy's of id %s known!\n", keys->toString().c_str());
+		Send("Disconnecting you now.\n");
+		Disconnect();
+		return;
+	}
+
+	SavableManagerPtr manager = SavableManager::bykeys(getTable(), keys);
+	manager->erase();
+
+	m_sock->Sendf("Deleted id %s.\n", keys->toString().c_str());
 	m_sock->Send("\n");
 	return;
 }

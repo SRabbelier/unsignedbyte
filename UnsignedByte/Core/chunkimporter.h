@@ -29,6 +29,9 @@ namespace mud
 {
 	class Chunk;
 	typedef SmartPtr<Chunk> ChunkPtr;
+	
+	class Detail;
+	typedef SmartPtr<Detail> DetailPtr;
 }
 
 class ChunkImporter;
@@ -36,28 +39,28 @@ typedef SmartPtr<ChunkImporter> ChunkImporterPtr;
 	
 class ChunkImporter 
 {
-	class Detail;
-	typedef SmartPtr<Detail> DetailPtr;
-	typedef std::vector<DetailPtr> DetailVector; // not called 'Details' to prevent confusion with db::Details
+	class MyDetail;
+	typedef SmartPtr<MyDetail> MyDetailPtr;
+	typedef std::vector<MyDetailPtr> MyDetailVector; // not called 'Details' to prevent confusion with db::Details
 	private:
-		class Detail
+		class MyDetail
 		{
 			public:
-				Detail() { }
-				~Detail() { }
+				MyDetail() { }
+				~MyDetail() { }
 				
 				void append(const std::string& line) { m_description.push_back(line); }
-				void addDetail(SmartPtr<Detail> detail) { m_details.push_back(detail); }
+				void addDetail(MyDetailPtr detail) { m_details.push_back(detail); }
 				
 				const std::vector<std::string>& getDescription() { return m_description; }
-				const DetailVector& getDetails() { return m_details; }
+				const MyDetailVector& getDetails() { return m_details; }
 				
 				std::string toString();
-				void apply(SavableManagerPtr detail);
+				void apply(mud::DetailPtr detail);
 				
 			private:
 				std::vector<std::string> m_description;
-				DetailVector m_details;
+				MyDetailVector m_details;
 		};
 		
 	public:
@@ -79,6 +82,6 @@ class ChunkImporter
 		
 		std::vector<std::string> m_description;
 		
-		SmartPtr<ChunkImporter::Detail> m_result;
+		MyDetailPtr m_result;
 		std::string m_resultstring;
 };

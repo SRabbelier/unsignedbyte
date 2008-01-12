@@ -104,10 +104,9 @@ TableImplPtr EditorPermission::getTable()
 	return db::TableImpls::Get()->PERMISSIONS;
 }
 
-long EditorPermission::addNew()
+KeysPtr EditorPermission::addNew()
 {
-	// TODO - TwoKey addNew()
-	return 0;
+	throw std::runtime_error("EditorPermission::addNew(), Not yet implemented.");
 }
 
 std::vector<std::string> EditorPermission::getList()
@@ -115,15 +114,16 @@ std::vector<std::string> EditorPermission::getList()
 	return mud::PermissionManager::Get()->List();
 }
 
-void EditorPermission::setEditing(long id)
+void EditorPermission::setEditing(KeysPtr keys)
 {
-	if(id == 0)
+	if(!keys->size())
 	{
 		m_permission.reset();
 		return;
 	}
 	
-	// TODO - TwoKey setEditing()
+	mud::PermissionPtr permission = mud::PermissionManager::Get()->GetByKeys(keys);
+	m_permission = permission;
 	return;
 }
 

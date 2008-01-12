@@ -27,9 +27,9 @@ class SavableManager
 		// Factories
 		static SavableManagerPtr getnew(TableImplPtr table);
 		static SavableManagerPtr bykeys(TableImplPtr table, KeyPtr keys);
-		static SavableManagerPtr bykeys(TableImplPtr table, Keys keys);
+		static SavableManagerPtr bykeys(TableImplPtr table, KeysPtr keys);
 		static SavableManagerPtr byvalue(ValuePtr value);
-		static Keys lookupvalue(ValuePtr value);
+		static KeysPtr lookupvalue(ValuePtr value);
 
 		// Database interaction
 		void erase();
@@ -48,13 +48,13 @@ class SavableManager
 
 		// Getters
 		TableImplPtr getTable() const;
-		const Keys& getkeys() const;
+		KeysPtr getkeys() const;
 		
 		ValuePtr getfield(FieldImplPtr field) const;
 		KeyPtr getkey(KeyDefPtr keydef) const;
 		
 		// Setters
-		void setkeys(Keys keys);
+		void setkeys(KeysPtr keys);
 		void setvalue(ValuePtr value);
 
 	private:
@@ -66,7 +66,7 @@ class SavableManager
 		TableImplPtr m_table;		
 		ValuePtr m_lookupvalue;
 		
-		Keys m_keys;
+		KeysPtr m_keys;
 		Fields m_fields;
 		
 		// State flags

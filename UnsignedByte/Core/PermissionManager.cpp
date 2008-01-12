@@ -43,16 +43,21 @@ TableImplPtr PermissionManager::GetTable()
 	return db::TableImpls::Get()->PERMISSIONS;
 }
 
-mud::PermissionPtr PermissionManager::GetByKeys(value_type account, value_type grantgroup)
+mud::PermissionPtr PermissionManager::GetByKeys(KeysPtr keys)
 {
-	Keys keys;
-	KeyPtr key;
-	key = new Key(db::PermissionsFields::Get()->FKACCOUNTS, account);
-	keys[db::PermissionsFields::Get()->FKACCOUNTS.get()] = key;
-	key = new Key(db::PermissionsFields::Get()->FKGRANTGROUPS, grantgroup);
-	keys[db::PermissionsFields::Get()->FKGRANTGROUPS.get()] = key;
-	
 	SavableManagerPtr manager = SavableManager::bykeys(db::TableImpls::Get()->PERMISSIONS, keys);
 	PermissionPtr p(new Permission(manager));
-	return p;	
+	return p;
+}
+
+mud::PermissionPtr PermissionManager::GetByKeys(value_type grantgroup, value_type account)
+{	
+	KeysPtr keys(new Keys(db::TableImpls::Get()->PERMISSIONS));
+	KeyPtr key;
+	key = new Key(db::PermissionsFields::Get()->FKGRANTGROUPS, grantgroup);
+	keys->addKey(key);
+	key = new Key(db::PermissionsFields::Get()->FKACCOUNTS, account);
+	keys->addKey(key);
+	
+	return GetByKeys(keys);
 }

@@ -148,7 +148,7 @@ TableImplPtr EditorRoom::getTable()
 	return db::TableImpls::Get()->ROOMS;
 }
 
-long EditorRoom::addNew()
+KeysPtr EditorRoom::addNew()
 {
 	return mud::RoomManager::Get()->Add();
 }
@@ -158,15 +158,15 @@ std::vector<std::string> EditorRoom::getList()
 	return mud::RoomManager::Get()->List();
 }
 
-void EditorRoom::setEditing(long id)
+void EditorRoom::setEditing(KeysPtr keys)
 {
-	if(id == 0)
+	if(!keys->size())
 	{
 		m_room.reset();
 		return;
 	}
 	
-	m_room = mud::RoomManager::Get()->GetByKey(id);
+	m_room = mud::RoomManager::Get()->GetByKey(keys->first()->getValue());
 	return;
 }
 

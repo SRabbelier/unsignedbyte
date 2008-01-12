@@ -39,22 +39,18 @@ TableImplPtr RoomManager::GetTable()
 	return db::TableImpls::Get()->ROOMS;
 }
 
-value_type RoomManager::Add()
+KeysPtr RoomManager::Add()
 {
 	SavableManagerPtr manager = SavableManager::getnew(db::TableImpls::Get()->ROOMS);
 	manager->save();
-	value_type id = manager->getkey(db::RoomsFields::Get()->ROOMID)->getValue();
-	if(id == 0)
-		Global::Get()->bug("RoomManager::Add(), id = 0");
-	
-	return id;	
+	return manager->getkeys();
 }
 
 mud::RoomPtr RoomManager::GetByKey(value_type id)
 {
+	KeysPtr keys(new Keys(db::TableImpls::Get()->ROOMS));
 	KeyPtr key(new Key(db::RoomsFields::Get()->ROOMID, id));
-	Keys keys;
-	keys[db::RoomsFields::Get()->ROOMID.get()] = key;
+	keys->addKey(key);
 	SavableManagerPtr manager = SavableManager::bykeys(db::TableImpls::Get()->ROOMS, keys);
 	RoomPtr p(new Room(manager));
 	return p;

@@ -153,7 +153,11 @@ void EditorNewCharacter::OnLine(const std::string &line)
 			return;
 		}
 
-		if(DatabaseMgr::Get()->CountSavable(db::TableImpls::Get()->ROOMS, 1) <= 0)
+		KeysPtr keys(new Keys(db::TableImpls::Get()->ROOMS));
+		KeyPtr key(new Key(db::RoomsFields::Get()->ROOMID, 1));
+		keys->addKey(key);
+		
+		if(DatabaseMgr::Get()->CountSavable(db::TableImpls::Get()->ROOMS, keys) <= 0)
 		{
 			m_sock->Sendf("Could not fetch room 1!\n");
 			m_sock->Send("Closing your connection now.\n");

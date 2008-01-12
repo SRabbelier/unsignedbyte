@@ -21,33 +21,59 @@
 
 #include "SavableHeaders.h"
 
-namespace mud 
-{ 
-	class Account; 
-	typedef SmartPtr<Account> AccountPtr;
-}
-
 namespace mud
 {
-	class AccountManager : public Singleton<mud::AccountManager>
+	class DetailManager;
+	
+	class Detail : public Savable
 	{
 	public:
-		TableImplPtr GetTable();
-		std::vector<std::string> List();
-		bool IllegalName(const std::string& name);
+		/**
+		 * \brief Getters
+		 */
+		value_type getID() const;
+		const std::string& getKey() const;
+		const std::string& getDescription() const;
+
+		/**
+		 * \brief Setters
+		 */
+		void setKey(const std::string& name);
+		void setDescription(const std::string& description);
+
+		/**
+		 * \brief Utilities
+		 */
+		std::vector<std::string> Show();
+		std::string ShowShort();
+		TablePtr getTable() const;
 		
-		KeysPtr Add();
-		mud::AccountPtr GetByKey(value_type id);
-		mud::AccountPtr GetByName(cstring name);
-		
-		value_type lookupByName(cstring value);
+		/**
+		 * \brief Database operations
+		 */
+		void Delete();
+		void Save();
+		bool Exists();
 
 	private:
-		AccountManager(void) {};
-		AccountManager(const AccountManager& rhs);
-		AccountManager operator=(const AccountManager& rhs);
-		~AccountManager(void) {};
+		friend class mud::DetailManager; // For constructor
+		friend SmartPtrDelete(mud::Detail);
 		
-		friend class Singleton<mud::AccountManager>;
+		SavableManagerPtr m_detail;
+
+		/**
+		 * \brief Constructor
+		 * \param detail The DB object
+		 * \return 
+		 */
+		Detail(SavableManagerPtr detail);
+		
+		Detail(const Detail& rhs);
+		Detail operator=(const Detail& rhs);
+			
+		/**
+		 * \brief Default destructor
+		 */
+		~Detail(void);
 	};
 }

@@ -23,31 +23,30 @@
 
 namespace mud 
 { 
-	class Account; 
-	typedef SmartPtr<Account> AccountPtr;
+	class Detail; 
+	typedef SmartPtr<Detail> DetailPtr;
 }
 
 namespace mud
 {
-	class AccountManager : public Singleton<mud::AccountManager>
+	class DetailManager : public Singleton<mud::DetailManager>
 	{
 	public:
 		TableImplPtr GetTable();
 		std::vector<std::string> List();
-		bool IllegalName(const std::string& name);
+		void Close(DetailPtr detail);
 		
 		KeysPtr Add();
-		mud::AccountPtr GetByKey(value_type id);
-		mud::AccountPtr GetByName(cstring name);
+		mud::DetailPtr GetByKey(value_type id);
 		
 		value_type lookupByName(cstring value);
 
 	private:
-		AccountManager(void) {};
-		AccountManager(const AccountManager& rhs);
-		AccountManager operator=(const AccountManager& rhs);
-		~AccountManager(void) {};
+		DetailManager(void) {};
+		DetailManager(const DetailManager& rhs);
+		DetailManager operator=(const DetailManager& rhs);
+		~DetailManager(void) {};
 		
-		friend class Singleton<mud::AccountManager>;
+		friend class Singleton<mud::DetailManager>;
 	};
 }

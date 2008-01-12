@@ -20,6 +20,7 @@
     <File Name="Permission.cpp"/>
     <File Name="Chunk.cpp"/>
     <File Name="chunkimporter.cpp"/>
+    <File Name="Detail.cpp"/>
   </VirtualDirectory>
   <VirtualDirectory Name="Core Header Files">
     <File Name="Account.h"/>
@@ -43,6 +44,7 @@
     <File Name="CommandObject.h"/>
     <File Name="Chunk.h"/>
     <File Name="chunkimporter.h"/>
+    <File Name="Detail.h"/>
   </VirtualDirectory>
   <VirtualDirectory Name="Editor Source Files">
     <File Name="EditorOLC.cpp"/>
@@ -106,6 +108,7 @@
     <File Name="RoomManager.cpp"/>
     <File Name="SectorManager.cpp"/>
     <File Name="ChunkManager.cpp"/>
+    <File Name="DetailManager.cpp"/>
   </VirtualDirectory>
   <VirtualDirectory Name="Manager Header Files">
     <File Name="AccountManager.h"/>
@@ -121,6 +124,7 @@
     <File Name="RoomManager.h"/>
     <File Name="SectorManager.h"/>
     <File Name="ChunkManager.h"/>
+    <File Name="DetailManager.h"/>
   </VirtualDirectory>
   <Settings Type="Executable">
     <Configuration Name="Debug" CompilerType="gnu g++" DebuggerType="GNU gdb debugger">

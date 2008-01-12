@@ -94,10 +94,9 @@ TableImplPtr EditorSector::getTable()
 	return db::TableImpls::Get()->SECTORS;
 }
 
-long EditorSector::addNew()
+KeysPtr EditorSector::addNew()
 {
 	return mud::SectorManager::Get()->Add();
-	return 0;
 }
 
 std::vector<std::string> EditorSector::getList()
@@ -105,15 +104,15 @@ std::vector<std::string> EditorSector::getList()
 	return mud::SectorManager::Get()->List();
 }
 
-void EditorSector::setEditing(long id)
+void EditorSector::setEditing(KeysPtr keys)
 {
-	if(id == 0)
+	if(!keys->size())
 	{
 		m_sector.reset();
 		return;
 	}
 	
-	m_sector = mud::SectorManager::Get()->GetByKey(id);
+	m_sector = mud::SectorManager::Get()->GetByKey(keys->first()->getValue());
 	return;
 }
 

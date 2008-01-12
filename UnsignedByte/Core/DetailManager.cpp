@@ -17,37 +17,38 @@
  *   Free Software Foundation, Inc.,                                       *
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
-#pragma once
 
-#include "SavableHeaders.h"
+#include "DetailManager.h"
+#include "Detail.h"
+#include "Global.h"
 
-namespace mud 
-{ 
-	class Account; 
-	typedef SmartPtr<Account> AccountPtr;
+using mud::DetailManager;
+using mud::Detail;
+using mud::DetailPtr;
+
+std::vector<std::string> DetailManager::List()
+{
+	return GetTable()->tableList();
 }
 
-namespace mud
+TableImplPtr DetailManager::GetTable()
 {
-	class AccountManager : public Singleton<mud::AccountManager>
-	{
-	public:
-		TableImplPtr GetTable();
-		std::vector<std::string> List();
-		bool IllegalName(const std::string& name);
-		
-		KeysPtr Add();
-		mud::AccountPtr GetByKey(value_type id);
-		mud::AccountPtr GetByName(cstring name);
-		
-		value_type lookupByName(cstring value);
+	return db::TableImpls::Get()->DETAILS;
+}
 
-	private:
-		AccountManager(void) {};
-		AccountManager(const AccountManager& rhs);
-		AccountManager operator=(const AccountManager& rhs);
-		~AccountManager(void) {};
-		
-		friend class Singleton<mud::AccountManager>;
-	};
+KeysPtr DetailManager::Add()
+{
+	SavableManagerPtr manager = SavableManager::getnew(db::TableImpls::Get()->DETAILS);
+	manager->save();
+	return manager->getkeys();
+}
+
+mud::DetailPtr DetailManager::GetByKey(value_type id)
+{
+	KeysPtr keys(new Keys(db::TableImpls::Get()->DETAILS));
+	KeyPtr key(new Key(db::DetailsFields::Get()->DETAILID, id));
+	keys->addKey(key);
+	SavableManagerPtr manager = SavableManager::bykeys(db::TableImpls::Get()->DETAILS, keys);
+	DetailPtr p(new Detail(manager));
+	return p;
 }

@@ -98,7 +98,7 @@ TableImplPtr EditorMobile::getTable()
 	return db::TableImpls::Get()->CHARACTERS;
 }
 
-long EditorMobile::addNew()
+KeysPtr EditorMobile::addNew()
 {
 	return mud::CharacterManager::Get()->Add();
 }
@@ -108,15 +108,15 @@ std::vector<std::string> EditorMobile::getList()
 	return mud::CharacterManager::Get()->List();
 }
 
-void EditorMobile::setEditing(long id)
+void EditorMobile::setEditing(KeysPtr keys)
 {
-	if(id == 0)
+	if(!keys->size())
 	{
 		m_mobile.reset();
 		return;
 	}
 	
-	m_mobile = mud::MCharacterManager::Get()->GetByKey(id);
+	m_mobile = mud::MCharacterManager::Get()->GetByKey(keys->first()->getValue());
 	return;
 }
 

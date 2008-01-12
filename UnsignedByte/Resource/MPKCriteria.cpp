@@ -17,37 +17,43 @@
  *   Free Software Foundation, Inc.,                                       *
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
-#pragma once
 
-#include "SavableHeaders.h"
+#include "Keys.h"
+#include "Key.h"
+#include "KeyDef.h"
+#include "TableImpl.h"
+#include "FieldImpl.h"
+#include "MPKCriteria.h"
 
-namespace mud 
-{ 
-	class Account; 
-	typedef SmartPtr<Account> AccountPtr;
+bool MPKCriteria::evaluate(sqlite3_stmt* statement)
+{
+	int pos = 0;
+	for(KeyMap::const_iterator it = m_keys->begin(); it != m_keys->end(); it++)
+	{
+		const char* text = sqlite3_column_name(statement, pos);
+		if(text == 0)
+			return false;
+			
+		std::string keyname(text);
+		value_type value = sqlite3_column_int64(statement, pos);
+		
+		// TODO - fix? currently positional....
+		if(it->first->getName().compare(keyname))
+			return false;
+		
+		if(it->second->getValue() != value)
+			return false;
+			
+		pos++;
+	}
+	
+	return true;
 }
 
-namespace mud
+bool MPKCriteria::evaluate(sqlite3_stmt* statement, const TablePtr table)
 {
-	class AccountManager : public Singleton<mud::AccountManager>
-	{
-	public:
-		TableImplPtr GetTable();
-		std::vector<std::string> List();
-		bool IllegalName(const std::string& name);
+	if(table->hasSingularPrimaryKey())
+		throw new std::logic_error("MPKCriteria::evaluate(), table has a singular primary key.");
 		
-		KeysPtr Add();
-		mud::AccountPtr GetByKey(value_type id);
-		mud::AccountPtr GetByName(cstring name);
-		
-		value_type lookupByName(cstring value);
-
-	private:
-		AccountManager(void) {};
-		AccountManager(const AccountManager& rhs);
-		AccountManager operator=(const AccountManager& rhs);
-		~AccountManager(void) {};
-		
-		friend class Singleton<mud::AccountManager>;
-	};
+	return evaluate(statement);
 }

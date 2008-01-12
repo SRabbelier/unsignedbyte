@@ -18,19 +18,22 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#include <string>
-
 #include "DatabaseMgr.h"
-#include "sqlite3.h"
 #include "Database.h"
 #include "IError.h"
 #include "StderrLog.h"
-#include "Query.h"
 #include "Global.h"
 
 #include "SPKCriteria.h"
+#include "MPKCriteria.h"
 #include "CountActor.h"
 #include "SqliteMgr.h"
+
+#include "Keys.h"
+#include "Key.h"
+#include "KeyDef.h"
+#include "TableImpl.h"
+#include "FieldImpl.h"
 
 std::string DatabaseMgr::m_staticpath = Global::Get()->EmptyString;
 
@@ -65,12 +68,18 @@ Database& DatabaseMgr::DBref()
 	return *m_db;
 }
 
-long DatabaseMgr::CountSavable(const TableImplPtr table, const long id)
+long DatabaseMgr::CountSavable(const TableImplPtr table, const KeysPtr keys)
 {
 	long count = 0;
 	
-	SPKCriteria crit(id);
-	CountActor act(&crit);
+	CriteriaPtr crit;
+	
+	if(keys->size() == 1)
+		crit = new SPKCriteria(keys->first()->getValue());
+	else
+		crit = new MPKCriteria(keys);
+		
+	CountActor act(crit);
 	SqliteMgr::Get()->doForEach(table.get(), act);
 	count = act.getCount();
 	

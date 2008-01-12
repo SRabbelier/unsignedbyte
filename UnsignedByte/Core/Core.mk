@@ -35,11 +35,11 @@ LibPath=$(LibraryPathSwitch). $(LibraryPathSwitch)../lib
 endif
 
 Objects=$(IntermediateDirectory)/Account$(ObjectSuffix) $(IntermediateDirectory)/Area$(ObjectSuffix) $(IntermediateDirectory)/Cache$(ObjectSuffix) $(IntermediateDirectory)/Character$(ObjectSuffix) $(IntermediateDirectory)/Colour$(ObjectSuffix) $(IntermediateDirectory)/main$(ObjectSuffix) $(IntermediateDirectory)/MCharacter$(ObjectSuffix) $(IntermediateDirectory)/PCharacter$(ObjectSuffix) $(IntermediateDirectory)/Race$(ObjectSuffix) $(IntermediateDirectory)/Room$(ObjectSuffix) \
-	$(IntermediateDirectory)/Sector$(ObjectSuffix) $(IntermediateDirectory)/UBHandler$(ObjectSuffix) $(IntermediateDirectory)/UBSocket$(ObjectSuffix) $(IntermediateDirectory)/SQLSocket$(ObjectSuffix) $(IntermediateDirectory)/Command$(ObjectSuffix) $(IntermediateDirectory)/GrantGroup$(ObjectSuffix) $(IntermediateDirectory)/Permission$(ObjectSuffix) $(IntermediateDirectory)/Chunk$(ObjectSuffix) $(IntermediateDirectory)/chunkimporter$(ObjectSuffix) $(IntermediateDirectory)/EditorOLC$(ObjectSuffix) \
-	$(IntermediateDirectory)/Editor$(ObjectSuffix) $(IntermediateDirectory)/EditorPermission$(ObjectSuffix) $(IntermediateDirectory)/EditorGrantGroup$(ObjectSuffix) $(IntermediateDirectory)/EditorString$(ObjectSuffix) $(IntermediateDirectory)/EditorCommand$(ObjectSuffix) $(IntermediateDirectory)/EditorScript$(ObjectSuffix) $(IntermediateDirectory)/EditorSector$(ObjectSuffix) $(IntermediateDirectory)/EditorRoom$(ObjectSuffix) $(IntermediateDirectory)/EditorPlaying$(ObjectSuffix) $(IntermediateDirectory)/EditorNewCharacter$(ObjectSuffix) \
-	$(IntermediateDirectory)/EditorNewAccount$(ObjectSuffix) $(IntermediateDirectory)/EditorAccount$(ObjectSuffix) $(IntermediateDirectory)/EditorMobile$(ObjectSuffix) $(IntermediateDirectory)/EditorArea$(ObjectSuffix) $(IntermediateDirectory)/EditorColour$(ObjectSuffix) $(IntermediateDirectory)/OLCEditor$(ObjectSuffix) $(IntermediateDirectory)/EditorAccountLogin$(ObjectSuffix) $(IntermediateDirectory)/EditorOOC$(ObjectSuffix) $(IntermediateDirectory)/EditorChunk$(ObjectSuffix) $(IntermediateDirectory)/EditorBool$(ObjectSuffix) \
-	$(IntermediateDirectory)/EditorDetail$(ObjectSuffix) $(IntermediateDirectory)/AccountManager$(ObjectSuffix) $(IntermediateDirectory)/AreaManager$(ObjectSuffix) $(IntermediateDirectory)/CharacterManager$(ObjectSuffix) $(IntermediateDirectory)/ColourManager$(ObjectSuffix) $(IntermediateDirectory)/CommandManager$(ObjectSuffix) $(IntermediateDirectory)/GrantGroupManager$(ObjectSuffix) $(IntermediateDirectory)/MCharacterManager$(ObjectSuffix) $(IntermediateDirectory)/PCharacterManager$(ObjectSuffix) $(IntermediateDirectory)/PermissionManager$(ObjectSuffix) \
-	$(IntermediateDirectory)/RaceManager$(ObjectSuffix) $(IntermediateDirectory)/RoomManager$(ObjectSuffix) $(IntermediateDirectory)/SectorManager$(ObjectSuffix) $(IntermediateDirectory)/ChunkManager$(ObjectSuffix) 
+	$(IntermediateDirectory)/Sector$(ObjectSuffix) $(IntermediateDirectory)/UBHandler$(ObjectSuffix) $(IntermediateDirectory)/UBSocket$(ObjectSuffix) $(IntermediateDirectory)/SQLSocket$(ObjectSuffix) $(IntermediateDirectory)/Command$(ObjectSuffix) $(IntermediateDirectory)/GrantGroup$(ObjectSuffix) $(IntermediateDirectory)/Permission$(ObjectSuffix) $(IntermediateDirectory)/Chunk$(ObjectSuffix) $(IntermediateDirectory)/chunkimporter$(ObjectSuffix) $(IntermediateDirectory)/Detail$(ObjectSuffix) \
+	$(IntermediateDirectory)/EditorOLC$(ObjectSuffix) $(IntermediateDirectory)/Editor$(ObjectSuffix) $(IntermediateDirectory)/EditorPermission$(ObjectSuffix) $(IntermediateDirectory)/EditorGrantGroup$(ObjectSuffix) $(IntermediateDirectory)/EditorString$(ObjectSuffix) $(IntermediateDirectory)/EditorCommand$(ObjectSuffix) $(IntermediateDirectory)/EditorScript$(ObjectSuffix) $(IntermediateDirectory)/EditorSector$(ObjectSuffix) $(IntermediateDirectory)/EditorRoom$(ObjectSuffix) $(IntermediateDirectory)/EditorPlaying$(ObjectSuffix) \
+	$(IntermediateDirectory)/EditorNewCharacter$(ObjectSuffix) $(IntermediateDirectory)/EditorNewAccount$(ObjectSuffix) $(IntermediateDirectory)/EditorAccount$(ObjectSuffix) $(IntermediateDirectory)/EditorMobile$(ObjectSuffix) $(IntermediateDirectory)/EditorArea$(ObjectSuffix) $(IntermediateDirectory)/EditorColour$(ObjectSuffix) $(IntermediateDirectory)/OLCEditor$(ObjectSuffix) $(IntermediateDirectory)/EditorAccountLogin$(ObjectSuffix) $(IntermediateDirectory)/EditorOOC$(ObjectSuffix) $(IntermediateDirectory)/EditorChunk$(ObjectSuffix) \
+	$(IntermediateDirectory)/EditorBool$(ObjectSuffix) $(IntermediateDirectory)/EditorDetail$(ObjectSuffix) $(IntermediateDirectory)/AccountManager$(ObjectSuffix) $(IntermediateDirectory)/AreaManager$(ObjectSuffix) $(IntermediateDirectory)/CharacterManager$(ObjectSuffix) $(IntermediateDirectory)/ColourManager$(ObjectSuffix) $(IntermediateDirectory)/CommandManager$(ObjectSuffix) $(IntermediateDirectory)/GrantGroupManager$(ObjectSuffix) $(IntermediateDirectory)/MCharacterManager$(ObjectSuffix) $(IntermediateDirectory)/PCharacterManager$(ObjectSuffix) \
+	$(IntermediateDirectory)/PermissionManager$(ObjectSuffix) $(IntermediateDirectory)/RaceManager$(ObjectSuffix) $(IntermediateDirectory)/RoomManager$(ObjectSuffix) $(IntermediateDirectory)/SectorManager$(ObjectSuffix) $(IntermediateDirectory)/ChunkManager$(ObjectSuffix) $(IntermediateDirectory)/DetailManager$(ObjectSuffix) 
 
 ##
 ## Main Build Tragets 
@@ -153,6 +153,11 @@ $(IntermediateDirectory)/chunkimporter$(ObjectSuffix): chunkimporter.cpp $(Inter
 	$(CompilerName) $(SourceSwitch)chunkimporter.cpp $(CmpOptions)   $(OutputSwitch)$(IntermediateDirectory)/chunkimporter$(ObjectSuffix) $(IncludePath)
 $(IntermediateDirectory)/chunkimporter$(ObjectSuffix).d:
 	@$(CompilerName) $(CmpOptions) $(IncludePath) -MT$(IntermediateDirectory)/chunkimporter$(ObjectSuffix) -MF$(IntermediateDirectory)/chunkimporter$(ObjectSuffix).d -MM chunkimporter.cpp
+
+$(IntermediateDirectory)/Detail$(ObjectSuffix): Detail.cpp $(IntermediateDirectory)/Detail$(ObjectSuffix).d
+	$(CompilerName) $(SourceSwitch)Detail.cpp $(CmpOptions)   $(OutputSwitch)$(IntermediateDirectory)/Detail$(ObjectSuffix) $(IncludePath)
+$(IntermediateDirectory)/Detail$(ObjectSuffix).d:
+	@$(CompilerName) $(CmpOptions) $(IncludePath) -MT$(IntermediateDirectory)/Detail$(ObjectSuffix) -MF$(IntermediateDirectory)/Detail$(ObjectSuffix).d -MM Detail.cpp
 
 $(IntermediateDirectory)/EditorOLC$(ObjectSuffix): EditorOLC.cpp $(IntermediateDirectory)/EditorOLC$(ObjectSuffix).d
 	$(CompilerName) $(SourceSwitch)EditorOLC.cpp $(CmpOptions)   $(OutputSwitch)$(IntermediateDirectory)/EditorOLC$(ObjectSuffix) $(IncludePath)
@@ -329,6 +334,11 @@ $(IntermediateDirectory)/ChunkManager$(ObjectSuffix): ChunkManager.cpp $(Interme
 $(IntermediateDirectory)/ChunkManager$(ObjectSuffix).d:
 	@$(CompilerName) $(CmpOptions) $(IncludePath) -MT$(IntermediateDirectory)/ChunkManager$(ObjectSuffix) -MF$(IntermediateDirectory)/ChunkManager$(ObjectSuffix).d -MM ChunkManager.cpp
 
+$(IntermediateDirectory)/DetailManager$(ObjectSuffix): DetailManager.cpp $(IntermediateDirectory)/DetailManager$(ObjectSuffix).d
+	$(CompilerName) $(SourceSwitch)DetailManager.cpp $(CmpOptions)   $(OutputSwitch)$(IntermediateDirectory)/DetailManager$(ObjectSuffix) $(IncludePath)
+$(IntermediateDirectory)/DetailManager$(ObjectSuffix).d:
+	@$(CompilerName) $(CmpOptions) $(IncludePath) -MT$(IntermediateDirectory)/DetailManager$(ObjectSuffix) -MF$(IntermediateDirectory)/DetailManager$(ObjectSuffix).d -MM DetailManager.cpp
+
 ##
 ## Clean
 ##
@@ -371,6 +381,8 @@ clean:
 	$(RM) $(IntermediateDirectory)/Chunk$(ObjectSuffix).d
 	$(RM) $(IntermediateDirectory)/chunkimporter$(ObjectSuffix)
 	$(RM) $(IntermediateDirectory)/chunkimporter$(ObjectSuffix).d
+	$(RM) $(IntermediateDirectory)/Detail$(ObjectSuffix)
+	$(RM) $(IntermediateDirectory)/Detail$(ObjectSuffix).d
 	$(RM) $(IntermediateDirectory)/EditorOLC$(ObjectSuffix)
 	$(RM) $(IntermediateDirectory)/EditorOLC$(ObjectSuffix).d
 	$(RM) $(IntermediateDirectory)/Editor$(ObjectSuffix)
@@ -441,6 +453,8 @@ clean:
 	$(RM) $(IntermediateDirectory)/SectorManager$(ObjectSuffix).d
 	$(RM) $(IntermediateDirectory)/ChunkManager$(ObjectSuffix)
 	$(RM) $(IntermediateDirectory)/ChunkManager$(ObjectSuffix).d
+	$(RM) $(IntermediateDirectory)/DetailManager$(ObjectSuffix)
+	$(RM) $(IntermediateDirectory)/DetailManager$(ObjectSuffix).d
 	$(RM) $(OutputFile)
 
 -include $(IntermediateDirectory)/*.d

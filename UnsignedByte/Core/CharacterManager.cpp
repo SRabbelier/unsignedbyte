@@ -44,22 +44,18 @@ bool CharacterManager::IllegalName(const std::string& name)
 	return false;
 }
 
-value_type CharacterManager::Add()
+KeysPtr CharacterManager::Add()
 {
 	SavableManagerPtr manager = SavableManager::getnew(db::TableImpls::Get()->CHARACTERS);
 	manager->save();
-	value_type id = manager->getkey(db::CharactersFields::Get()->CHARACTERID)->getValue();
-	if(id == 0)
-		Global::Get()->bug("CharacterManager::Add(), id = 0");
-	
-	return id;	
+	return manager->getkeys();
 }
 
 mud::CharacterPtr CharacterManager::GetByKey(value_type id)
 {
+	KeysPtr keys(new Keys(db::TableImpls::Get()->CHARACTERS));
 	KeyPtr key(new Key(db::CharactersFields::Get()->CHARACTERID, id));
-	Keys keys;
-	keys[db::CommandsFields::Get()->COMMANDID.get()] = key;
+	keys->addKey(key);
 	SavableManagerPtr manager = SavableManager::bykeys(db::TableImpls::Get()->CHARACTERS, keys);
 	CharacterPtr p(new Character(manager));
 	return p;
@@ -76,7 +72,7 @@ mud::CharacterPtr CharacterManager::GetByName(cstring value)
 value_type CharacterManager::lookupByName(cstring value)
 {
 	ValuePtr val(new Value(db::CharactersFields::Get()->NAME, value));
-	Keys keys = SavableManager::lookupvalue(val);
-	value_type id = keys[db::CharactersFields::Get()->CHARACTERID.get()];
+	KeysPtr keys = SavableManager::lookupvalue(val);
+	value_type id = keys->getKey(db::CharactersFields::Get()->CHARACTERID);
 	return id;
 }

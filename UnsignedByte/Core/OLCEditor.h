@@ -39,15 +39,16 @@ public:
 	
 	virtual SavablePtr getEditing() = 0;
 	virtual TableImplPtr getTable() = 0;
-	virtual long addNew() = 0;
+	virtual KeysPtr addNew() = 0;
 
 	virtual std::vector<std::string> getList() = 0;
 	virtual std::vector<std::string> getCommands() = 0;
 	
-	virtual void setEditing(long id) = 0;
+	virtual void setEditing(KeysPtr keys) = 0;
 	
 	void listCommands(const std::string& argument);
 	void newSavable(const std::string& argument);
+	void deleteSavable(const std::string& argument);
 	void editSavable(const std::string& argument);
 	void quitEditor(const std::string& argument);
 	void doneEditing(const std::string& argument);
@@ -66,6 +67,7 @@ protected:
 	
 	static SavableCommand m_listCommands;
 	static SavableCommand m_newSavable;
+	static SavableCommand m_deleteSavable;
 	static SavableCommand m_editSavable;
 	static SavableCommand m_quitEditor;
 	static SavableCommand m_doneEditing;

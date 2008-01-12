@@ -126,13 +126,13 @@ void EditorAccount::beginLogin(const std::string &argument)
 		return;
 	}
 	
-	Keys keys;
+	KeysPtr keys(new Keys(db::TableImpls::Get()->CHARACTERACCOUNT));
 	KeyPtr key;
 	
 	key = new Key(db::CharacterAccountFields::Get()->FKACCOUNTS, id);
-	keys[db::CharacterAccountFields::Get()->FKACCOUNTS.get()] = key;
+	keys->addKey(key);
 	key = new Key(db::CharacterAccountFields::Get()->FKCHARACTERS, m_sock->GetAccount()->getID());
-	keys[db::CharacterAccountFields::Get()->FKCHARACTERS.get()] = key;	
+	keys->addKey(key);
 	
 	bool hasAccount = false;
 	try

@@ -38,7 +38,8 @@ Objects=$(IntermediateDirectory)/Base64$(ObjectSuffix) $(IntermediateDirectory)/
 	$(IntermediateDirectory)/Lock$(ObjectSuffix) $(IntermediateDirectory)/MemFile$(ObjectSuffix) $(IntermediateDirectory)/Mutex$(ObjectSuffix) $(IntermediateDirectory)/Parse$(ObjectSuffix) $(IntermediateDirectory)/Query$(ObjectSuffix) $(IntermediateDirectory)/RandomNumber$(ObjectSuffix) $(IntermediateDirectory)/ResolvServer$(ObjectSuffix) $(IntermediateDirectory)/ResolvSocket$(ObjectSuffix) $(IntermediateDirectory)/SmtpdSocket$(ObjectSuffix) $(IntermediateDirectory)/Socket$(ObjectSuffix) \
 	$(IntermediateDirectory)/SocketHandler$(ObjectSuffix) $(IntermediateDirectory)/socket_include$(ObjectSuffix) $(IntermediateDirectory)/SSLInitializer$(ObjectSuffix) $(IntermediateDirectory)/StderrLog$(ObjectSuffix) $(IntermediateDirectory)/StdoutLog$(ObjectSuffix) $(IntermediateDirectory)/StreamSocket$(ObjectSuffix) $(IntermediateDirectory)/TcpSocket$(ObjectSuffix) $(IntermediateDirectory)/Thread$(ObjectSuffix) $(IntermediateDirectory)/UdpSocket$(ObjectSuffix) $(IntermediateDirectory)/Utility$(ObjectSuffix) \
 	$(IntermediateDirectory)/Coordinate$(ObjectSuffix) $(IntermediateDirectory)/Path$(ObjectSuffix) $(IntermediateDirectory)/Global$(ObjectSuffix) $(IntermediateDirectory)/sha2$(ObjectSuffix) $(IntermediateDirectory)/StringUtilities$(ObjectSuffix) $(IntermediateDirectory)/Tables$(ObjectSuffix) $(IntermediateDirectory)/Table$(ObjectSuffix) $(IntermediateDirectory)/Field$(ObjectSuffix) $(IntermediateDirectory)/DatabaseMgr$(ObjectSuffix) $(IntermediateDirectory)/SqliteMgr$(ObjectSuffix) \
-	$(IntermediateDirectory)/Statements$(ObjectSuffix) $(IntermediateDirectory)/ListActor$(ObjectSuffix) $(IntermediateDirectory)/CountActor$(ObjectSuffix) $(IntermediateDirectory)/SPKCriteria$(ObjectSuffix) $(IntermediateDirectory)/SavableManager$(ObjectSuffix) $(IntermediateDirectory)/FieldDef$(ObjectSuffix) $(IntermediateDirectory)/FieldImpl$(ObjectSuffix) $(IntermediateDirectory)/TableDef$(ObjectSuffix) $(IntermediateDirectory)/TableImpl$(ObjectSuffix) 
+	$(IntermediateDirectory)/Statements$(ObjectSuffix) $(IntermediateDirectory)/ListActor$(ObjectSuffix) $(IntermediateDirectory)/CountActor$(ObjectSuffix) $(IntermediateDirectory)/SPKCriteria$(ObjectSuffix) $(IntermediateDirectory)/SavableManager$(ObjectSuffix) $(IntermediateDirectory)/FieldDef$(ObjectSuffix) $(IntermediateDirectory)/FieldImpl$(ObjectSuffix) $(IntermediateDirectory)/TableDef$(ObjectSuffix) $(IntermediateDirectory)/TableImpl$(ObjectSuffix) $(IntermediateDirectory)/Keys$(ObjectSuffix) \
+	$(IntermediateDirectory)/MPKCriteria$(ObjectSuffix) 
 
 ##
 ## Main Build Tragets 
@@ -303,6 +304,16 @@ $(IntermediateDirectory)/TableImpl$(ObjectSuffix): TableImpl.cpp $(IntermediateD
 $(IntermediateDirectory)/TableImpl$(ObjectSuffix).d:
 	@$(CompilerName) $(CmpOptions) $(IncludePath) -MT$(IntermediateDirectory)/TableImpl$(ObjectSuffix) -MF$(IntermediateDirectory)/TableImpl$(ObjectSuffix).d -MM TableImpl.cpp
 
+$(IntermediateDirectory)/Keys$(ObjectSuffix): Keys.cpp $(IntermediateDirectory)/Keys$(ObjectSuffix).d
+	$(CompilerName) $(SourceSwitch)Keys.cpp $(CmpOptions)   $(OutputSwitch)$(IntermediateDirectory)/Keys$(ObjectSuffix) $(IncludePath)
+$(IntermediateDirectory)/Keys$(ObjectSuffix).d:
+	@$(CompilerName) $(CmpOptions) $(IncludePath) -MT$(IntermediateDirectory)/Keys$(ObjectSuffix) -MF$(IntermediateDirectory)/Keys$(ObjectSuffix).d -MM Keys.cpp
+
+$(IntermediateDirectory)/MPKCriteria$(ObjectSuffix): MPKCriteria.cpp $(IntermediateDirectory)/MPKCriteria$(ObjectSuffix).d
+	$(CompilerName) $(SourceSwitch)MPKCriteria.cpp $(CmpOptions)   $(OutputSwitch)$(IntermediateDirectory)/MPKCriteria$(ObjectSuffix) $(IncludePath)
+$(IntermediateDirectory)/MPKCriteria$(ObjectSuffix).d:
+	@$(CompilerName) $(CmpOptions) $(IncludePath) -MT$(IntermediateDirectory)/MPKCriteria$(ObjectSuffix) -MF$(IntermediateDirectory)/MPKCriteria$(ObjectSuffix).d -MM MPKCriteria.cpp
+
 ##
 ## Clean
 ##
@@ -405,6 +416,10 @@ clean:
 	$(RM) $(IntermediateDirectory)/TableDef$(ObjectSuffix).d
 	$(RM) $(IntermediateDirectory)/TableImpl$(ObjectSuffix)
 	$(RM) $(IntermediateDirectory)/TableImpl$(ObjectSuffix).d
+	$(RM) $(IntermediateDirectory)/Keys$(ObjectSuffix)
+	$(RM) $(IntermediateDirectory)/Keys$(ObjectSuffix).d
+	$(RM) $(IntermediateDirectory)/MPKCriteria$(ObjectSuffix)
+	$(RM) $(IntermediateDirectory)/MPKCriteria$(ObjectSuffix).d
 	$(RM) $(OutputFile)
 
 -include $(IntermediateDirectory)/*.d

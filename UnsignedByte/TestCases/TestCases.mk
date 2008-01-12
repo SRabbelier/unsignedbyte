@@ -34,7 +34,7 @@ Libs=$(LibrarySwitch)ubdal $(LibrarySwitch)ubresource $(LibrarySwitch)sqlite3
 LibPath=$(LibraryPathSwitch)../lib 
 endif
 
-Objects=$(IntermediateDirectory)/main$(ObjectSuffix) $(IntermediateDirectory)/chunkimporter$(ObjectSuffix) $(IntermediateDirectory)/Chunk$(ObjectSuffix) $(IntermediateDirectory)/ChunkManager$(ObjectSuffix) 
+Objects=$(IntermediateDirectory)/main$(ObjectSuffix) $(IntermediateDirectory)/chunkimporter$(ObjectSuffix) $(IntermediateDirectory)/Chunk$(ObjectSuffix) $(IntermediateDirectory)/ChunkManager$(ObjectSuffix) $(IntermediateDirectory)/Detail$(ObjectSuffix) $(IntermediateDirectory)/DetailManager$(ObjectSuffix) 
 
 ##
 ## Main Build Tragets 
@@ -74,6 +74,16 @@ $(IntermediateDirectory)/ChunkManager$(ObjectSuffix): ../Core/ChunkManager.cpp $
 $(IntermediateDirectory)/ChunkManager$(ObjectSuffix).d:
 	@$(CompilerName) $(CmpOptions) $(IncludePath) -MT$(IntermediateDirectory)/ChunkManager$(ObjectSuffix) -MF$(IntermediateDirectory)/ChunkManager$(ObjectSuffix).d -MM ../Core/ChunkManager.cpp
 
+$(IntermediateDirectory)/Detail$(ObjectSuffix): ../Core/Detail.cpp $(IntermediateDirectory)/Detail$(ObjectSuffix).d
+	$(CompilerName) $(SourceSwitch)../Core/Detail.cpp $(CmpOptions)   $(OutputSwitch)$(IntermediateDirectory)/Detail$(ObjectSuffix) $(IncludePath)
+$(IntermediateDirectory)/Detail$(ObjectSuffix).d:
+	@$(CompilerName) $(CmpOptions) $(IncludePath) -MT$(IntermediateDirectory)/Detail$(ObjectSuffix) -MF$(IntermediateDirectory)/Detail$(ObjectSuffix).d -MM ../Core/Detail.cpp
+
+$(IntermediateDirectory)/DetailManager$(ObjectSuffix): ../Core/DetailManager.cpp $(IntermediateDirectory)/DetailManager$(ObjectSuffix).d
+	$(CompilerName) $(SourceSwitch)../Core/DetailManager.cpp $(CmpOptions)   $(OutputSwitch)$(IntermediateDirectory)/DetailManager$(ObjectSuffix) $(IncludePath)
+$(IntermediateDirectory)/DetailManager$(ObjectSuffix).d:
+	@$(CompilerName) $(CmpOptions) $(IncludePath) -MT$(IntermediateDirectory)/DetailManager$(ObjectSuffix) -MF$(IntermediateDirectory)/DetailManager$(ObjectSuffix).d -MM ../Core/DetailManager.cpp
+
 ##
 ## Clean
 ##
@@ -86,6 +96,10 @@ clean:
 	$(RM) $(IntermediateDirectory)/Chunk$(ObjectSuffix).d
 	$(RM) $(IntermediateDirectory)/ChunkManager$(ObjectSuffix)
 	$(RM) $(IntermediateDirectory)/ChunkManager$(ObjectSuffix).d
+	$(RM) $(IntermediateDirectory)/Detail$(ObjectSuffix)
+	$(RM) $(IntermediateDirectory)/Detail$(ObjectSuffix).d
+	$(RM) $(IntermediateDirectory)/DetailManager$(ObjectSuffix)
+	$(RM) $(IntermediateDirectory)/DetailManager$(ObjectSuffix).d
 	$(RM) $(OutputFile)
 
 -include $(IntermediateDirectory)/*.d

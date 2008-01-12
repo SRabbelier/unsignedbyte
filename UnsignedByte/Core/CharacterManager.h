@@ -36,7 +36,7 @@ namespace mud
 		std::vector<std::string> List();
 		bool IllegalName(const std::string& name);
 		
-		value_type Add();
+		KeysPtr Add();
 		mud::CharacterPtr GetByKey(value_type id);
 		mud::CharacterPtr GetByName(cstring name);
 		

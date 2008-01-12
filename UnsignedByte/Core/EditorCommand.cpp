@@ -104,7 +104,7 @@ TableImplPtr EditorCommand::getTable()
 	return db::TableImpls::Get()->COMMANDS;
 }
 
-long EditorCommand::addNew()
+KeysPtr EditorCommand::addNew()
 {
 	return mud::CommandManager::Get()->Add();
 }
@@ -114,15 +114,15 @@ std::vector<std::string> EditorCommand::getList()
 	return mud::CommandManager::Get()->List();
 }
 
-void EditorCommand::setEditing(long id)
+void EditorCommand::setEditing(KeysPtr keys)
 {
-	if(id == 0)
+	if(!keys->size())
 	{
 		m_command.reset();
 		return;
 	}
 	
-	m_command = mud::CommandManager::Get()->GetByKey(id);
+	m_command = mud::CommandManager::Get()->GetByKey(keys->first()->getValue());
 	return;
 }
 

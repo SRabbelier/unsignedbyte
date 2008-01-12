@@ -54,7 +54,10 @@ typedef std::vector<KeyDefPtr> KeyDefs;
 
 class Key;
 typedef SmartPtr<Key> KeyPtr;
-typedef std::map<KeyDef*, KeyPtr> Keys;
+
+class Keys;
+typedef std::map<KeyDef*, KeyPtr> KeyMap;
+typedef SmartPtr<Keys> KeysPtr;
 
 class Value;
 typedef SmartPtr<Value> ValuePtr;

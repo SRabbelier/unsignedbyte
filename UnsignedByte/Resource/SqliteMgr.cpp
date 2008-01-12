@@ -18,7 +18,12 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#include "SavableHeaders.h"
+#include "FieldDef.h"
+#include "TableDef.h"
+#include "SavableManager.h"
+#include "TableImpl.h"
+#include "FieldImpl.h"
+#include "KeyDef.h"
 
 #include "SqliteMgr.h"
 #include "DatabaseMgr.h"

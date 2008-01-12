@@ -19,16 +19,17 @@
  ***************************************************************************/
 
 #include "SavableManager.h"
-#include "SqliteMgr.h"
-
-#include "TableImpl.h"
-#include "Value.h"
-#include "FieldImpl.h"
 #include "Key.h"
 #include "KeyDef.h"
+#include "Keys.h"
+#include "Value.h"
+#include "FieldImpl.h"
+#include "TableImpl.h"
+#include "SqliteMgr.h"
 
 SavableManager::SavableManager(TableImplPtr table) :
 m_table(table),
+m_keys(new Keys(table)),
 m_newentry(true),
 m_dirty(false)
 {
@@ -41,7 +42,7 @@ m_dirty(false)
 	for(KeyDefs::const_iterator it = table->keyimplbegin(); it != table->keyimplend(); it++)
 	{
 		KeyPtr key(new Key(*it, 0));
-		m_keys[it->get()] = key;
+		m_keys->addKey(key);
 	}
 }
 
@@ -58,12 +59,12 @@ SavableManagerPtr SavableManager::getnew(TableImplPtr table)
 
 SavableManagerPtr SavableManager::bykeys(TableImplPtr table, KeyPtr key)
 {
-	Keys keys;
-	keys[key->getKeyDef().get()] = key;
+	KeysPtr keys(new Keys(table));
+	keys->addKey(key);
 	return bykeys(table, keys);
 }
 
-SavableManagerPtr SavableManager::bykeys(TableImplPtr table, Keys keys)
+SavableManagerPtr SavableManager::bykeys(TableImplPtr table, KeysPtr keys)
 {
 	// assert(keys.size() == m_table->keySize());
 	
@@ -81,10 +82,10 @@ SavableManagerPtr SavableManager::byvalue(ValuePtr value)
 	return result;
 }
 
-Keys SavableManager::lookupvalue(ValuePtr value)
+KeysPtr SavableManager::lookupvalue(ValuePtr value)
 {
 	SavableManagerPtr result = byvalue(value);
-	Keys keys = result->getkeys();
+	KeysPtr keys = result->getkeys();
 	return keys;
 }
 
@@ -122,7 +123,7 @@ void SavableManager::bindKeys(sqlite3_stmt* stmt, int startpos) const
 {
 	int pos = startpos;
 	int rc = 0;
-	for(Keys::const_iterator it = m_keys.begin(); it != m_keys.end(); it++)
+	for(KeyMap::const_iterator it = m_keys->begin(); it != m_keys->end(); it++)
 	{
 		rc = sqlite3_bind_int64(stmt, pos, it->second->getValue());
 		
@@ -178,7 +179,7 @@ void SavableManager::parseInsert(sqlite3* db)
 	// assert(m_keys.size() == 0);
 	value_type value = sqlite3_last_insert_rowid(db);
 	KeyPtr key(new Key(m_table->firstImplKey(), value));
-	m_keys[key->getKeyDef().get()] = key;
+	m_keys->addKey(key);
 }
 
 void SavableManager::parseSelect(sqlite3_stmt* stmt)
@@ -212,9 +213,7 @@ void SavableManager::parseLookup(sqlite3_stmt* stmt)
 {
 	// assert(m_keys.size() == 0);
 	KeyPtr key(new Key(m_table->firstImplKey(), sqlite3_column_int64(stmt, 0)));
-	Keys keys;
-	keys[key->getKeyDef().get()] = key;
-	m_keys = keys;
+	m_keys->addKey(key);
 }
 
 TableImplPtr SavableManager::getTable() const
@@ -222,15 +221,15 @@ TableImplPtr SavableManager::getTable() const
 	return m_table;
 }
 
-const Keys& SavableManager::getkeys() const
+KeysPtr SavableManager::getkeys() const
 {
 	return m_keys;
 }
 
 KeyPtr SavableManager::getkey(KeyDefPtr keydef) const
 {
-	Keys::const_iterator it = m_keys.find(keydef.get());
-	if(it != m_keys.end())
+	KeyMap::const_iterator it = m_keys->find(keydef.get());
+	if(it != m_keys->end())
 		return it->second;
 	else
 		throw std::invalid_argument("SavableManager::getkey(), key not in m_keys.");
@@ -245,12 +244,12 @@ ValuePtr SavableManager::getfield(FieldImplPtr field) const
 		throw std::invalid_argument("SavableManager::getfield(), field not in m_fields.");
 }
 
-void SavableManager::setkeys(Keys keys)
+void SavableManager::setkeys(KeysPtr keys)
 {
-	if(keys.size() != m_table->keysize())
+	if(keys->size() != m_table->keysize())
 		throw std::invalid_argument("SavableManager::setkeys(), key sizes don't match.");
 		
-	for(Keys::const_iterator it = keys.begin(); it != keys.end(); it++)
+	for(KeyMap::const_iterator it = keys->begin(); it != keys->end(); it++)
 	{
 		if(it->first->getTable() != m_table)
 			throw std::invalid_argument("SavableManager::setkeys(), key type is not m_table.");

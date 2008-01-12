@@ -46,7 +46,8 @@ namespace mud
 		TableImplPtr GetTable();
 		std::vector<std::string> List();
 		
-		mud::PermissionPtr GetByKeys(value_type account, value_type grantgroup);
+		mud::PermissionPtr GetByKeys(KeysPtr keys);
+		mud::PermissionPtr GetByKeys(value_type grantgroup, value_type account);
 		
 		value_type lookupByName(cstring value);
 

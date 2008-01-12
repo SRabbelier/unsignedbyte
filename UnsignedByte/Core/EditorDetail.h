@@ -19,15 +19,12 @@
  ***************************************************************************/
 #pragma once
 
-#include <string>
+#include "Types.h"
+
 #include "OLCEditor.h"
-#include "singleton.h"
 #include "Interpreter.h"
 #include "CommandObject.h"
-#include "smart_ptr.h"
-#include "db.h"
 
-class UBSocket;
 namespace mud 
 { 
 	class Detail; 
@@ -39,7 +36,7 @@ class EditorDetail : public Editor
 public:
 	typedef CommandObject<EditorDetail> DetailCommand;
 
-	EditorDetail(UBSocket* sock, SmartPtr<db::Details> detail);
+	EditorDetail(UBSocket* sock, mud::DetailPtr detail);
 	~EditorDetail(void);
 	
 	void OnFocus();
@@ -66,7 +63,7 @@ private:
 		M_DESCRIPTION,
 	};
 	
-	SmartPtr<db::Details> m_detail;
+	mud::DetailPtr m_detail;
 	std::string m_value;
 	EditorDetail::E_TARGET m_target;
 	

@@ -127,7 +127,7 @@ TableImplPtr EditorChunk::getTable()
 	return db::TableImpls::Get()->CHUNKS;
 }
 
-long EditorChunk::addNew()
+KeysPtr EditorChunk::addNew()
 {
 	return mud::ChunkManager::Get()->Add();
 }
@@ -137,15 +137,15 @@ std::vector<std::string> EditorChunk::getList()
 	return mud::ChunkManager::Get()->List();
 }
 
-void EditorChunk::setEditing(long id)
+void EditorChunk::setEditing(KeysPtr keys)
 {
-	if(id == 0)
+	if(!keys->size())
 	{
 		m_chunk.reset();
 		return;
 	}
 	
-	m_chunk = mud::ChunkManager::Get()->GetByKey(id);
+	m_chunk = mud::ChunkManager::Get()->GetByKey(keys->first()->getValue());
 	return;
 }
 

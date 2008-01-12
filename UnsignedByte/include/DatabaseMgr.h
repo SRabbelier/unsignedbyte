@@ -40,7 +40,7 @@ public:
 	/**
 	 * Savable Interaction
 	 */
-	long CountSavable(const TableImplPtr table, const long id);
+	long CountSavable(const TableImplPtr table, KeysPtr keys);
 
 private: // functions
 	DatabaseMgr();
