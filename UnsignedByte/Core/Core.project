@@ -3,7 +3,6 @@
   <VirtualDirectory Name="Core Source Files">
     <File Name="Account.cpp"/>
     <File Name="Area.cpp"/>
-    <File Name="Cache.cpp"/>
     <File Name="Character.cpp"/>
     <File Name="Colour.cpp"/>
     <File Name="main.cpp"/>
@@ -24,9 +23,7 @@
   </VirtualDirectory>
   <VirtualDirectory Name="Core Header Files">
     <File Name="Account.h"/>
-    <File Name="Action.h"/>
     <File Name="Area.h"/>
-    <File Name="Cache.h"/>
     <File Name="Character.h"/>
     <File Name="Colour.h"/>
     <File Name="Interpreter.h"/>
