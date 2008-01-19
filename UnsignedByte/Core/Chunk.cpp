@@ -28,7 +28,7 @@ Chunk::Chunk(SavableManagerPtr chunk) :
 m_chunk(chunk)
 {
 	if(!m_chunk)
-		throw new std::invalid_argument("Chunk::Chunk(), m_chunk == NULL!");
+		throw std::invalid_argument("Chunk::Chunk(), m_chunk == NULL!");
 }
 
 Chunk::~Chunk(void)

@@ -28,7 +28,7 @@ Detail::Detail(SavableManagerPtr detail) :
 m_detail(detail)
 {
 	if(!m_detail)
-		throw new std::invalid_argument("Detail::Detail(), m_detail == NULL!");
+		throw std::invalid_argument("Detail::Detail(), m_detail == NULL!");
 }
 
 Detail::~Detail(void)

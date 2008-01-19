@@ -28,7 +28,7 @@ Area::Area(SavableManagerPtr area) :
 m_area(area)
 {
 	if(!m_area)
-		throw new std::invalid_argument("Area::Area(), m_area == NULL!");
+		throw std::invalid_argument("Area::Area(), m_area == NULL!");
 }
 
 Area::~Area(void)
