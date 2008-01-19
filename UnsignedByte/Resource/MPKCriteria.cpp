@@ -53,7 +53,7 @@ bool MPKCriteria::evaluate(sqlite3_stmt* statement)
 bool MPKCriteria::evaluate(sqlite3_stmt* statement, const TablePtr table)
 {
 	if(table->hasSingularPrimaryKey())
-		throw new std::logic_error("MPKCriteria::evaluate(), table has a singular primary key.");
+		throw std::logic_error("MPKCriteria::evaluate(), table has a singular primary key.");
 		
 	return evaluate(statement);
 }

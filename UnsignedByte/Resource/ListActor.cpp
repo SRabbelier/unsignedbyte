@@ -55,7 +55,7 @@ void ListActor::parseRow(sqlite3_stmt* statement, Table* table)
 		default:
 			std::ostringstream err;
 			err << "Unknown data type '" << type << "'.";
-			throw new std::runtime_error(err.str());
+			throw std::runtime_error(err.str());
 		}
 
 		result.append(str.str());
