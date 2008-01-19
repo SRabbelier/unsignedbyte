@@ -19,11 +19,8 @@
  ***************************************************************************/
 #pragma once
 
-#include <string>
+#include "Types.h"
 #include "Editor.h"
-#include "smart_ptr.h"
-
-class UBSocket;
 
 namespace mud
 {

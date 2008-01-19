@@ -19,10 +19,8 @@
  ***************************************************************************/
 #pragma once
 
-#include <string>
+#include "Types.h"
 #include "Editor.h"
-
-class UBSocket;
 
 class EditorNewCharacter : public Editor
 {

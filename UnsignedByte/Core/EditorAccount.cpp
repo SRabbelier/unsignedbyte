@@ -18,7 +18,6 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#include "Action.h"
 #include "EditorAccount.h"
 #include "EditorOLC.h"
 #include "EditorNewCharacter.h"

@@ -22,8 +22,6 @@
 #include "Types.h"
 #include "Savable.h"
 
-class UBSocket;
-
 namespace mud
 {
 	class Account;

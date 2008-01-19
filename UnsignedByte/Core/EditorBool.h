@@ -19,13 +19,10 @@
  ***************************************************************************/
 #pragma once
 
-#include <string>
-#include "OLCEditor.h"
-#include "singleton.h"
-#include "Interpreter.h"
-#include "Action.h"
+#include "Types.h"
 
-class UBSocket;
+#include "OLCEditor.h"
+#include "Interpreter.h"
 
 class EditorBool : public Editor
 {

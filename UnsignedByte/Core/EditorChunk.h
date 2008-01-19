@@ -19,14 +19,12 @@
  ***************************************************************************/
 #pragma once
 
-#include <string>
+#include "Types.h"
+
 #include "OLCEditor.h"
-#include "singleton.h"
 #include "Interpreter.h"
 #include "CommandObject.h"
-#include "smart_ptr.h"
 
-class UBSocket;
 namespace mud 
 { 
 	class Chunk; 

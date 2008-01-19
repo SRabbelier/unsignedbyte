@@ -19,13 +19,11 @@
  ***************************************************************************/
 #pragma once
 
-#include <string>
+#include "Types.h"
+
 #include "Editor.h"
-#include "singleton.h"
 #include "Interpreter.h"
 #include "CommandObject.h"
-
-class UBSocket;
 
 class EditorOLC : public Editor
 {

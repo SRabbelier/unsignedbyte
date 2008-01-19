@@ -19,11 +19,10 @@
  ***************************************************************************/
 #pragma once
 
-#include <string>
+#include "Types.h"
+
 #include "OLCEditor.h"
-#include "singleton.h"
 #include "Interpreter.h"
-#include "Action.h"
 
 class EditorOOC : public Editor
 {

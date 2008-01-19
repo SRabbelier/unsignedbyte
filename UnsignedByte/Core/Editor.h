@@ -19,10 +19,7 @@
  ***************************************************************************/
 #pragma once
 
-#include <string>
-#include "Global.h"
-
-class UBSocket;
+#include "Types.h"
 
 class Editor
 {
@@ -34,9 +31,9 @@ public:
 	virtual void OnFocus() { }
 	
 	virtual std::string name() = 0;
-	virtual std::string prompt() { return Global::Get()->EmptyString; };
+	virtual std::string prompt(); // { return Global::Get()->EmptyString; };
 	
-	virtual std::string lookup(const std::string& action) { return Global::Get()->EmptyString; };
+	virtual std::string lookup(const std::string& action); // { return Global::Get()->EmptyString; };
 	virtual void dispatch(const std::string& action, const std::string& argument) { return; };
 	
 	void Send(const std::string& msg);

@@ -25,7 +25,6 @@
 #include "AccountManager.h"
 #include "Global.h"
 #include "DatabaseMgr.h"
-#include "Cache.h"
 #include "db.h"
 
 EditorNewAccount::EditorNewAccount(UBSocket* sock) :

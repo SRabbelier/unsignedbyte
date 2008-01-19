@@ -19,16 +19,11 @@
  ***************************************************************************/
 #pragma once
 
-#include <string>
-
-#include "smart_ptr.h"
+#include "Types.h"
 
 #include "Editor.h"
-#include "singleton.h"
 #include "Interpreter.h"
 #include "CommandObject.h"
-
-class UBSocket;
 
 namespace mud 
 { 

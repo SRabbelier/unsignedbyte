@@ -18,10 +18,7 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-class UBSocket;
-#include "Cache.h"
 #include "Account.h"
-#include "DatabaseMgr.h"
 #include "SavableHeaders.h"
 #include "db.h"
 

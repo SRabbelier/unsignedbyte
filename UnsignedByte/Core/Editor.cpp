@@ -24,12 +24,12 @@
 #include "Parse.h"
 #include "Permission.h"
 #include "PermissionManager.h"
-#include "Cache.h"
 #include "Command.h"
 #include "CommandManager.h"
 #include "UBSocket.h"
 #include "Account.h"
 #include "Exceptions.h"
+#include "Global.h"
 
 using mud::Permission;
 using mud::Command;
@@ -44,6 +44,16 @@ m_sock(sock)
 Editor::~Editor()
 {
 	
+}
+
+std::string Editor::prompt()
+{ 
+	return Global::Get()->EmptyString; 
+}
+	
+std::string Editor::lookup(const std::string& action) 
+{ 
+	return Global::Get()->EmptyString; 
 }
 
 void Editor::Send(const std::string& msg) 

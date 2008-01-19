@@ -19,10 +19,7 @@
  ***************************************************************************/
 #pragma once
 
-#include <string>
-#include <smart_ptr.h>
-
-class UBSocket;
+#include "Types.h"
 
 template <class T>
 class CommandObject
