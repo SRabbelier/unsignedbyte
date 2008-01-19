@@ -26,6 +26,7 @@
 #include "FieldImpl.h"
 #include "TableImpl.h"
 #include "SqliteMgr.h"
+#include "SqliteError.h"
 
 SavableManager::SavableManager(TableImplPtr table) :
 m_table(table),
@@ -119,7 +120,7 @@ bool SavableManager::exists()
 	return true;
 }
 
-void SavableManager::bindKeys(sqlite3_stmt* stmt, int startpos) const
+void SavableManager::bindKeys(sqlite3* db, sqlite3_stmt* stmt, int startpos) const
 {
 	int pos = startpos;
 	int rc = 0;
@@ -128,12 +129,12 @@ void SavableManager::bindKeys(sqlite3_stmt* stmt, int startpos) const
 		rc = sqlite3_bind_int64(stmt, pos, it->second->getValue());
 		
 		if(rc != SQLITE_OK)
-			throw new std::runtime_error("SavableManager::bindKeys(), rc != SQLITE_OK.");
+			throw SqliteError(db);
 		pos++;
 	}
 }
 
-void SavableManager::bindFields(sqlite3_stmt* stmt, int startpos) const
+void SavableManager::bindFields(sqlite3* db, sqlite3_stmt* stmt, int startpos) const
 {
 	int pos = startpos;
 	int rc = 0;
@@ -151,18 +152,18 @@ void SavableManager::bindFields(sqlite3_stmt* stmt, int startpos) const
 			rc = sqlite3_bind_int64(stmt, pos, it->second->getIntegerValue());
 			
 		if(rc != SQLITE_OK)
-			throw new std::runtime_error("SavableManager::bindFields(), rc != SQLITE_OK.");
+			throw SqliteError(db);
 		pos++;
 	}
 }
 
-void SavableManager::bindUpdate(sqlite3_stmt* stmt) const
+void SavableManager::bindUpdate(sqlite3* db, sqlite3_stmt* stmt) const
 {
-	bindFields(stmt);
-	bindKeys(stmt, m_fields.size() + 1);
+	bindFields(db, stmt);
+	bindKeys(db, stmt, m_fields.size() + 1);
 }
 
-void SavableManager::bindLookup(sqlite3_stmt* stmt) const
+void SavableManager::bindLookup(sqlite3* db, sqlite3_stmt* stmt) const
 {
 	int rc = 0;
 	if(m_lookupvalue->getField()->isText())
@@ -171,7 +172,7 @@ void SavableManager::bindLookup(sqlite3_stmt* stmt) const
 		rc = sqlite3_bind_int64(stmt, 1, m_lookupvalue->getIntegerValue());
 		
 	if(rc != SQLITE_OK)
-		throw new std::runtime_error("SavableManager::bindLookup(), rc != SQLITE_OK.");
+		throw SqliteError(db);
 }
 
 void SavableManager::parseInsert(sqlite3* db)

@@ -37,10 +37,10 @@ class SavableManager
 		bool exists();
 
 		// Bindable interface
-		void bindKeys(sqlite3_stmt* stmt, int startpos = 1) const;
-		void bindFields(sqlite3_stmt* stmt, int startpos = 1) const;
-		void bindUpdate(sqlite3_stmt* stmt) const;
-		void bindLookup(sqlite3_stmt* stmt) const;
+		void bindKeys(sqlite3* db, sqlite3_stmt* stmt, int startpos = 1) const;
+		void bindFields(sqlite3* db, sqlite3_stmt* stmt, int startpos = 1) const;
+		void bindUpdate(sqlite3* db, sqlite3_stmt* stmt) const;
+		void bindLookup(sqlite3* db, sqlite3_stmt* stmt) const;
 		
 		void parseInsert(sqlite3* db);
 		void parseSelect(sqlite3_stmt* stmt);

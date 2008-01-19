@@ -50,7 +50,7 @@ void SqliteMgr::doInsert(SavableManager* bindable)
 	sqlite3_reset(insert);
 	
 	if(!table->hasSingularPrimaryKey())
-		bindable->bindKeys(insert);	
+		bindable->bindKeys(m_odb->db, insert);
 		
 	doStatement(insert);
 	
@@ -66,7 +66,7 @@ void SqliteMgr::doErase(SavableManager* bindable)
 	sqlite3_stmt* erase = getEraseStmt(table);
 	sqlite3_reset(erase);
 	
-	bindable->bindKeys(erase);
+	bindable->bindKeys(m_odb->db, erase);
 	doStatement(erase);	
 	
 	commit(table);
@@ -78,7 +78,7 @@ void SqliteMgr::doUpdate(SavableManager* bindable)
 	sqlite3_stmt* update = getUpdateStmt(table);
 	sqlite3_reset(update);
 	
-	bindable->bindUpdate(update);
+	bindable->bindUpdate(m_odb->db, update);
 	doStatement(update);
 	
 	commit(table);
@@ -90,7 +90,7 @@ void SqliteMgr::doSelect(SavableManagerPtr bindable)
 	sqlite3_stmt* select = getSelectStmt(table);
 	sqlite3_reset(select);
 	
-	bindable->bindKeys(select);
+	bindable->bindKeys(m_odb->db, select);
 	if(doStatement(select))
 		bindable->parseSelect(select);
 	else
@@ -103,7 +103,7 @@ void SqliteMgr::doLookup(SavableManagerPtr bindable, FieldPtr field)
 	sqlite3_stmt* lookup = getLookupStmt(table, field);
 	sqlite3_reset(lookup);
 	
-	bindable->bindLookup(lookup);
+	bindable->bindLookup(m_odb->db, lookup);
 	if(doStatement(lookup))
 	{
 		bindable->parseLookup(lookup);
