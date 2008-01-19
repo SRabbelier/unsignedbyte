@@ -19,12 +19,7 @@
  ***************************************************************************/
 #pragma once
 
-#include <map>
-#include <string>
-#include <vector>
-
-typedef std::vector<std::string> Strings;
-typedef Strings::iterator StringsI;
+#include "Types.h"
 
 template <class T>
 class Interpreter

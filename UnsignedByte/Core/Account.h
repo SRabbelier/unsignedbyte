@@ -19,8 +19,7 @@
  ***************************************************************************/
 #pragma once
 
-#include "Types.h"
-#include "Savable.h"
+#include "SavableHeaders.h"
 
 namespace mud
 {

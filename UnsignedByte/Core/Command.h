@@ -21,8 +21,6 @@
 
 #include "SavableHeaders.h"
 
-#include "Permission.h"
-
 namespace mud
 {
 	class CommandManager;

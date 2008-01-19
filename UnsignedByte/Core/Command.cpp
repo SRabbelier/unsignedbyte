@@ -26,6 +26,7 @@
 #include "PermissionManager.h"
 #include "Account.h"
 #include "Exceptions.h"
+#include "Permission.h"
 
 using mud::Command;
 

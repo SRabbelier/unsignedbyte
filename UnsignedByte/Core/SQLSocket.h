@@ -19,14 +19,8 @@
  ***************************************************************************/
 #pragma once
 
-#include <string>
-
 #include <TcpSocket.h>
 #include <ISocketHandler.h>
-#include "Global.h"
-
-class Account;
-class Editor;
 
 class SQLSocket : public TcpSocket
 {
