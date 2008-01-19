@@ -37,7 +37,7 @@ endif
 Objects=$(IntermediateDirectory)/Base64$(ObjectSuffix) $(IntermediateDirectory)/Database$(ObjectSuffix) $(IntermediateDirectory)/Debug$(ObjectSuffix) $(IntermediateDirectory)/Event$(ObjectSuffix) $(IntermediateDirectory)/EventHandler$(ObjectSuffix) $(IntermediateDirectory)/EventTime$(ObjectSuffix) $(IntermediateDirectory)/File$(ObjectSuffix) $(IntermediateDirectory)/IEventOwner$(ObjectSuffix) $(IntermediateDirectory)/Ipv4Address$(ObjectSuffix) $(IntermediateDirectory)/Ipv6Address$(ObjectSuffix) \
 	$(IntermediateDirectory)/Lock$(ObjectSuffix) $(IntermediateDirectory)/MemFile$(ObjectSuffix) $(IntermediateDirectory)/Mutex$(ObjectSuffix) $(IntermediateDirectory)/Parse$(ObjectSuffix) $(IntermediateDirectory)/Query$(ObjectSuffix) $(IntermediateDirectory)/RandomNumber$(ObjectSuffix) $(IntermediateDirectory)/ResolvServer$(ObjectSuffix) $(IntermediateDirectory)/ResolvSocket$(ObjectSuffix) $(IntermediateDirectory)/SmtpdSocket$(ObjectSuffix) $(IntermediateDirectory)/Socket$(ObjectSuffix) \
 	$(IntermediateDirectory)/SocketHandler$(ObjectSuffix) $(IntermediateDirectory)/socket_include$(ObjectSuffix) $(IntermediateDirectory)/SSLInitializer$(ObjectSuffix) $(IntermediateDirectory)/StderrLog$(ObjectSuffix) $(IntermediateDirectory)/StdoutLog$(ObjectSuffix) $(IntermediateDirectory)/StreamSocket$(ObjectSuffix) $(IntermediateDirectory)/TcpSocket$(ObjectSuffix) $(IntermediateDirectory)/Thread$(ObjectSuffix) $(IntermediateDirectory)/UdpSocket$(ObjectSuffix) $(IntermediateDirectory)/Utility$(ObjectSuffix) \
-	$(IntermediateDirectory)/Coordinate$(ObjectSuffix) $(IntermediateDirectory)/Path$(ObjectSuffix) $(IntermediateDirectory)/Global$(ObjectSuffix) $(IntermediateDirectory)/sha2$(ObjectSuffix) $(IntermediateDirectory)/StringUtilities$(ObjectSuffix) $(IntermediateDirectory)/Tables$(ObjectSuffix) $(IntermediateDirectory)/Table$(ObjectSuffix) $(IntermediateDirectory)/Field$(ObjectSuffix) $(IntermediateDirectory)/DatabaseMgr$(ObjectSuffix) $(IntermediateDirectory)/SqliteMgr$(ObjectSuffix) \
+	$(IntermediateDirectory)/Coordinate$(ObjectSuffix) $(IntermediateDirectory)/Path$(ObjectSuffix) $(IntermediateDirectory)/Global$(ObjectSuffix) $(IntermediateDirectory)/sha2$(ObjectSuffix) $(IntermediateDirectory)/StringUtilities$(ObjectSuffix) $(IntermediateDirectory)/Tables$(ObjectSuffix) $(IntermediateDirectory)/Table$(ObjectSuffix) $(IntermediateDirectory)/Field$(ObjectSuffix) $(IntermediateDirectory)/DatabaseMgr$(ObjectSuffix) $(IntermediateDirectory)/SqliteMgr$(ObjectSuffix) $(IntermediateDirectory)/SqliteError$(ObjectSuffix) \
 	$(IntermediateDirectory)/Statements$(ObjectSuffix) $(IntermediateDirectory)/ListActor$(ObjectSuffix) $(IntermediateDirectory)/CountActor$(ObjectSuffix) $(IntermediateDirectory)/SPKCriteria$(ObjectSuffix) $(IntermediateDirectory)/SavableManager$(ObjectSuffix) $(IntermediateDirectory)/FieldDef$(ObjectSuffix) $(IntermediateDirectory)/FieldImpl$(ObjectSuffix) $(IntermediateDirectory)/TableDef$(ObjectSuffix) $(IntermediateDirectory)/TableImpl$(ObjectSuffix) $(IntermediateDirectory)/Keys$(ObjectSuffix) \
 	$(IntermediateDirectory)/MPKCriteria$(ObjectSuffix) 
 
@@ -254,6 +254,11 @@ $(IntermediateDirectory)/DatabaseMgr$(ObjectSuffix): DatabaseMgr.cpp $(Intermedi
 $(IntermediateDirectory)/DatabaseMgr$(ObjectSuffix).d:
 	@$(CompilerName) $(CmpOptions) $(IncludePath) -MT$(IntermediateDirectory)/DatabaseMgr$(ObjectSuffix) -MF$(IntermediateDirectory)/DatabaseMgr$(ObjectSuffix).d -MM DatabaseMgr.cpp
 
+$(IntermediateDirectory)/SqliteError$(ObjectSuffix): SqliteError.cpp $(IntermediateDirectory)/SqliteError$(ObjectSuffix).d
+	$(CompilerName) $(SourceSwitch)SqliteError.cpp $(CmpOptions)   $(OutputSwitch)$(IntermediateDirectory)/SqliteError$(ObjectSuffix) $(IncludePath)
+$(IntermediateDirectory)/SqliteError$(ObjectSuffix).d:
+	@$(CompilerName) $(CmpOptions) $(IncludePath) -MT$(IntermediateDirectory)/SqliteError$(ObjectSuffix) -MF$(IntermediateDirectory)/SqliteError$(ObjectSuffix).d -MM SqliteError.cpp
+
 $(IntermediateDirectory)/SqliteMgr$(ObjectSuffix): SqliteMgr.cpp $(IntermediateDirectory)/SqliteMgr$(ObjectSuffix).d
 	$(CompilerName) $(SourceSwitch)SqliteMgr.cpp $(CmpOptions)   $(OutputSwitch)$(IntermediateDirectory)/SqliteMgr$(ObjectSuffix) $(IncludePath)
 $(IntermediateDirectory)/SqliteMgr$(ObjectSuffix).d:
@@ -396,6 +401,8 @@ clean:
 	$(RM) $(IntermediateDirectory)/Field$(ObjectSuffix).d
 	$(RM) $(IntermediateDirectory)/DatabaseMgr$(ObjectSuffix)
 	$(RM) $(IntermediateDirectory)/DatabaseMgr$(ObjectSuffix).d
+	$(RM) $(IntermediateDirectory)/SqliteError$(ObjectSuffix)
+	$(RM) $(IntermediateDirectory)/SqliteError$(ObjectSuffix).d
 	$(RM) $(IntermediateDirectory)/SqliteMgr$(ObjectSuffix)
 	$(RM) $(IntermediateDirectory)/SqliteMgr$(ObjectSuffix).d
 	$(RM) $(IntermediateDirectory)/Statements$(ObjectSuffix)
