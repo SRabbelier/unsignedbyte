@@ -36,6 +36,7 @@ private:
 	Generator operator=(const Generator& rhs) { return *this; };
 	
 	void AppendLicense(std::ofstream& file);
+	void AppendGeneratorNotice(std::ofstream& file);
 	
 	void AppendHeaderIncludes();
 	void AppendHeaderClass(TableDefPtr table);
