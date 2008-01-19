@@ -240,11 +240,21 @@ FKDETAILSSECONDARY(new KeyDef(TableImpls::Get()->DETAILDETAIL, "fkDetailsSeconda
 	TableImpls::Get()->DETAILDETAIL->addKey(FKDETAILSSECONDARY);
 }
 
+ExitRoomFields::ExitRoomFields() :
+FKEXITS(new KeyDef(TableImpls::Get()->EXITROOM, "fkExits")),
+FKROOMS(new KeyDef(TableImpls::Get()->EXITROOM, "fkRooms"))
+{
+	TableImpls::Get()->EXITROOM->addKey(FKEXITS);
+	TableImpls::Get()->EXITROOM->addKey(FKROOMS);
+}
+
 ExitsFields::ExitsFields() :
 EXITID(new KeyDef(TableImpls::Get()->EXITS, "exitid")),
+FKROOMS(new FieldImpl(TableImpls::Get()->EXITS, "fkRooms")),
 DIR(new FieldImpl(TableImpls::Get()->EXITS, "dir"))
 {
 	TableImpls::Get()->EXITS->addKey(EXITID);
+	TableImpls::Get()->EXITS->addField(FKROOMS);
 	TableImpls::Get()->EXITS->addField(DIR);
 }
 

@@ -43,6 +43,7 @@ public:
 	TableDefPtr DETAILCHUNK;
 	TableDefPtr DETAILCHARACTER;
 	TableDefPtr DETAILDETAIL;
+	TableDefPtr EXITROOM;
 	TableDefPtr EXITS;
 	TableDefPtr GRANTGROUPS;
 	TableDefPtr PERMISSIONS;

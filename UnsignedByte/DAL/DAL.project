@@ -10,7 +10,7 @@
   </VirtualDirectory>
   <Settings Type="Static Library">
     <Configuration Name="Debug" CompilerType="gnu g++" DebuggerType="GNU gdb debugger">
-      <General OutputFile="../lib/libubdal.a" IntermediateDirectory="./Debug" Command="" CommandArguments="" WorkingDirectory="./Debug"/>
+      <General OutputFile="../lib/libubdal.a" IntermediateDirectory="./Debug" Command="" CommandArguments="" WorkingDirectory="UnsignedByte/DAL"/>
       <Compiler Required="yes" Options="-g -Wall">
         <IncludePath Value="."/>
         <IncludePath Value="../include"/>
@@ -22,16 +22,19 @@
       <PreBuild/>
       <PostBuild/>
       <CustomBuild Enabled="no">
-        <CleanCommand/>
-        <BuildCommand/>
+        <CleanCommand></CleanCommand>
+        <BuildCommand></BuildCommand>
       </CustomBuild>
       <AdditionalRules>
-        <CustomPostBuild/>
-        <CustomPreBuild/>
+        <CustomPostBuild></CustomPostBuild>
+        <CustomPreBuild>
+
+</CustomPreBuild>
       </AdditionalRules>
     </Configuration>
   </Settings>
   <Dependencies>
     <Project Name="Resource"/>
+    <Project Name="Generator"/>
   </Dependencies>
 </CodeLite_Project>

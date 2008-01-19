@@ -49,6 +49,7 @@ namespace db
 		TableImplPtr DETAILCHUNK;
 		TableImplPtr DETAILCHARACTER;
 		TableImplPtr DETAILDETAIL;
+		TableImplPtr EXITROOM;
 		TableImplPtr EXITS;
 		TableImplPtr GRANTGROUPS;
 		TableImplPtr PERMISSIONS;

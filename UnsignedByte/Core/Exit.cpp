@@ -18,21 +18,79 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#include "Table.h"
-#include "FieldDef.h"
+#include "Exit.h"
+#include "Global.h"
+#include "db.h"
 
-Table::Table(std::string name) :
-m_name(name)
+using mud::Exit;
+
+Exit::Exit(SavableManagerPtr exit) :
+m_exit(exit)
+{
+	if(!m_exit)
+		throw new std::invalid_argument("Exit::Exit(), m_exit == NULL!");
+}
+
+Exit::~Exit(void)
 {
 
 }
 
-Table::~Table()
+value_type Exit::getRoom() const
 {
-
+	return m_exit->getfield(db::ExitsFields::Get()->FKROOMS)->getIntegerValue();
 }
 
-const std::string& Table::tableName() const
+const std::string& Exit::getDir() const
 {
-	return m_name;
+	return m_exit->getfield(db::ExitsFields::Get()->DIR)->getStringValue();
+}
+
+void Exit::setRoom(value_type room)
+{
+	ValuePtr value(new Value(db::ExitsFields::Get()->FKROOMS, room));
+	m_exit->setvalue(value);
+}
+
+void Exit::setDir(const std::string& dir)
+{
+	ValuePtr value(new Value(db::ExitsFields::Get()->DIR, dir));
+	m_exit->setvalue(value);
+}
+
+void Exit::Delete()
+{
+	m_exit->erase();
+}
+
+void Exit::Save()
+{
+	m_exit->save();
+}
+
+bool Exit::Exists()
+{
+	return m_exit->exists();
+}
+
+std::vector<std::string> Exit::Show()
+{
+	std::vector<std::string> result;
+	
+	result.push_back(Global::Get()->sprintf("Room: '%d'.", getRoom()));
+	result.push_back(Global::Get()->sprintf("Dir: '%s'.", getDir().c_str()));
+	
+	return result;
+}
+
+std::string Exit::ShowShort()
+{
+	return Global::Get()->sprintf("%d: %s\n", 
+			getRoom(),
+			getDir().c_str());
+}
+
+TablePtr Exit::getTable() const
+{
+	return Tables::Get()->EXITS;
 }

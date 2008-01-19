@@ -41,11 +41,14 @@ Objects=$(IntermediateDirectory)/db$(ObjectSuffix) $(IntermediateDirectory)/Tabl
 ##
 all: $(IntermediateDirectory) $(OutputFile)
 
-$(OutputFile):  $(Objects)
+$(OutputFile): PrePreBuild $(Objects)
 	$(ArchiveTool) $(OutputFile) $(Objects)
 
 ./Debug:
 	@test -d ./Debug || mkdir ./Debug
+
+PrePreBuild: 
+
 
 
 PreBuild:

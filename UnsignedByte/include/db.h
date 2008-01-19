@@ -342,10 +342,26 @@ namespace db
 		friend class Singleton<DetailDetailFields>;
 	};
 
+	class ExitRoomFields : public Singleton<ExitRoomFields>
+	{
+	public:
+		KeyDefPtr FKEXITS;
+		KeyDefPtr FKROOMS;
+
+	private:
+		// Hide constructor and assignment operator
+		ExitRoomFields();
+		~ExitRoomFields() { }
+		ExitRoomFields(const ExitRoomFields& rhs);
+		ExitRoomFields operator=(const ExitRoomFields& rhs);
+		friend class Singleton<ExitRoomFields>;
+	};
+
 	class ExitsFields : public Singleton<ExitsFields>
 	{
 	public:
 		KeyDefPtr EXITID;
+		FieldImplPtr FKROOMS;
 		FieldImplPtr DIR;
 
 	private:

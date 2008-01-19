@@ -17,22 +17,35 @@
  *   Free Software Foundation, Inc.,                                       *
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
+#pragma once
 
-#include "Table.h"
-#include "FieldDef.h"
+#include "SavableHeaders.h"
 
-Table::Table(std::string name) :
-m_name(name)
-{
-
+namespace mud 
+{ 
+	class Exit; 
+	typedef SmartPtr<Exit> ExitPtr;
 }
 
-Table::~Table()
+namespace mud
 {
+	class ExitManager : public Singleton<mud::ExitManager>
+	{
+	public:
+		TableImplPtr GetTable();
+		std::vector<std::string> List();
+		
+		KeysPtr Add();
+		mud::ExitPtr GetByKey(value_type id);
+		
+		value_type lookupByName(cstring value);
 
-}
-
-const std::string& Table::tableName() const
-{
-	return m_name;
+	private:
+		ExitManager(void) {};
+		ExitManager(const ExitManager& rhs);
+		ExitManager operator=(const ExitManager& rhs);
+		~ExitManager(void) {};
+		
+		friend class Singleton<mud::ExitManager>;
+	};
 }

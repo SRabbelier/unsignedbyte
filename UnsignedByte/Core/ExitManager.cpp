@@ -18,21 +18,39 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#include "Table.h"
-#include "FieldDef.h"
+#include "ExitManager.h"
+#include "Exit.h"
+#include "Exceptions.h"
+#include "TableImpls.h"
+#include "db.h"
 
-Table::Table(std::string name) :
-m_name(name)
+using mud::ExitManager;
+using mud::Exit;
+using mud::ExitPtr;
+
+std::vector<std::string> ExitManager::List()
 {
-
+	return GetTable()->tableList();
 }
 
-Table::~Table()
+TableImplPtr ExitManager::GetTable()
 {
-
+	return db::TableImpls::Get()->EXITS;
 }
 
-const std::string& Table::tableName() const
+KeysPtr ExitManager::Add()
 {
-	return m_name;
+	SavableManagerPtr manager = SavableManager::getnew(db::TableImpls::Get()->EXITS);
+	manager->save();
+	return manager->getkeys();
+}
+
+mud::ExitPtr ExitManager::GetByKey(value_type id)
+{
+	KeysPtr keys(new Keys(db::TableImpls::Get()->EXITS));
+	KeyPtr key(new Key(db::ExitsFields::Get()->EXITID, id));
+	keys->addKey(key);
+	SavableManagerPtr manager = SavableManager::bykeys(keys);
+	ExitPtr p(new Exit(manager));
+	return p;
 }

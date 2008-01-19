@@ -55,6 +55,7 @@ TableImpls* TableImpls::Get()
 		db::DetailChunkFields::Get();
 		db::DetailCharacterFields::Get();
 		db::DetailDetailFields::Get();
+		db::ExitRoomFields::Get();
 		db::ExitsFields::Get();
 		db::GrantGroupsFields::Get();
 		db::PermissionsFields::Get();
@@ -95,6 +96,7 @@ DETAILROOM(new TableImpl(Tables::Get()->DETAILROOM)),
 DETAILCHUNK(new TableImpl(Tables::Get()->DETAILCHUNK)),
 DETAILCHARACTER(new TableImpl(Tables::Get()->DETAILCHARACTER)),
 DETAILDETAIL(new TableImpl(Tables::Get()->DETAILDETAIL)),
+EXITROOM(new TableImpl(Tables::Get()->EXITROOM)),
 EXITS(new TableImpl(Tables::Get()->EXITS)),
 GRANTGROUPS(new TableImpl(Tables::Get()->GRANTGROUPS)),
 PERMISSIONS(new TableImpl(Tables::Get()->PERMISSIONS)),
@@ -125,6 +127,7 @@ VERSION(new TableImpl(Tables::Get()->VERSION))
 	m_tables.push_back(DETAILCHUNK);
 	m_tables.push_back(DETAILCHARACTER);
 	m_tables.push_back(DETAILDETAIL);
+	m_tables.push_back(EXITROOM);
 	m_tables.push_back(EXITS);
 	m_tables.push_back(GRANTGROUPS);
 	m_tables.push_back(PERMISSIONS);

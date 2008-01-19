@@ -19,7 +19,10 @@
  ***************************************************************************/
 
 #include "Keys.h"
-#include "SavableHeaders.h"
+#include "Key.h"
+#include "KeyDef.h"
+#include "TableImpl.h"
+#include "FieldImpl.h"
 #include "Parse.h"
 
 Keys::Keys(TableImplPtr table, cstring initstring) :

@@ -41,11 +41,14 @@ Objects=$(IntermediateDirectory)/main$(ObjectSuffix) $(IntermediateDirectory)/Cl
 ##
 all: $(OutputFile)
 
-$(OutputFile): makeDirStep  $(Objects)
+$(OutputFile): makeDirStep PrePreBuild $(Objects)
 	$(LinkerName) $(OutputSwitch)$(OutputFile) $(Objects) $(LibPath) $(Libs) $(LinkOptions)
 
 makeDirStep:
 	@test -d ./Debug || mkdir ./Debug
+
+PrePreBuild: 
+
 
 
 PreBuild:

@@ -17,22 +17,61 @@
  *   Free Software Foundation, Inc.,                                       *
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
+#pragma once
 
-#include "Table.h"
-#include "FieldDef.h"
+#include "SavableHeaders.h"
 
-Table::Table(std::string name) :
-m_name(name)
+namespace mud
 {
+	class ExitManager;
+	
+	class Exit : public Savable
+	{
+	public:
+		/**
+		 * \brief Getters
+		 */
+		value_type getRoom() const;
+		const std::string& getDir() const;
 
-}
+		/**
+		 * \brief Setters
+		 */
+		void setRoom(value_type room);
+		void setDir(const std::string& dir);
 
-Table::~Table()
-{
+		/**
+		 * \brief Utilities
+		 */
+		std::vector<std::string> Show();
+		std::string ShowShort();
+		TablePtr getTable() const;
+		
+		/**
+		 * \brief Database operations
+		 */
+		void Delete();
+		void Save();
+		bool Exists();
 
-}
+	private:
+		friend class mud::ExitManager; // For constructor
+		friend SmartPtrDelete(mud::Exit);
+		
+		SavableManagerPtr m_exit;
 
-const std::string& Table::tableName() const
-{
-	return m_name;
+		/**
+		 * \brief Constructor
+		 * \param exit The DB object
+		 */
+		Exit(SavableManagerPtr exit);
+		
+		Exit(const Exit& rhs);
+		Exit operator=(const Exit& rhs);
+			
+		/**
+		 * \brief Default destructor
+		 */
+		~Exit(void);
+	};
 }

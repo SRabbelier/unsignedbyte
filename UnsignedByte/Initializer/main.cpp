@@ -32,6 +32,7 @@
 #include "SqliteMgr.h"
 
 #include "Initializer.h"
+#include "GameVersion.h"
 
 const int MAXSIZE = (1<<16);
 char m_workspace[MAXSIZE];
