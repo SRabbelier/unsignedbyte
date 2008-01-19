@@ -46,7 +46,7 @@ public:
 	
 protected:
 	Table(std::string name);
-	~Table();
+	virtual ~Table();
 	friend SmartPtrDelete(Table);
 
 	std::string m_name;
