@@ -24,14 +24,14 @@
 
 #include <stdarg.h>
 
-#include "Character.h"
-
-#include "Global.h"
 #include "StringUtilities.h"
+#include "Exceptions.h"
+#include "db.h"
 
 #include "UBSocket.h"
 #include "UBHandler.h"
 
+#include "Character.h"
 #include "Race.h"
 #include "RaceManager.h"
 #include "Area.h"

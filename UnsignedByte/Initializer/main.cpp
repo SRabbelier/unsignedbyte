@@ -20,6 +20,8 @@
  
 #include <iostream>
 #include "SavableHeaders.h"
+#include "db.h"
+#include "TableImpls.h"
 
 #include "Database.h"
 #include "Query.h"

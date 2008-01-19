@@ -20,7 +20,8 @@
 
 #include "DetailManager.h"
 #include "Detail.h"
-#include "Global.h"
+#include "TableImpls.h"
+#include "db.h"
 
 using mud::DetailManager;
 using mud::Detail;

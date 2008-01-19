@@ -21,6 +21,12 @@
 #ifdef _WIN32
 #include <winsock2.h>
 #endif
+
+#include "SavableHeaders.h"
+#include "db.h"
+#include "TableImpls.h"
+#include "GameVersion.h"
+
 #include "DatabaseMgr.h"
 #include "Query.h"
 #include "UBHandler.h"
@@ -29,7 +35,6 @@
 #include "SQLSocket.h"
 #include "Global.h"
 #include "Account.h" // needed because we include UBSocket.h
-#include "SavableHeaders.h"
 #include <iostream>
 
 void exitfunc()

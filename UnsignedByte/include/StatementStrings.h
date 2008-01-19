@@ -20,11 +20,7 @@
 
 #pragma once
 
-#include <string>
-#include <map>
-#include <smart_ptr.h>
-
-typedef const std::string& cstring;
+#include "Types.h"
 
 class StatementStrings
 {

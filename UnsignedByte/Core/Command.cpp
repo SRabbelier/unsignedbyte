@@ -25,12 +25,9 @@
 #include "GrantGroupManager.h"
 #include "PermissionManager.h"
 #include "Account.h"
+#include "Exceptions.h"
 
 using mud::Command;
-
-bool Command::defaultHighForce = true;
-bool Command::defaultForce = true;
-bool Command::defaultLowForce = false;
 
 Command::Command(SavableManagerPtr Command) :
 m_command(Command)

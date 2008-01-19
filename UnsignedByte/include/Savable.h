@@ -19,12 +19,7 @@
  ***************************************************************************/
 #pragma once
 
-#include <string>
-#include <vector>
-#include <smart_ptr.h>
-
-class Table;
-typedef SmartPtr<Table> TablePtr;
+#include "Types.h"
 
 class Savable
 {

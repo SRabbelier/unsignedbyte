@@ -18,10 +18,7 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#include <string>
-#include <map>
 #include <stdarg.h>
-#include <stdexcept>
 
 #include "Editor.h"
 #include "Parse.h"
@@ -32,6 +29,7 @@
 #include "CommandManager.h"
 #include "UBSocket.h"
 #include "Account.h"
+#include "Exceptions.h"
 
 using mud::Permission;
 using mud::Command;
@@ -95,9 +93,9 @@ void Editor::OnLine(const std::string& line)
 	bool hasGrant = mud::PermissionManager::Get()->defaultGrant;
 	bool hasLog = mud::PermissionManager::Get()->defaultLog;
 	
-	bool canLowForce = Command::defaultLowForce;
-	bool canForce = Command::defaultForce;
-	bool canHighForce = Command::defaultHighForce;
+	bool canLowForce = mud::CommandManager::Get()->defaultLowForce;
+	bool canForce = mud::CommandManager::Get()->defaultForce;
+	bool canHighForce = mud::CommandManager::Get()->defaultHighForce;
 	
 	bool isLowForced = m_sock->isLowForced();
 	bool isNormalForced = m_sock->isForced();

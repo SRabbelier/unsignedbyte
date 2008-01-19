@@ -29,7 +29,10 @@
 #include "Sector.h"
 #include "SectorManager.h"
 #include "Character.h"
+
 #include "Global.h"
+#include "Exceptions.h"
+#include "db.h"
 
 using mud::Room;
 

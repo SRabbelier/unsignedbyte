@@ -25,17 +25,16 @@
 #include "CharacterManager.h"
 #include "PCharacter.h"
 #include "PCharacterManager.h"
-#include "Global.h"
-#include "DatabaseMgr.h"
+
 #include "StringUtilities.h"
-#include "Cache.h"
-#include "Account.h"
 #include "db.h"
+#include "Exceptions.h"
+#include "TableImpls.h"
+#include "DatabaseMgr.h" // for CountSavable
+
+#include "Account.h"
 #include "Race.h"
 #include "RaceManager.h"
-
-#include "Table.h"
-#include "Tables.h"
 
 EditorNewCharacter::EditorNewCharacter(UBSocket* sock) :
 Editor(sock),

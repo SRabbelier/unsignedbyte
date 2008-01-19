@@ -20,13 +20,8 @@
 
 #pragma once
 
-#include <string>
-#include <vector>
-
-#include <sqlite3.h>
+#include "Types.h"
 #include "Actor.h"
-
-typedef std::vector<std::string> Strings;
 
 class ListActor : public Actor
 {

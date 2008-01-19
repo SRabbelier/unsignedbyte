@@ -21,9 +21,6 @@
 
 #include "Types.h"
 
-typedef std::vector<FieldPtr> FieldVector;
-typedef std::map<std::string, TablePtr> TableMap;
-
 class Table
 {
 public:

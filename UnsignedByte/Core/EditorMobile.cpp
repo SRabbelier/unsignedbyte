@@ -23,21 +23,13 @@
 
 #include "UBSocket.h"
 
-#include "Global.h"
-#include "DatabaseMgr.h"
-#include "Cache.h"
-#include "Parse.h"
 #include "StringUtilities.h"
-
-#include "Action.h"
+#include "TableImpls.h"
 
 #include "Account.h"
 #include "MCharacter.h"
 #include "MCharacterManager.h"
 #include "CharacterManager.h"
-
-#include "Table.h"
-#include "Tables.h"
 
 EditorMobile::MobileCommand EditorMobile::m_editName("Name", &EditorMobile::editName);
 EditorMobile::MobileCommand EditorMobile::m_editDescription("Description", &EditorMobile::editDescription);

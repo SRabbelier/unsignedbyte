@@ -20,13 +20,7 @@
 #pragma once
 
 #include "Types.h"
-
 #include "Database.h"
-#include "Global.h"
-
-typedef std::vector<std::string> Strings;
-typedef std::vector<long> Longs;
-class IError;
 
 class DatabaseMgr : public Singleton<DatabaseMgr>
 {

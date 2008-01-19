@@ -20,7 +20,9 @@
  
 #include "RaceManager.h"
 #include "Race.h"
-#include "Global.h"
+#include "Exceptions.h"
+#include "TableImpls.h"
+#include "db.h"
 
 using mud::RaceManager;
 using mud::Race;

@@ -20,12 +20,26 @@
 
 #include "CommandManager.h"
 #include "Command.h"
-#include "Global.h"
 #include "Command.h"
+#include "db.h"
+#include "TableImpls.h"
 
 using mud::CommandManager;
 using mud::Command;
 using mud::CommandPtr;
+
+CommandManager::CommandManager() :
+defaultHighForce(true),
+defaultForce(true),
+defaultLowForce(true)
+{
+	
+}
+
+CommandManager::~CommandManager()
+{
+	
+}
 
 std::vector<std::string> CommandManager::List()
 {

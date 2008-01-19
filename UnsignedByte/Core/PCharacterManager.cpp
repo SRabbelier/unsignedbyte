@@ -22,8 +22,9 @@
 
 #include "PCharacterManager.h"
 #include "PCharacter.h"
-#include "Global.h"
-#include "PCharacter.h"
+#include "Exceptions.h"
+#include "TableImpls.h"
+#include "db.h"
 
 using mud::PCharacterManager;
 using mud::PCharacter;

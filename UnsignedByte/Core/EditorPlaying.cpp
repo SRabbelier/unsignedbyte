@@ -18,17 +18,12 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#include <string>
-
 #include "EditorAccount.h"
 #include "EditorPlaying.h"
 #include "UBSocket.h"
 
-#include "Global.h"
-#include "DatabaseMgr.h"
-#include "Cache.h"
-#include "Parse.h"
 #include "StringUtilities.h"
+#include "Exceptions.h"
 
 #include "Account.h"
 #include "Character.h"

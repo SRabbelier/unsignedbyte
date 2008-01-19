@@ -20,7 +20,9 @@
 
 #include "SectorManager.h"
 #include "Sector.h"
-#include "Global.h"
+#include "Exceptions.h"
+#include "TableImpls.h"
+#include "db.h"
 
 using mud::SectorManager;
 using mud::Sector;

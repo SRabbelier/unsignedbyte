@@ -22,8 +22,6 @@
 #include "Types.h"
 #include "Table.h"
 
-typedef std::map<std::string, TablePtr> TableMap;
-
 class TableDef : public Table
 {
 public:

@@ -20,10 +20,9 @@
 
 #include "RoomManager.h"
 #include "Room.h"
-#include "Global.h"
-
-#include "Table.h"
-#include "Tables.h"
+#include "Exceptions.h"
+#include "TableImpls.h"
+#include "db.h"
 
 using mud::RoomManager;
 using mud::Room;

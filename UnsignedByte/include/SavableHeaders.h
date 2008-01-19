@@ -20,14 +20,12 @@
 #pragma once
 
 #include "Types.h"
-#include "db.h"
 #include "Table.h"
 #include "Tables.h"
 #include "Key.h"
 #include "KeyDef.h"
 #include "Keys.h"
 #include "TableImpl.h"
-#include "TableImpls.h"
 #include "FieldImpl.h"
 #include "FieldDef.h"
 #include "Value.h"

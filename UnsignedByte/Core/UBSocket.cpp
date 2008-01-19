@@ -34,6 +34,8 @@
 #include "AccountManager.h"
 #include "Colour.h"
 #include "ColourManager.h"
+#include "GameVersion.h"
+#include "Exceptions.h"
 
 UBSocket::UBSocket(ISocketHandler& h) :
 TcpSocket(h),

@@ -20,6 +20,7 @@
 
 #include "Chunk.h"
 #include "Global.h"
+#include "db.h"
 
 using mud::Chunk;
 

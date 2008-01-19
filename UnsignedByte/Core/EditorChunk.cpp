@@ -24,8 +24,9 @@
 
 #include "UBSocket.h"
 
-#include "Global.h"
 #include "StringUtilities.h"
+#include "Exceptions.h"
+#include "TableImpls.h"
 
 #include "Account.h"
 #include "Chunk.h"
@@ -34,9 +35,6 @@
 #include "RoomManager.h"
 
 #include "chunkimporter.h"
-
-#include "Table.h"
-#include "Tables.h"
 
 EditorChunk::ChunkCommand EditorChunk::m_editName("Name", &EditorChunk::editName);
 EditorChunk::ChunkCommand EditorChunk::m_editDescription("Description", &EditorChunk::editDescription);

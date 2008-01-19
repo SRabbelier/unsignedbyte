@@ -20,7 +20,9 @@
 
 #include "PermissionManager.h"
 #include "Permission.h"
-#include "Global.h"
+#include "Exceptions.h"
+#include "TableImpls.h"
+#include "db.h"
 
 using mud::PermissionManager;
 using mud::Permission;

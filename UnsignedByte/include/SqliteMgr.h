@@ -21,29 +21,16 @@
 #pragma once
 
 #include "Types.h"
-
 #include <Database.h>
-#include <singleton.h>
 
-class Table;
 class Statements;
-class StatementStrings;
-class Actor;
-
-typedef SmartPtr<Actor> ActorPtr;
-typedef SmartPtr<Table> TablePtr;
 typedef SmartPtr<Statements> StatementsPtr;
+
+class StatementStrings;
 typedef SmartPtr<StatementStrings> StatementStringsPtr;
 
 typedef std::map<TableImpl*, StatementsPtr>  TableStatements;
 typedef std::map<TableImpl*, StatementStringsPtr>  TableStatementStrings;
-typedef unsigned long value_type;
-
-class RowNotFoundException : public std::runtime_error
-{
-	public:
-		RowNotFoundException(const std::string& arg) : std::runtime_error(arg) { }
-};
 
 class SqliteMgr : public Singleton<SqliteMgr>
 {

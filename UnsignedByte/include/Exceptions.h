@@ -18,30 +18,12 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#include "MCharacterManager.h"
-#include "MCharacter.h"
-#include "MCharacter.h"
-#include "TableImpls.h"
-#include "db.h"
+#pragma once
 
-using mud::MCharacterManager;
-using mud::MCharacter;
-using mud::MCharacterPtr;
+#include "Types.h"
 
-mud::MCharacterPtr MCharacterManager::GetByKey(value_type id)
+class RowNotFoundException : public std::runtime_error
 {
-	KeysPtr keys(new Keys(db::TableImpls::Get()->CHARACTERS));
-	KeyPtr key(new Key(db::CharactersFields::Get()->CHARACTERID, id));
-	keys->addKey(key);
-	SavableManagerPtr manager = SavableManager::bykeys(db::TableImpls::Get()->CHARACTERS, keys);
-	MCharacterPtr p(new MCharacter(manager));
-	return p;
-}
-
-mud::MCharacterPtr MCharacterManager::GetByName(cstring value)
-{
-	ValuePtr val(new Value(db::CharactersFields::Get()->NAME, value));
-	SavableManagerPtr manager = SavableManager::byvalue(val);
-	MCharacterPtr p(new MCharacter(manager));
-	return p;
-}
+	public:
+		RowNotFoundException(const std::string& arg) : std::runtime_error(arg) { }
+};

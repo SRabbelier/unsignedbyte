@@ -20,8 +20,9 @@
 
 #include "GrantGroupManager.h"
 #include "GrantGroup.h"
-#include "Global.h"
-#include "GrantGroup.h"
+#include "Exceptions.h"
+#include "TableImpls.h"
+#include "db.h"
 
 using mud::GrantGroupManager;
 using mud::GrantGroup;

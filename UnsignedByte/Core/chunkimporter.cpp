@@ -20,6 +20,8 @@
 
 #include "chunkimporter.h"
 #include "Chunk.h"
+#include "db.h"
+#include "TableImpls.h"
 
 #include "StringUtilities.h"
 

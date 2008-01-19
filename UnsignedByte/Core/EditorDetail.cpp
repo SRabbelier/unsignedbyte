@@ -25,8 +25,6 @@
 #include "EditorBool.h"
 
 #include "UBSocket.h"
-
-#include "Global.h"
 #include "StringUtilities.h"
 
 #include "Account.h"

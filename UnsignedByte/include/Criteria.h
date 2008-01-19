@@ -20,11 +20,7 @@
 
 #pragma once
 
-#include <sqlite3.h>
-#include <smart_ptr.h>
-
-class Table;
-typedef SmartPtr<Table> TablePtr;
+#include "Types.h"
 
 class Criteria
 {

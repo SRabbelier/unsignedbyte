@@ -19,13 +19,8 @@
  ***************************************************************************/
 #pragma once
 
-#include <string>
-#include <vector>
-
-#include "singleton.h"
+#include "Types.h"
 #include "Global.h"
-
-typedef std::vector<std::string> Strings;
 
 class String : public Singleton<String>
 {

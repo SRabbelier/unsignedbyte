@@ -20,10 +20,9 @@
 
 #include "ColourManager.h"
 #include "Colour.h"
-#include "Global.h"
-
-#include "Table.h"
-#include "Tables.h"
+#include "Exceptions.h"
+#include "TableImpls.h"
+#include "db.h"
 
 using mud::ColourManager;
 using mud::Colour;

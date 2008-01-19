@@ -20,7 +20,9 @@
 
 #include "Character.h"
 #include "CharacterManager.h"
-#include "Global.h"
+#include "Exceptions.h"
+#include "TableImpls.h"
+#include "db.h"
 
 using mud::CharacterManager;
 using mud::Character;

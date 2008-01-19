@@ -23,21 +23,15 @@
 
 #include "UBSocket.h"
 
-#include "Global.h"
-#include "DatabaseMgr.h"
-#include "Cache.h"
-#include "Parse.h"
 #include "StringUtilities.h"
+#include "TableImpls.h"
+
 #include "Command.h"
 #include "Permission.h"
-
 #include "Action.h"
 #include "Account.h"
 #include "Colour.h"
 #include "ColourManager.h"
-
-#include "Table.h"
-#include "Tables.h"
 
 using mud::Colour;
 

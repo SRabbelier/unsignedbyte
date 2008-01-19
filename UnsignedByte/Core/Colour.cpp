@@ -20,12 +20,7 @@
 
 #include "Colour.h"
 #include "Global.h"
-#include "DatabaseMgr.h"
-#include "Cache.h"
 #include "db.h"
-
-#include "Table.h"
-#include "Tables.h"
 
 using namespace mud;
 

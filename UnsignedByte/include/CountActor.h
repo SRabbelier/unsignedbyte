@@ -20,14 +20,9 @@
 
 #pragma once
 
-#include <string>
-#include <vector>
-
-#include <sqlite3.h>
+#include "Types.h"
 #include "Actor.h"
 #include "Criteria.h"
-
-typedef std::vector<std::string> Strings;
 
 class CountActor : public Actor
 {

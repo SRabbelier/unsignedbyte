@@ -20,7 +20,8 @@
 
 #include "ChunkManager.h"
 #include "Chunk.h"
-#include "Global.h"
+#include "TableImpls.h"
+#include "db.h"
 
 using mud::ChunkManager;
 using mud::Chunk;

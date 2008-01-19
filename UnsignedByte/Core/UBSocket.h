@@ -20,7 +20,6 @@
 #pragma once
 
 #include "SavableHeaders.h"
-#include "Global.h"
 
 #include <stack>
 
@@ -58,7 +57,7 @@ public:
 	/**
 	 * \brief Prompt utilities
 	 */ 
-	void SetPrompt(const std::string& prompt = Global::Get()->EmptyString);
+	void SetPrompt(const std::string& prompt = "");
 	void SendPrompt();
 
 	/**

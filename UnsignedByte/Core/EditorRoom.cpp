@@ -25,13 +25,9 @@
 
 #include "UBSocket.h"
 
-#include "Global.h"
-#include "DatabaseMgr.h"
-#include "Cache.h"
-#include "Parse.h"
 #include "StringUtilities.h"
-
-#include "Action.h"
+#include "Exceptions.h"
+#include "TableImpls.h"
 
 #include "Account.h"
 #include "Area.h"
@@ -40,9 +36,6 @@
 #include "RoomManager.h"
 #include "Sector.h"
 #include "SectorManager.h"
-
-#include "Table.h"
-#include "Tables.h"
 
 using mud::Room;
 

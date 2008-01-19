@@ -20,12 +20,8 @@
 
 #pragma once
 
-#include <sqlite3.h>
-
-class Table;
+#include "Types.h"
 #include "Criteria.h"
-
-typedef unsigned long value_type;
 
 class SPKCriteria : public Criteria
 {

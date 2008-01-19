@@ -30,6 +30,7 @@
 #include "Actor.h"
 #include "Statements.h"
 #include "StatementStrings.h"
+#include "Exceptions.h"
 
 SqliteMgr::SqliteMgr()
 {	

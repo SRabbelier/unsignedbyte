@@ -20,7 +20,9 @@
 
 #include "AccountManager.h"
 #include "Account.h"
-#include "Global.h"
+#include "Exceptions.h"
+#include "TableImpls.h"
+#include "db.h"
 
 using mud::AccountManager;
 using mud::Account;

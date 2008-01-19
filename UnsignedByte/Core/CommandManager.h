@@ -32,6 +32,10 @@ namespace mud
 	class CommandManager : public Singleton<mud::CommandManager>
 	{
 	public:
+		bool defaultHighForce;
+		bool defaultForce;
+		bool defaultLowForce;
+	
 		TableImplPtr GetTable();
 		std::vector<std::string> List();
 		
@@ -42,10 +46,10 @@ namespace mud
 		value_type lookupByName(cstring value);
 
 	private:
-		CommandManager(void) {};
+		CommandManager(void);
 		CommandManager(const CommandManager& rhs);
 		CommandManager operator=(const CommandManager& rhs);
-		~CommandManager(void) {};
+		~CommandManager(void);
 		
 		friend class Singleton<mud::CommandManager>;
 	};

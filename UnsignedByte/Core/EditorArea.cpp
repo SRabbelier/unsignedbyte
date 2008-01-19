@@ -23,18 +23,12 @@
 
 #include "UBSocket.h"
 
-#include "Global.h"
-#include "DatabaseMgr.h"
-#include "Cache.h"
-#include "Parse.h"
 #include "StringUtilities.h"
+#include "TableImpls.h"
 
 #include "Account.h"
 #include "Area.h"
 #include "AreaManager.h"
-
-#include "Table.h"
-#include "Tables.h"
 
 EditorArea::AreaCommand EditorArea::m_editName("Name", &EditorArea::editName);
 EditorArea::AreaCommand EditorArea::m_editDescription("Description", &EditorArea::editDescription);

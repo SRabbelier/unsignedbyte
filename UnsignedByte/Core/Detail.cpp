@@ -20,6 +20,7 @@
 
 #include "Detail.h"
 #include "Global.h"
+#include "db.h"
 
 using mud::Detail;
 

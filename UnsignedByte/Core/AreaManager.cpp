@@ -20,7 +20,9 @@
 
 #include "AreaManager.h"
 #include "Area.h"
-#include "Global.h"
+#include "Exceptions.h"
+#include "TableImpls.h"
+#include "db.h"
 
 using mud::AreaManager;
 using mud::Area;

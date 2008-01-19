@@ -20,7 +20,6 @@
 
 #include "Permission.h"
 #include "PermissionManager.h"
-#include "Global.h"
 
 using mud::Permission;
 

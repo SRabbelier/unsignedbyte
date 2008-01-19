@@ -20,13 +20,7 @@
 
 #pragma once
 
-#include <sqlite3.h>
-#include <smart_ptr.h>
-
-class Table;
-
-typedef SmartPtr<Table> TablePtr;
-typedef unsigned long value_type;
+#include "Types.h"
 
 class Actor
 {

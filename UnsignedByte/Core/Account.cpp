@@ -23,6 +23,7 @@ class UBSocket;
 #include "Account.h"
 #include "DatabaseMgr.h"
 #include "SavableHeaders.h"
+#include "db.h"
 
 using mud::Account;
 

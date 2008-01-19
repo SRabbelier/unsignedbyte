@@ -31,11 +31,6 @@
 
 #include "UBSocket.h"
 #include "Account.h"
-#include "Global.h"
-#include "DatabaseMgr.h"
-#include "Cache.h"
-#include "Parse.h"
-#include "Action.h"
 #include "StringUtilities.h"
 
 EditorOLC::OLCCommand EditorOLC::m_startAreas("Areas", &EditorOLC::startAreas);

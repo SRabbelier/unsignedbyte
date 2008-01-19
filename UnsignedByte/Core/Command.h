@@ -31,10 +31,6 @@ namespace mud
 	class Command : public Savable
 	{
 	public:
-		static bool defaultHighForce;
-		static bool defaultForce;
-		static bool defaultLowForce;
-
 		/**
 		 * \brief Getters
 		 */ 

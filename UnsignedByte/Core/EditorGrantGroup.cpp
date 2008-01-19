@@ -23,20 +23,12 @@
 
 #include "UBSocket.h"
 
-#include "Global.h"
-#include "DatabaseMgr.h"
-#include "Cache.h"
-#include "Parse.h"
 #include "StringUtilities.h"
-
-#include "Action.h"
+#include "TableImpls.h"
 
 #include "Account.h"
 #include "GrantGroup.h"
 #include "GrantGroupManager.h"
-
-#include "Table.h"
-#include "Tables.h"
 
 using mud::GrantGroup;
 
