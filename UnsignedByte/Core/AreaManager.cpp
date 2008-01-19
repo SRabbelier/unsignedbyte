@@ -50,7 +50,7 @@ mud::AreaPtr AreaManager::GetByKey(value_type id)
 	KeysPtr keys(new Keys(db::TableImpls::Get()->AREAS));
 	KeyPtr key(new Key(db::AreasFields::Get()->AREAID, id));
 	keys->addKey(key);
-	SavableManagerPtr manager = SavableManager::bykeys(db::TableImpls::Get()->AREAS, keys);
+	SavableManagerPtr manager = SavableManager::bykeys(keys);
 	AreaPtr p(new Area(manager));
 	return p;
 }

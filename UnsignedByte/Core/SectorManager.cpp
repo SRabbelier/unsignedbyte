@@ -50,7 +50,7 @@ mud::SectorPtr SectorManager::GetByKey(value_type id)
 	KeysPtr keys(new Keys(db::TableImpls::Get()->SECTORS));
 	KeyPtr key(new Key(db::SectorsFields::Get()->SECTORID, id));
 	keys->addKey(key);
-	SavableManagerPtr manager = SavableManager::bykeys(db::TableImpls::Get()->SECTORS, keys);
+	SavableManagerPtr manager = SavableManager::bykeys(keys);
 	SectorPtr p(new Sector(manager));
 	return p;
 }

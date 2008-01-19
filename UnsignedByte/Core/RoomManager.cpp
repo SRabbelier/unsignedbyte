@@ -50,7 +50,7 @@ mud::RoomPtr RoomManager::GetByKey(value_type id)
 	KeysPtr keys(new Keys(db::TableImpls::Get()->ROOMS));
 	KeyPtr key(new Key(db::RoomsFields::Get()->ROOMID, id));
 	keys->addKey(key);
-	SavableManagerPtr manager = SavableManager::bykeys(db::TableImpls::Get()->ROOMS, keys);
+	SavableManagerPtr manager = SavableManager::bykeys(keys);
 	RoomPtr p(new Room(manager));
 	return p;
 }

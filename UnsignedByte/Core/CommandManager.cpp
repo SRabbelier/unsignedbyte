@@ -63,7 +63,7 @@ mud::CommandPtr CommandManager::GetByKey(value_type id)
 	KeysPtr keys(new Keys(db::TableImpls::Get()->COMMANDS));
 	KeyPtr key(new Key(db::CommandsFields::Get()->COMMANDID, id));
 	keys->addKey(key);
-	SavableManagerPtr manager = SavableManager::bykeys(db::TableImpls::Get()->COMMANDS, keys);
+	SavableManagerPtr manager = SavableManager::bykeys(keys);
 	CommandPtr p(new Command(manager));
 	return p;
 }

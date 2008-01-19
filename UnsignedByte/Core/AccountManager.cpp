@@ -61,7 +61,7 @@ AccountPtr AccountManager::GetByKey(value_type id)
 	KeysPtr keys(new Keys(db::TableImpls::Get()->ACCOUNTS));
 	KeyPtr key(new Key(db::AccountsFields::Get()->ACCOUNTID, id));
 	keys->addKey(key);
-	SavableManagerPtr manager = SavableManager::bykeys(db::TableImpls::Get()->ACCOUNTS, keys);
+	SavableManagerPtr manager = SavableManager::bykeys(keys);
 	AccountPtr p(new Account(manager));
 	return p;
 }

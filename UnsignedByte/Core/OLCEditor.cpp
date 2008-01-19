@@ -177,7 +177,7 @@ void OLCEditor::deleteSavable(const std::string& argument)
 		return;
 	}
 
-	SavableManagerPtr manager = SavableManager::bykeys(getTable(), keys);
+	SavableManagerPtr manager = SavableManager::bykeys(keys);
 	manager->erase();
 
 	m_sock->Sendf("Deleted id %s.\n", keys->toString().c_str());

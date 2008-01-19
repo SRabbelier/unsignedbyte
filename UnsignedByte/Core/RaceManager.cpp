@@ -50,7 +50,7 @@ mud::RacePtr RaceManager::GetByKey(value_type id)
 	KeysPtr keys(new Keys(db::TableImpls::Get()->RACES));
 	KeyPtr key(new Key(db::RacesFields::Get()->RACEID, id));
 	keys->addKey(key);
-	SavableManagerPtr manager = SavableManager::bykeys(db::TableImpls::Get()->RACES, keys);
+	SavableManagerPtr manager = SavableManager::bykeys(keys);
 	RacePtr p(new Race(manager));
 	return p;
 }

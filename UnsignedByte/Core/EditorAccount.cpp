@@ -138,7 +138,7 @@ void EditorAccount::beginLogin(const std::string &argument)
 	bool hasAccount = false;
 	try
 	{
-		SavableManagerPtr manager = SavableManager::bykeys(db::TableImpls::Get()->CHARACTERACCOUNT, keys);
+		SavableManagerPtr manager = SavableManager::bykeys(keys);
 		hasAccount = true;
 	} catch(RowNotFoundException& e) { }
 	

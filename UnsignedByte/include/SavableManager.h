@@ -26,8 +26,8 @@ class SavableManager
 	public:
 		// Factories
 		static SavableManagerPtr getnew(TableImplPtr table);
-		static SavableManagerPtr bykeys(TableImplPtr table, KeyPtr keys);
-		static SavableManagerPtr bykeys(TableImplPtr table, KeysPtr keys);
+		static SavableManagerPtr bykeys(KeyPtr keys);
+		static SavableManagerPtr bykeys(KeysPtr keys);
 		static SavableManagerPtr byvalue(ValuePtr value);
 		static KeysPtr lookupvalue(ValuePtr value);
 

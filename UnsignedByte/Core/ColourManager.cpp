@@ -51,7 +51,7 @@ mud::ColourPtr ColourManager::GetByKey(value_type id)
 	KeysPtr keys(new Keys(db::TableImpls::Get()->COLOURS));
 	KeyPtr key(new Key(db::ColoursFields::Get()->COLOURID, id));
 	keys->addKey(key);
-	SavableManagerPtr manager = SavableManager::bykeys(db::TableImpls::Get()->COLOURS, keys);
+	SavableManagerPtr manager = SavableManager::bykeys(keys);
 	ColourPtr p(new Colour(manager));
 	return p;
 }

@@ -51,7 +51,7 @@ mud::GrantGroupPtr GrantGroupManager::GetByKey(value_type id)
 	KeyPtr key(new Key(db::GrantGroupsFields::Get()->GRANTGROUPID, id));
 	keys->addKey(key);
 	
-	SavableManagerPtr manager = SavableManager::bykeys(db::TableImpls::Get()->GRANTGROUPS, keys);
+	SavableManagerPtr manager = SavableManager::bykeys(keys);
 	GrantGroupPtr p(new GrantGroup(manager));
 	return p;
 }

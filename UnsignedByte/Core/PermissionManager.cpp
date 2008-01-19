@@ -47,7 +47,7 @@ TableImplPtr PermissionManager::GetTable()
 
 mud::PermissionPtr PermissionManager::GetByKeys(KeysPtr keys)
 {
-	SavableManagerPtr manager = SavableManager::bykeys(db::TableImpls::Get()->PERMISSIONS, keys);
+	SavableManagerPtr manager = SavableManager::bykeys(keys);
 	PermissionPtr p(new Permission(manager));
 	return p;
 }

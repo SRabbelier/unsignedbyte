@@ -49,7 +49,7 @@ mud::DetailPtr DetailManager::GetByKey(value_type id)
 	KeysPtr keys(new Keys(db::TableImpls::Get()->DETAILS));
 	KeyPtr key(new Key(db::DetailsFields::Get()->DETAILID, id));
 	keys->addKey(key);
-	SavableManagerPtr manager = SavableManager::bykeys(db::TableImpls::Get()->DETAILS, keys);
+	SavableManagerPtr manager = SavableManager::bykeys(keys);
 	DetailPtr p(new Detail(manager));
 	return p;
 }

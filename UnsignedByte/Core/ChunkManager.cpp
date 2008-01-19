@@ -49,7 +49,7 @@ mud::ChunkPtr ChunkManager::GetByKey(value_type id)
 	KeysPtr keys(new Keys(db::TableImpls::Get()->CHUNKS));
 	KeyPtr key(new Key(db::ChunksFields::Get()->CHUNKID, id));
 	keys->addKey(key);
-	SavableManagerPtr manager = SavableManager::bykeys(db::TableImpls::Get()->CHUNKS, keys);
+	SavableManagerPtr manager = SavableManager::bykeys(keys);
 	ChunkPtr p(new Chunk(manager));
 	return p;
 }

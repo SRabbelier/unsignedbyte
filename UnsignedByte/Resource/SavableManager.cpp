@@ -57,18 +57,18 @@ SavableManagerPtr SavableManager::getnew(TableImplPtr table)
 	return result;
 }
 
-SavableManagerPtr SavableManager::bykeys(TableImplPtr table, KeyPtr key)
+SavableManagerPtr SavableManager::bykeys(KeyPtr key)
 {
-	KeysPtr keys(new Keys(table));
+	KeysPtr keys(new Keys(keys->getTable()));
 	keys->addKey(key);
-	return bykeys(table, keys);
+	return bykeys(keys);
 }
 
-SavableManagerPtr SavableManager::bykeys(TableImplPtr table, KeysPtr keys)
+SavableManagerPtr SavableManager::bykeys(KeysPtr keys)
 {
 	// assert(keys.size() == m_table->keySize());
 	
-	SavableManagerPtr result = getnew(table);
+	SavableManagerPtr result = getnew(keys->first()->getKeyDef()->getTable());
 	result->setkeys(keys);
 	SqliteMgr::Get()->doSelect(result);
 	return result;

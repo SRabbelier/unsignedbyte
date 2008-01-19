@@ -58,7 +58,7 @@ mud::CharacterPtr CharacterManager::GetByKey(value_type id)
 	KeysPtr keys(new Keys(db::TableImpls::Get()->CHARACTERS));
 	KeyPtr key(new Key(db::CharactersFields::Get()->CHARACTERID, id));
 	keys->addKey(key);
-	SavableManagerPtr manager = SavableManager::bykeys(db::TableImpls::Get()->CHARACTERS, keys);
+	SavableManagerPtr manager = SavableManager::bykeys(keys);
 	CharacterPtr p(new Character(manager));
 	return p;
 }
