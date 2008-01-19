@@ -21,6 +21,9 @@
 
 #include "Types.h"
 
+typedef std::map<Keys*, SavableManagerPtr> ByKeyCache;
+typedef std::map<Value*, SavableManagerPtr> ByValueCache;
+
 class SavableManager
 {
 	public:
@@ -62,6 +65,9 @@ class SavableManager
 		~SavableManager();
 		
 		friend SmartPtrDelete(SavableManager);
+		
+		static ByKeyCache ms_byKeyCache;
+		static ByValueCache ms_byValueCache;
 		
 		TableImplPtr m_table;		
 		ValuePtr m_lookupvalue;

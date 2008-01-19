@@ -27,6 +27,9 @@
 #include "TableImpl.h"
 #include "SqliteMgr.h"
 
+ByKeyCache SavableManager::ms_byKeyCache;
+ByValueCache SavableManager::ms_byValueCache;
+
 SavableManager::SavableManager(TableImplPtr table) :
 m_table(table),
 m_keys(new Keys(table)),
@@ -66,20 +69,28 @@ SavableManagerPtr SavableManager::bykeys(KeyPtr key)
 
 SavableManagerPtr SavableManager::bykeys(KeysPtr keys)
 {
-	// assert(keys.size() == m_table->keySize());
+	if(ms_byKeyCache.find(keys.get()) == ms_byKeyCache.end())
+	{		
+		SavableManagerPtr result = getnew(keys->first()->getKeyDef()->getTable());
+		result->setkeys(keys);
+		SqliteMgr::Get()->doSelect(result);
+		ms_byKeyCache[keys.get()] = result;
+	}
 	
-	SavableManagerPtr result = getnew(keys->first()->getKeyDef()->getTable());
-	result->setkeys(keys);
-	SqliteMgr::Get()->doSelect(result);
-	return result;
+	return ms_byKeyCache[keys.get()];
 }
 
 SavableManagerPtr SavableManager::byvalue(ValuePtr value)
 {	
-	SavableManagerPtr result = getnew(value->getField()->getTable());
-	result->m_lookupvalue = value;
-	SqliteMgr::Get()->doLookup(result, value->getField());
-	return result;
+	if(ms_byValueCache.find(value.get()) == ms_byValueCache.end())
+	{
+		SavableManagerPtr result = getnew(value->getField()->getTable());
+		result->m_lookupvalue = value;
+		SqliteMgr::Get()->doLookup(result, value->getField());
+		ms_byValueCache[value.get()] = result;
+	}
+	
+	return ms_byValueCache[value.get()];
 }
 
 KeysPtr SavableManager::lookupvalue(ValuePtr value)
