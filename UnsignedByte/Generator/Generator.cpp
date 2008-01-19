@@ -18,6 +18,7 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include <iostream>
 #include <stdexcept>
 
 #include "Generator.h"
@@ -29,6 +30,7 @@
 #include "ClassHeaderGenerator.h"
 #include "ClassSourceGenerator.h"
 
+using std::cout;
 using std::endl;
 
 Generator::Generator(const std::string name) :
@@ -42,6 +44,7 @@ m_tabs("\t")
 	headername.append(m_name);
 	headername.append(".h");
 	m_headerfile.open(headername.c_str());
+	cout << "> " << headername << endl;
 	
 	std::string sourcename;
 	#ifdef _WIN32
@@ -50,6 +53,7 @@ m_tabs("\t")
 	sourcename.append(m_name);
 	sourcename.append(".cpp");
 	m_sourcefile.open(sourcename.c_str());
+	cout << "> " << sourcename << endl;
 	
 	std::string tiheadername;
 	#ifdef _WIN32
@@ -57,6 +61,7 @@ m_tabs("\t")
 	#endif
 	tiheadername.append("TableImpls.h");
 	m_tiheaderfile.open(tiheadername.c_str());
+	cout << "> " << tiheadername << endl;
 	
 	std::string tisourcename;
 	#ifdef _WIN32
@@ -64,6 +69,7 @@ m_tabs("\t")
 	#endif
 	tisourcename.append("TableImpls.cpp");
 	m_tisourcefile.open(tisourcename.c_str());
+	cout << "> " << tisourcename << endl;
 }
 
 Generator::~Generator()
@@ -128,6 +134,12 @@ void Generator::AppendLicense(std::ofstream& file)
 	return;
 }
 
+void Generator::AppendGeneratorNotice(std::ofstream& file)
+{
+	file << "/* NOTE: This file was generated automatically. Do not edit. */" << endl;
+	file << endl;
+}
+
 void Generator::AppendHeaderIncludes()
 {
 	if(!m_headerfile)
@@ -184,6 +196,7 @@ void Generator::CreateHeader()
 	try
 	{
 		AppendLicense(m_headerfile);
+		AppendGeneratorNotice(m_headerfile);
 		AppendHeaderIncludes();
 		
 		for(TableDefVector::const_iterator it = Tables::Get()->begin(); it != Tables::Get()->end(); it++)
@@ -262,6 +275,7 @@ void Generator::CreateSource()
 	try
 	{
 		AppendLicense(m_sourcefile);
+		AppendGeneratorNotice(m_sourcefile);
 		AppendSourceIncludes();
 		
 		for(TableDefVector::const_iterator it = Tables::Get()->begin(); it != Tables::Get()->end(); it++)
@@ -283,9 +297,11 @@ void Generator::CreateTI()
 	try
 	{
 		AppendLicense(m_tiheaderfile);
+		AppendGeneratorNotice(m_tiheaderfile);
 		AppendHeaderTableImpls();
 		
 		AppendLicense(m_tisourcefile);
+		AppendGeneratorNotice(m_tisourcefile);
 		AppendSourceTableImpls();
 	}
 	catch(std::logic_error& e)
