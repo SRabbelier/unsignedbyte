@@ -26,6 +26,7 @@
 #include "KeyDef.h"
 
 #include "SqliteMgr.h"
+#include "SqliteError.h"
 #include "DatabaseMgr.h"
 #include "Actor.h"
 #include "Statements.h"
@@ -50,7 +51,7 @@ void SqliteMgr::doInsert(SavableManager* bindable)
 	sqlite3_reset(insert);
 	
 	if(!table->hasSingularPrimaryKey())
-		bindable->bindKeys(insert);	
+		bindable->bindKeys(m_odb->db, insert);
 		
 	doStatement(insert);
 	
@@ -66,7 +67,7 @@ void SqliteMgr::doErase(SavableManager* bindable)
 	sqlite3_stmt* erase = getEraseStmt(table);
 	sqlite3_reset(erase);
 	
-	bindable->bindKeys(erase);
+	bindable->bindKeys(m_odb->db, erase);
 	doStatement(erase);	
 	
 	commit(table);
@@ -78,7 +79,7 @@ void SqliteMgr::doUpdate(SavableManager* bindable)
 	sqlite3_stmt* update = getUpdateStmt(table);
 	sqlite3_reset(update);
 	
-	bindable->bindUpdate(update);
+	bindable->bindUpdate(m_odb->db, update);
 	doStatement(update);
 	
 	commit(table);
@@ -90,9 +91,8 @@ void SqliteMgr::doSelect(SavableManagerPtr bindable)
 	sqlite3_stmt* select = getSelectStmt(table);
 	sqlite3_reset(select);
 	
-	bindable->bindKeys(select);
-	bool row = doStatement(select);
-	if(row)
+	bindable->bindKeys(m_odb->db, select);
+	if(doStatement(select))
 		bindable->parseSelect(select);
 	else
 		throw RowNotFoundException("SqliteMgr::doSelect(), no row.");
@@ -104,9 +104,8 @@ void SqliteMgr::doLookup(SavableManagerPtr bindable, FieldPtr field)
 	sqlite3_stmt* lookup = getLookupStmt(table, field);
 	sqlite3_reset(lookup);
 	
-	bindable->bindLookup(lookup);
-	bool row = doStatement(lookup);
-	if(row)
+	bindable->bindLookup(m_odb->db, lookup);
+	if(doStatement(lookup))
 	{
 		bindable->parseLookup(lookup);
 		doSelect(bindable);
@@ -141,24 +140,15 @@ void SqliteMgr::commit(TableImpl* table)
 bool SqliteMgr::doStatement(sqlite3_stmt* stmt)
 {
 	int rc = sqlite3_step(stmt);
-	
-	switch (rc)
-	{
-	default:
-		throw new std::runtime_error("SqliteMgr::doUpdate(), Unknown error code!");
-	case SQLITE_BUSY:
-		throw new std::runtime_error("SqliteMgr::doUpdate(), The database is busy.");
-	case SQLITE_ERROR:
-		throw new std::runtime_error(sqlite3_errmsg(m_odb->db));
-	case SQLITE_MISUSE:
-		throw new std::runtime_error("SqliteMgr::doUpdate(), Database misuse.");
-		
+
+	switch(rc) {
 	case SQLITE_DONE:
 		return false;
-
 	case SQLITE_ROW:
 		return true;
 	}
+
+	throw SqliteError(m_odb->db);
 }
 
 StatementsPtr SqliteMgr::getStatements(TableImpl* table)
@@ -232,11 +222,11 @@ sqlite3_stmt* SqliteMgr::getInsertStmt(TableImpl* table)
 	int errorcode = sqlite3_prepare_v2(m_odb->db, sql.c_str(), (int)sql.size(), &statement, &m_leftover);
 
 	if(errorcode != SQLITE_OK)
-		throw std::runtime_error("SqliteMgr::getInsertStmt(), Could not prepare insertion query!");
-		
+		throw SqliteError(m_odb->db);
+
 	if(m_leftover != NULL && strlen(m_leftover) > 0)
 		throw std::runtime_error("SqliteMgr::getInsertStmt(), Leftover from insertion is not NULL!");
-		
+
 	statements->setInsert(statement);
 	return statement;
 }
@@ -278,8 +268,8 @@ sqlite3_stmt* SqliteMgr::getEraseStmt(TableImpl* table)
 	int errorcode = sqlite3_prepare_v2(m_odb->db, sql.c_str(), (int)sql.size(), &statement, &m_leftover);
 
 	if(errorcode != SQLITE_OK)
-		throw std::runtime_error("SqliteMgr::getEraseStmt(), Could not prepare insertion query!");
-		
+		throw SqliteError(m_odb->db);
+
 	if(m_leftover != NULL && strlen(m_leftover) > 0)
 		throw std::runtime_error("SqliteMgr::getEraseStmt(), Leftover from insertion is not NULL!");
 		
@@ -334,8 +324,8 @@ sqlite3_stmt* SqliteMgr::getUpdateStmt(TableImpl* table)
 	int errorcode = sqlite3_prepare_v2(m_odb->db, sql.c_str(), (int)sql.size(), &statement, &m_leftover);
 
 	if(errorcode != SQLITE_OK)
-		throw std::runtime_error("SqliteMgr::getUpdateStmt(), Could not prepare update query!");
-		
+		throw SqliteError(m_odb->db);
+
 	if(m_leftover != NULL && strlen(m_leftover) > 0)
 		throw std::runtime_error("SqliteMgr::getUpdateStmt(), Leftover from update is not NULL!");
 
@@ -397,7 +387,7 @@ sqlite3_stmt* SqliteMgr::getSelectStmt(TableImpl* table)
 	int errorcode = sqlite3_prepare_v2(m_odb->db, sql.c_str(), (int)sql.size(), &statement, &m_leftover);
 
 	if(errorcode != SQLITE_OK)
-		throw std::runtime_error("SqliteMgr::getSelectStmt(), Could not prepare selection query!");
+		throw SqliteError(m_odb->db);
 		
 	if(m_leftover != NULL && strlen(m_leftover) > 0)
 		throw std::runtime_error("SqliteMgr::getSelectStmt(), Leftover from selection is not NULL!");
@@ -445,11 +435,11 @@ sqlite3_stmt* SqliteMgr::getLookupStmt(TableImpl* table, FieldPtr field)
 	int errorcode = sqlite3_prepare_v2(m_odb->db, sql.c_str(), (int)sql.size(), &statement, &m_leftover);
 
 	if(errorcode != SQLITE_OK)
-		throw std::runtime_error("SqliteMgr::getLookupStmt(), Could not prepare lookup query!");
-		
+		throw SqliteError(m_odb->db);
+
 	if(m_leftover != NULL && strlen(m_leftover) > 0)
 		throw std::runtime_error("SqliteMgr::getLookupStmt(), Leftover from lookup is not NULL!");
-		
+
 	statements->setLookup(field, statement);
 	return statement;
 }
@@ -497,11 +487,11 @@ sqlite3_stmt* SqliteMgr::getForEachStmt(TableImpl* table)
 	
 		statementstrings->setForEach(sql);
 	}
-		
+
 	int errorcode = sqlite3_prepare_v2(m_odb->db, sql.c_str(), (int)sql.size(), &statement, &m_leftover);
 
 	if(errorcode != SQLITE_OK)
-		throw std::runtime_error("SqliteMgr::getForEachStmt(), Could not prepare forEach query!");
+		throw SqliteError(m_odb->db);
 		
 	if(m_leftover != NULL && strlen(m_leftover) > 0)
 		throw std::runtime_error("SqliteMgr::getForEachStmt(), Leftover from forEach is not NULL!");
