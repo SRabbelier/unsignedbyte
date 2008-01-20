@@ -18,6 +18,7 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include "Assert.h"
 #include "Detail.h"
 #include "Global.h"
 #include "db.h"
@@ -27,8 +28,7 @@ using mud::Detail;
 Detail::Detail(SavableManagerPtr detail) :
 m_detail(detail)
 {
-	if(!m_detail)
-		throw std::invalid_argument("Detail::Detail(), m_detail == NULL!");
+	Assert(detail);
 }
 
 Detail::~Detail(void)

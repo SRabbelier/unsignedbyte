@@ -18,6 +18,7 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include "Assert.h"
 #include "Colour.h"
 #include "Global.h"
 #include "db.h"
@@ -27,8 +28,7 @@ using namespace mud;
 Colour::Colour(SavableManagerPtr object) :
 m_colour(object)
 {
-	if(!m_colour)
-		throw std::invalid_argument("Colour::Colour(), m_colour == NULL");
+	Assert(object);
 }
 
 Colour::~Colour(void)

@@ -20,6 +20,7 @@
 
 #include <stdarg.h>
 
+#include "Assert.h"
 #include "Editor.h"
 #include "Parse.h"
 #include "Permission.h"
@@ -37,8 +38,7 @@ using mud::Command;
 Editor::Editor(UBSocket* sock) : 
 m_sock(sock) 
 {
-	if(sock == NULL)
-		throw std::invalid_argument("Editor::Editor(), m_sock == NULL!");
+	Assert(sock);
 }
 
 Editor::~Editor()

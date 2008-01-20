@@ -30,6 +30,7 @@
 #include "SectorManager.h"
 #include "Character.h"
 
+#include "Assert.h"
 #include "Global.h"
 #include "Exceptions.h"
 #include "db.h"
@@ -39,8 +40,7 @@ using mud::Room;
 Room::Room(SavableManagerPtr room) :
 m_room(room)
 {
-	if(!m_room)
-		throw std::invalid_argument("Room::Room(), m_room == NULL!");
+	Assert(room);
 }
 
 Room::~Room(void)

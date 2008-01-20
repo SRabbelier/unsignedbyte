@@ -18,6 +18,7 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include "Assert.h"
 #include "Race.h"
 
 using mud::Race;
@@ -25,8 +26,7 @@ using mud::Race;
 Race::Race(SavableManagerPtr race) :
 m_race(race)
 {
-	if(!m_race)
-		throw std::invalid_argument("Race::Race(), m_race == NULL!");
+	Assert(race);
 }
 
 Race::~Race(void)

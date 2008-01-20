@@ -18,6 +18,7 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include "Assert.h"
 #include "Sector.h"
 #include "db.h"
 
@@ -26,8 +27,7 @@ using mud::Sector;
 Sector::Sector(SavableManagerPtr Sector) :
 m_sector(Sector)
 {
-	if(!m_sector)
-		throw std::invalid_argument("Sector::Sector(), m_sector == NULL!");
+	Assert(Sector);
 }
 
 Sector::~Sector(void)

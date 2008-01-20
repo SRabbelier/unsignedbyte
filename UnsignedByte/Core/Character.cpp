@@ -24,6 +24,7 @@
 
 #include <stdarg.h>
 
+#include "Assert.h"
 #include "StringUtilities.h"
 #include "Exceptions.h"
 #include "db.h"
@@ -45,8 +46,7 @@ using mud::Character;
 Character::Character(SavableManagerPtr character) :
 m_character(character)
 {
-	if(!m_character)
-		throw std::invalid_argument("Character::Character(), m_character == NULL");
+	Assert(character);
 }
 
 Character::~Character(void)

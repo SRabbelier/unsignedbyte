@@ -19,6 +19,7 @@
  ***************************************************************************/
 
 #include "Area.h"
+#include "Assert.h"
 #include "Global.h"
 #include "db.h"
 
@@ -27,8 +28,7 @@ using mud::Area;
 Area::Area(SavableManagerPtr area) :
 m_area(area)
 {
-	if(!m_area)
-		throw std::invalid_argument("Area::Area(), m_area == NULL!");
+	Assert(area);
 }
 
 Area::~Area(void)

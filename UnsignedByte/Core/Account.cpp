@@ -19,6 +19,7 @@
  ***************************************************************************/
 
 #include "Account.h"
+#include "Assert.h"
 #include "db.h"
 
 using mud::Account;
@@ -26,8 +27,7 @@ using mud::Account;
 Account::Account(SavableManagerPtr dbaccount) :
 m_account(dbaccount)
 {
-	if(!m_account)
-		throw std::invalid_argument("Account::Account(), m_account == NULL!");
+	Assert(dbaccount);
 }
 
 Account::~Account(void)

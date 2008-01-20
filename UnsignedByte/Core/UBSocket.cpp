@@ -26,6 +26,7 @@
 #include "UBSocket.h"
 #include "PCharacter.h"
 
+#include "Assert.h"
 #include "DatabaseMgr.h"
 #include "EditorAccountLogin.h"
 #include "EditorOOC.h"
@@ -75,8 +76,7 @@ void UBSocket::OnAccept()
 	Global::Get()->logf("Login from: %s\n", GetRemoteAddress().c_str());
 	Sendf("Welcome to %s.\n", game::vname);
 	Editor* p = new EditorAccountLogin(this);
-	if(!m_editors.empty())
-		throw std::logic_error("UBSocket::OnAccept(), m_editor != NULL!");
+	Assert(m_editors.empty());
 
 	m_editors.push(p);
 }
@@ -112,17 +112,13 @@ void UBSocket::OnLine(const std::string &line)
 
 mud::Account* UBSocket::GetAccount() const
 {
-	if(!m_account)
-		throw std::logic_error("UBSocket::GetAccount(), m_account == NULL!");
-	
+	Assert(m_account);
 	return m_account.get();
 }
 
 UBSocket* UBSocket::GetForcer() const
 {
-	if(m_forcer == NULL)
-		throw std::logic_error("UBSocket::GetForcer(), m_forcer == NULL!");
-		
+	Assert(m_forcer);
 	return m_forcer;
 }
 

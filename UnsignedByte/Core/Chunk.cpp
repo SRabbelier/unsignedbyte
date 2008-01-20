@@ -18,6 +18,7 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include "Assert.h"
 #include "Chunk.h"
 #include "Global.h"
 #include "db.h"
@@ -27,8 +28,7 @@ using mud::Chunk;
 Chunk::Chunk(SavableManagerPtr chunk) :
 m_chunk(chunk)
 {
-	if(!m_chunk)
-		throw std::invalid_argument("Chunk::Chunk(), m_chunk == NULL!");
+	Assert(chunk);
 }
 
 Chunk::~Chunk(void)

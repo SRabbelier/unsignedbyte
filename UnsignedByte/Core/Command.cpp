@@ -18,6 +18,7 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include "Assert.h"
 #include "UBSocket.h"
 #include "Command.h"
 #include "Global.h"
@@ -33,8 +34,7 @@ using mud::Command;
 Command::Command(SavableManagerPtr Command) :
 m_command(Command)
 {
-	if(!m_command)
-		throw std::invalid_argument("Command::Command(), m_command == NULL!");
+	Assert(Command);
 }
 
 Command::~Command(void)

@@ -18,6 +18,7 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include "Assert.h"
 #include "Exit.h"
 #include "Global.h"
 #include "db.h"
@@ -27,8 +28,7 @@ using mud::Exit;
 Exit::Exit(SavableManagerPtr exit) :
 m_exit(exit)
 {
-	if(!m_exit)
-		throw new std::invalid_argument("Exit::Exit(), m_exit == NULL!");
+	Assert(m_exit);
 }
 
 Exit::~Exit(void)
