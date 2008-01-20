@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (C) 2007 by Sverre Rabbelier                                *
+ *   Copyright (C) 2008 by Sverre Rabbelier                                *
  *   sverre@rabbelier.nl                                                   *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -17,6 +17,8 @@
  *   Free Software Foundation, Inc.,                                       *
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
+
+/* NOTE: This file was generated automatically. Do not edit. */
 
 #ifdef _WIN32
 #pragma warning (disable:4244)

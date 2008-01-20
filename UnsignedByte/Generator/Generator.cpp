@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (C) 2007 by Sverre Rabbelier                                *
+ *   Copyright (C) 2008 by Sverre Rabbelier                                *
  *   sverre@rabbelier.nl                                                   *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -111,7 +111,7 @@ void Generator::AppendLicense(std::ofstream& file)
 		throw std::logic_error("File is not open for writing.\n");
 		
 	file << "/***************************************************************************" << endl;
-	file << " *   Copyright (C) 2007 by Sverre Rabbelier                                *" << endl;
+	file << " *   Copyright (C) 2008 by Sverre Rabbelier                                *" << endl;
 	file << " *   sverre@rabbelier.nl                                                   *" << endl;
 	file << " *                                                                         *" << endl;
 	file << " *   This program is free software; you can redistribute it and/or modify  *" << endl;

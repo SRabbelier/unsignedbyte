@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (C) 2007 by Sverre Rabbelier                                *
+ *   Copyright (C) 2008 by Sverre Rabbelier                                *
  *   sverre@rabbelier.nl                                                   *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
