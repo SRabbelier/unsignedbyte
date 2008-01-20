@@ -27,3 +27,13 @@ class RowNotFoundException : public std::runtime_error
 	public:
 		RowNotFoundException(const std::string& arg) : std::runtime_error(arg) { }
 };
+
+class SqliteError : public std::runtime_error
+{
+	public:
+		SqliteError(sqlite3*);
+
+	private:
+		int m_sqliteErrno;
+		const char* m_sqliteError;
+};

@@ -1,6 +1,6 @@
 /***************************************************************************
- *   Copyright (C) 2007 by Sverre Rabbelier                                *
- *   sverre@rabbelier.nl                                                   *
+ *   Copyright (C) 2008 by Vegard Nossum                                   *
+ *   vegard@peltkore.net                                                   *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -18,11 +18,12 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#include "SqliteError.h"
+#include "Exceptions.h"
 
-SqliteError::SqliteError(::sqlite3* db):
-	std::runtime_error(::sqlite3_errmsg(db)),
-	_sqlite_errno(::sqlite3_errcode(db)),
-	_sqlite_error(::sqlite3_errmsg(db))
+SqliteError::SqliteError(sqlite3* db):
+	std::runtime_error(sqlite3_errmsg(db)),
+	m_sqliteErrno(sqlite3_errcode(db)),
+	m_sqliteError(sqlite3_errmsg(db))
 {
+	
 }

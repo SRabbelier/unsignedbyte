@@ -52,6 +52,7 @@
     <File Name="TableImpl.cpp"/>
     <File Name="Keys.cpp"/>
     <File Name="MPKCriteria.cpp"/>
+    <File Name="SqliteError.cpp"/>
   </VirtualDirectory>
   <VirtualDirectory Name="Header Files">
     <File Name="../include/Base64.h"/>

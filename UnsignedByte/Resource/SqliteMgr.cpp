@@ -92,7 +92,8 @@ void SqliteMgr::doSelect(SavableManagerPtr bindable)
 	sqlite3_reset(select);
 	
 	bindable->bindKeys(m_odb->db, select);
-	if(doStatement(select))
+	bool row = doStatement(select);
+	if(row)
 		bindable->parseSelect(select);
 	else
 		throw RowNotFoundException("SqliteMgr::doSelect(), no row.");
@@ -105,7 +106,8 @@ void SqliteMgr::doLookup(SavableManagerPtr bindable, FieldPtr field)
 	sqlite3_reset(lookup);
 	
 	bindable->bindLookup(m_odb->db, lookup);
-	if(doStatement(lookup))
+	bool row = doStatement(lookup);
+	if(row)
 	{
 		bindable->parseLookup(lookup);
 		doSelect(bindable);
