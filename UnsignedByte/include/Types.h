@@ -24,6 +24,7 @@
 #include <vector>
 #include <map>
 #include <stdexcept>
+#include <set>
 
 #include <sqlite3.h>
 
@@ -31,6 +32,7 @@
 #include "singleton.h"
 
 typedef unsigned long value_type;
+typedef std::set<value_type> value_types;
 typedef const std::string& cstring;
 
 typedef std::vector<std::string> Strings;

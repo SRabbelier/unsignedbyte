@@ -29,6 +29,7 @@
 #include "Sector.h"
 #include "SectorManager.h"
 #include "Character.h"
+#include "CharacterManager.h"
 
 #include "Assert.h"
 #include "Global.h"
@@ -131,18 +132,31 @@ void Room::setLength(value_type length)
 	m_room->setvalue(value);	
 }
 
-
-const mud::Characters& mud::Room::getCharactersInRoom()
+void mud::Room::addCharacter(value_type characterid)
 {
-	return m_charactersInRoom;
+	SmartPtr<mud::Character> character = mud::CharacterManager::Get()->GetByKey(characterid);
+	Assert(character->getRoom() == this->getID());
+	
+	m_charactersInRoom.insert(characterid);
 }
 
-void Room::Send(const std::string& msg)
+void mud::Room::removeCharacter(value_type characterid)
 {
-	Characters inroom = getCharactersInRoom();
+	SmartPtr<mud::Character> character = mud::CharacterManager::Get()->GetByKey(characterid);
+	Assert(character->getRoom() == this->getID());
 	
-	for(Characters::iterator it = inroom.begin(); it != inroom.end(); it++)
-		(*it)->OnSend(msg);
+	value_types::const_iterator it = m_charactersInRoom.find(characterid);
+	Assert(it != m_charactersInRoom.end());
+	m_charactersInRoom.erase(it);
+}
+
+void mud::Room::Send(const std::string& msg)
+{
+	for(value_types::const_iterator it = m_charactersInRoom.begin(); it != m_charactersInRoom.end(); it++)
+	{
+		CharacterPtr character = mud::CharacterManager::Get()->GetByKey(*it);
+		character->OnSend(msg);
+	}
 }
 
 void Room::Sendf(const char* format, ...)

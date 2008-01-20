@@ -36,6 +36,7 @@
 #include "Global.h"
 #include "Account.h" // needed because we include UBSocket.h
 #include <iostream>
+#include "Assert.h"
 
 void exitfunc()
 {

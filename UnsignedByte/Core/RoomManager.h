@@ -24,7 +24,7 @@
 namespace mud 
 { 
 	class Room; 
-	typedef SmartPtr<Room> RoomPtr;
+	typedef SmartPtr<mud::Room> RoomPtr;
 }
 
 namespace mud

@@ -109,6 +109,20 @@ void Character::setRoom(value_type room)
 
 
 /**
+ * Operations
+ */ 
+
+void mud::Character::MoveToRoom(value_type roomid)
+{
+	mud::RoomPtr inroom = mud::RoomManager::Get()->GetByKey(getRoom());
+	mud::RoomPtr toroom = mud::RoomManager::Get()->GetByKey(roomid);
+	
+	setRoom(roomid);
+	inroom->removeCharacter(getID());
+	toroom->addCharacter(getID());
+}
+
+/**
  * Start of Output
  */ 
 void Character::OnSend(const std::string& msg)

@@ -62,6 +62,11 @@ namespace mud
 		void setRoom(value_type room);
 		
 		/**
+		 * \brief Operations
+		 */ 
+		void MoveToRoom(value_type room);
+		
+		/**
 		 * \brief Database operations
 		 */
 		void Delete();

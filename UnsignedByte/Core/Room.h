@@ -23,8 +23,6 @@
 
 namespace mud
 {
-	class Character;
-	typedef std::vector<Character*> Characters;
 	class Room;
 	typedef SmartPtr<Room> RoomPtr;
 	
@@ -47,8 +45,13 @@ namespace mud
 		void setHeight(value_type height);
 		void setWidth(value_type width);
 		void setLength(value_type length);
+		
+		void addCharacter(value_type characterid);
+		void removeCharacter(value_type characterid);
 
-		const Characters& getCharactersInRoom();
+		value_types::const_iterator firstCharactersInRoom() { return m_charactersInRoom.begin(); }
+		value_types::const_iterator lastCharactersInRoom() { return m_charactersInRoom.end(); }
+		value_type sizeCharactersInRoom() { return m_charactersInRoom.size(); }
 
 		void Send(const std::string& msg);
 		void Sendf(const char* format, ...);
@@ -69,7 +72,7 @@ namespace mud
 
 	private:
 		SavableManagerPtr m_room;
-		Characters m_charactersInRoom;
+		value_types m_charactersInRoom;
 
 		Room(SavableManagerPtr room);
 		Room(const Room& rhs);

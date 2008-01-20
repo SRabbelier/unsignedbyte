@@ -53,6 +53,7 @@
     <File Name="Keys.cpp"/>
     <File Name="MPKCriteria.cpp"/>
     <File Name="SqliteError.cpp"/>
+    <File Name="Assert.cpp"/>
   </VirtualDirectory>
   <VirtualDirectory Name="Header Files">
     <File Name="../include/Base64.h"/>
