@@ -24,9 +24,13 @@
 
 #include "ListActor.h"
 #include "Table.h"
+#include "Assert.h"
 
 void ListActor::parseRow(sqlite3_stmt* statement, Table* table)
 {
+	Assert(statement);
+	Assert(table);
+	
 	std::string result;
 
 	int columns = sqlite3_column_count(statement);

@@ -30,22 +30,22 @@ public:
 	~Statements();
 	
 	// Getters
-	sqlite3_stmt* getErase() const {return m_erase;}
-	sqlite3_stmt* getInsert() const {return m_insert;}
-	sqlite3_stmt* getUpdate() const {return m_update;}
-	sqlite3_stmt* getSelect() const {return m_select;}
-	sqlite3_stmt* getLookup(FieldPtr field) {return m_lookup[field.get()];}
-	sqlite3_stmt* getList() const {return m_list;}
-	sqlite3_stmt* getForEach() const {return m_foreach;}
+	sqlite3_stmt* getErase() const;
+	sqlite3_stmt* getInsert() const;
+	sqlite3_stmt* getUpdate() const;
+	sqlite3_stmt* getSelect() const;
+	sqlite3_stmt* getLookup(FieldPtr field);
+	sqlite3_stmt* getList() const;
+	sqlite3_stmt* getForEach() const;
 	
 	// Setters
-	void setErase(sqlite3_stmt* erase) { m_erase = erase; }
-	void setInsert(sqlite3_stmt* insert) { m_insert = insert; }
-	void setUpdate(sqlite3_stmt* update) { m_update = update; }
-	void setSelect(sqlite3_stmt* select) { m_select = select; }
-	void setLookup(FieldPtr field, sqlite3_stmt* lookup) { m_lookup[field.get()] = lookup; }
-	void setList(sqlite3_stmt* list) { m_list = list; }
-	void setForEach(sqlite3_stmt* forEach) { m_foreach = forEach; }
+	void setErase(sqlite3_stmt* erase);
+	void setInsert(sqlite3_stmt* insert);
+	void setUpdate(sqlite3_stmt* update);
+	void setSelect(sqlite3_stmt* select);
+	void setLookup(FieldPtr field, sqlite3_stmt* lookup);
+	void setList(sqlite3_stmt* list);
+	void setForEach(sqlite3_stmt* forEach);
 	
 	void commit();
 	

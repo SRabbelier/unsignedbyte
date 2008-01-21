@@ -28,7 +28,8 @@
 TableImpl::TableImpl(TableDefPtr table) :
 Table(table->tableName()),
 m_table(table),
-m_lastchange(time(NULL))
+m_lastchange(time(NULL)),
+m_listcache(0)
 {
 
 }
@@ -44,6 +45,20 @@ const std::vector<std::string>& TableImpl::tableList()
 	}
 
 	return m_list;
+}
+
+void TableImpl::addKey(KeyDefPtr key) 
+{
+	Assert(key); 
+	
+	m_keys.push_back(key); 
+}
+
+void TableImpl::addField(FieldImplPtr field) 
+{ 
+	Assert(field); 
+	
+	m_implfields.push_back(field); 
 }
 
 void TableImpl::modify()

@@ -25,15 +25,24 @@
 #include "FieldImpl.h"
 #include "Parse.h"
 
+Keys::Keys(TableImplPtr table) : 
+m_table(table) 
+{ 
+	Assert(table); 
+}
+
 Keys::Keys(TableImplPtr table, cstring initstring) :
 m_table(table)
 {
+	Assert(table);
 	Parse p(initstring);
 		
 	try
 	{
 		for(KeyDefs::const_iterator it = m_table->keyimplbegin(); it != m_table->keyimplend(); it++)
 		{
+			Assert(*it);
+			
 			std::string keystring = p.getword();
 			int value = atoi(keystring.c_str());
 			KeyPtr key(new Key(*it, value));
@@ -46,19 +55,29 @@ m_table(table)
 	}
 }
 
+Keys::~Keys() 
+{ 
+	
+}
+
 KeyPtr Keys::getKey(KeyDefPtr key) const
 {
+	Assert(key);
 	KeyMap::const_iterator it = m_keys.find(key.get());
-	if(it == m_keys.end())
-		throw std::invalid_argument("Keys::getKey(), key not in m_keys.");
+	Assert(it != m_keys.end());
 		
 	return it->second;
 }
 
+TableImplPtr Keys::getTable() const 
+{ 
+	return m_table; 
+}
+
 void Keys::addKey(KeyPtr key)
 {
-	if(key->getKeyDef()->getTable() != m_table)
-		throw std::invalid_argument("Keys::addKey(), key->getTable() != m_table");
+	Assert(key);
+	Assert(key->getKeyDef()->getTable() == m_table);
 		
 	m_keys[key->getKeyDef().get()] = key;
 }
@@ -68,4 +87,31 @@ std::string Keys::toString() const
 	std::string result;
 	
 	return result;
+}
+
+size_t Keys::size() const 
+{ 
+	return m_keys.size(); 
+}
+
+KeyPtr Keys::first() const 
+{ 
+	return m_keys.begin()->second; 
+}
+
+KeyMap::const_iterator Keys::begin() const 
+{ 
+	return m_keys.begin(); 
+}
+
+KeyMap::const_iterator Keys::end() const 
+{ 
+	return m_keys.end(); 
+}
+
+KeyMap::const_iterator Keys::find(KeyDefPtr key) const 
+{ 
+	Assert(key); 
+	
+	return m_keys.find(key.get()); 
 }

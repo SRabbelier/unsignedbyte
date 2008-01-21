@@ -43,7 +43,7 @@ public:
 	void setInsert(cstring insert) { m_insert = insert; }
 	void setUpdate(cstring update) { m_update = update; }
 	void setSelect(cstring select) { m_select = select; }
-	void setLookup(FieldPtr field, cstring lookup) { m_lookup[field.get()] = lookup; }
+	void setLookup(FieldPtr field, cstring lookup) { Assert(field); m_lookup[field.get()] = lookup; }
 	void setList(cstring list) { m_list = list; }
 	void setForEach(cstring forEach) { m_foreach = forEach; }
 	

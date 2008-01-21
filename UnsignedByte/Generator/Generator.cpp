@@ -26,6 +26,7 @@
 #include "Tables.h"
 #include "TableDef.h"
 #include "StringUtilities.h"
+#include "Assert.h"
 
 #include "ClassHeaderGenerator.h"
 #include "ClassSourceGenerator.h"
@@ -165,6 +166,8 @@ void Generator::AppendHeaderIncludes()
 
 void Generator::AppendHeaderClass(TableDefPtr table)
 {
+	Assert(table);
+	
 	try
 	{
 		ClassHeaderGenerator gen(table, &m_headerfile);
@@ -245,6 +248,8 @@ void Generator::AppendSourceIncludes()
 
 void Generator::AppendSourceClass(TableDefPtr table)
 {
+	Assert(table);
+	
 	try
 	{
 		ClassSourceGenerator gen(table, &m_sourcefile);

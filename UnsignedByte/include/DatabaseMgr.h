@@ -38,8 +38,8 @@ public:
 
 private: // functions
 	DatabaseMgr();
-	DatabaseMgr(const DatabaseMgr& rhs) {};
-	DatabaseMgr operator=(const DatabaseMgr& rhs) { return *this; };
+	DatabaseMgr(const DatabaseMgr& rhs);
+	DatabaseMgr operator=(const DatabaseMgr& rhs);
 	~DatabaseMgr();
 
 	std::string m_path;

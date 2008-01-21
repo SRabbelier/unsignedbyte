@@ -39,7 +39,7 @@ Objects=$(IntermediateDirectory)/Base64$(ObjectSuffix) $(IntermediateDirectory)/
 	$(IntermediateDirectory)/SocketHandler$(ObjectSuffix) $(IntermediateDirectory)/socket_include$(ObjectSuffix) $(IntermediateDirectory)/SSLInitializer$(ObjectSuffix) $(IntermediateDirectory)/StderrLog$(ObjectSuffix) $(IntermediateDirectory)/StdoutLog$(ObjectSuffix) $(IntermediateDirectory)/StreamSocket$(ObjectSuffix) $(IntermediateDirectory)/TcpSocket$(ObjectSuffix) $(IntermediateDirectory)/Thread$(ObjectSuffix) $(IntermediateDirectory)/UdpSocket$(ObjectSuffix) $(IntermediateDirectory)/Utility$(ObjectSuffix) \
 	$(IntermediateDirectory)/Coordinate$(ObjectSuffix) $(IntermediateDirectory)/Path$(ObjectSuffix) $(IntermediateDirectory)/Global$(ObjectSuffix) $(IntermediateDirectory)/sha2$(ObjectSuffix) $(IntermediateDirectory)/StringUtilities$(ObjectSuffix) $(IntermediateDirectory)/Tables$(ObjectSuffix) $(IntermediateDirectory)/Table$(ObjectSuffix) $(IntermediateDirectory)/Field$(ObjectSuffix) $(IntermediateDirectory)/DatabaseMgr$(ObjectSuffix) $(IntermediateDirectory)/SqliteMgr$(ObjectSuffix) \
 	$(IntermediateDirectory)/Statements$(ObjectSuffix) $(IntermediateDirectory)/ListActor$(ObjectSuffix) $(IntermediateDirectory)/CountActor$(ObjectSuffix) $(IntermediateDirectory)/SPKCriteria$(ObjectSuffix) $(IntermediateDirectory)/SavableManager$(ObjectSuffix) $(IntermediateDirectory)/FieldDef$(ObjectSuffix) $(IntermediateDirectory)/FieldImpl$(ObjectSuffix) $(IntermediateDirectory)/TableDef$(ObjectSuffix) $(IntermediateDirectory)/TableImpl$(ObjectSuffix) $(IntermediateDirectory)/Keys$(ObjectSuffix) \
-	$(IntermediateDirectory)/MPKCriteria$(ObjectSuffix) $(IntermediateDirectory)/SqliteError$(ObjectSuffix) $(IntermediateDirectory)/Assert$(ObjectSuffix) 
+	$(IntermediateDirectory)/MPKCriteria$(ObjectSuffix) $(IntermediateDirectory)/SqliteError$(ObjectSuffix) $(IntermediateDirectory)/Assert$(ObjectSuffix) $(IntermediateDirectory)/Value$(ObjectSuffix) $(IntermediateDirectory)/Criteria$(ObjectSuffix) 
 
 ##
 ## Main Build Tragets 
@@ -324,6 +324,16 @@ $(IntermediateDirectory)/Assert$(ObjectSuffix): Assert.cpp $(IntermediateDirecto
 $(IntermediateDirectory)/Assert$(ObjectSuffix).d:
 	@$(CompilerName) $(CmpOptions) $(IncludePath) -MT$(IntermediateDirectory)/Assert$(ObjectSuffix) -MF$(IntermediateDirectory)/Assert$(ObjectSuffix).d -MM Assert.cpp
 
+$(IntermediateDirectory)/Value$(ObjectSuffix): Value.cpp $(IntermediateDirectory)/Value$(ObjectSuffix).d
+	$(CompilerName) $(SourceSwitch)Value.cpp $(CmpOptions)   $(OutputSwitch)$(IntermediateDirectory)/Value$(ObjectSuffix) $(IncludePath)
+$(IntermediateDirectory)/Value$(ObjectSuffix).d:
+	@$(CompilerName) $(CmpOptions) $(IncludePath) -MT$(IntermediateDirectory)/Value$(ObjectSuffix) -MF$(IntermediateDirectory)/Value$(ObjectSuffix).d -MM Value.cpp
+
+$(IntermediateDirectory)/Criteria$(ObjectSuffix): Criteria.cpp $(IntermediateDirectory)/Criteria$(ObjectSuffix).d
+	$(CompilerName) $(SourceSwitch)Criteria.cpp $(CmpOptions)   $(OutputSwitch)$(IntermediateDirectory)/Criteria$(ObjectSuffix) $(IncludePath)
+$(IntermediateDirectory)/Criteria$(ObjectSuffix).d:
+	@$(CompilerName) $(CmpOptions) $(IncludePath) -MT$(IntermediateDirectory)/Criteria$(ObjectSuffix) -MF$(IntermediateDirectory)/Criteria$(ObjectSuffix).d -MM Criteria.cpp
+
 ##
 ## Clean
 ##
@@ -434,6 +444,10 @@ clean:
 	$(RM) $(IntermediateDirectory)/SqliteError$(ObjectSuffix).d
 	$(RM) $(IntermediateDirectory)/Assert$(ObjectSuffix)
 	$(RM) $(IntermediateDirectory)/Assert$(ObjectSuffix).d
+	$(RM) $(IntermediateDirectory)/Value$(ObjectSuffix)
+	$(RM) $(IntermediateDirectory)/Value$(ObjectSuffix).d
+	$(RM) $(IntermediateDirectory)/Criteria$(ObjectSuffix)
+	$(RM) $(IntermediateDirectory)/Criteria$(ObjectSuffix).d
 	$(RM) $(OutputFile)
 
 -include $(IntermediateDirectory)/*.d

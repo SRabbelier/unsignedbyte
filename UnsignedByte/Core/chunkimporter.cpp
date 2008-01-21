@@ -43,6 +43,8 @@ std::string ChunkImporter::MyDetail::toString()
 
 void ChunkImporter::MyDetail::apply(mud::DetailPtr detail)
 {	
+	Assert(detail);
+	
 	MyDetailVector details = getDetails();
 	for(MyDetailVector::iterator it = details.begin(); it != details.end(); it++)
 	{
@@ -265,6 +267,8 @@ void ChunkImporter::Parse()
 
 void ChunkImporter::Apply(mud::ChunkPtr chunk)
 {
+	Assert(chunk);
+	
 	/**
 	 * Set description to that of the top node
 	 */ 

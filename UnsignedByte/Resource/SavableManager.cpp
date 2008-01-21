@@ -37,6 +37,8 @@ m_keys(new Keys(table)),
 m_newentry(true),
 m_dirty(false)
 {
+	Assert(table);
+	
 	for(FieldImplVector::const_iterator it = table->implbegin(); it != table->implend(); it++)
 	{
 		ValuePtr value(new Value(*it));
@@ -57,12 +59,16 @@ SavableManager::~SavableManager()
 
 SavableManagerPtr SavableManager::getnew(TableImplPtr table)
 {
+	Assert(table);
+	
 	SavableManagerPtr result(new SavableManager(table));
 	return result;
 }
 
 SavableManagerPtr SavableManager::bykeys(KeyPtr key)
 {
+	Assert(key);
+	
 	KeysPtr keys(new Keys(keys->getTable()));
 	keys->addKey(key);
 	return bykeys(keys);
@@ -70,9 +76,11 @@ SavableManagerPtr SavableManager::bykeys(KeyPtr key)
 
 SavableManagerPtr SavableManager::bykeys(KeysPtr keys)
 {
+	Assert(keys);
+	
 	if(ms_byKeyCache.find(keys.get()) == ms_byKeyCache.end())
 	{		
-		SavableManagerPtr result = getnew(keys->first()->getKeyDef()->getTable());
+		SavableManagerPtr result = getnew(keys->getTable());
 		result->setkeys(keys);
 		SqliteMgr::Get()->doSelect(result);
 		ms_byKeyCache[keys.get()] = result;
@@ -83,9 +91,11 @@ SavableManagerPtr SavableManager::bykeys(KeysPtr keys)
 
 SavableManagerPtr SavableManager::byvalue(ValuePtr value)
 {	
+	Assert(value);
+	
 	if(ms_byValueCache.find(value.get()) == ms_byValueCache.end())
 	{
-		SavableManagerPtr result = getnew(value->getField()->getTable());
+		SavableManagerPtr result = getnew(value->getTable());
 		result->m_lookupvalue = value;
 		SqliteMgr::Get()->doLookup(result, value->getField());
 		ms_byValueCache[value.get()] = result;
@@ -96,6 +106,8 @@ SavableManagerPtr SavableManager::byvalue(ValuePtr value)
 
 KeysPtr SavableManager::lookupvalue(ValuePtr value)
 {
+	Assert(value);
+	
 	SavableManagerPtr result = byvalue(value);
 	KeysPtr keys = result->getkeys();
 	return keys;
@@ -133,6 +145,9 @@ bool SavableManager::exists()
 
 void SavableManager::bindKeys(sqlite3* db, sqlite3_stmt* stmt, int startpos) const
 {
+	Assert(db);
+	Assert(stmt);
+	
 	int pos = startpos;
 	int rc = 0;
 	for(KeyMap::const_iterator it = m_keys->begin(); it != m_keys->end(); it++)
@@ -147,6 +162,9 @@ void SavableManager::bindKeys(sqlite3* db, sqlite3_stmt* stmt, int startpos) con
 
 void SavableManager::bindFields(sqlite3* db, sqlite3_stmt* stmt, int startpos) const
 {
+	Assert(db);
+	Assert(stmt);
+	
 	int pos = startpos;
 	int rc = 0;
 	for(Fields::const_iterator it = m_fields.begin(); it != m_fields.end(); it++)
@@ -170,12 +188,18 @@ void SavableManager::bindFields(sqlite3* db, sqlite3_stmt* stmt, int startpos) c
 
 void SavableManager::bindUpdate(sqlite3* db, sqlite3_stmt* stmt) const
 {
+	Assert(db);
+	Assert(stmt);
+	
 	bindFields(db, stmt);
 	bindKeys(db, stmt, m_fields.size() + 1);
 }
 
 void SavableManager::bindLookup(sqlite3* db, sqlite3_stmt* stmt) const
 {
+	Assert(db);
+	Assert(stmt);
+	
 	int rc = 0;
 	if(m_lookupvalue->getField()->isText())
 		rc = sqlite3_bind_text(stmt, 1, m_lookupvalue->getStringValue().c_str(), m_lookupvalue->getStringValue().size(), SQLITE_TRANSIENT);
@@ -188,7 +212,8 @@ void SavableManager::bindLookup(sqlite3* db, sqlite3_stmt* stmt) const
 
 void SavableManager::parseInsert(sqlite3* db)
 {	
-	// assert(m_keys.size() == 0);
+	Assert(db);
+	
 	value_type value = sqlite3_last_insert_rowid(db);
 	KeyPtr key(new Key(m_table->firstImplKey(), value));
 	m_keys->addKey(key);
@@ -196,6 +221,8 @@ void SavableManager::parseInsert(sqlite3* db)
 
 void SavableManager::parseSelect(sqlite3_stmt* stmt)
 {
+	Assert(stmt);
+	
 	int pos = 0;
 	const unsigned char * text;
 	for(Fields::const_iterator it = m_fields.begin(); it != m_fields.end(); it++)
@@ -223,7 +250,8 @@ void SavableManager::parseSelect(sqlite3_stmt* stmt)
 
 void SavableManager::parseLookup(sqlite3_stmt* stmt)
 {
-	// assert(m_keys.size() == 0);
+	Assert(stmt);
+	
 	KeyPtr key(new Key(m_table->firstImplKey(), sqlite3_column_int64(stmt, 0)));
 	m_keys->addKey(key);
 }
@@ -240,31 +268,32 @@ KeysPtr SavableManager::getkeys() const
 
 KeyPtr SavableManager::getkey(KeyDefPtr keydef) const
 {
+	Assert(keydef);
+	
 	KeyMap::const_iterator it = m_keys->find(keydef.get());
-	if(it != m_keys->end())
-		return it->second;
-	else
-		throw std::invalid_argument("SavableManager::getkey(), key not in m_keys.");
+	Assert(it != m_keys->end());
+	
+	return it->second;
 }
 
 ValuePtr SavableManager::getfield(FieldImplPtr field) const
 {
+	Assert(field);
+	
 	Fields::const_iterator it = m_fields.find(field.get());
-	if(it != m_fields.end())
-		return it->second;
-	else
-		throw std::invalid_argument("SavableManager::getfield(), field not in m_fields.");
+	Assert(it != m_fields.end());
+	
+	return it->second;
 }
 
 void SavableManager::setkeys(KeysPtr keys)
 {
-	if(keys->size() != m_table->keysize())
-		throw std::invalid_argument("SavableManager::setkeys(), key sizes don't match.");
+	Assert(keys);
+	Assert(keys->size() == m_table->keysize());
 		
 	for(KeyMap::const_iterator it = keys->begin(); it != keys->end(); it++)
 	{
-		if(it->first->getTable() != m_table)
-			throw std::invalid_argument("SavableManager::setkeys(), key type is not m_table.");
+		Assert(it->first->getTable() == m_table);
 	}
 		
 	m_keys = keys;
@@ -273,11 +302,9 @@ void SavableManager::setkeys(KeysPtr keys)
 
 void SavableManager::setvalue(ValuePtr value)
 {
-	if(!m_table->hasfield(value->getField()))
-		throw std::invalid_argument("SavableManager::setfield(), field not in m_table.");
-	
-	if(m_fields.find(value->getField().get()) == m_fields.end())
-		throw std::invalid_argument("SavableManager::setfield(), field not in m_fields.");
+	Assert(value);
+	Assert(m_table->hasfield(value->getField()));	
+	Assert(m_fields.find(value->getField().get()) != m_fields.end());
 	
 	m_fields[value->getField().get()] = value;
 	m_dirty = true;

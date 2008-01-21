@@ -31,8 +31,8 @@ public:
 	void modify();
 	const Strings& tableList();
 	
-	void addKey(KeyDefPtr key) { m_keys.push_back(key); }
-	void addField(FieldImplPtr field) { m_implfields.push_back(field); }
+	void addKey(KeyDefPtr key);
+	void addField(FieldImplPtr field);
 	
 	// Lookup fields
 	FieldDefVector::const_iterator lookupbegin() const { return m_table->lookupbegin(); }

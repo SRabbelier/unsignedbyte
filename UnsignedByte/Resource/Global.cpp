@@ -19,8 +19,8 @@
  ***************************************************************************/
 
 #include <stdarg.h>
-#include <string>
 #include "Global.h"
+#include "Assert.h"
 
 Global::Global() :
 EmptyString(),
@@ -37,6 +37,8 @@ Global::~Global()
 
 std::string Global::sprintf(const char* format, ...)
 {
+	Assert(format);
+	
 	va_list args;
 	va_start(args, format);
 	vsnprintf(m_workspace, MAXSIZE, format, args);
@@ -47,12 +49,16 @@ std::string Global::sprintf(const char* format, ...)
 
 std::string Global::sprint(va_list& args, const char* format)
 {
+	Assert(format);
+	
 	vsnprintf(m_workspace, MAXSIZE, format, args);
 	return m_workspace;
 }
 
 void Global::bugf(const char *format, ...)
 {
+	Assert(format);
+	
 	va_list args;
 	va_start(args, format);
 	vsnprintf(m_workspace, MAXSIZE, format, args);
@@ -65,12 +71,16 @@ void Global::bugf(const char *format, ...)
 
 void Global::bug(const char* msg)
 {
+	Assert(msg);
+	
 	printf("***BUG: %s ***BUG\n", msg);
 	return;
 }
 
 void Global::logf(const char *format, ...)
 {
+	Assert(format);
+	
 	va_list args;
 	va_start(args, format);
 	vsnprintf(m_workspace, MAXSIZE, format, args);
@@ -84,5 +94,7 @@ void Global::logf(const char *format, ...)
 
 void Global::log(const char *msg)
 {
+	Assert(msg);
+	
 	printf(msg);
 }

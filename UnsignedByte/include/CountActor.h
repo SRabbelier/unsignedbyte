@@ -27,8 +27,8 @@
 class CountActor : public Actor
 {
 public:
-	CountActor(CriteriaPtr crit) : m_count(0), m_criteria(crit) {}
-	~CountActor() {}
+	CountActor(CriteriaPtr crit);
+	~CountActor();
 	
 	void parseRow(sqlite3_stmt* statement, Table* table);
 	const value_type getCount() const;

@@ -24,9 +24,25 @@
 
 #include "CountActor.h"
 #include "Table.h"
+#include "Assert.h"
+
+CountActor::CountActor(CriteriaPtr crit) : 
+m_count(0), 
+m_criteria(crit) 
+{
+	Assert(crit);
+}
+
+CountActor::~CountActor() 
+{
+	
+}
 
 void CountActor::parseRow(sqlite3_stmt* statement, Table* table)
 { 
+	Assert(statement);
+	Assert(table);
+	
 	if(m_criteria->evaluate(statement, table))
 		m_count++;
 }

@@ -26,7 +26,7 @@ FieldImpl::FieldImpl(TableImplPtr table, const std::string& name, bool text) :
 Field(name, text),
 m_table(table)
 {
-	
+	Assert(table);
 }
 
 FieldImpl::~FieldImpl()

@@ -54,6 +54,8 @@
     <File Name="MPKCriteria.cpp"/>
     <File Name="SqliteError.cpp"/>
     <File Name="Assert.cpp"/>
+    <File Name="Value.cpp"/>
+    <File Name="Criteria.cpp"/>
   </VirtualDirectory>
   <VirtualDirectory Name="Header Files">
     <File Name="../include/Base64.h"/>

@@ -24,12 +24,13 @@
 class Value
 {
 public:
-	Value(FieldImplPtr field) : m_field(field), m_textvalue(""), m_integervalue(0) {}
-	Value(FieldImplPtr field, cstring value) : m_field(field), m_textvalue(value), m_integervalue(0) {}
-	Value(FieldImplPtr field, value_type value) : m_field(field), m_textvalue(""), m_integervalue(value) {}
-	~Value() {}
+	Value(FieldImplPtr field);
+	Value(FieldImplPtr field, cstring value);
+	Value(FieldImplPtr field, value_type value);
+	~Value();
 	
 	FieldImplPtr getField() const { return m_field; }
+	TableImplPtr getTable() const;
 
 	const std::string& getStringValue() const { return m_textvalue; }
 	value_type getIntegerValue() const { return m_integervalue; }

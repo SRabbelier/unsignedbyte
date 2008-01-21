@@ -24,20 +24,20 @@
 class Keys
 {
 public:
-	Keys(TableImplPtr table) : m_table(table) { }
+	Keys(TableImplPtr table);
 	Keys(TableImplPtr table, cstring initstring);
-	~Keys() { }
+	~Keys();
 	
-	TableImplPtr getTable() const { return m_table; }
+	TableImplPtr getTable() const;
 	void addKey(KeyPtr key);
 	
 	std::string toString() const;
 	
-	size_t size() const { return m_keys.size(); }
-	KeyPtr first() const { return m_keys.begin()->second; }
-	KeyMap::const_iterator begin() const { return m_keys.begin(); }
-	KeyMap::const_iterator end() const { return m_keys.end(); }
-	KeyMap::const_iterator find(KeyDefPtr key) const { return m_keys.find(key.get()); }
+	size_t size() const;
+	KeyPtr first() const;
+	KeyMap::const_iterator begin() const;
+	KeyMap::const_iterator end() const;
+	KeyMap::const_iterator find(KeyDefPtr key) const;
 	KeyPtr getKey(KeyDefPtr key) const;
 
 private:

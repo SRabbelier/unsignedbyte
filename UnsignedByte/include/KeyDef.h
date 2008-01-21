@@ -20,11 +20,12 @@
 #pragma once
 
 #include "Types.h"
+#include "Assert.h"
 
 class KeyDef
 {
 public:
-	KeyDef(TableImplPtr table, cstring name) : m_table(table), m_name(name) { }
+	KeyDef(TableImplPtr table, cstring name) : m_table(table), m_name(name) { Assert(table); }
 	~KeyDef() { }
 	TableImplPtr getTable() const { return m_table; }
 	cstring getName() const { return m_name; }

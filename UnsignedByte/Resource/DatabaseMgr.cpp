@@ -23,6 +23,7 @@
 #include "IError.h"
 #include "StderrLog.h"
 #include "Global.h"
+#include "Assert.h"
 
 #include "SPKCriteria.h"
 #include "MPKCriteria.h"
@@ -46,11 +47,10 @@ void DatabaseMgr::Initialize(const std::string& path)
 }
 
 DatabaseMgr::DatabaseMgr() :
-m_path(m_staticpath == Global::Get()->EmptyString ? "new.db" : m_staticpath),
+m_path(m_staticpath),
 m_db(new Database(m_path, new StderrLog()))
 {
-	if(m_staticpath == Global::Get()->EmptyString)
-		throw std::invalid_argument("m_staticpath == Global::Get()->EmptyString");
+	Assert(m_staticpath != Global::Get()->EmptyString);
 }
 
 DatabaseMgr::~DatabaseMgr()
@@ -70,6 +70,9 @@ Database& DatabaseMgr::DBref()
 
 long DatabaseMgr::CountSavable(const TableImplPtr table, const KeysPtr keys)
 {
+	Assert(table);
+	Assert(keys);
+	
 	long count = 0;
 	
 	CriteriaPtr crit;

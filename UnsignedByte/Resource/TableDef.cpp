@@ -24,6 +24,7 @@
 #include "TableDef.h"
 #include "FieldDef.h"
 #include "Global.h"
+#include "Assert.h"
 
 TableDef::TableDef(std::string name) :
 Table(name),
@@ -59,6 +60,8 @@ void TableDef::addPK(const std::string& name)
 
 void TableDef::addFPK(TableDefPtr table)
 {
+	Assert(table);
+	
 	std::string name;
 	name.append(table->tableForeignName());
 	
@@ -72,6 +75,8 @@ void TableDef::addFPK(TableDefPtr table)
 
 void TableDef::addFPK(TableDefPtr table, const std::string& suffix)
 {
+	Assert(table);
+	
 	std::string name;
 	name.append(table->tableForeignName());
 	name.append(suffix);
@@ -122,11 +127,15 @@ void TableDef::addField(const std::string& name, bool text, const std::string& d
 
 void TableDef::addFK(TableDefPtr table)
 {
+	Assert(table);
+	
 	addFK(table, Global::Get()->EmptyString);
 }
 
 void TableDef::addFK(TableDefPtr table, const std::string& suffix)
 {	
+	Assert(table);
+	
 	std::string name;
 	name.append(table->tableForeignName());
 	name.append(suffix);

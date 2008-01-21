@@ -26,6 +26,7 @@
 #include "TableDef.h"
 #include "FieldDef.h"
 #include "StringUtilities.h"
+#include "Assert.h"
 
 using std::endl;
 
@@ -34,6 +35,8 @@ m_tabs("\t"),
 m_table(table),
 m_file(file)
 {
+	Assert(table);
+	
 	std::string name = m_table->tableName();
 	name.append("Fields");
 	m_name = name;

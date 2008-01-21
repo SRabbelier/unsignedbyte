@@ -24,9 +24,12 @@
 
 #include "SPKCriteria.h"
 #include "Table.h"
+#include "Assert.h"
 
 bool SPKCriteria::evaluate(sqlite3_stmt* statement)
 {
+	Assert(statement);
+	
 	value_type key = sqlite3_column_int64(statement, 0);
 	if(key == m_key)
 		return true;
@@ -36,8 +39,9 @@ bool SPKCriteria::evaluate(sqlite3_stmt* statement)
 
 bool SPKCriteria::evaluate(sqlite3_stmt* statement, const TablePtr table)
 {
-	if(!table->hasSingularPrimaryKey())
-		throw std::logic_error("SPKCriteria::evaluate(), table doesn't have a singular primary key.");
+	Assert(statement);
+	Assert(table);
+	Assert(table->hasSingularPrimaryKey());
 		
 	return evaluate(statement);
 }

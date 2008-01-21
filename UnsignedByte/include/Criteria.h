@@ -28,7 +28,7 @@ public:
 	Criteria() {}
 	virtual ~Criteria() {}
 
-	virtual bool evaluate(sqlite3_stmt* statement, Table* table) { return evaluate(statement); }
+	virtual bool evaluate(sqlite3_stmt* statement, Table* table);
 	
 private:
 	virtual bool evaluate(sqlite3_stmt* statement) = 0;

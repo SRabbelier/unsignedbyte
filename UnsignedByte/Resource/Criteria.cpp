@@ -17,21 +17,16 @@
  *   Free Software Foundation, Inc.,                                       *
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
-#pragma once
 
-#include "Types.h"
-#include "Assert.h"
+#include "Criteria.h"
+#include "FieldImpl.h"
+#include "TableImpl.h"
+#include "KeyDef.h"
 
-class Key
-{
-public:
-	Key(KeyDefPtr key, value_type value) : m_key(key), m_value(value) { Assert(key); }
-	~Key() { }
+bool Criteria::evaluate(sqlite3_stmt* statement, Table* table) 
+{ 
+	Assert(statement); 
+	Assert(table); 
 	
-	KeyDefPtr getKeyDef() const { return m_key; }
-	value_type getValue() const { return m_value; }
-
-private:
-	KeyDefPtr m_key;
-	value_type m_value;
-};
+	return evaluate(statement); 
+}

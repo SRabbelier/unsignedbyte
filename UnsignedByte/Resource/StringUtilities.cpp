@@ -23,11 +23,14 @@
 
 #include "StringUtilities.h"
 #include "Parse.h"
+#include "Assert.h"
 
 Strings String::lines(const std::string& input, const char* separator)
 {
-	Strings result;
+	Assert(separator);
+	
 	Parse p(input, separator, 1);
+	Strings result;
 
 	while(true)
 	{
@@ -43,6 +46,8 @@ Strings String::lines(const std::string& input, const char* separator)
 
 std::string String::unlines(const Strings& input, const char* filler, int extra)
 {
+	Assert(filler);
+	
 	std::string result;
 	int i = 0;
 	
