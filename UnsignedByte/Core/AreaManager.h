@@ -24,7 +24,7 @@
 namespace mud 
 { 
 	class Area; 
-	typedef SmartPtr<Area> AreaPtr;
+	typedef SmartPtr<mud::Area> AreaPtr;
 }
 
 namespace mud

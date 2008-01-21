@@ -24,7 +24,7 @@
 namespace mud 
 { 
 	class Colour; 
-	typedef SmartPtr<Colour> ColourPtr;
+	typedef SmartPtr<mud::Colour> ColourPtr;
 }
 
 namespace mud

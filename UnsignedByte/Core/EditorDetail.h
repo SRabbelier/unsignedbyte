@@ -28,7 +28,7 @@
 namespace mud 
 { 
 	class Detail; 
-	typedef SmartPtr<Detail> DetailPtr;
+	typedef SmartPtr<mud::Detail> DetailPtr;
 };
 
 class EditorDetail : public Editor

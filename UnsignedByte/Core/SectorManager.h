@@ -25,7 +25,7 @@
 namespace mud 
 { 
 	class Sector; 
-	typedef SmartPtr<Sector> SectorPtr;
+	typedef SmartPtr<mud::Sector> SectorPtr;
 }
 
 namespace mud

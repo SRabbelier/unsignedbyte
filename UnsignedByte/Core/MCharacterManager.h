@@ -24,7 +24,7 @@
 namespace mud 
 { 
 	class MCharacter; 
-	typedef SmartPtr<MCharacter> MCharacterPtr;
+	typedef SmartPtr<mud::MCharacter> MCharacterPtr;
 }
 
 namespace mud

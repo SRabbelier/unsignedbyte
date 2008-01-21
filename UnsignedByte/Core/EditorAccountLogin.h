@@ -25,7 +25,7 @@
 namespace mud
 {
 	class Account;
-	typedef SmartPtr<Account> AccountPtr;
+	typedef SmartPtr<mud::Account> AccountPtr;
 }
 
 class EditorAccountLogin : public Editor

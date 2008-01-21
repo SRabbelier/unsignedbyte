@@ -24,7 +24,7 @@
 namespace mud 
 { 
 	class Exit; 
-	typedef SmartPtr<Exit> ExitPtr;
+	typedef SmartPtr<mud::Exit> ExitPtr;
 }
 
 namespace mud

@@ -28,7 +28,7 @@
 namespace mud 
 { 
 	class Permission; 
-	typedef SmartPtr<Permission> PermissionPtr;
+	typedef SmartPtr<mud::Permission> PermissionPtr;
 }
 
 typedef const std::string& cstring;

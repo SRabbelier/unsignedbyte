@@ -24,7 +24,7 @@
 namespace mud 
 { 
 	class Race; 
-	typedef SmartPtr<Race> RacePtr;
+	typedef SmartPtr<mud::Race> RacePtr;
 }
 
 namespace mud

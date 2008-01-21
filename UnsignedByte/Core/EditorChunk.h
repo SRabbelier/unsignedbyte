@@ -28,7 +28,7 @@
 namespace mud 
 { 
 	class Chunk; 
-	typedef SmartPtr<Chunk> ChunkPtr;
+	typedef SmartPtr<mud::Chunk> ChunkPtr;
 };
 
 class ChunkImporter;

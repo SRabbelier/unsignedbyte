@@ -23,9 +23,8 @@
 
 namespace mud
 {
-	class SectorManager;
 	class Sector;
-	typedef SmartPtr<Sector> SectorPtr;
+	typedef SmartPtr<mud::Sector> SectorPtr;
 
 	class Sector : public Savable
 	{

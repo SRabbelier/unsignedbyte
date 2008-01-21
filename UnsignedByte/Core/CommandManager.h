@@ -24,7 +24,7 @@
 namespace mud 
 { 
 	class Command; 
-	typedef SmartPtr<Command> CommandPtr;
+	typedef SmartPtr<mud::Command> CommandPtr;
 }
 
 namespace mud

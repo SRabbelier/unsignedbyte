@@ -24,7 +24,7 @@
 namespace mud 
 { 
 	class PCharacter; 
-	typedef SmartPtr<PCharacter> PCharacterPtr;
+	typedef SmartPtr<mud::PCharacter> PCharacterPtr;
 }
 
 typedef std::map<value_type, mud::PCharacterPtr> charactersByKey;
