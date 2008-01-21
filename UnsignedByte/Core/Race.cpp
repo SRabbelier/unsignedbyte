@@ -20,6 +20,7 @@
 
 #include "Assert.h"
 #include "Race.h"
+#include "db.h"
 
 using mud::Race;
 
@@ -47,6 +48,17 @@ void Race::Save()
 bool Race::Exists()
 {
 	return m_race->exists();
+}
+
+cstring Race::getName() const
+{
+	return m_race->getfield(db::RacesFields::Get()->NAME)->getStringValue();
+}
+
+void Race::setName(const std::string& name)
+{
+	ValuePtr value(new Value(db::RacesFields::Get()->NAME, name));
+	m_race->setvalue(value);
 }
 
 std::vector<std::string> Race::Show()

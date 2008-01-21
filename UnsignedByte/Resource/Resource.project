@@ -111,7 +111,6 @@
     <File Name="../include/StringUtilities.h"/>
     <File Name="../include/SqliteMgr.h"/>
     <File Name="../include/Statements.h"/>
-    <File Name="../include/Bindable.h"/>
     <File Name="../include/Actor.h"/>
     <File Name="../include/ListActor.h"/>
     <File Name="../include/CountActor.h"/>

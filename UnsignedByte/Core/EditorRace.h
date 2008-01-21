@@ -21,56 +21,61 @@
 
 #include "Types.h"
 
-#include "Editor.h"
+#include "OLCEditor.h"
 #include "Interpreter.h"
 #include "CommandObject.h"
 
-class EditorOLC : public Editor
+namespace mud 
+{ 
+	class Race; 
+	typedef SmartPtr<mud::Race> RacePtr;
+};
+
+class EditorRace : public OLCEditor
 {
 public:
-	typedef CommandObject<EditorOLC> OLCCommand;
+	typedef CommandObject<EditorRace> RaceCommand;
 
-	EditorOLC(UBSocket* sock);
-	~EditorOLC(void);
+	EditorRace(UBSocket* sock);
+	~EditorRace(void);
 
-	std::string name() { return "OLC"; };
-	std::string prompt() { return "OLC> "; };
+	std::string name() { return "Race"; };
+	std::string prompt() { return "Race> "; };
 	
 	std::string lookup(const std::string& action);
 	void dispatch(const std::string& action, const std::string& argument);
 	
-	void startAreas(const std::string& argument);
-	void startRooms(const std::string& argument);
-	void startScripts(const std::string& argument);
-	void startMobiles(const std::string& argument);
-	void startSectors(const std::string& argument);
-	void startColours(const std::string& argument);
-	void startCommands(const std::string& argument);
-	void startChunks(const std::string& argument);
-	void startRaces(const std::string& argument);
-	void listCommands(const std::string& argument);
-	void quitEditor(const std::string& argument);
+	SavablePtr getEditing();
+	TableImplPtr getTable();
+	KeysPtr addNew();
+	std::vector<std::string> getList();
+	std::vector<std::string> getCommands();
+	void setEditing(KeysPtr keys);
+	
+	void editName(const std::string& argument);
+	void editDescription(const std::string& argument);
+	void editHeight(const std::string& argument);
+	void editWidth(const std::string& argument);
+	void showRace(const std::string& argument);
+	void saveRace(const std::string& argument);
 
 private:
-	EditorOLC(const EditorOLC& rhs);
-	EditorOLC operator=(const EditorOLC& rhs);
+	mud::RacePtr m_race;
 
-	class OLCInterpreter : public Interpreter<OLCCommand>, public Singleton<OLCInterpreter> {
-	private:
-		OLCInterpreter(void);
-		~OLCInterpreter(void);
-		friend class Singleton<OLCInterpreter>;
-	};
+	EditorRace(const EditorRace& rhs);
+	EditorRace operator=(const EditorRace& rhs);
 	
-	static OLCCommand m_startAreas;
-	static OLCCommand m_startRooms;
-	static OLCCommand m_startScripts;
-	static OLCCommand m_startMobiles;
-	static OLCCommand m_startSectors;
-	static OLCCommand m_startColours;
-	static OLCCommand m_startCommands;
-	static OLCCommand m_startChunks;
-	static OLCCommand m_startRaces;
-	static OLCCommand m_listCommands;
-	static OLCCommand m_quitEditor;
+	class RaceInterpreter : public Interpreter<RaceCommand>, public Singleton<RaceInterpreter> {
+	private:
+		RaceInterpreter(void);
+		~RaceInterpreter(void);
+		friend class Singleton<RaceInterpreter>;
+	};
+
+	static RaceCommand m_editName;
+	static RaceCommand m_editDescription;
+	static RaceCommand m_editHeight;
+	static RaceCommand m_editWidth;
+	static RaceCommand m_showRace;
+	static RaceCommand m_saveRace;
 };

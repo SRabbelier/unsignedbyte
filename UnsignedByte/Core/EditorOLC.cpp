@@ -28,6 +28,7 @@
 #include "EditorCommand.h"
 #include "EditorAccount.h"
 #include "EditorChunk.h"
+#include "EditorRace.h"
 
 #include "UBSocket.h"
 #include "Account.h"
@@ -41,6 +42,7 @@ EditorOLC::OLCCommand EditorOLC::m_startMobiles("Mobiles", &EditorOLC::startMobi
 EditorOLC::OLCCommand EditorOLC::m_startSectors("Sectors", &EditorOLC::startSectors);
 EditorOLC::OLCCommand EditorOLC::m_startColours("Colours", &EditorOLC::startColours);
 EditorOLC::OLCCommand EditorOLC::m_startCommands("Commands", &EditorOLC::startCommands);
+EditorOLC::OLCCommand EditorOLC::m_startRaces("Races", &EditorOLC::startRaces);
 EditorOLC::OLCCommand EditorOLC::m_listCommands("?", &EditorOLC::listCommands);
 EditorOLC::OLCCommand EditorOLC::m_quitEditor("Quit", &EditorOLC::quitEditor);
 
@@ -86,6 +88,7 @@ EditorOLC::OLCInterpreter::OLCInterpreter(void)
 	addWord("colour", &m_startColours);
 	addWord("commands", &m_startCommands);
 	addWord("chunks", &m_startChunks);
+	addWord("races", &m_startRaces);
 	addWord("?", &m_listCommands);
 	addWord("quit", &m_quitEditor);
 }
@@ -142,6 +145,13 @@ void EditorOLC::startChunks(const std::string& argument)
 {
 	m_sock->Send("Dropping you into Chunk Edit mode!\n");
 	m_sock->SetEditor(new EditorChunk(m_sock));
+	return;
+}
+
+void EditorOLC::startRaces(const std::string& argument)
+{
+	m_sock->Send("Dropping you into Race Edit mode!\n");
+	m_sock->SetEditor(new EditorRace(m_sock));
 	return;
 }
 
