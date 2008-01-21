@@ -19,7 +19,6 @@
  ***************************************************************************/
 #pragma once
 
-#include "singleton.h"
 #include "SavableHeaders.h"
 
 namespace mud 

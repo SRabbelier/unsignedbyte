@@ -19,10 +19,7 @@
  ***************************************************************************/
 #pragma once
 
-#include <string>
-#include <vector>
-
-#include "singleton.h"
+#include "Types.h"
 #include "db.h"
 
 namespace mud 
@@ -30,10 +27,6 @@ namespace mud
 	class Permission; 
 	typedef SmartPtr<mud::Permission> PermissionPtr;
 }
-
-typedef const std::string& cstring;
-typedef std::pair<value_type, value_type> twoValueKey;
-typedef std::map<twoValueKey,mud::Permission*> permissions_m; // account, grantgroup
 
 namespace mud
 {
