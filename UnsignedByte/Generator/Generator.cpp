@@ -155,7 +155,6 @@ void Generator::AppendHeaderIncludes()
 	m_headerfile << endl;
 	m_headerfile << "#include <Database.h>" << endl;
 	m_headerfile << "#include <SqliteMgr.h>" << endl;
-	m_headerfile << "#include <Bindable.h>" << endl;
 	m_headerfile << endl;
 	
 	m_headerfile << "namespace " << m_name << endl;

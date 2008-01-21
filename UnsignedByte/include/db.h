@@ -29,7 +29,6 @@
 
 #include <Database.h>
 #include <SqliteMgr.h>
-#include <Bindable.h>
 
 namespace db
 {
