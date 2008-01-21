@@ -26,6 +26,8 @@ namespace mud
 	class Command;
 	typedef SmartPtr<mud::Command> CommandPtr;
 	
+	class CommandManager;
+	
 	class Command : public Savable
 	{
 	public:
