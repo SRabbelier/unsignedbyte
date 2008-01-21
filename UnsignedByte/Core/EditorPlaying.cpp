@@ -53,6 +53,7 @@ m_char(character)
 	{
 		long id = m_char->getRoom();
 		mud::RoomPtr inroom = mud::RoomManager::Get()->GetByKey(id);
+		inroom->addCharacter(m_char->getID());
 	
 		inroom->Sendf("%s enters the realm.\n", m_char->getName().c_str());
 	}
