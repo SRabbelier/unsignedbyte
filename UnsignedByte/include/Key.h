@@ -25,11 +25,12 @@
 class Key
 {
 public:
-	Key(KeyDefPtr key, value_type value) : m_key(key), m_value(value) { Assert(key); }
-	~Key() { }
+	Key(KeyDefPtr key, value_type value);
+	~Key();
 	
-	KeyDefPtr getKeyDef() const { return m_key; }
-	value_type getValue() const { return m_value; }
+	KeyDefPtr getKeyDef() const;
+	value_type getValue() const;
+	TableImplPtr getTable() const;
 
 private:
 	KeyDefPtr m_key;

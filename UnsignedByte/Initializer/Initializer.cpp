@@ -124,16 +124,16 @@ void Initializer::InitDatabase()
 		
 		ValuePtr value;
 		
-		value = new Value(db::VersionFields::Get()->MAJOR, game::major);
+		value = ValuePtr(new Value(db::VersionFields::Get()->MAJOR, game::major));
 		manager->setvalue(value);
 
-		value = new Value(db::VersionFields::Get()->MINOR, game::minor);
+		value = ValuePtr(new Value(db::VersionFields::Get()->MINOR, game::minor));
 		manager->setvalue(value);
 
-		value = new Value(db::VersionFields::Get()->MICRO, game::micro);
+		value = ValuePtr(new Value(db::VersionFields::Get()->MICRO, game::micro));
 		manager->setvalue(value);
 		
-		value = new Value(db::VersionFields::Get()->VERSIONTEXT, std::string(game::vstring));
+		value = ValuePtr(new Value(db::VersionFields::Get()->VERSIONTEXT, std::string(game::vstring)));
 		manager->setvalue(value);
 		
 		manager->save();
@@ -148,10 +148,10 @@ void Initializer::InitDatabase()
 	{
 		SavableManagerPtr manager = SavableManager::getnew(db::TableImpls::Get()->ACCOUNTS);
 		
-		ValuePtr value = new Value(db::AccountsFields::Get()->NAME, game::vname);
+		ValuePtr value = ValuePtr(new Value(db::AccountsFields::Get()->NAME, game::vname));
 		manager->setvalue(value);
 		
-		value = new Value(db::AccountsFields::Get()->PASSWORD, "qq");
+		value = ValuePtr(new Value(db::AccountsFields::Get()->PASSWORD, "qq"));
 		manager->setvalue(value);
 		
 		manager->save();
@@ -166,10 +166,10 @@ void Initializer::InitDatabase()
 	{
 		SavableManagerPtr manager = SavableManager::getnew(db::TableImpls::Get()->ROOMS);
 		
-		ValuePtr value = new Value(db::RoomsFields::Get()->NAME, "The Void");
+		ValuePtr value = ValuePtr(new Value(db::RoomsFields::Get()->NAME, "The Void"));
 		manager->setvalue(value);
 		
-		value = new Value(db::RoomsFields::Get()->DESCRIPTION, "You are in The Void.");
+		value = ValuePtr(new Value(db::RoomsFields::Get()->DESCRIPTION, "You are in The Void."));
 		manager->setvalue(value);
 		
 		manager->save();
@@ -207,7 +207,7 @@ void Initializer::InitColours()
 	{
 		try
 		{
-			ValuePtr value = new Value(db::ColoursFields::Get()->CODE, colours[i].code);
+			ValuePtr value(new Value(db::ColoursFields::Get()->CODE, colours[i].code));
 			SavableManagerPtr manager = SavableManager::byvalue(value);
 		}
 		catch(RowNotFoundException& e)
@@ -216,16 +216,16 @@ void Initializer::InitColours()
 		
 			ValuePtr value;
 			
-			value = new Value(db::ColoursFields::Get()->NAME, colours[i].name);
+			value = ValuePtr(new Value(db::ColoursFields::Get()->NAME, colours[i].name));
 			manager->setvalue(value);
 			
-			value = new Value(db::ColoursFields::Get()->CODE, colours[i].code);
+			value = ValuePtr(new Value(db::ColoursFields::Get()->CODE, colours[i].code));
 			manager->setvalue(value);
 		
-			value = new Value(db::ColoursFields::Get()->COLOURSTRING, colours[i].cstr);
+			value = ValuePtr(new Value(db::ColoursFields::Get()->COLOURSTRING, colours[i].cstr));
 			manager->setvalue(value);
 
-			value = new Value(db::ColoursFields::Get()->ANSI, 1);
+			value = ValuePtr(new Value(db::ColoursFields::Get()->ANSI, 1));
 			manager->setvalue(value);
 			
 			manager->save();

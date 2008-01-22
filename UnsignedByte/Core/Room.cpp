@@ -330,7 +330,7 @@ std::string Room::ShowShort()
 	return result;
 }
 
-TablePtr Room::getTable() const
+TableImplPtr Room::getTable() const
 {
-	return Tables::Get()->ROOMS;
+	return m_room->getTable();
 }

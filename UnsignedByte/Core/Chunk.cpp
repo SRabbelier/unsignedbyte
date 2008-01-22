@@ -120,7 +120,7 @@ std::string Chunk::ShowShort()
 			getDescription().c_str());
 }
 
-TablePtr Chunk::getTable() const
+TableImplPtr Chunk::getTable() const
 {
-	return Tables::Get()->CHUNKS;
+	return m_chunk->getTable();
 }

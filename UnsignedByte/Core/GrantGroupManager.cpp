@@ -68,6 +68,6 @@ value_type GrantGroupManager::lookupByName(cstring value)
 {
 	ValuePtr val(new Value(db::GrantGroupsFields::Get()->NAME, value));
 	KeysPtr keys = SavableManager::lookupvalue(val);
-	value_type id = keys->getKey(db::GrantGroupsFields::Get()->GRANTGROUPID);
+	value_type id = keys->getKey(db::GrantGroupsFields::Get()->GRANTGROUPID)->getValue();
 	return id;
 }

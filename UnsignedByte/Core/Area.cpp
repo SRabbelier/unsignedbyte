@@ -117,7 +117,7 @@ std::string Area::ShowShort()
 			getDescription().c_str());
 }
 
-TablePtr Area::getTable() const
+TableImplPtr Area::getTable() const
 {
-	return Tables::Get()->AREAS;
+	return m_area->getTable();
 }

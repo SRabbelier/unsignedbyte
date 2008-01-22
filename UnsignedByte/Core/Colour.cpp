@@ -107,7 +107,7 @@ std::string Colour::ShowShort()
 			getColourString().c_str());
 }
 
-TablePtr Colour::getTable() const
+TableImplPtr Colour::getTable() const
 {
-	return Tables::Get()->COLOURS;
+	return m_colour->getTable();
 }

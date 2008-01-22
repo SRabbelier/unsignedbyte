@@ -1,6 +1,7 @@
 #ifndef SMART_PTR_H
 #define SMART_PTR_H
 
+// #define CONFIG_USE_BOOST_POINTERS
 #ifdef CONFIG_USE_BOOST_POINTERS
 
 #include <boost/shared_ptr.hpp>

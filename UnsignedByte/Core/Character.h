@@ -78,7 +78,7 @@ namespace mud
 		 */
 		std::vector<std::string> Show();
 		std::string ShowShort();
-		TablePtr getTable() const;
+		TableImplPtr getTable() const;
 
 	protected:
 		SavableManagerPtr m_character;

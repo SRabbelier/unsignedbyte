@@ -34,7 +34,7 @@ public:
 	virtual std::vector<std::string> Show() = 0;
 	virtual std::string ShowShort() = 0;
 	
-	virtual TablePtr getTable() const = 0;
+	virtual TableImplPtr getTable() const = 0;
 private:
 	Savable(const Savable& rhs) {};
 };

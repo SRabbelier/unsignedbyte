@@ -95,7 +95,7 @@ std::string Detail::ShowShort()
 			getDescription().c_str());
 }
 
-TablePtr Detail::getTable() const
+TableImplPtr Detail::getTable() const
 {
-	return Tables::Get()->DETAILS;
+	return m_detail->getTable();
 }
