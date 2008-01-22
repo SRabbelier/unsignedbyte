@@ -92,7 +92,7 @@ std::string Account::ShowShort()
 	return result;
 }
 
-TablePtr Account::getTable() const
+TableImplPtr Account::getTable() const
 {
 	return m_account->getTable();
 }

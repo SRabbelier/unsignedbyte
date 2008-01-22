@@ -26,7 +26,7 @@ class KeyDef
 {
 public:
 	KeyDef(TableImplPtr table, cstring name) : m_table(table), m_name(name) { Assert(table); }
-	~KeyDef() { }
+	~KeyDef() { abort(); }
 	TableImplPtr getTable() const { return m_table; }
 	cstring getName() const { return m_name; }
 

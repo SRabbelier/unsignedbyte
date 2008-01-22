@@ -79,6 +79,6 @@ value_type CharacterManager::lookupByName(cstring value)
 {
 	ValuePtr val(new Value(db::CharactersFields::Get()->NAME, value));
 	KeysPtr keys = SavableManager::lookupvalue(val);
-	value_type id = keys->getKey(db::CharactersFields::Get()->CHARACTERID);
+	value_type id = keys->getKey(db::CharactersFields::Get()->CHARACTERID)->getValue();
 	return id;
 }

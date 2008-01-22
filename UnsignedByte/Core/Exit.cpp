@@ -90,7 +90,7 @@ std::string Exit::ShowShort()
 			getDir().c_str());
 }
 
-TablePtr Exit::getTable() const
+TableImplPtr Exit::getTable() const
 {
-	return Tables::Get()->EXITS;
+	return m_exit->getTable();
 }

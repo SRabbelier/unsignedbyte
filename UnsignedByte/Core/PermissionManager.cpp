@@ -56,9 +56,9 @@ mud::PermissionPtr PermissionManager::GetByKeys(value_type grantgroup, value_typ
 {	
 	KeysPtr keys(new Keys(db::TableImpls::Get()->PERMISSIONS));
 	KeyPtr key;
-	key = new Key(db::PermissionsFields::Get()->FKGRANTGROUPS, grantgroup);
+	key = KeyPtr(new Key(db::PermissionsFields::Get()->FKGRANTGROUPS, grantgroup));
 	keys->addKey(key);
-	key = new Key(db::PermissionsFields::Get()->FKACCOUNTS, account);
+	key = KeyPtr(new Key(db::PermissionsFields::Get()->FKACCOUNTS, account));
 	keys->addKey(key);
 	
 	return GetByKeys(keys);

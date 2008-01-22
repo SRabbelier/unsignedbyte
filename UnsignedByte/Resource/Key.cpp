@@ -18,73 +18,34 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#include "DatabaseMgr.h"
-#include "Database.h"
-#include "IError.h"
-#include "StderrLog.h"
-#include "Global.h"
-#include "Assert.h"
-
-#include "SPKCriteria.h"
-#include "MPKCriteria.h"
-#include "CountActor.h"
-#include "SqliteMgr.h"
-
-#include "Keys.h"
 #include "Key.h"
 #include "KeyDef.h"
 #include "TableImpl.h"
 #include "FieldImpl.h"
 
-std::string DatabaseMgr::m_staticpath = Global::Get()->EmptyString;
-
-void DatabaseMgr::Initialize(const std::string& path)
-{
-	Free();
-	m_staticpath = path;
-	Get();
-	m_staticpath = Global::Get()->EmptyString;
+Key::Key(KeyDefPtr key, value_type value) : 
+m_key(key), 
+m_value(value) 
+{ 
+	Assert(key); 
 }
 
-DatabaseMgr::DatabaseMgr() :
-m_path(m_staticpath),
-m_db(new Database(m_path, new StderrLog()))
-{
-	Assert(m_staticpath != Global::Get()->EmptyString);
-}
-
-DatabaseMgr::~DatabaseMgr()
-{
-	delete m_db;
-}
-
-Database* DatabaseMgr::DB()
-{
-	return m_db;
-}
-
-Database& DatabaseMgr::DBref()
-{
-	return *m_db;
-}
-
-long DatabaseMgr::CountSavable(const TableImplPtr table, const KeysPtr keys)
-{
-	Assert(table);
-	Assert(keys);
+Key::~Key() 
+{ 
 	
-	long count = 0;
+}
 	
-	CriteriaPtr crit;
-	
-	if(keys->size() == 1)
-		crit = CriteriaPtr(new SPKCriteria(keys->first()->getValue()));
-	else
-		crit = CriteriaPtr(new MPKCriteria(keys));
-		
-	CountActor act(crit);
-	SqliteMgr::Get()->doForEach(table.get(), act);
-	count = act.getCount();
-	
-	return count;
+KeyDefPtr Key::getKeyDef() const 
+{ 
+	return m_key; 
+}
+
+value_type Key::getValue() const 
+{ 
+	return m_value; 
+}
+
+TableImplPtr Key::getTable() const
+{
+	return m_key->getTable();
 }

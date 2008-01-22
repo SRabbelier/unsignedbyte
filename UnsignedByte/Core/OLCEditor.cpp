@@ -103,7 +103,7 @@ void OLCEditor::editSavable(const std::string& argument)
 	
 	try
 	{
-		keys = new Keys(table, argument);
+		keys = KeysPtr(new Keys(table, argument));
 	}
 	catch(std::invalid_argument& e)
 	{
@@ -150,7 +150,7 @@ void OLCEditor::deleteSavable(const std::string& argument)
 
 	try
 	{
-		keys = new Keys(getTable(), argument);
+		keys = KeysPtr(new Keys(getTable(), argument));
 	}
 	catch(std::invalid_argument& e)
 	{
@@ -222,6 +222,9 @@ void OLCEditor::doneEditing(const std::string& argument)
 	if(editing)
 		editing->Save();
 
-	setEditing(0);
+	TableImplPtr table = editing->getTable();
+
+	KeysPtr keys(new Keys(table));
+	setEditing(keys);
 	return;
 }

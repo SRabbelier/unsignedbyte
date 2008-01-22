@@ -86,7 +86,7 @@ std::string Permission::ShowShort()
 	return result;
 }
 
-TablePtr Permission::getTable() const
+TableImplPtr Permission::getTable() const
 {
-	return Tables::Get()->PERMISSIONS;
+	return m_permission->getTable();
 }

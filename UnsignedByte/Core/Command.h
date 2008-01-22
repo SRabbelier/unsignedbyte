@@ -60,7 +60,7 @@ namespace mud
 		 */
 		std::vector<std::string> Show();
 		std::string ShowShort();
-		TablePtr getTable() const;
+		TableImplPtr getTable() const;
 			
 		/**
 		 * \brief Database utilities

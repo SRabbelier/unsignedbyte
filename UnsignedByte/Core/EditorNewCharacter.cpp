@@ -173,7 +173,8 @@ void EditorNewCharacter::OnLine(const std::string &line)
 			return;			
 		}
 
-		long id = mud::CharacterManager::Get()->Add();
+		KeysPtr newchkeys = mud::CharacterManager::Get()->Add();
+		value_type id = newchkeys->first()->getValue();
 		if(id <= 0)
 		{
 			m_sock->Send("For some reason your characters newly inserted id is <= 0.\n");

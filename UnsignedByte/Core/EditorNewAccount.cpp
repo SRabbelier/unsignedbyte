@@ -156,7 +156,8 @@ void EditorNewAccount::OnLine(const std::string &line)
 			return;
 		}
 
-		long id = mud::AccountManager::Get()->Add();
+		KeysPtr newaccountkeys = mud::AccountManager::Get()->Add();
+		value_type id = newaccountkeys->first()->getValue();
 		if(id == 0)
 		{
 			m_sock->Send("Could not create a new account.\n");

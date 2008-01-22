@@ -109,7 +109,7 @@ std::string GrantGroup::ShowShort()
 			getName().c_str());
 }
 
-TablePtr GrantGroup::getTable() const
+TableImplPtr GrantGroup::getTable() const
 {
-	return Tables::Get()->GRANTGROUPS;
+	return m_grantgroup->getTable();
 }

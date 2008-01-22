@@ -78,6 +78,6 @@ value_type AccountManager::lookupByName(cstring value)
 {
 	ValuePtr val(new Value(db::AccountsFields::Get()->NAME, value));
 	KeysPtr keys = SavableManager::lookupvalue(val);
-	value_type id = keys->getKey(db::AccountsFields::Get()->ACCOUNTID);
+	value_type id = keys->getKey(db::AccountsFields::Get()->ACCOUNTID)->getValue();
 	return id;
 }

@@ -208,7 +208,7 @@ std::string Command::ShowShort()
 			forcelevel.c_str());
 }
 
-TablePtr Command::getTable() const
+TableImplPtr Command::getTable() const
 {
-	return Tables::Get()->COMMANDS;
+	return m_command->getTable();
 }

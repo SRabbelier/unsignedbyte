@@ -67,6 +67,6 @@ value_type RaceManager::lookupByName(cstring value)
 {
 	ValuePtr val(new Value(db::RacesFields::Get()->NAME, value));
 	KeysPtr keys = SavableManager::lookupvalue(val);
-	value_type id = keys->getKey(db::RacesFields::Get()->RACEID);
+	value_type id = keys->getKey(db::RacesFields::Get()->RACEID)->getValue();
 	return id;
 }

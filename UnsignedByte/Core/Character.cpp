@@ -261,7 +261,7 @@ std::string Character::ShowShort()
 	return result;
 }
 
-TablePtr Character::getTable() const
+TableImplPtr Character::getTable() const
 { 
-	return Tables::Get()->CHARACTERS; 
+	return m_character->getTable();
 }

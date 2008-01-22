@@ -77,7 +77,7 @@ TableImplPtr Keys::getTable() const
 void Keys::addKey(KeyPtr key)
 {
 	Assert(key);
-	Assert(key->getKeyDef()->getTable() == m_table);
+	Assert(key->getTable() == m_table);
 		
 	m_keys[key->getKeyDef().get()] = key;
 }

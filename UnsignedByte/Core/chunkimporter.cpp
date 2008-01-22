@@ -60,9 +60,9 @@ void ChunkImporter::MyDetail::apply(mud::DetailPtr detail)
 		 */ 
 		KeysPtr keys(new Keys(db::TableImpls::Get()->DETAILDETAIL));
 		KeyPtr key;
-		key = new Key(db::DetailDetailFields::Get()->FKDETAILSPRIMARY, newdetail->getID());
+		key = KeyPtr(new Key(db::DetailDetailFields::Get()->FKDETAILSPRIMARY, newdetail->getID()));
 		keys->addKey(key);
-		key = new Key(db::DetailDetailFields::Get()->FKDETAILSSECONDARY, detail->getID());
+		key = KeyPtr(new Key(db::DetailDetailFields::Get()->FKDETAILSSECONDARY, detail->getID()));
 		keys->addKey(key);
 		
 		SavableManagerPtr manager = SavableManager::getnew(db::TableImpls::Get()->DETAILDETAIL);
@@ -214,7 +214,7 @@ void ChunkImporter::Parse()
 			if(!tabDepth)
 			{
 				Global::Get()->bugf("Malformed import line.\n");
-				m_result = NULL;
+				m_result.reset();
 				return;
 			}
 			
@@ -292,9 +292,9 @@ void ChunkImporter::Apply(mud::ChunkPtr chunk)
 		 */ 
 		KeysPtr keys(new Keys(db::TableImpls::Get()->DETAILS));
 		KeyPtr key;
-		key = new Key(db::DetailsFields::Get()->DETAILID, chunk->getID());
+		key = KeyPtr(new Key(db::DetailsFields::Get()->DETAILID, chunk->getID()));
 		keys->addKey(key);
-		key = new Key(db::ChunksFields::Get()->CHUNKID, detail->getID());
+		key = KeyPtr(new Key(db::ChunksFields::Get()->CHUNKID, detail->getID()));
 		keys->addKey(key);
 		
 		SavableManagerPtr manager = SavableManager::getnew(db::TableImpls::Get()->DETAILCHUNK);

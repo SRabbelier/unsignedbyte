@@ -76,7 +76,7 @@ value_type ColourManager::lookupByCode(cstring value)
 {
 	ValuePtr val(new Value(db::ColoursFields::Get()->CODE, value));
 	KeysPtr keys = SavableManager::lookupvalue(val);
-	value_type id = keys->getKey(db::ColoursFields::Get()->COLOURID);
+	value_type id = keys->getKey(db::ColoursFields::Get()->COLOURID)->getValue();
 	return id;
 }
 
@@ -84,6 +84,6 @@ value_type ColourManager::lookupByName(cstring value)
 {
 	ValuePtr val(new Value(db::ColoursFields::Get()->NAME, value));
 	KeysPtr keys = SavableManager::lookupvalue(val);
-	value_type id = keys->getKey(db::ColoursFields::Get()->COLOURID);
+	value_type id = keys->getKey(db::ColoursFields::Get()->COLOURID)->getValue();
 	return id;
 }

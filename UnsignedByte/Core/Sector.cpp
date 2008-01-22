@@ -110,7 +110,7 @@ std::string Sector::ShowShort()
 	return result;
 }
 
-TablePtr Sector::getTable() const
+TableImplPtr Sector::getTable() const
 {
-	return Tables::Get()->SECTORS;
+	return m_sector->getTable();
 }

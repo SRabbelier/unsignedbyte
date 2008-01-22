@@ -75,7 +75,7 @@ std::string Race::ShowShort()
 	return result;
 }
 
-TablePtr Race::getTable() const
+TableImplPtr Race::getTable() const
 {
-	return Tables::Get()->RACES;
+	return m_race->getTable();
 }

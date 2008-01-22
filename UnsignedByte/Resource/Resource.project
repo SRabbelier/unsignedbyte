@@ -56,6 +56,7 @@
     <File Name="Assert.cpp"/>
     <File Name="Value.cpp"/>
     <File Name="Criteria.cpp"/>
+    <File Name="Key.cpp"/>
   </VirtualDirectory>
   <VirtualDirectory Name="Header Files">
     <File Name="../include/Base64.h"/>

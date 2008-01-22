@@ -69,7 +69,8 @@ SavableManagerPtr SavableManager::bykeys(KeyPtr key)
 {
 	Assert(key);
 	
-	KeysPtr keys(new Keys(keys->getTable()));
+	TableImplPtr table = key->getTable();
+	KeysPtr keys(new Keys(table));
 	keys->addKey(key);
 	return bykeys(keys);
 }
@@ -270,7 +271,7 @@ KeyPtr SavableManager::getkey(KeyDefPtr keydef) const
 {
 	Assert(keydef);
 	
-	KeyMap::const_iterator it = m_keys->find(keydef.get());
+	KeyMap::const_iterator it = m_keys->find(keydef);
 	Assert(it != m_keys->end());
 	
 	return it->second;

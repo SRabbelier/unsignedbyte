@@ -80,6 +80,6 @@ value_type CommandManager::lookupByName(cstring value)
 {
 	ValuePtr val(new Value(db::CommandsFields::Get()->NAME, value));
 	KeysPtr keys = SavableManager::lookupvalue(val);
-	value_type id = keys->getKey(db::CommandsFields::Get()->COMMANDID);
+	value_type id = keys->getKey(db::CommandsFields::Get()->COMMANDID)->getValue();
 	return id;
 }

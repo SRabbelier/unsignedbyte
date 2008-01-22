@@ -67,6 +67,6 @@ value_type SectorManager::lookupByName(cstring value)
 {	
 	ValuePtr val(new Value(db::SectorsFields::Get()->NAME, value));
 	KeysPtr keys = SavableManager::lookupvalue(val);
-	value_type id = keys->getKey(db::SectorsFields::Get()->SECTORID);
+	value_type id = keys->getKey(db::SectorsFields::Get()->SECTORID)->getValue();
 	return id;
 }
