@@ -26,10 +26,10 @@
 class Generator
 {
 public:
-	Generator(const std::string name);
+	Generator(const std::string& name);
 	~Generator();
 	
-	bool GenerateDAL();
+	void GenerateDAL();
 
 private:
 	Generator(const Generator& rhs) : m_name(rhs.m_name) { };

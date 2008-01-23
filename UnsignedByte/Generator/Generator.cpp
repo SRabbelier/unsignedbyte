@@ -33,7 +33,7 @@
 using std::cout;
 using std::endl;
 
-Generator::Generator(const std::string name) :
+Generator::Generator(const std::string& name) :
 m_name(name),
 m_tabs("\t")
 {
@@ -74,41 +74,27 @@ m_tabs("\t")
 
 Generator::~Generator()
 {
-	if(m_headerfile.is_open())
-		m_headerfile.close();
+	Assert(m_headerfile.is_open());
+	Assert(m_sourcefile.is_open());
+	Assert(m_tiheaderfile.is_open());
+	Assert(m_tisourcefile.is_open());
 
-	if(m_sourcefile.is_open())
-		m_sourcefile.close();
-	
-	if(m_tiheaderfile.is_open())
-		m_tiheaderfile.close();
-
-	if(m_tisourcefile.is_open())
-		m_tisourcefile.close();
+	m_headerfile.close();
+	m_sourcefile.close();
+	m_tiheaderfile.close();
+	m_tisourcefile.close();
 }
 
-bool Generator::GenerateDAL()
+void Generator::GenerateDAL()
 {
-	try
-	{
-		CreateHeader();
-		CreateSource();
-		CreateTI();
-	}
-	catch(std::logic_error& e)
-	{
-		Global::Get()->bug(e.what());
-		Global::Get()->bug("Could not generate DAL.\n");
-		return false;	
-	}
-	
-	return true;
+	CreateHeader();
+	CreateSource();
+	CreateTI();
 }
 
 void Generator::AppendLicense(std::ofstream& file)
 {
-	if(!file)
-		throw std::logic_error("File is not open for writing.\n");
+	Assert(file);
 		
 	file << "/***************************************************************************" << endl;
 	file << " *   Copyright (C) 2008 by Sverre Rabbelier                                *" << endl;
@@ -136,14 +122,15 @@ void Generator::AppendLicense(std::ofstream& file)
 
 void Generator::AppendGeneratorNotice(std::ofstream& file)
 {
+	Assert(file);
+
 	file << "/* NOTE: This file was generated automatically. Do not edit. */" << endl;
 	file << endl;
 }
 
 void Generator::AppendHeaderIncludes()
 {
-	if(!m_headerfile)
-		throw std::logic_error("Header file is not open for writing.\n");
+	Assert(m_headerfile);
 	
 	m_headerfile << "#pragma once" << endl;
 	m_headerfile << "#ifdef _WIN32" << endl;
@@ -167,24 +154,15 @@ void Generator::AppendHeaderClass(TableDefPtr table)
 {
 	Assert(table);
 	
-	try
-	{
-		ClassHeaderGenerator gen(table, &m_headerfile);
-		gen.GenerateClass();
-	}
-	catch(std::logic_error& e)
-	{
-		Global::Get()->bug(e.what());
-		throw std::logic_error("Could not append constructor declaration to header file.\n");
-	}
+	ClassHeaderGenerator gen(table, &m_headerfile);
+	gen.GenerateClass();
 	
 	return;
 }
 
 void Generator::AppendHeaderFooter()
 {
-	if(!m_headerfile)
-		throw std::logic_error("Header file is not open for writing.\n");
+	Assert(m_headerfile);
 	
 	m_headerfile << "} // end of namespace" << endl;
 	m_headerfile << endl;
@@ -194,30 +172,21 @@ void Generator::AppendHeaderFooter()
 
 void Generator::CreateHeader()
 {
-	try
-	{
-		AppendLicense(m_headerfile);
-		AppendGeneratorNotice(m_headerfile);
-		AppendHeaderIncludes();
-		
-		for(TableDefVector::const_iterator it = Tables::Get()->begin(); it != Tables::Get()->end(); it++)
-			AppendHeaderClass(*it);
+	AppendLicense(m_headerfile);
+	AppendGeneratorNotice(m_headerfile);
+	AppendHeaderIncludes();
+	
+	for(TableDefVector::const_iterator it = Tables::Get()->begin(); it != Tables::Get()->end(); it++)
+		AppendHeaderClass(*it);
 			
-		AppendHeaderFooter();
-	}
-	catch(std::logic_error& e)
-	{
-		Global::Get()->bug(e.what());
-		throw std::logic_error("Could not create header file.\n");
-	}
+	AppendHeaderFooter();
 	
 	return;
 }
 
 void Generator::AppendSourceIncludes()
 {
-	if(!m_sourcefile)
-		throw std::logic_error("Header file is not open for writing.\n");
+	Assert(m_sourcefile);
 
 	m_sourcefile << "#ifdef _WIN32" << endl;
 	m_sourcefile << "#pragma warning (disable:4244)" << endl;
@@ -249,24 +218,15 @@ void Generator::AppendSourceClass(TableDefPtr table)
 {
 	Assert(table);
 	
-	try
-	{
-		ClassSourceGenerator gen(table, &m_sourcefile);
-		gen.GenerateClass();
-	}
-	catch(std::logic_error& e)
-	{
-		Global::Get()->bug(e.what());
-		throw std::logic_error("Could not append constructor declaration to header file.\n");
-	}
+	ClassSourceGenerator gen(table, &m_sourcefile);
+	gen.GenerateClass();
 	
 	return;
 }
 
 void Generator::AppendSourceFooter()
 {
-	if(!m_sourcefile)
-		throw std::logic_error("Header file is not open for writing.\n");
+	Assert(m_sourcefile);
 	
 	m_headerfile << endl;
 	
@@ -275,47 +235,33 @@ void Generator::AppendSourceFooter()
 
 void Generator::CreateSource()
 {
-	try
-	{
-		AppendLicense(m_sourcefile);
-		AppendGeneratorNotice(m_sourcefile);
-		AppendSourceIncludes();
+	AppendLicense(m_sourcefile);
+	AppendGeneratorNotice(m_sourcefile);
+	AppendSourceIncludes();
 		
-		for(TableDefVector::const_iterator it = Tables::Get()->begin(); it != Tables::Get()->end(); it++)
-			AppendSourceClass(*it);
+	for(TableDefVector::const_iterator it = Tables::Get()->begin(); it != Tables::Get()->end(); it++)
+		AppendSourceClass(*it);
 			
-		AppendSourceFooter();
-	}
-	catch(std::logic_error& e)
-	{
-		Global::Get()->bug(e.what());
-		throw std::logic_error("Could not create source file.\n");
-	}
+	AppendSourceFooter();
 	
 	return;
 }
 
 void Generator::CreateTI()
 {
-	try
-	{
-		AppendLicense(m_tiheaderfile);
-		AppendGeneratorNotice(m_tiheaderfile);
-		AppendHeaderTableImpls();
+	AppendLicense(m_tiheaderfile);
+	AppendGeneratorNotice(m_tiheaderfile);
+	AppendHeaderTableImpls();
 		
-		AppendLicense(m_tisourcefile);
-		AppendGeneratorNotice(m_tisourcefile);
-		AppendSourceTableImpls();
-	}
-	catch(std::logic_error& e)
-	{
-		Global::Get()->bug(e.what());
-		throw std::logic_error("Could not create TableImpls file.\n");
-	}
+	AppendLicense(m_tisourcefile);
+	AppendGeneratorNotice(m_tisourcefile);
+	AppendSourceTableImpls();
 }
 
 void Generator::AppendHeaderTableImpls()
 {
+	Assert(m_tiheaderfile);
+
 	m_tiheaderfile << "#pragma once" << endl;
 	//m_tiheaderfile << "#ifdef _WIN32" << endl;
 	//m_tiheaderfile << m_tabs << "#pragma warning (disable:4800)" << endl;
@@ -362,6 +308,8 @@ void Generator::AppendHeaderTableImpls()
 
 void Generator::AppendSourceTableImpls()
 {
+	Assert(m_tisourcefile);
+
 	//m_tisourcefile << "#ifdef _WIN32" << endl;
 	//m_tisourcefile << "#pragma warning (disable:4244)" << endl;
 	//m_tisourcefile << "#pragma warning (disable:4267)" << endl;

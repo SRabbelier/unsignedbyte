@@ -18,9 +18,10 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include <exception>
+#include <iostream>
 #include <string>
 #include <vector>
-#include <iostream>
 
 #include "sqlite3.h"
 #include "Database.h"
@@ -51,11 +52,11 @@ int main()
 	printf("Generating DAL...\n");
 	Generator gen("db");
 	
-	bool succes;
-	succes = gen.GenerateDAL();
-	if(!succes)
-	{
+	try {
+		gen.GenerateDAL();
+	} catch(std::exception& e) {
 		printf("Could not generate DAL!\n");
+		printf("%s\n", e.what());
 		return 1;
 	}
 	
