@@ -71,25 +71,42 @@ mud::PCharacterPtr PCharacterManager::LoadByKey(UBSocket* sock, value_type id)
 		throw std::invalid_argument(err.str());
 	}
 	
-	SavableManagerPtr manager = SavableManager::getnew(db::TableImpls::Get()->CHARACTERS);
+	KeyPtr key(new Key(db::CharactersFields::Get()->CHARACTERID, id));
+	SavableManagerPtr manager = SavableManager::bykeys(key);
 	PCharacterPtr p(new PCharacter(sock, manager));
 	m_activeCharactersByKey[id] = p;
 	m_activeCharactersByName[p->getName()] = p;
 	return p;
 }
 
-mud::PCharacterPtr PCharacterManager::LoadByName(UBSocket* sock, cstring value)
+mud::PCharacterPtr PCharacterManager::LoadByName(UBSocket* sock, cstring name)
 {
-	if(m_activeCharactersByName.find(value) != m_activeCharactersByName.end())
+	if(m_activeCharactersByName.find(name) != m_activeCharactersByName.end())
 	{
 		std::ostringstream err;
-		err << "PCharacterManager::LoadPCharacterByKey(), A character with name '" << value << "' has already been loaded.";
+		err << "PCharacterManager::LoadPCharacterByKey(), A character with name '" << name << "' has already been loaded.";
 		throw std::invalid_argument(err.str());
 	}	
 	
-	SavableManagerPtr manager = SavableManager::getnew(db::TableImpls::Get()->CHARACTERS);
+	ValuePtr value(new Value(db::CharactersFields::Get()->NAME, name));
+	SavableManagerPtr manager = SavableManager::byvalue(value);
 	PCharacterPtr p(new PCharacter(sock, manager));
-	m_activeCharactersByName[value] = p;
+	m_activeCharactersByName[name] = p;
 	m_activeCharactersByKey[p->getID()] = p;
 	return p;
+}
+
+void mud::PCharacterManager::UnloadByKey(value_type id)
+{
+	charactersByKey::iterator it_key = m_activeCharactersByKey.find(id);
+	Assert(it_key != m_activeCharactersByKey.end());
+	
+	mud::PCharacterPtr character = it_key->second;
+	std::string name = character->getName();
+	
+	charactersByName::iterator it_name = m_activeCharactersByName.find(name);
+	Assert(it_name != m_activeCharactersByName.end());
+	
+	m_activeCharactersByKey.erase(it_key);
+	m_activeCharactersByName.erase(it_name);
 }

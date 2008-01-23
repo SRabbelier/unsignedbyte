@@ -67,6 +67,7 @@ m_char(character)
 EditorPlaying::~EditorPlaying(void)
 {
 	m_char->Save();
+	mud::PCharacterManager::Get()->UnloadByKey(m_char->getID());
 }
 
 std::string EditorPlaying::lookup(const std::string& action)
@@ -149,10 +150,11 @@ void EditorPlaying::look(const std::string& argument)
 
 void EditorPlaying::quitEditor(const std::string& argument)
 {
+	m_char->OnSend("Thank you for visiting.\n");
+	
 	try
 	{
-		m_char->OnSend("Thank you for visiting.\n");
-		long id =m_char->getRoom();
+		value_type id = m_char->getRoom();
 		mud::RoomPtr room = mud::RoomManager::Get()->GetByKey(id);
 		
 		room->Sendf("%s fades from the realm.\n", m_char->getName().c_str());	
@@ -165,7 +167,7 @@ void EditorPlaying::quitEditor(const std::string& argument)
 	
 	try
 	{
-		m_sock->SetEditor(new EditorAccount(m_sock));
+		m_sock->PopEditor();
 	}
 	catch(std::exception& e)
 	{

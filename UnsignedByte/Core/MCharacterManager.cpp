@@ -30,10 +30,8 @@ using mud::MCharacterPtr;
 
 mud::MCharacterPtr MCharacterManager::GetByKey(value_type id)
 {
-	KeysPtr keys(new Keys(db::TableImpls::Get()->CHARACTERS));
 	KeyPtr key(new Key(db::CharactersFields::Get()->CHARACTERID, id));
-	keys->addKey(key);
-	SavableManagerPtr manager = SavableManager::bykeys(keys);
+	SavableManagerPtr manager = SavableManager::bykeys(key);
 	MCharacterPtr p(new MCharacter(manager));
 	return p;
 }

@@ -45,6 +45,8 @@ namespace mud
 		
 		mud::PCharacterPtr LoadByKey(UBSocket* sock, value_type id);
 		mud::PCharacterPtr LoadByName(UBSocket* sock, cstring name);
+		
+		void UnloadByKey(value_type id);
 
 	private:
 		PCharacterManager(void) {};
