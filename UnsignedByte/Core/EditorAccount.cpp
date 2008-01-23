@@ -179,7 +179,7 @@ void EditorAccount::listCharacters(const std::string &argument)
 	
 	sock->Send(String::Get()->box(characters));
 	*/
-	m_sock->Send("Not yet implemented!");
+	m_sock->Send("Character listing for Account not yet implemented!");
 	m_sock->Send("\n");
 	return;
 }
