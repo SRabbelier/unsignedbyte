@@ -30,7 +30,7 @@ RcCmpOptions=
 LinkOptions=
 IncludePath=$(IncludeSwitch). $(IncludeSwitch)../include 
 RcIncludePath=
-Libs=$(LibrarySwitch)pthread $(LibrarySwitch)dl $(LibrarySwitch)ubdal $(LibrarySwitch)ubresource $(LibrarySwitch)MySqlite3 
+Libs=$(LibrarySwitch)pthread $(LibrarySwitch)dl $(LibrarySwitch)ubdal $(LibrarySwitch)ubresource $(LibrarySwitch)sqlite3 
 LibPath=$(LibraryPathSwitch). $(LibraryPathSwitch)../lib 
 endif
 
@@ -46,11 +46,14 @@ Objects=$(IntermediateDirectory)/Account$(ObjectSuffix) $(IntermediateDirectory)
 ##
 all: $(OutputFile)
 
-$(OutputFile): makeDirStep  $(Objects)
+$(OutputFile): makeDirStep PrePreBuild $(Objects)
 	$(LinkerName) $(OutputSwitch)$(OutputFile) $(Objects) $(LibPath) $(Libs) $(LinkOptions)
 
 makeDirStep:
 	@test -d ./Debug || mkdir ./Debug
+
+PrePreBuild: 
+
 
 
 PreBuild:

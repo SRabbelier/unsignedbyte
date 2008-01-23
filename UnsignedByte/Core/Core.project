@@ -143,18 +143,20 @@
         <Library Value="dl"/>
         <Library Value="ubdal"/>
         <Library Value="ubresource"/>
-        <Library Value="MySqlite3"/>
+        <Library Value="sqlite3"/>
       </Linker>
       <ResourceCompiler Required="no" Options=""/>
       <PreBuild/>
       <PostBuild/>
       <CustomBuild Enabled="no">
-        <CleanCommand/>
-        <BuildCommand/>
+        <CleanCommand></CleanCommand>
+        <BuildCommand></BuildCommand>
       </CustomBuild>
       <AdditionalRules>
-        <CustomPostBuild/>
-        <CustomPreBuild/>
+        <CustomPostBuild></CustomPostBuild>
+        <CustomPreBuild>
+
+</CustomPreBuild>
       </AdditionalRules>
     </Configuration>
   </Settings>
