@@ -35,7 +35,7 @@ std::vector<std::string> CharacterManager::List()
 
 TableImplPtr CharacterManager::GetTable()
 { 
-	return db::TableImpls::Get()->CHARACTERS; 
+	return db::TableImpls::Get()->ENTITIES; 
 }
 
 bool CharacterManager::IllegalName(const std::string& name)
@@ -52,15 +52,15 @@ bool CharacterManager::IllegalName(const std::string& name)
 
 KeysPtr CharacterManager::Add()
 {
-	SavableManagerPtr manager = SavableManager::getnew(db::TableImpls::Get()->CHARACTERS);
+	SavableManagerPtr manager = SavableManager::getnew(db::TableImpls::Get()->ENTITIES);
 	manager->save();
 	return manager->getkeys();
 }
 
 mud::CharacterPtr CharacterManager::GetByKey(value_type id)
 {
-	KeysPtr keys(new Keys(db::TableImpls::Get()->CHARACTERS));
-	KeyPtr key(new Key(db::CharactersFields::Get()->CHARACTERID, id));
+	KeysPtr keys(new Keys(db::TableImpls::Get()->ENTITIES));
+	KeyPtr key(new Key(db::EntitiesFields::Get()->ENTITYID, id));
 	keys->addKey(key);
 	SavableManagerPtr manager = SavableManager::bykeys(keys);
 	CharacterPtr p(new Character(manager));
@@ -69,7 +69,7 @@ mud::CharacterPtr CharacterManager::GetByKey(value_type id)
 
 mud::CharacterPtr CharacterManager::GetByName(cstring value)
 {
-	ValuePtr val(new Value(db::CharactersFields::Get()->NAME, value));
+	ValuePtr val(new Value(db::EntitiesFields::Get()->NAME, value));
 	SavableManagerPtr manager = SavableManager::byvalue(val);
 	CharacterPtr p(new Character(manager));
 	return p;
@@ -77,8 +77,8 @@ mud::CharacterPtr CharacterManager::GetByName(cstring value)
 
 value_type CharacterManager::lookupByName(cstring value)
 {
-	ValuePtr val(new Value(db::CharactersFields::Get()->NAME, value));
+	ValuePtr val(new Value(db::EntitiesFields::Get()->NAME, value));
 	KeysPtr keys = SavableManager::lookupvalue(val);
-	value_type id = keys->getKey(db::CharactersFields::Get()->CHARACTERID)->getValue();
+	value_type id = keys->getKey(db::EntitiesFields::Get()->ENTITYID)->getValue();
 	return id;
 }

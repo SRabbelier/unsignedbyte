@@ -71,7 +71,7 @@ mud::PCharacterPtr PCharacterManager::LoadByKey(UBSocket* sock, value_type id)
 		throw std::invalid_argument(err.str());
 	}
 	
-	KeyPtr key(new Key(db::CharactersFields::Get()->CHARACTERID, id));
+	KeyPtr key(new Key(db::EntitiesFields::Get()->ENTITYID, id));
 	SavableManagerPtr manager = SavableManager::bykeys(key);
 	PCharacterPtr p(new PCharacter(sock, manager));
 	m_activeCharactersByKey[id] = p;
@@ -88,7 +88,7 @@ mud::PCharacterPtr PCharacterManager::LoadByName(UBSocket* sock, cstring name)
 		throw std::invalid_argument(err.str());
 	}	
 	
-	ValuePtr value(new Value(db::CharactersFields::Get()->NAME, name));
+	ValuePtr value(new Value(db::EntitiesFields::Get()->NAME, name));
 	SavableManagerPtr manager = SavableManager::byvalue(value);
 	PCharacterPtr p(new PCharacter(sock, manager));
 	m_activeCharactersByName[name] = p;

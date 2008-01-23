@@ -88,7 +88,7 @@ namespace db
 	{
 	public:
 		KeyDefPtr FKACCOUNTS;
-		KeyDefPtr FKCHARACTERS;
+		KeyDefPtr FKENTITIES;
 
 	private:
 		// Hide constructor and assignment operator
@@ -103,7 +103,7 @@ namespace db
 	{
 	public:
 		KeyDefPtr FKBRANCHES;
-		KeyDefPtr FKCHARACTERS;
+		KeyDefPtr FKENTITIES;
 		FieldImplPtr XP;
 
 	private:
@@ -118,8 +118,8 @@ namespace db
 	class CharacterClusterFields : public Singleton<CharacterClusterFields>
 	{
 	public:
-		KeyDefPtr FKCHARACTERS;
 		KeyDefPtr FKCLUSTERS;
+		KeyDefPtr FKENTITIES;
 		FieldImplPtr XP;
 
 	private:
@@ -131,29 +131,11 @@ namespace db
 		friend class Singleton<CharacterClusterFields>;
 	};
 
-	class CharactersFields : public Singleton<CharactersFields>
-	{
-	public:
-		KeyDefPtr CHARACTERID;
-		FieldImplPtr FKRACES;
-		FieldImplPtr FKROOMS;
-		FieldImplPtr NAME;
-		FieldImplPtr DESCRIPTION;
-
-	private:
-		// Hide constructor and assignment operator
-		CharactersFields();
-		~CharactersFields() { }
-		CharactersFields(const CharactersFields& rhs);
-		CharactersFields operator=(const CharactersFields& rhs);
-		friend class Singleton<CharactersFields>;
-	};
-
 	class CharacterSkillFields : public Singleton<CharacterSkillFields>
 	{
 	public:
 		KeyDefPtr FKBRANCHES;
-		KeyDefPtr FKCHARACTERS;
+		KeyDefPtr FKENTITIES;
 		FieldImplPtr XP;
 
 	private:
@@ -168,7 +150,7 @@ namespace db
 	class CharacterStatFields : public Singleton<CharacterStatFields>
 	{
 	public:
-		KeyDefPtr FKCHARACTERS;
+		KeyDefPtr FKENTITIES;
 		KeyDefPtr FKSTATS;
 		FieldImplPtr XP;
 
@@ -184,7 +166,7 @@ namespace db
 	class CharacterTreeFields : public Singleton<CharacterTreeFields>
 	{
 	public:
-		KeyDefPtr FKCHARACTERS;
+		KeyDefPtr FKENTITIES;
 		KeyDefPtr FKTREES;
 		FieldImplPtr XP;
 
@@ -316,8 +298,8 @@ namespace db
 	class DetailCharacterFields : public Singleton<DetailCharacterFields>
 	{
 	public:
-		KeyDefPtr FKCHARACTERS;
 		KeyDefPtr FKDETAILS;
+		KeyDefPtr FKENTITIES;
 
 	private:
 		// Hide constructor and assignment operator
@@ -341,6 +323,24 @@ namespace db
 		DetailDetailFields(const DetailDetailFields& rhs);
 		DetailDetailFields operator=(const DetailDetailFields& rhs);
 		friend class Singleton<DetailDetailFields>;
+	};
+
+	class EntitiesFields : public Singleton<EntitiesFields>
+	{
+	public:
+		KeyDefPtr ENTITYID;
+		FieldImplPtr FKRACES;
+		FieldImplPtr FKROOMS;
+		FieldImplPtr NAME;
+		FieldImplPtr DESCRIPTION;
+
+	private:
+		// Hide constructor and assignment operator
+		EntitiesFields();
+		~EntitiesFields() { }
+		EntitiesFields(const EntitiesFields& rhs);
+		EntitiesFields operator=(const EntitiesFields& rhs);
+		friend class Singleton<EntitiesFields>;
 	};
 
 	class ExitRoomFields : public Singleton<ExitRoomFields>

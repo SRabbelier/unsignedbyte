@@ -199,23 +199,23 @@ void Initializer::InitDatabase()
 	
 	try
 	{
-		KeyPtr key(new Key(db::CharactersFields::Get()->CHARACTERID, 1));
+		KeyPtr key(new Key(db::EntitiesFields::Get()->ENTITYID, 1));
 		SavableManagerPtr manager = SavableManager::bykeys(key);
 	}
 	catch(RowNotFoundException& e)
 	{
-		SavableManagerPtr manager = SavableManager::getnew(db::TableImpls::Get()->CHARACTERS);
+		SavableManagerPtr manager = SavableManager::getnew(db::TableImpls::Get()->ENTITIES);
 		
-		ValuePtr value = ValuePtr(new Value(db::CharactersFields::Get()->NAME, game::vname));
+		ValuePtr value = ValuePtr(new Value(db::EntitiesFields::Get()->NAME, game::vname));
 		manager->setvalue(value);
 		
-		value = ValuePtr(new Value(db::CharactersFields::Get()->DESCRIPTION, "This is the default character."));
+		value = ValuePtr(new Value(db::EntitiesFields::Get()->DESCRIPTION, "This is the default character."));
 		manager->setvalue(value);
 		
-		value = ValuePtr(new Value(db::CharactersFields::Get()->FKRACES, 1));
+		value = ValuePtr(new Value(db::EntitiesFields::Get()->FKRACES, 1));
 		manager->setvalue(value);
 		
-		value = ValuePtr(new Value(db::CharactersFields::Get()->FKROOMS, 1));
+		value = ValuePtr(new Value(db::EntitiesFields::Get()->FKROOMS, 1));
 		manager->setvalue(value);
 		
 		manager->save();

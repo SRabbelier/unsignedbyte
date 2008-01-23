@@ -44,7 +44,6 @@ TableImpls* TableImpls::Get()
 		db::CharacterAccountFields::Get();
 		db::CharacterBranchFields::Get();
 		db::CharacterClusterFields::Get();
-		db::CharactersFields::Get();
 		db::CharacterSkillFields::Get();
 		db::CharacterStatFields::Get();
 		db::CharacterTreeFields::Get();
@@ -57,6 +56,7 @@ TableImpls* TableImpls::Get()
 		db::DetailChunkFields::Get();
 		db::DetailCharacterFields::Get();
 		db::DetailDetailFields::Get();
+		db::EntitiesFields::Get();
 		db::ExitRoomFields::Get();
 		db::ExitsFields::Get();
 		db::GrantGroupsFields::Get();
@@ -85,7 +85,6 @@ BRANCHES(new TableImpl(Tables::Get()->BRANCHES)),
 CHARACTERACCOUNT(new TableImpl(Tables::Get()->CHARACTERACCOUNT)),
 CHARACTERBRANCH(new TableImpl(Tables::Get()->CHARACTERBRANCH)),
 CHARACTERCLUSTER(new TableImpl(Tables::Get()->CHARACTERCLUSTER)),
-CHARACTERS(new TableImpl(Tables::Get()->CHARACTERS)),
 CHARACTERSKILL(new TableImpl(Tables::Get()->CHARACTERSKILL)),
 CHARACTERSTAT(new TableImpl(Tables::Get()->CHARACTERSTAT)),
 CHARACTERTREE(new TableImpl(Tables::Get()->CHARACTERTREE)),
@@ -98,6 +97,7 @@ DETAILROOM(new TableImpl(Tables::Get()->DETAILROOM)),
 DETAILCHUNK(new TableImpl(Tables::Get()->DETAILCHUNK)),
 DETAILCHARACTER(new TableImpl(Tables::Get()->DETAILCHARACTER)),
 DETAILDETAIL(new TableImpl(Tables::Get()->DETAILDETAIL)),
+ENTITIES(new TableImpl(Tables::Get()->ENTITIES)),
 EXITROOM(new TableImpl(Tables::Get()->EXITROOM)),
 EXITS(new TableImpl(Tables::Get()->EXITS)),
 GRANTGROUPS(new TableImpl(Tables::Get()->GRANTGROUPS)),
@@ -116,7 +116,6 @@ VERSION(new TableImpl(Tables::Get()->VERSION))
 	m_tables.push_back(CHARACTERACCOUNT);
 	m_tables.push_back(CHARACTERBRANCH);
 	m_tables.push_back(CHARACTERCLUSTER);
-	m_tables.push_back(CHARACTERS);
 	m_tables.push_back(CHARACTERSKILL);
 	m_tables.push_back(CHARACTERSTAT);
 	m_tables.push_back(CHARACTERTREE);
@@ -129,6 +128,7 @@ VERSION(new TableImpl(Tables::Get()->VERSION))
 	m_tables.push_back(DETAILCHUNK);
 	m_tables.push_back(DETAILCHARACTER);
 	m_tables.push_back(DETAILDETAIL);
+	m_tables.push_back(ENTITIES);
 	m_tables.push_back(EXITROOM);
 	m_tables.push_back(EXITS);
 	m_tables.push_back(GRANTGROUPS);

@@ -78,72 +78,58 @@ FKSTATSSECONDARY(new FieldImpl(TableImpls::Get()->BRANCHES, "fkStatsSecondary"))
 
 CharacterAccountFields::CharacterAccountFields() :
 FKACCOUNTS(new KeyDef(TableImpls::Get()->CHARACTERACCOUNT, "fkAccounts")),
-FKCHARACTERS(new KeyDef(TableImpls::Get()->CHARACTERACCOUNT, "fkCharacters"))
+FKENTITIES(new KeyDef(TableImpls::Get()->CHARACTERACCOUNT, "fkEntities"))
 {
 	TableImpls::Get()->CHARACTERACCOUNT->addKey(FKACCOUNTS);
-	TableImpls::Get()->CHARACTERACCOUNT->addKey(FKCHARACTERS);
+	TableImpls::Get()->CHARACTERACCOUNT->addKey(FKENTITIES);
 }
 
 CharacterBranchFields::CharacterBranchFields() :
 FKBRANCHES(new KeyDef(TableImpls::Get()->CHARACTERBRANCH, "fkBranches")),
-FKCHARACTERS(new KeyDef(TableImpls::Get()->CHARACTERBRANCH, "fkCharacters")),
+FKENTITIES(new KeyDef(TableImpls::Get()->CHARACTERBRANCH, "fkEntities")),
 XP(new FieldImpl(TableImpls::Get()->CHARACTERBRANCH, "xp"))
 {
 	TableImpls::Get()->CHARACTERBRANCH->addKey(FKBRANCHES);
-	TableImpls::Get()->CHARACTERBRANCH->addKey(FKCHARACTERS);
+	TableImpls::Get()->CHARACTERBRANCH->addKey(FKENTITIES);
 	TableImpls::Get()->CHARACTERBRANCH->addField(XP);
 }
 
 CharacterClusterFields::CharacterClusterFields() :
-FKCHARACTERS(new KeyDef(TableImpls::Get()->CHARACTERCLUSTER, "fkCharacters")),
 FKCLUSTERS(new KeyDef(TableImpls::Get()->CHARACTERCLUSTER, "fkClusters")),
+FKENTITIES(new KeyDef(TableImpls::Get()->CHARACTERCLUSTER, "fkEntities")),
 XP(new FieldImpl(TableImpls::Get()->CHARACTERCLUSTER, "xp"))
 {
-	TableImpls::Get()->CHARACTERCLUSTER->addKey(FKCHARACTERS);
 	TableImpls::Get()->CHARACTERCLUSTER->addKey(FKCLUSTERS);
+	TableImpls::Get()->CHARACTERCLUSTER->addKey(FKENTITIES);
 	TableImpls::Get()->CHARACTERCLUSTER->addField(XP);
-}
-
-CharactersFields::CharactersFields() :
-CHARACTERID(new KeyDef(TableImpls::Get()->CHARACTERS, "characterid")),
-FKRACES(new FieldImpl(TableImpls::Get()->CHARACTERS, "fkRaces")),
-FKROOMS(new FieldImpl(TableImpls::Get()->CHARACTERS, "fkRooms")),
-NAME(new FieldImpl(TableImpls::Get()->CHARACTERS, "name", true)),
-DESCRIPTION(new FieldImpl(TableImpls::Get()->CHARACTERS, "description", true))
-{
-	TableImpls::Get()->CHARACTERS->addKey(CHARACTERID);
-	TableImpls::Get()->CHARACTERS->addField(FKRACES);
-	TableImpls::Get()->CHARACTERS->addField(FKROOMS);
-	TableImpls::Get()->CHARACTERS->addField(NAME);
-	TableImpls::Get()->CHARACTERS->addField(DESCRIPTION);
 }
 
 CharacterSkillFields::CharacterSkillFields() :
 FKBRANCHES(new KeyDef(TableImpls::Get()->CHARACTERSKILL, "fkBranches")),
-FKCHARACTERS(new KeyDef(TableImpls::Get()->CHARACTERSKILL, "fkCharacters")),
+FKENTITIES(new KeyDef(TableImpls::Get()->CHARACTERSKILL, "fkEntities")),
 XP(new FieldImpl(TableImpls::Get()->CHARACTERSKILL, "xp"))
 {
 	TableImpls::Get()->CHARACTERSKILL->addKey(FKBRANCHES);
-	TableImpls::Get()->CHARACTERSKILL->addKey(FKCHARACTERS);
+	TableImpls::Get()->CHARACTERSKILL->addKey(FKENTITIES);
 	TableImpls::Get()->CHARACTERSKILL->addField(XP);
 }
 
 CharacterStatFields::CharacterStatFields() :
-FKCHARACTERS(new KeyDef(TableImpls::Get()->CHARACTERSTAT, "fkCharacters")),
+FKENTITIES(new KeyDef(TableImpls::Get()->CHARACTERSTAT, "fkEntities")),
 FKSTATS(new KeyDef(TableImpls::Get()->CHARACTERSTAT, "fkStats")),
 XP(new FieldImpl(TableImpls::Get()->CHARACTERSTAT, "xp"))
 {
-	TableImpls::Get()->CHARACTERSTAT->addKey(FKCHARACTERS);
+	TableImpls::Get()->CHARACTERSTAT->addKey(FKENTITIES);
 	TableImpls::Get()->CHARACTERSTAT->addKey(FKSTATS);
 	TableImpls::Get()->CHARACTERSTAT->addField(XP);
 }
 
 CharacterTreeFields::CharacterTreeFields() :
-FKCHARACTERS(new KeyDef(TableImpls::Get()->CHARACTERTREE, "fkCharacters")),
+FKENTITIES(new KeyDef(TableImpls::Get()->CHARACTERTREE, "fkEntities")),
 FKTREES(new KeyDef(TableImpls::Get()->CHARACTERTREE, "fkTrees")),
 XP(new FieldImpl(TableImpls::Get()->CHARACTERTREE, "xp"))
 {
-	TableImpls::Get()->CHARACTERTREE->addKey(FKCHARACTERS);
+	TableImpls::Get()->CHARACTERTREE->addKey(FKENTITIES);
 	TableImpls::Get()->CHARACTERTREE->addKey(FKTREES);
 	TableImpls::Get()->CHARACTERTREE->addField(XP);
 }
@@ -227,11 +213,11 @@ FKDETAILS(new KeyDef(TableImpls::Get()->DETAILCHUNK, "fkDetails"))
 }
 
 DetailCharacterFields::DetailCharacterFields() :
-FKCHARACTERS(new KeyDef(TableImpls::Get()->DETAILCHARACTER, "fkCharacters")),
-FKDETAILS(new KeyDef(TableImpls::Get()->DETAILCHARACTER, "fkDetails"))
+FKDETAILS(new KeyDef(TableImpls::Get()->DETAILCHARACTER, "fkDetails")),
+FKENTITIES(new KeyDef(TableImpls::Get()->DETAILCHARACTER, "fkEntities"))
 {
-	TableImpls::Get()->DETAILCHARACTER->addKey(FKCHARACTERS);
 	TableImpls::Get()->DETAILCHARACTER->addKey(FKDETAILS);
+	TableImpls::Get()->DETAILCHARACTER->addKey(FKENTITIES);
 }
 
 DetailDetailFields::DetailDetailFields() :
@@ -240,6 +226,20 @@ FKDETAILSSECONDARY(new KeyDef(TableImpls::Get()->DETAILDETAIL, "fkDetailsSeconda
 {
 	TableImpls::Get()->DETAILDETAIL->addKey(FKDETAILSPRIMARY);
 	TableImpls::Get()->DETAILDETAIL->addKey(FKDETAILSSECONDARY);
+}
+
+EntitiesFields::EntitiesFields() :
+ENTITYID(new KeyDef(TableImpls::Get()->ENTITIES, "entityid")),
+FKRACES(new FieldImpl(TableImpls::Get()->ENTITIES, "fkRaces")),
+FKROOMS(new FieldImpl(TableImpls::Get()->ENTITIES, "fkRooms")),
+NAME(new FieldImpl(TableImpls::Get()->ENTITIES, "name", true)),
+DESCRIPTION(new FieldImpl(TableImpls::Get()->ENTITIES, "description", true))
+{
+	TableImpls::Get()->ENTITIES->addKey(ENTITYID);
+	TableImpls::Get()->ENTITIES->addField(FKRACES);
+	TableImpls::Get()->ENTITIES->addField(FKROOMS);
+	TableImpls::Get()->ENTITIES->addField(NAME);
+	TableImpls::Get()->ENTITIES->addField(DESCRIPTION);
 }
 
 ExitRoomFields::ExitRoomFields() :

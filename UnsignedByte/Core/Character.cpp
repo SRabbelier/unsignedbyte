@@ -55,27 +55,27 @@ Character::~Character(void)
 
 value_type Character::getID() const
 {
-	return m_character->getkey(db::CharactersFields::Get()->CHARACTERID)->getValue();
+	return m_character->getkey(db::EntitiesFields::Get()->ENTITYID)->getValue();
 }
 
 const std::string& Character::getName() const
 {
-	return m_character->getfield(db::CharactersFields::Get()->NAME)->getStringValue();
+	return m_character->getfield(db::EntitiesFields::Get()->NAME)->getStringValue();
 }
 
 const std::string& Character::getDescription() const
 {
-	return m_character->getfield(db::CharactersFields::Get()->DESCRIPTION)->getStringValue();
+	return m_character->getfield(db::EntitiesFields::Get()->DESCRIPTION)->getStringValue();
 }
 
 value_type Character::getRace() const
 {
-	return m_character->getfield(db::CharactersFields::Get()->FKRACES)->getIntegerValue();
+	return m_character->getfield(db::EntitiesFields::Get()->FKRACES)->getIntegerValue();
 }
 
 value_type Character::getRoom() const
 {
-	return m_character->getfield(db::CharactersFields::Get()->FKROOMS)->getIntegerValue();
+	return m_character->getfield(db::EntitiesFields::Get()->FKROOMS)->getIntegerValue();
 }
 
 
@@ -84,25 +84,25 @@ value_type Character::getRoom() const
  */ 
 void Character::setName(const std::string& name)
 {
-	ValuePtr value(new Value(db::CharactersFields::Get()->NAME, name));
+	ValuePtr value(new Value(db::EntitiesFields::Get()->NAME, name));
 	m_character->setvalue(value);	
 }
 
 void Character::setDescription(const std::string& description)
 {
-	ValuePtr value(new Value(db::CharactersFields::Get()->DESCRIPTION, description));
+	ValuePtr value(new Value(db::EntitiesFields::Get()->DESCRIPTION, description));
 	m_character->setvalue(value);
 }
 
 void Character::setRace(value_type race)
 {
-	ValuePtr value(new Value(db::CharactersFields::Get()->FKRACES, race));
+	ValuePtr value(new Value(db::EntitiesFields::Get()->FKRACES, race));
 	m_character->setvalue(value);
 }
 
 void Character::setRoom(value_type room)
 {
-	ValuePtr value(new Value(db::CharactersFields::Get()->FKROOMS, room));
+	ValuePtr value(new Value(db::EntitiesFields::Get()->FKROOMS, room));
 	m_character->setvalue(value);
 }
 

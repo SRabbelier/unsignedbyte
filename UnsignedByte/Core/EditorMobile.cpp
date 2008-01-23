@@ -87,7 +87,7 @@ SavablePtr EditorMobile::getEditing()
 
 TableImplPtr EditorMobile::getTable()
 {
-	return db::TableImpls::Get()->CHARACTERS;
+	return db::TableImpls::Get()->ENTITIES;
 }
 
 KeysPtr EditorMobile::addNew()

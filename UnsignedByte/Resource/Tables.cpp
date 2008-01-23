@@ -28,7 +28,6 @@ Tables::Tables() :
 	CHARACTERACCOUNT( new TableDef("CharacterAccount") ),
 	CHARACTERBRANCH( new TableDef("CharacterBranch") ),
 	CHARACTERCLUSTER( new TableDef("CharacterCluster") ),
-	CHARACTERS( new TableDef("Characters") ),
 	CHARACTERSKILL( new TableDef("CharacterSkill") ),
 	CHARACTERSTAT( new TableDef("CharacterStat") ),
 	CHARACTERTREE( new TableDef("CharacterTree") ),
@@ -41,6 +40,7 @@ Tables::Tables() :
 	DETAILCHUNK( new TableDef("DetailChunk") ),
 	DETAILCHARACTER( new TableDef("DetailCharacter") ),
 	DETAILDETAIL( new TableDef("DetailDetail") ),
+	ENTITIES( new TableDef("Entities") ),
 	EXITROOM( new TableDef("ExitRoom") ),
 	EXITS( new TableDef("Exits") ),
 	GRANTGROUPS( new TableDef("GrantGroups") ),
@@ -69,32 +69,26 @@ Tables::Tables() :
 	BRANCHES->addFK(STATS, "Primary");
 	BRANCHES->addFK(STATS, "Secondary");
 	
-	CHARACTERACCOUNT->addFPK(CHARACTERS);
+	CHARACTERACCOUNT->addFPK(ENTITIES);
 	CHARACTERACCOUNT->addFPK(ACCOUNTS);
 	
-	CHARACTERBRANCH->addFPK(CHARACTERS);
+	CHARACTERBRANCH->addFPK(ENTITIES);
 	CHARACTERBRANCH->addFPK(BRANCHES);
 	CHARACTERBRANCH->addValue("xp");
 	
-	CHARACTERCLUSTER->addFPK(CHARACTERS);
+	CHARACTERCLUSTER->addFPK(ENTITIES);
 	CHARACTERCLUSTER->addFPK(CLUSTERS);
 	CHARACTERCLUSTER->addValue("xp");
 	
-	CHARACTERS->addPK("characterid");
-	CHARACTERS->addFK(RACES);
-	CHARACTERS->addFK(ROOMS);
-	CHARACTERS->addLookupTextField("name");
-	CHARACTERS->addTextField("description");
-	
-	CHARACTERSKILL->addFPK(CHARACTERS);
+	CHARACTERSKILL->addFPK(ENTITIES);
 	CHARACTERSKILL->addFPK(BRANCHES);
 	CHARACTERSKILL->addValue("xp");
 	
-	CHARACTERSTAT->addFPK(CHARACTERS);
+	CHARACTERSTAT->addFPK(ENTITIES);
 	CHARACTERSTAT->addFPK(STATS);
 	CHARACTERSTAT->addValue("xp");
 	
-	CHARACTERTREE->addFPK(CHARACTERS);
+	CHARACTERTREE->addFPK(ENTITIES);
 	CHARACTERTREE->addFPK(TREES);
 	CHARACTERTREE->addValue("xp");
 	
@@ -131,10 +125,16 @@ Tables::Tables() :
 	DETAILCHUNK->addFPK(CHUNKS);
 	
 	DETAILCHARACTER->addFPK(DETAILS);
-	DETAILCHARACTER->addFPK(CHARACTERS);
+	DETAILCHARACTER->addFPK(ENTITIES);
 	
 	DETAILDETAIL->addFPK(DETAILS, "Primary");
 	DETAILDETAIL->addFPK(DETAILS, "Secondary");
+	
+	ENTITIES->addPK("entityid");
+	ENTITIES->addFK(RACES);
+	ENTITIES->addFK(ROOMS);
+	ENTITIES->addLookupTextField("name");
+	ENTITIES->addTextField("description");
 	
 	EXITROOM->addFPK(EXITS);
 	EXITROOM->addFPK(ROOMS);
@@ -198,7 +198,6 @@ Tables::Tables() :
 	m_tables.push_back(CHARACTERACCOUNT);
 	m_tables.push_back(CHARACTERBRANCH);
 	m_tables.push_back(CHARACTERCLUSTER);
-	m_tables.push_back(CHARACTERS);
 	m_tables.push_back(CHARACTERSKILL);
 	m_tables.push_back(CHARACTERSTAT);
 	m_tables.push_back(CHARACTERTREE);
@@ -211,6 +210,7 @@ Tables::Tables() :
 	m_tables.push_back(DETAILCHUNK);
 	m_tables.push_back(DETAILCHARACTER);
 	m_tables.push_back(DETAILDETAIL);
+	m_tables.push_back(ENTITIES);
 	m_tables.push_back(EXITROOM);
 	m_tables.push_back(EXITS);
 	m_tables.push_back(GRANTGROUPS);

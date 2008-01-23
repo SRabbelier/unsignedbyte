@@ -38,7 +38,6 @@ namespace db
 		TableImplPtr CHARACTERACCOUNT;
 		TableImplPtr CHARACTERBRANCH;
 		TableImplPtr CHARACTERCLUSTER;
-		TableImplPtr CHARACTERS;
 		TableImplPtr CHARACTERSKILL;
 		TableImplPtr CHARACTERSTAT;
 		TableImplPtr CHARACTERTREE;
@@ -51,6 +50,7 @@ namespace db
 		TableImplPtr DETAILCHUNK;
 		TableImplPtr DETAILCHARACTER;
 		TableImplPtr DETAILDETAIL;
+		TableImplPtr ENTITIES;
 		TableImplPtr EXITROOM;
 		TableImplPtr EXITS;
 		TableImplPtr GRANTGROUPS;

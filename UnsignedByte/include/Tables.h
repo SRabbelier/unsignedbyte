@@ -30,7 +30,6 @@ public:
 	TableDefPtr CHARACTERACCOUNT;
 	TableDefPtr CHARACTERBRANCH;
 	TableDefPtr CHARACTERCLUSTER;
-	TableDefPtr CHARACTERS;
 	TableDefPtr CHARACTERSKILL;
 	TableDefPtr CHARACTERSTAT;
 	TableDefPtr CHARACTERTREE;
@@ -43,6 +42,7 @@ public:
 	TableDefPtr DETAILCHUNK;
 	TableDefPtr DETAILCHARACTER;
 	TableDefPtr DETAILDETAIL;
+	TableDefPtr ENTITIES;
 	TableDefPtr EXITROOM;
 	TableDefPtr EXITS;
 	TableDefPtr GRANTGROUPS;
