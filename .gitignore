@@ -7,3 +7,4 @@ UnsignedByte_wsp.mk
 *.ncb
 *.suo
 *.vcproj.LAPTOP-SVERRE.Sverre.user
+cscope*
