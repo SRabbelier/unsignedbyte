@@ -1,0 +1,28 @@
+Build instructions:
+* Install Sqlite3:
+This can be done either through the official website (http://sqlite3.org), your distribution's package manager, or by using the Sqlite3 makefile in the UnsignedByte/Sqlite3 subdirectory. If you do, you'll need to rename the resulting libMySqlite3.a (which can then be found in UnsignedByte/lib) to libsqlite3.a, since all projects use that name.
+
+* Compile the Resources
+This can be done by typing the following:
+make -f makefile.resource
+This is the makefile exported by CodeLite (see http://codelite.sf.net) and will compile the Resources, the Generator (although you won't need it) and the Initializer, which can be used to generate the sqlite3 database with the appropriate structure and some initial values.
+
+* Compile the Core
+This can be done by typing the following:
+make
+This is also a makefile exported by CodeLite and will compile the core, that is, the game itself.
+
+* Run the Initializer
+You can find the Initializer in the UnsignedByte/bin subdirectory after having compiled the Resources.
+This can be done by typing the following:
+cd UnsignedByte
+./Initialize
+
+* Run the Core
+The Core is located in the same directory as the Initializer.
+This can be done by typing the following:
+./UnsignedByte
+
+The default login is 'hp' with password 'qq'. The 'hp' name is defined in GameVersion.h (which can be found in UnsignedByte/include) and the 'qq' is defined in Initializer.cpp (which can be found in UnsignedByte/Initializer). A default character has also been created, named 'hp'.
+
+Have fun!
