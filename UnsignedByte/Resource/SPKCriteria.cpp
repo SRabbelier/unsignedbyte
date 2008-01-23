@@ -24,7 +24,6 @@
 
 #include "SPKCriteria.h"
 #include "Table.h"
-#include "Assert.h"
 
 bool SPKCriteria::evaluate(sqlite3_stmt* statement)
 {

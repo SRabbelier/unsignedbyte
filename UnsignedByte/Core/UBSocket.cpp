@@ -26,7 +26,6 @@
 #include "UBSocket.h"
 #include "PCharacter.h"
 
-#include "Assert.h"
 #include "DatabaseMgr.h"
 #include "EditorAccountLogin.h"
 #include "EditorOOC.h"

@@ -20,7 +20,6 @@
 #pragma once
 
 #include "Types.h"
-#include "Assert.h"
 
 class Key
 {

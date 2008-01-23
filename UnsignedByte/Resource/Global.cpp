@@ -20,7 +20,6 @@
 
 #include <stdarg.h>
 #include "Global.h"
-#include "Assert.h"
 
 Global::Global() :
 EmptyString(),

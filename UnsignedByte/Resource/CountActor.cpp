@@ -24,7 +24,6 @@
 
 #include "CountActor.h"
 #include "Table.h"
-#include "Assert.h"
 
 CountActor::CountActor(CriteriaPtr crit) : 
 m_count(0), 

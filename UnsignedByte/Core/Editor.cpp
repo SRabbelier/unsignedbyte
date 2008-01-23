@@ -20,7 +20,6 @@
 
 #include <stdarg.h>
 
-#include "Assert.h"
 #include "Editor.h"
 #include "Parse.h"
 #include "Permission.h"

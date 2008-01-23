@@ -24,7 +24,6 @@
 #include "TableDef.h"
 #include "FieldDef.h"
 #include "Global.h"
-#include "Assert.h"
 
 TableDef::TableDef(std::string name) :
 Table(name),

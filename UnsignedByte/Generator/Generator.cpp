@@ -26,7 +26,6 @@
 #include "Tables.h"
 #include "TableDef.h"
 #include "StringUtilities.h"
-#include "Assert.h"
 
 #include "ClassHeaderGenerator.h"
 #include "ClassSourceGenerator.h"

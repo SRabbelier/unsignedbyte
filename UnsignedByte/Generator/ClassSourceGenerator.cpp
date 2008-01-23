@@ -26,7 +26,6 @@
 #include "TableDef.h"
 #include "FieldDef.h"
 #include "StringUtilities.h"
-#include "Assert.h"
 
 using std::endl;
 

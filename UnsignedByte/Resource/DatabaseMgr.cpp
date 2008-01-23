@@ -23,7 +23,6 @@
 #include "IError.h"
 #include "StderrLog.h"
 #include "Global.h"
-#include "Assert.h"
 
 #include "SPKCriteria.h"
 #include "MPKCriteria.h"

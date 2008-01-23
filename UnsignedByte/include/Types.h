@@ -30,6 +30,7 @@
 
 #include "smart_ptr.h"
 #include "singleton.h"
+#include "Assert.h"
 
 typedef unsigned long value_type;
 typedef std::set<value_type> value_types;

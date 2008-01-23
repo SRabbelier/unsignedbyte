@@ -31,7 +31,6 @@
 #include "Character.h"
 #include "CharacterManager.h"
 
-#include "Assert.h"
 #include "Global.h"
 #include "Exceptions.h"
 #include "db.h"

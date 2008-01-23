@@ -22,7 +22,6 @@
 #include "sqlite3.h"
 #include "Field.h"
 #include "Table.h"
-#include "Assert.h"
 
 Statements::Statements() :
 m_insert(NULL),

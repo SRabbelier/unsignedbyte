@@ -24,7 +24,6 @@
 
 #include <stdarg.h>
 
-#include "Assert.h"
 #include "StringUtilities.h"
 #include "Exceptions.h"
 #include "db.h"

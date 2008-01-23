@@ -19,7 +19,6 @@
  ***************************************************************************/
 
 #include "Area.h"
-#include "Assert.h"
 #include "Global.h"
 #include "db.h"
 

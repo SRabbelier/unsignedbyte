@@ -23,7 +23,6 @@
 
 #include "StringUtilities.h"
 #include "Parse.h"
-#include "Assert.h"
 
 Strings String::lines(const std::string& input, const char* separator)
 {

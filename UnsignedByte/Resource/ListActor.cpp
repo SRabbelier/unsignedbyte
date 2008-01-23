@@ -24,7 +24,6 @@
 
 #include "ListActor.h"
 #include "Table.h"
-#include "Assert.h"
 
 void ListActor::parseRow(sqlite3_stmt* statement, Table* table)
 {

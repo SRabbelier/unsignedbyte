@@ -19,7 +19,6 @@
  ***************************************************************************/
 
 #include "Account.h"
-#include "Assert.h"
 #include "db.h"
 
 using mud::Account;
