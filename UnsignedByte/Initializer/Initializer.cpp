@@ -172,6 +172,76 @@ void Initializer::InitDatabase()
 		value = ValuePtr(new Value(db::RoomsFields::Get()->DESCRIPTION, "You are in The Void."));
 		manager->setvalue(value);
 		
+		value = ValuePtr(new Value(db::RoomsFields::Get()->FKSECTORS, 1));
+		manager->setvalue(value);
+		
+		value = ValuePtr(new Value(db::RoomsFields::Get()->FKAREAS, 1));
+		manager->setvalue(value);
+		
+		manager->save();
+	}
+	
+	try
+	{
+		KeyPtr key(new Key(db::RacesFields::Get()->RACEID, 1));
+		SavableManagerPtr manager = SavableManager::bykeys(key);
+		
+	}
+	catch(RowNotFoundException& e)
+	{
+		SavableManagerPtr manager = SavableManager::getnew(db::TableImpls::Get()->RACES);
+		
+		ValuePtr value = ValuePtr(new Value(db::RacesFields::Get()->NAME, "human"));
+		manager->setvalue(value);
+		
+		manager->save();
+	}
+	
+	try
+	{
+		KeyPtr key(new Key(db::CharactersFields::Get()->CHARACTERID, 1));
+		SavableManagerPtr manager = SavableManager::bykeys(key);
+	}
+	catch(RowNotFoundException& e)
+	{
+		SavableManagerPtr manager = SavableManager::getnew(db::TableImpls::Get()->CHARACTERS);
+		
+		ValuePtr value = ValuePtr(new Value(db::CharactersFields::Get()->NAME, game::vname));
+		manager->setvalue(value);
+		
+		value = ValuePtr(new Value(db::CharactersFields::Get()->DESCRIPTION, "This is the default character."));
+		manager->setvalue(value);
+		
+		value = ValuePtr(new Value(db::CharactersFields::Get()->FKRACES, 1));
+		manager->setvalue(value);
+		
+		value = ValuePtr(new Value(db::CharactersFields::Get()->FKROOMS, 1));
+		manager->setvalue(value);
+		
+		manager->save();
+	}
+	
+	try
+	{
+		KeyPtr key(new Key(db::SectorsFields::Get()->SECTORID, 1));
+		SavableManagerPtr manager = SavableManager::bykeys(key);
+	}
+	catch(RowNotFoundException& e)
+	{
+		SavableManagerPtr manager = SavableManager::getnew(db::TableImpls::Get()->SECTORS);
+		
+		ValuePtr value = ValuePtr(new Value(db::SectorsFields::Get()->NAME, "grass"));
+		manager->setvalue(value);
+		
+		value = ValuePtr(new Value(db::SectorsFields::Get()->SYMBOL, "."));
+		manager->setvalue(value);
+		
+		value = ValuePtr(new Value(db::SectorsFields::Get()->MOVECOST, 1));
+		manager->setvalue(value);
+		
+		value = ValuePtr(new Value(db::SectorsFields::Get()->WATER, 0));
+		manager->setvalue(value);
+		
 		manager->save();
 	}
 }
