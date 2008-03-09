@@ -140,7 +140,7 @@
       <Linker Required="yes" Options="">
         <LibraryPath Value="."/>
         <LibraryPath Value="../lib"/>
-        <LibraryPath Value="(HOME)/local/lib"/>
+        <LibraryPath Value="$(HOME)/local/lib"/>
         <Library Value="pthread"/>
         <Library Value="dl"/>
         <Library Value="ubdal"/>

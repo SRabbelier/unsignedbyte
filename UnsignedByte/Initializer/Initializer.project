@@ -13,12 +13,12 @@
       <Compiler Required="yes" Options="-g -Wall">
         <IncludePath Value="."/>
         <IncludePath Value="../include"/>
-        <IncludePath Value="(HOME)/local/include"/>
+        <IncludePath Value="$(HOME)/local/include"/>
       </Compiler>
       <Linker Required="yes" Options="-O0">
         <LibraryPath Value="."/>
         <LibraryPath Value="../lib"/>
-        <LibraryPath Value="(HOME)/local/lib"/>
+        <LibraryPath Value="$(HOME)/local/lib"/>
         <Library Value="pthread"/>
         <Library Value="dl"/>
         <Library Value="sqlite3"/>

@@ -14,6 +14,7 @@
       <Compiler Required="yes" Options="-g -Wall">
         <IncludePath Value="."/>
         <IncludePath Value="../include"/>
+        <IncludePath Value="$(HOME)/local/include"/>
       </Compiler>
       <Linker Required="yes" Options="-O0">
         <LibraryPath Value="."/>
