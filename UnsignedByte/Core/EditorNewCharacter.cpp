@@ -183,8 +183,8 @@ void EditorNewCharacter::OnLine(const std::string &line)
 			return;
 		}
 
-		mud::PCharacterPtr Ch = mud::PCharacterManager::Get()->LoadByKey(m_sock, id);
-		if(!Ch)
+		mud::CharacterPtr character = mud::CharacterManager::Get()->GetByKey(id);
+		if(!character)
 		{
 			m_sock->Send("For some reason your new characters could not be retreived.\n");
 			m_sock->Send("Disconnecting you now.\n");
@@ -192,11 +192,14 @@ void EditorNewCharacter::OnLine(const std::string &line)
 			return;
 		}
 
-		Ch->setName(m_name);
-		Ch->setRace(m_raceid);
-		Ch->setRoom(1);
-		//Ch->setAccount(accountid);
-		Ch->Save();
+		character->setName(m_name);
+		character->setRace(m_raceid);
+		character->setRoom(1);
+		// character->setAccount(accountid);
+		character->Save();
+		character.reset();
+		
+		mud::PCharacterPtr Ch = mud::PCharacterManager::Get()->LoadByKey(m_sock, id);
 		m_sock->Sendf("Character %s created, enjoy!\n", m_name.c_str());
 		m_sock->SetEditor(new EditorPlaying(m_sock, Ch), true);
 		return;

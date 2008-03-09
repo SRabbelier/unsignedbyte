@@ -1,36 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <CodeLite_Project Name="Resource">
-  <VirtualDirectory Name="Source Files">
-    <File Name="Base64.cpp"/>
-    <File Name="Database.cpp"/>
-    <File Name="Debug.cpp"/>
-    <File Name="Event.cpp"/>
-    <File Name="EventHandler.cpp"/>
-    <File Name="EventTime.cpp"/>
-    <File Name="File.cpp"/>
-    <File Name="IEventOwner.cpp"/>
-    <File Name="Ipv4Address.cpp"/>
-    <File Name="Ipv6Address.cpp"/>
-    <File Name="Lock.cpp"/>
-    <File Name="MemFile.cpp"/>
-    <File Name="Mutex.cpp"/>
-    <File Name="Parse.cpp"/>
-    <File Name="Query.cpp"/>
-    <File Name="RandomNumber.cpp"/>
-    <File Name="ResolvServer.cpp"/>
-    <File Name="ResolvSocket.cpp"/>
-    <File Name="SmtpdSocket.cpp"/>
-    <File Name="Socket.cpp"/>
-    <File Name="SocketHandler.cpp"/>
-    <File Name="socket_include.cpp"/>
-    <File Name="SSLInitializer.cpp"/>
-    <File Name="StderrLog.cpp"/>
-    <File Name="StdoutLog.cpp"/>
-    <File Name="StreamSocket.cpp"/>
-    <File Name="TcpSocket.cpp"/>
-    <File Name="Thread.cpp"/>
-    <File Name="UdpSocket.cpp"/>
-    <File Name="Utility.cpp"/>
+  <VirtualDirectory Name="UB Source Files">
     <File Name="Coordinate.cpp"/>
     <File Name="Path.cpp"/>
     <File Name="Global.cpp"/>
@@ -58,53 +28,13 @@
     <File Name="Criteria.cpp"/>
     <File Name="Key.cpp"/>
   </VirtualDirectory>
-  <VirtualDirectory Name="Header Files">
-    <File Name="../include/Base64.h"/>
+  <VirtualDirectory Name="UB Header Files">
     <File Name="../include/Coordinate.h"/>
-    <File Name="../include/Database.h"/>
-    <File Name="../include/Debug.h"/>
-    <File Name="../include/Event.h"/>
-    <File Name="../include/EventHandler.h"/>
-    <File Name="../include/EventTime.h"/>
-    <File Name="../include/File.h"/>
     <File Name="../include/Global.h"/>
-    <File Name="../include/IError.h"/>
-    <File Name="../include/IEventHandler.h"/>
-    <File Name="../include/IEventOwner.h"/>
-    <File Name="../include/IFile.h"/>
-    <File Name="../include/Ipv4Address.h"/>
-    <File Name="../include/Ipv6Address.h"/>
-    <File Name="../include/ISocketHandler.h"/>
-    <File Name="../include/ListenSocket.h"/>
-    <File Name="../include/Lock.h"/>
-    <File Name="../include/MemFile.h"/>
-    <File Name="../include/Mutex.h"/>
-    <File Name="../include/Parse.h"/>
     <File Name="../include/Path.h"/>
-    <File Name="../include/Query.h"/>
-    <File Name="../include/RandomNumber.h"/>
-    <File Name="../include/ResolvServer.h"/>
-    <File Name="../include/ResolvSocket.h"/>
-    <File Name="../include/SctpSocket.h"/>
     <File Name="../include/sha2.h"/>
     <File Name="../include/singleton.h"/>
-    <File Name="../include/SmtpdSocket.h"/>
-    <File Name="../include/Socket.h"/>
-    <File Name="../include/SocketAddress.h"/>
-    <File Name="../include/SocketHandler.h"/>
-    <File Name="../include/socket_include.h"/>
-    <File Name="../include/sockets-config.h"/>
-    <File Name="../include/sqlite3.h"/>
-    <File Name="../include/SSLInitializer.h"/>
-    <File Name="../include/StderrLog.h"/>
-    <File Name="../include/StdLog.h"/>
-    <File Name="../include/StdoutLog.h"/>
-    <File Name="../include/StreamSocket.h"/>
-    <File Name="../include/TcpSocket.h"/>
     <File Name="../include/telnet.h"/>
-    <File Name="../include/Thread.h"/>
-    <File Name="../include/UdpSocket.h"/>
-    <File Name="../include/Utility.h"/>
     <File Name="../include/Tables.h"/>
     <File Name="../include/TableImpl.h"/>
     <File Name="../include/Field.h"/>
@@ -132,14 +62,89 @@
     <File Name="../include/SavableHeaders.h"/>
     <File Name="../include/Keys.h"/>
     <File Name="../include/GameVersion.h"/>
-    <File Name="../include/Exceptions.h"/>
   </VirtualDirectory>
+  <VirtualDirectory Name="Socket Header Files">
+    <File Name="../include/UdpSocket.h"/>
+    <File Name="../include/Utility.h"/>
+    <File Name="../include/TcpSocket.h"/>
+    <File Name="../include/StreamSocket.h"/>
+    <File Name="../include/StdoutLog.h"/>
+    <File Name="../include/StderrLog.h"/>
+    <File Name="../include/SSLInitializer.h"/>
+    <File Name="../include/StdLog.h"/>
+    <File Name="../include/sockets-config.h"/>
+    <File Name="../include/ResolvSocket.h"/>
+    <File Name="../include/SocketHandler.h"/>
+    <File Name="../include/SmtpdSocket.h"/>
+    <File Name="../include/SctpSocket.h"/>
+    <File Name="../include/Ipv6Address.h"/>
+    <File Name="../include/Thread.h"/>
+    <File Name="../include/SocketAddress.h"/>
+    <File Name="../include/ResolvServer.h"/>
+    <File Name="../include/RandomNumber.h"/>
+    <File Name="../include/Mutex.h"/>
+    <File Name="../include/IFile.h"/>
+    <File Name="../include/Base64.h"/>
+    <File Name="../include/Exceptions.h"/>
+    <File Name="../include/Event.h"/>
+    <File Name="../include/EventTime.h"/>
+    <File Name="../include/Parse.h"/>
+    <File Name="../include/IEventOwner.h"/>
+    <File Name="../include/IError.h"/>
+    <File Name="../include/Ipv4Address.h"/>
+    <File Name="../include/ISocketHandler.h"/>
+    <File Name="../include/IEventHandler.h"/>
+    <File Name="../include/EventHandler.h"/>
+    <File Name="../include/MemFile.h"/>
+    <File Name="../include/Lock.h"/>
+    <File Name="../include/ListenSocket.h"/>
+    <File Name="../include/File.h"/>
+    <File Name="../include/Debug.h"/>
+    <File Name="../include/Database.h"/>
+    <File Name="../include/socket_include.h"/>
+    <File Name="../include/Query.h"/>
+    <File Name="../include/Socket.h"/>
+  </VirtualDirectory>
+  <VirtualDirectory Name="Socket Source Files">
+    <File Name="Base64.cpp"/>
+    <File Name="Event.cpp"/>
+    <File Name="EventHandler.cpp"/>
+    <File Name="Database.cpp"/>
+    <File Name="Debug.cpp"/>
+    <File Name="EventTime.cpp"/>
+    <File Name="File.cpp"/>
+    <File Name="IEventOwner.cpp"/>
+    <File Name="Ipv4Address.cpp"/>
+    <File Name="Ipv6Address.cpp"/>
+    <File Name="Mutex.cpp"/>
+    <File Name="MemFile.cpp"/>
+    <File Name="Lock.cpp"/>
+    <File Name="Parse.cpp"/>
+    <File Name="ResolvServer.cpp"/>
+    <File Name="SmtpdSocket.cpp"/>
+    <File Name="ResolvSocket.cpp"/>
+    <File Name="Query.cpp"/>
+    <File Name="RandomNumber.cpp"/>
+    <File Name="SSLInitializer.cpp"/>
+    <File Name="SocketHandler.cpp"/>
+    <File Name="StderrLog.cpp"/>
+    <File Name="socket_include.cpp"/>
+    <File Name="StreamSocket.cpp"/>
+    <File Name="StdoutLog.cpp"/>
+    <File Name="Socket.cpp"/>
+    <File Name="TcpSocket.cpp"/>
+    <File Name="Thread.cpp"/>
+    <File Name="Utility.cpp"/>
+    <File Name="UdpSocket.cpp"/>
+  </VirtualDirectory>
+  <Dependencies/>
   <Settings Type="Static Library">
     <Configuration Name="Debug" CompilerType="gnu g++" DebuggerType="GNU gdb debugger">
-      <General OutputFile="../lib/libubresource.a" IntermediateDirectory="./Debug" Command="" CommandArguments="" WorkingDirectory=""/>
+      <General OutputFile="../lib/libubresource.a" IntermediateDirectory="./Debug" Command="" CommandArguments="" WorkingDirectory="" PauseExecWhenProcTerminates="yes"/>
       <Compiler Required="yes" Options="-g -Wall">
         <IncludePath Value="."/>
         <IncludePath Value="../include"/>
+        <IncludePath Value="~/local/include"/>
       </Compiler>
       <Linker Required="yes" Options="-O0">
         <LibraryPath Value="."/>
@@ -148,14 +153,18 @@
       <PreBuild/>
       <PostBuild/>
       <CustomBuild Enabled="no">
-        <CleanCommand/>
-        <BuildCommand/>
+        <CleanCommand></CleanCommand>
+        <BuildCommand></BuildCommand>
+        <MakefileGenerationCommand></MakefileGenerationCommand>
+        <ThirdPartyToolName>None</ThirdPartyToolName>
+        <WorkingDirectory></WorkingDirectory>
       </CustomBuild>
       <AdditionalRules>
-        <CustomPostBuild/>
-        <CustomPreBuild/>
+        <CustomPostBuild></CustomPostBuild>
+        <CustomPreBuild>
+
+</CustomPreBuild>
       </AdditionalRules>
     </Configuration>
   </Settings>
-  <Dependencies/>
 </CodeLite_Project>

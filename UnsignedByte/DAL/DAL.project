@@ -8,9 +8,13 @@
     <File Name="../include/db.h"/>
     <File Name="../include/TableImpls.h"/>
   </VirtualDirectory>
+  <Dependencies>
+    <Project Name="Resource"/>
+    <Project Name="Generator"/>
+  </Dependencies>
   <Settings Type="Static Library">
     <Configuration Name="Debug" CompilerType="gnu g++" DebuggerType="GNU gdb debugger">
-      <General OutputFile="../lib/libubdal.a" IntermediateDirectory="./Debug" Command="" CommandArguments="" WorkingDirectory="UnsignedByte/DAL"/>
+      <General OutputFile="../lib/libubdal.a" IntermediateDirectory="./Debug" Command="" CommandArguments="" WorkingDirectory="UnsignedByte/DAL" PauseExecWhenProcTerminates="yes"/>
       <Compiler Required="yes" Options="-g -Wall">
         <IncludePath Value="."/>
         <IncludePath Value="../include"/>
@@ -22,17 +26,18 @@
       <PreBuild/>
       <PostBuild/>
       <CustomBuild Enabled="no">
-        <CleanCommand/>
-        <BuildCommand/>
+        <CleanCommand></CleanCommand>
+        <BuildCommand></BuildCommand>
+        <MakefileGenerationCommand></MakefileGenerationCommand>
+        <ThirdPartyToolName>None</ThirdPartyToolName>
+        <WorkingDirectory></WorkingDirectory>
       </CustomBuild>
       <AdditionalRules>
-        <CustomPostBuild/>
-        <CustomPreBuild/>
+        <CustomPostBuild></CustomPostBuild>
+        <CustomPreBuild>
+
+</CustomPreBuild>
       </AdditionalRules>
     </Configuration>
   </Settings>
-  <Dependencies>
-    <Project Name="Resource"/>
-    <Project Name="Generator"/>
-  </Dependencies>
 </CodeLite_Project>

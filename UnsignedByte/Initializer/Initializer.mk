@@ -1,8 +1,6 @@
 ##
 ## Auto Generated makefile, please do not edit
 ##
-WorkspaceName=UnsignedByte
-WorkspacePath=/home/sverre/code/ub
 ProjectName=Initializer
 
 ## Debug
@@ -14,7 +12,7 @@ LinkerName=g++
 ArchiveTool=ar rcu
 SharedObjectLinkerName=g++ -shared -fPIC
 ObjectSuffix=.o
-DebugSwitch=-gstabs 
+DebugSwitch=-gstab
 IncludeSwitch=-I
 LibrarySwitch=-l
 OutputSwitch=-o 
@@ -25,13 +23,15 @@ CompilerName=g++
 RcCompilerName=windres
 OutputFile=../bin/Initialize
 Preprocessors=
+ObjectSwitch=-o 
+ArchiveOutputSwitch= 
 CmpOptions=-g -Wall $(Preprocessors)
 RcCmpOptions=
 LinkOptions=-O0
-IncludePath=$(IncludeSwitch). $(IncludeSwitch)../include 
+IncludePath=$(IncludeSwitch). $(IncludeSwitch)../include $(IncludeSwitch)~/local/include 
 RcIncludePath=
 Libs=$(LibrarySwitch)pthread $(LibrarySwitch)dl $(LibrarySwitch)sqlite3 $(LibrarySwitch)ubdal $(LibrarySwitch)ubresource 
-LibPath=$(LibraryPathSwitch). $(LibraryPathSwitch)../lib 
+LibPath=$(LibraryPathSwitch). $(LibraryPathSwitch)../lib $(LibraryPathSwitch)~/local/lib 
 endif
 
 Objects=$(IntermediateDirectory)/main$(ObjectSuffix) $(IntermediateDirectory)/Initializer$(ObjectSuffix) 
@@ -41,11 +41,14 @@ Objects=$(IntermediateDirectory)/main$(ObjectSuffix) $(IntermediateDirectory)/In
 ##
 all: $(OutputFile)
 
-$(OutputFile): makeDirStep  $(Objects)
+$(OutputFile): makeDirStep PrePreBuild $(Objects)
 	$(LinkerName) $(OutputSwitch)$(OutputFile) $(Objects) $(LibPath) $(Libs) $(LinkOptions)
 
 makeDirStep:
 	@test -d Intermediate || mkdir Intermediate
+
+PrePreBuild: 
+
 
 
 PreBuild:
@@ -55,12 +58,12 @@ PreBuild:
 ## Objects
 ##
 $(IntermediateDirectory)/main$(ObjectSuffix): main.cpp $(IntermediateDirectory)/main$(ObjectSuffix).d
-	$(CompilerName) $(SourceSwitch)main.cpp $(CmpOptions)   $(OutputSwitch)$(IntermediateDirectory)/main$(ObjectSuffix) $(IncludePath)
+	$(CompilerName) $(SourceSwitch)main.cpp $(CmpOptions)   $(ObjectSwitch)$(IntermediateDirectory)/main$(ObjectSuffix) $(IncludePath)
 $(IntermediateDirectory)/main$(ObjectSuffix).d:
 	@$(CompilerName) $(CmpOptions) $(IncludePath) -MT$(IntermediateDirectory)/main$(ObjectSuffix) -MF$(IntermediateDirectory)/main$(ObjectSuffix).d -MM main.cpp
 
 $(IntermediateDirectory)/Initializer$(ObjectSuffix): Initializer.cpp $(IntermediateDirectory)/Initializer$(ObjectSuffix).d
-	$(CompilerName) $(SourceSwitch)Initializer.cpp $(CmpOptions)   $(OutputSwitch)$(IntermediateDirectory)/Initializer$(ObjectSuffix) $(IncludePath)
+	$(CompilerName) $(SourceSwitch)Initializer.cpp $(CmpOptions)   $(ObjectSwitch)$(IntermediateDirectory)/Initializer$(ObjectSuffix) $(IncludePath)
 $(IntermediateDirectory)/Initializer$(ObjectSuffix).d:
 	@$(CompilerName) $(CmpOptions) $(IncludePath) -MT$(IntermediateDirectory)/Initializer$(ObjectSuffix) -MF$(IntermediateDirectory)/Initializer$(ObjectSuffix).d -MM Initializer.cpp
 

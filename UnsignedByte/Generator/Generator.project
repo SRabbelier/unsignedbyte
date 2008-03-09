@@ -11,16 +11,21 @@
     <File Name="ClassSourceGenerator.h"/>
     <File Name="Generator.h"/>
   </VirtualDirectory>
+  <Dependencies>
+    <Project Name="Resource"/>
+  </Dependencies>
   <Settings Type="Executable">
     <Configuration Name="Debug" CompilerType="gnu g++" DebuggerType="GNU gdb debugger">
-      <General OutputFile="../bin/Generator" IntermediateDirectory="./Debug" Command="./Generator" CommandArguments="" WorkingDirectory="../bin/"/>
+      <General OutputFile="../bin/Generator" IntermediateDirectory="./Debug" Command="./Generator" CommandArguments="" WorkingDirectory="../bin/" PauseExecWhenProcTerminates="yes"/>
       <Compiler Required="yes" Options="-g -Wall">
         <IncludePath Value="."/>
         <IncludePath Value="../include"/>
+        <IncludePath Value="~/local/include"/>
       </Compiler>
       <Linker Required="yes" Options="-O0">
         <LibraryPath Value="."/>
         <LibraryPath Value="../lib"/>
+        <LibraryPath Value="~/local/lib"/>
         <Library Value="ubresource"/>
         <Library Value="pthread"/>
         <Library Value="dl"/>
@@ -34,16 +39,18 @@
         <Command Enabled="no">mv db.h ../include</Command>
       </PostBuild>
       <CustomBuild Enabled="no">
-        <CleanCommand/>
-        <BuildCommand/>
+        <CleanCommand></CleanCommand>
+        <BuildCommand></BuildCommand>
+        <MakefileGenerationCommand></MakefileGenerationCommand>
+        <ThirdPartyToolName>None</ThirdPartyToolName>
+        <WorkingDirectory></WorkingDirectory>
       </CustomBuild>
       <AdditionalRules>
-        <CustomPostBuild/>
-        <CustomPreBuild/>
+        <CustomPostBuild></CustomPostBuild>
+        <CustomPreBuild>
+
+</CustomPreBuild>
       </AdditionalRules>
     </Configuration>
   </Settings>
-  <Dependencies>
-    <Project Name="Resource"/>
-  </Dependencies>
 </CodeLite_Project>

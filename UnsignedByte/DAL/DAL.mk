@@ -1,8 +1,6 @@
 ##
 ## Auto Generated makefile, please do not edit
 ##
-WorkspaceName=UnsignedByte
-WorkspacePath=/home/sverre/code/ub
 ProjectName=DAL
 
 ## Debug
@@ -14,7 +12,7 @@ LinkerName=g++
 ArchiveTool=ar rcu
 SharedObjectLinkerName=g++ -shared -fPIC
 ObjectSuffix=.o
-DebugSwitch=-gstabs 
+DebugSwitch=-gstab
 IncludeSwitch=-I
 LibrarySwitch=-l
 OutputSwitch=-o 
@@ -25,6 +23,8 @@ CompilerName=g++
 RcCompilerName=windres
 OutputFile=../lib/libubdal.a
 Preprocessors=
+ObjectSwitch=-o 
+ArchiveOutputSwitch= 
 CmpOptions=-g -Wall $(Preprocessors)
 RcCmpOptions=
 LinkOptions=-O0
@@ -41,11 +41,14 @@ Objects=$(IntermediateDirectory)/db$(ObjectSuffix) $(IntermediateDirectory)/Tabl
 ##
 all: $(IntermediateDirectory) $(OutputFile)
 
-$(OutputFile):  $(Objects)
-	$(ArchiveTool) $(OutputFile) $(Objects)
+$(OutputFile): PrePreBuild $(Objects)
+	$(ArchiveTool) $(ArchiveOutputSwitch)$(OutputFile) $(Objects)
 
 ./Debug:
 	@test -d ./Debug || mkdir ./Debug
+
+PrePreBuild: 
+
 
 
 PreBuild:
@@ -55,12 +58,12 @@ PreBuild:
 ## Objects
 ##
 $(IntermediateDirectory)/db$(ObjectSuffix): db.cpp $(IntermediateDirectory)/db$(ObjectSuffix).d
-	$(CompilerName) $(SourceSwitch)db.cpp $(CmpOptions)   $(OutputSwitch)$(IntermediateDirectory)/db$(ObjectSuffix) $(IncludePath)
+	$(CompilerName) $(SourceSwitch)db.cpp $(CmpOptions)   $(ObjectSwitch)$(IntermediateDirectory)/db$(ObjectSuffix) $(IncludePath)
 $(IntermediateDirectory)/db$(ObjectSuffix).d:
 	@$(CompilerName) $(CmpOptions) $(IncludePath) -MT$(IntermediateDirectory)/db$(ObjectSuffix) -MF$(IntermediateDirectory)/db$(ObjectSuffix).d -MM db.cpp
 
 $(IntermediateDirectory)/TableImpls$(ObjectSuffix): TableImpls.cpp $(IntermediateDirectory)/TableImpls$(ObjectSuffix).d
-	$(CompilerName) $(SourceSwitch)TableImpls.cpp $(CmpOptions)   $(OutputSwitch)$(IntermediateDirectory)/TableImpls$(ObjectSuffix) $(IncludePath)
+	$(CompilerName) $(SourceSwitch)TableImpls.cpp $(CmpOptions)   $(ObjectSwitch)$(IntermediateDirectory)/TableImpls$(ObjectSuffix) $(IncludePath)
 $(IntermediateDirectory)/TableImpls$(ObjectSuffix).d:
 	@$(CompilerName) $(CmpOptions) $(IncludePath) -MT$(IntermediateDirectory)/TableImpls$(ObjectSuffix) -MF$(IntermediateDirectory)/TableImpls$(ObjectSuffix).d -MM TableImpls.cpp
 
