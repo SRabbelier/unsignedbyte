@@ -8,10 +8,6 @@
     <File Name="../include/db.h"/>
     <File Name="../include/TableImpls.h"/>
   </VirtualDirectory>
-  <Dependencies>
-    <Project Name="Resource"/>
-    <Project Name="Generator"/>
-  </Dependencies>
   <Settings Type="Static Library">
     <Configuration Name="Debug" CompilerType="gnu g++" DebuggerType="GNU gdb debugger">
       <General OutputFile="../lib/libubdal.a" IntermediateDirectory="./Debug" Command="" CommandArguments="" WorkingDirectory="UnsignedByte/DAL" PauseExecWhenProcTerminates="yes"/>
@@ -40,4 +36,8 @@
       </AdditionalRules>
     </Configuration>
   </Settings>
+  <Dependencies>
+    <Project Name="Resource"/>
+    <Project Name="Generator"/>
+  </Dependencies>
 </CodeLite_Project>

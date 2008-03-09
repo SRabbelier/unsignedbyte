@@ -1,8 +1,6 @@
 ##
 ## Auto Generated makefile, please do not edit
 ##
-WorkspaceName=UnsignedByte
-WorkspacePath=/home/sverre/code/ub
 ProjectName=Generator
 
 ## Debug
@@ -14,7 +12,7 @@ LinkerName=g++
 ArchiveTool=ar rcu
 SharedObjectLinkerName=g++ -shared -fPIC
 ObjectSuffix=.o
-DebugSwitch=-gstabs 
+DebugSwitch=-gstab
 IncludeSwitch=-I
 LibrarySwitch=-l
 OutputSwitch=-o 
@@ -25,13 +23,15 @@ CompilerName=g++
 RcCompilerName=windres
 OutputFile=../bin/Generator
 Preprocessors=
+ObjectSwitch=-o 
+ArchiveOutputSwitch= 
 CmpOptions=-g -Wall $(Preprocessors)
 RcCmpOptions=
 LinkOptions=-O0
-IncludePath=$(IncludeSwitch). $(IncludeSwitch)../include 
+IncludePath=$(IncludeSwitch). $(IncludeSwitch)../include $(IncludeSwitch)(HOME)/local/include 
 RcIncludePath=
 Libs=$(LibrarySwitch)ubresource $(LibrarySwitch)pthread $(LibrarySwitch)dl $(LibrarySwitch)sqlite3 
-LibPath=$(LibraryPathSwitch). $(LibraryPathSwitch)../lib 
+LibPath=$(LibraryPathSwitch). $(LibraryPathSwitch)../lib $(LibraryPathSwitch)(HOME)/local/lib 
 endif
 
 Objects=$(IntermediateDirectory)/main$(ObjectSuffix) $(IntermediateDirectory)/ClassHeaderGenerator$(ObjectSuffix) $(IntermediateDirectory)/ClassSourceGenerator$(ObjectSuffix) $(IntermediateDirectory)/Generator$(ObjectSuffix) 
@@ -41,11 +41,14 @@ Objects=$(IntermediateDirectory)/main$(ObjectSuffix) $(IntermediateDirectory)/Cl
 ##
 all: $(OutputFile)
 
-$(OutputFile): makeDirStep  $(Objects)
+$(OutputFile): makeDirStep PrePreBuild $(Objects)
 	$(LinkerName) $(OutputSwitch)$(OutputFile) $(Objects) $(LibPath) $(Libs) $(LinkOptions)
 
 makeDirStep:
 	@test -d ./Debug || mkdir ./Debug
+
+PrePreBuild: 
+
 
 
 PreBuild:
@@ -55,22 +58,22 @@ PreBuild:
 ## Objects
 ##
 $(IntermediateDirectory)/main$(ObjectSuffix): main.cpp $(IntermediateDirectory)/main$(ObjectSuffix).d
-	$(CompilerName) $(SourceSwitch)main.cpp $(CmpOptions)   $(OutputSwitch)$(IntermediateDirectory)/main$(ObjectSuffix) $(IncludePath)
+	$(CompilerName) $(SourceSwitch)main.cpp $(CmpOptions)   $(ObjectSwitch)$(IntermediateDirectory)/main$(ObjectSuffix) $(IncludePath)
 $(IntermediateDirectory)/main$(ObjectSuffix).d:
 	@$(CompilerName) $(CmpOptions) $(IncludePath) -MT$(IntermediateDirectory)/main$(ObjectSuffix) -MF$(IntermediateDirectory)/main$(ObjectSuffix).d -MM main.cpp
 
 $(IntermediateDirectory)/ClassHeaderGenerator$(ObjectSuffix): ClassHeaderGenerator.cpp $(IntermediateDirectory)/ClassHeaderGenerator$(ObjectSuffix).d
-	$(CompilerName) $(SourceSwitch)ClassHeaderGenerator.cpp $(CmpOptions)   $(OutputSwitch)$(IntermediateDirectory)/ClassHeaderGenerator$(ObjectSuffix) $(IncludePath)
+	$(CompilerName) $(SourceSwitch)ClassHeaderGenerator.cpp $(CmpOptions)   $(ObjectSwitch)$(IntermediateDirectory)/ClassHeaderGenerator$(ObjectSuffix) $(IncludePath)
 $(IntermediateDirectory)/ClassHeaderGenerator$(ObjectSuffix).d:
 	@$(CompilerName) $(CmpOptions) $(IncludePath) -MT$(IntermediateDirectory)/ClassHeaderGenerator$(ObjectSuffix) -MF$(IntermediateDirectory)/ClassHeaderGenerator$(ObjectSuffix).d -MM ClassHeaderGenerator.cpp
 
 $(IntermediateDirectory)/ClassSourceGenerator$(ObjectSuffix): ClassSourceGenerator.cpp $(IntermediateDirectory)/ClassSourceGenerator$(ObjectSuffix).d
-	$(CompilerName) $(SourceSwitch)ClassSourceGenerator.cpp $(CmpOptions)   $(OutputSwitch)$(IntermediateDirectory)/ClassSourceGenerator$(ObjectSuffix) $(IncludePath)
+	$(CompilerName) $(SourceSwitch)ClassSourceGenerator.cpp $(CmpOptions)   $(ObjectSwitch)$(IntermediateDirectory)/ClassSourceGenerator$(ObjectSuffix) $(IncludePath)
 $(IntermediateDirectory)/ClassSourceGenerator$(ObjectSuffix).d:
 	@$(CompilerName) $(CmpOptions) $(IncludePath) -MT$(IntermediateDirectory)/ClassSourceGenerator$(ObjectSuffix) -MF$(IntermediateDirectory)/ClassSourceGenerator$(ObjectSuffix).d -MM ClassSourceGenerator.cpp
 
 $(IntermediateDirectory)/Generator$(ObjectSuffix): Generator.cpp $(IntermediateDirectory)/Generator$(ObjectSuffix).d
-	$(CompilerName) $(SourceSwitch)Generator.cpp $(CmpOptions)   $(OutputSwitch)$(IntermediateDirectory)/Generator$(ObjectSuffix) $(IncludePath)
+	$(CompilerName) $(SourceSwitch)Generator.cpp $(CmpOptions)   $(ObjectSwitch)$(IntermediateDirectory)/Generator$(ObjectSuffix) $(IncludePath)
 $(IntermediateDirectory)/Generator$(ObjectSuffix).d:
 	@$(CompilerName) $(CmpOptions) $(IncludePath) -MT$(IntermediateDirectory)/Generator$(ObjectSuffix) -MF$(IntermediateDirectory)/Generator$(ObjectSuffix).d -MM Generator.cpp
 
