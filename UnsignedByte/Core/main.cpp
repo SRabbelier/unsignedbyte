@@ -88,6 +88,7 @@ int main(int argc, char** argv)
 
 	add(UBHandler::Get(), 4000);
 	add(UBHandler::Get(), 4040);
+	add(UBHandler::Get(), 5060);
 	addSQL(UBHandler::Get(), 9090);
 
 	printf("Running!\n");
