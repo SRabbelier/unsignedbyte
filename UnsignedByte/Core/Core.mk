@@ -28,10 +28,10 @@ ArchiveOutputSwitch=
 CmpOptions=-g -Wall $(Preprocessors)
 RcCmpOptions=
 LinkOptions=
-IncludePath=$(IncludeSwitch). $(IncludeSwitch)../include $(IncludeSwitch)~/local/include 
+IncludePath=$(IncludeSwitch). $(IncludeSwitch)../include $(IncludeSwitch)$(HOME)/local/include 
 RcIncludePath=
 Libs=$(LibrarySwitch)pthread $(LibrarySwitch)dl $(LibrarySwitch)ubdal $(LibrarySwitch)ubresource $(LibrarySwitch)sqlite3 
-LibPath=$(LibraryPathSwitch). $(LibraryPathSwitch)../lib $(LibraryPathSwitch)~/local/lib 
+LibPath=$(LibraryPathSwitch). $(LibraryPathSwitch)../lib $(LibraryPathSwitch)(HOME)/local/lib 
 endif
 
 Objects=$(IntermediateDirectory)/Account$(ObjectSuffix) $(IntermediateDirectory)/Area$(ObjectSuffix) $(IntermediateDirectory)/Character$(ObjectSuffix) $(IntermediateDirectory)/Colour$(ObjectSuffix) $(IntermediateDirectory)/main$(ObjectSuffix) $(IntermediateDirectory)/MCharacter$(ObjectSuffix) $(IntermediateDirectory)/PCharacter$(ObjectSuffix) $(IntermediateDirectory)/Race$(ObjectSuffix) $(IntermediateDirectory)/Room$(ObjectSuffix) $(IntermediateDirectory)/Sector$(ObjectSuffix) \

@@ -135,12 +135,12 @@
       <Compiler Required="yes" Options="-g -Wall">
         <IncludePath Value="."/>
         <IncludePath Value="../include"/>
-        <IncludePath Value="~/local/include"/>
+        <IncludePath Value="$(HOME)/local/include"/>
       </Compiler>
       <Linker Required="yes" Options="">
         <LibraryPath Value="."/>
         <LibraryPath Value="../lib"/>
-        <LibraryPath Value="~/local/lib"/>
+        <LibraryPath Value="(HOME)/local/lib"/>
         <Library Value="pthread"/>
         <Library Value="dl"/>
         <Library Value="ubdal"/>
