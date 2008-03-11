@@ -21,6 +21,7 @@
     <File Name="chunkimporter.cpp"/>
     <File Name="Detail.cpp"/>
     <File Name="Exit.cpp"/>
+    <File Name="Trace.cpp"/>
   </VirtualDirectory>
   <VirtualDirectory Name="Core Header Files">
     <File Name="Account.h"/>
@@ -44,6 +45,7 @@
     <File Name="chunkimporter.h"/>
     <File Name="Detail.h"/>
     <File Name="Exit.h"/>
+    <File Name="Trace.h"/>
   </VirtualDirectory>
   <VirtualDirectory Name="Editor Source Files">
     <File Name="EditorOLC.cpp"/>
