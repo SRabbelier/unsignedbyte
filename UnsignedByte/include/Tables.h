@@ -52,6 +52,10 @@ public:
 	TableDefPtr SECTORS;
 	TableDefPtr SKILLS;
 	TableDefPtr STATS;
+	TableDefPtr TRACES;
+	TableDefPtr TRACECHUNK;
+	TableDefPtr TRACEDETAIL;
+	TableDefPtr TRACEROOM;
 	TableDefPtr TREES;
 	TableDefPtr VERSION;
 	

@@ -50,6 +50,10 @@ Tables::Tables() :
 	SECTORS( new TableDef("Sectors") ),
 	SKILLS( new TableDef("Skills") ),
 	STATS( new TableDef("Stats") ),
+	TRACES( new TableDef("Traces") ),
+	TRACECHUNK( new TableDef("TraceChunk") ),
+	TRACEDETAIL( new TableDef("TraceDetail") ),
+	TRACEROOM( new TableDef("TraceRoom") ),
 	TREES( new TableDef("Trees") ),
 	VERSION( new TableDef("Version") )
 {	
@@ -180,6 +184,21 @@ Tables::Tables() :
 	STATS->addLookupTextField("name");
 	STATS->addLookupTextField("shortname");
 	
+	TRACES->addPK("traceid");
+	TRACES->addFK(ACCOUNTS);
+	TRACES->addTextField("time");
+	TRACES->addTextField("description");
+	TRACES->addTextField("diff");
+	
+	TRACECHUNK->addFPK(TRACES);
+	TRACECHUNK->addFPK(CHUNKS);
+	
+	TRACEDETAIL->addFPK(TRACES);
+	TRACEDETAIL->addFPK(DETAILS);
+	
+	TRACEROOM->addFPK(TRACES);
+	TRACEROOM->addFPK(ROOMS);
+	
 	TREES->addPK("treeid");
 	TREES->addLookupTextField("name");
 	TREES->addFK(CLUSTERS);
@@ -220,6 +239,10 @@ Tables::Tables() :
 	m_tables.push_back(SECTORS);
 	m_tables.push_back(SKILLS);
 	m_tables.push_back(STATS);
+	m_tables.push_back(TRACES);
+	m_tables.push_back(TRACECHUNK);
+	m_tables.push_back(TRACEDETAIL);
+	m_tables.push_back(TRACEROOM);
 	m_tables.push_back(TREES);
 	m_tables.push_back(VERSION);
 }
