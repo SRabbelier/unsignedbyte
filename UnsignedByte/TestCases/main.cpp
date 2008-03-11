@@ -144,6 +144,35 @@ void TestPointerPass()
 	printf("\n");
 }
 
+class TestNullPtrClass
+{
+	public:
+		TestNullPtrClass() : m_nullPtr()
+		{
+			
+		}
+		
+		SmartPtr<Simple> getPtr() { return m_nullPtr; }
+		void setPtr(SmartPtr<Simple> that) { m_nullPtr = that; }
+		
+	private:
+		SmartPtr<Simple> m_nullPtr;
+};
+
+void TestNullPtr()
+{
+	printf("Creating nullPtr...\n");
+	TestNullPtrClass* testClass = new TestNullPtrClass();
+	SmartPtr<Simple> nullPtr = testClass->getPtr();
+	
+	SmartPtr<Simple> newPtr(new Simple());
+	testClass->setPtr(newPtr);
+	
+	SmartPtr<Simple> retreivedPtr = testClass->getPtr();
+	delete testClass;
+	printf("Done.\n");
+}
+
 void TestChunkImporter()
 {
 	value_type key = mud::ChunkManager::Get()->Add();
@@ -248,11 +277,13 @@ void TestStringUtilities()
 
 int main()
 { 
+	/*
 	printf("Opening database...\n");
 	std::string dbname = "TestCase";
 	dbname.append(".db");
 	DatabaseMgr::Initialize(dbname);
 	printf("Done.\n");
+	*/
 	
 	/*
 	printf("[starttest:Simple]\n");
@@ -281,12 +312,17 @@ int main()
 	printf("\n");
 	*/
 	
+	printf("[starttest:NullPointer]\n");
+	TestNullPtr();
+	printf("[endtest:NullPointer]\n");
+	printf("\n");
+
+	/*
 	printf("[starttest:ChunkImporter]\n");
 	TestChunkImporter();
 	printf("[endtest:ChunkImporter]\n");
 	printf("\n");
 
-	/*
 	printf("[starttest:StringUtilities]\n");
 	TestStringUtilities();
 	printf("[endtest:StringUtilities]\n");

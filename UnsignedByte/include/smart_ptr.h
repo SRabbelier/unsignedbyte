@@ -1,6 +1,17 @@
 #ifndef SMART_PTR_H
 #define SMART_PTR_H
 
+#if 0
+	#define DEB(x) x
+#else
+	#define DEB(x)
+#endif
+#if 0
+	#define DEB2(x) x
+#else
+	#define DEB2(x)
+#endif
+
 // #define CONFIG_USE_BOOST_POINTERS
 #ifdef CONFIG_USE_BOOST_POINTERS
 
@@ -27,6 +38,7 @@ public:
 	SmartPtrCount()
 		: m_refCount( 1 )
 	{
+		DEB( printf("SmartPtrCount ctor...\n"));
 	}
 
 	/**
@@ -34,7 +46,7 @@ public:
 	 */
 	virtual ~SmartPtrCount()
 	{
-		
+		DEB( printf("SmartPtrCount dtor...\n"));
 	}
 
 	/**
@@ -76,6 +88,7 @@ public:
 	 */
 	SmartPtr(T* ptr)
 	{
+		DEB( printf("SmartPtr T* ctor...\n"));
 		// create a fresh copy
 		CreateFresh( ptr );
 	}
@@ -84,9 +97,10 @@ public:
 	 * Default constructor
 	 */
 	SmartPtr()
-		: m_data(NULL), 
-		m_ref(NULL)
+		: m_data(NULL)
 	{
+		DEB( printf("SmartPtr ctor...\n"));
+		m_ref = new SmartPtrCount();
 	}
 
 	/**
@@ -97,6 +111,7 @@ public:
 		: m_data(NULL),
 		m_ref(NULL)
 	{
+		DEB( printf("SmartPtr SmartPtr ctor...\n"));
 		*this = rhs;
 	}
 	
@@ -105,6 +120,7 @@ public:
 		: m_data(rhs.m_data),
 		m_ref(rhs.m_ref)
 	{
+		DEB( printf("SmartPtr SmartPtr<Y> ctor...\n"));
 		m_ref->IncRef();
 	}
 
@@ -115,17 +131,27 @@ public:
 	 */
 	SmartPtr& operator=(const SmartPtr& rhs)
 	{
+		DEB2( printf("SmartPtr = operator...\n"));
+		
 		// increase the reference count
 		if( m_ref == rhs.m_ref )
+		{
+			DEB2( printf("m_ref = rhs.m_ref\n") );
 			return *this;
+		}
 
 		// Delete previous reference 
 		DeleteRefCount();
 
 		// TODO: What to do here?
 		if( !rhs.m_ref )
+		{
+			DEB2( printf("!rhs.m_ref\n") );
 			return *this;
-
+		}
+		
+		DEB2( printf("no returns so far\n") );
+		
 		m_data = rhs.m_data;
 		m_ref = rhs.m_ref;
 		m_ref->IncRef();
@@ -137,6 +163,7 @@ public:
 	 */
 	virtual ~SmartPtr()
 	{
+		DEB( printf("SmartPtr dtor...\n"));
 		DeleteRefCount();
 	}
 
@@ -204,18 +231,28 @@ public:
 private:
 	void DeleteRefCount()
 	{
+		DEB2( printf("DeleteRefCount()\n") );
 		// decrease the ref count (or delete pointer if it is 1)
 		if( m_ref )
 		{
-			if( m_ref->GetRefCount() == 1 )
+			DEB2( printf("m_ref\n") );
+			if( m_ref->GetRefCount() <= 1 )
 			{
+				DEB2( printf("m_ref->GetRefCount() <= 1\n") );
 				delete m_ref;
 				m_ref = NULL;
 				delete m_data;
 				m_data = NULL;
 			}
 			else
+			{
+				DEB2( printf("m_ref->GetRefCount() = %d\n", m_ref->GetRefCount()) );
 				m_ref->DecRef();
+			}
+		}
+		else
+		{
+			DEB2( printf("!m_ref\n") );
 		}
 	};
 
