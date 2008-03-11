@@ -1,37 +1,35 @@
 ##
 ## Auto Generated makefile, please do not edit
 ##
-ProjectName=Initializer
+ProjectName:=Initializer
 
 ## Debug
 ifeq ($(type),Debug)
-ConfigurationName=Debug
-IntermediateDirectory=Intermediate
-OutDir=$(IntermediateDirectory)
-LinkerName=g++
-ArchiveTool=ar rcu
-SharedObjectLinkerName=g++ -shared -fPIC
-ObjectSuffix=.o
-DebugSwitch=-gstab
-IncludeSwitch=-I
-LibrarySwitch=-l
-OutputSwitch=-o 
-LibraryPathSwitch=-L
-PreprocessorSwitch=-D
-SourceSwitch=-c 
-CompilerName=g++
-RcCompilerName=windres
-OutputFile=../bin/Initialize
-Preprocessors=
-ObjectSwitch=-o 
-ArchiveOutputSwitch= 
-CmpOptions=-g -Wall $(Preprocessors)
-RcCmpOptions=
-LinkOptions=-O0
-IncludePath=$(IncludeSwitch). $(IncludeSwitch)../include $(IncludeSwitch)$(HOME)/local/include 
-RcIncludePath=
-Libs=$(LibrarySwitch)pthread $(LibrarySwitch)dl $(LibrarySwitch)sqlite3 $(LibrarySwitch)ubdal $(LibrarySwitch)ubresource 
-LibPath=$(LibraryPathSwitch). $(LibraryPathSwitch)../lib $(LibraryPathSwitch)$(HOME)/local/lib 
+ConfigurationName :=Debug
+IntermediateDirectory :=Intermediate
+OutDir := $(IntermediateDirectory)
+LinkerName:=g++
+ArchiveTool :=ar rcu
+SharedObjectLinkerName :=g++ -shared -fPIC
+ObjectSuffix :=.o
+DebugSwitch :=-gstab
+IncludeSwitch :=-I
+LibrarySwitch :=-l
+OutputSwitch :=-o 
+LibraryPathSwitch :=-L
+PreprocessorSwitch :=-D
+SourceSwitch :=-c 
+CompilerName :=g++
+OutputFile :=../bin/Initialize
+Preprocessors :=
+ObjectSwitch :=-o 
+ArchiveOutputSwitch := 
+CmpOptions :=-g -Wall $(Preprocessors)
+LinkOptions := -O0
+IncludePath := $(IncludeSwitch). $(IncludeSwitch)../include $(IncludeSwitch)$(HOME)/local/include 
+RcIncludePath :=
+Libs :=$(LibrarySwitch)pthread $(LibrarySwitch)dl $(LibrarySwitch)sqlite3 $(LibrarySwitch)ubdal $(LibrarySwitch)ubresource 
+LibPath :=$(LibraryPathSwitch). $(LibraryPathSwitch)../lib $(LibraryPathSwitch)$(HOME)/local/lib 
 endif
 
 Objects=$(IntermediateDirectory)/main$(ObjectSuffix) $(IntermediateDirectory)/Initializer$(ObjectSuffix) 
@@ -41,14 +39,11 @@ Objects=$(IntermediateDirectory)/main$(ObjectSuffix) $(IntermediateDirectory)/In
 ##
 all: $(OutputFile)
 
-$(OutputFile): makeDirStep PrePreBuild $(Objects)
+$(OutputFile): makeDirStep  $(Objects)
 	$(LinkerName) $(OutputSwitch)$(OutputFile) $(Objects) $(LibPath) $(Libs) $(LinkOptions)
 
 makeDirStep:
 	@test -d Intermediate || mkdir Intermediate
-
-PrePreBuild: 
-
 
 
 PreBuild:

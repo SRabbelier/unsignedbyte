@@ -1,37 +1,35 @@
 ##
 ## Auto Generated makefile, please do not edit
 ##
-ProjectName=Core
+ProjectName:=Core
 
 ## Debug
 ifeq ($(type),Debug)
-ConfigurationName=Debug
-IntermediateDirectory=./Debug
-OutDir=$(IntermediateDirectory)
-LinkerName=g++
-ArchiveTool=ar rcu
-SharedObjectLinkerName=g++ -shared -fPIC
-ObjectSuffix=.o
-DebugSwitch=-gstab
-IncludeSwitch=-I
-LibrarySwitch=-l
-OutputSwitch=-o 
-LibraryPathSwitch=-L
-PreprocessorSwitch=-D
-SourceSwitch=-c 
-CompilerName=g++
-RcCompilerName=windres
-OutputFile=../bin/UnsignedByte
-Preprocessors=
-ObjectSwitch=-o 
-ArchiveOutputSwitch= 
-CmpOptions=-g -Wall $(Preprocessors)
-RcCmpOptions=
-LinkOptions=
-IncludePath=$(IncludeSwitch). $(IncludeSwitch)../include $(IncludeSwitch)$(HOME)/local/include 
-RcIncludePath=
-Libs=$(LibrarySwitch)pthread $(LibrarySwitch)dl $(LibrarySwitch)ubdal $(LibrarySwitch)ubresource $(LibrarySwitch)sqlite3 
-LibPath=$(LibraryPathSwitch). $(LibraryPathSwitch)../lib $(LibraryPathSwitch)$(HOME)/local/lib 
+ConfigurationName :=Debug
+IntermediateDirectory :=./Debug
+OutDir := $(IntermediateDirectory)
+LinkerName:=g++
+ArchiveTool :=ar rcu
+SharedObjectLinkerName :=g++ -shared -fPIC
+ObjectSuffix :=.o
+DebugSwitch :=-gstab
+IncludeSwitch :=-I
+LibrarySwitch :=-l
+OutputSwitch :=-o 
+LibraryPathSwitch :=-L
+PreprocessorSwitch :=-D
+SourceSwitch :=-c 
+CompilerName :=g++
+OutputFile :=../bin/UnsignedByte
+Preprocessors :=
+ObjectSwitch :=-o 
+ArchiveOutputSwitch := 
+CmpOptions :=-g -Wall $(Preprocessors)
+LinkOptions := 
+IncludePath := $(IncludeSwitch). $(IncludeSwitch)../include $(IncludeSwitch)$(HOME)/local/include 
+RcIncludePath :=
+Libs :=$(LibrarySwitch)pthread $(LibrarySwitch)dl $(LibrarySwitch)ubdal $(LibrarySwitch)ubresource $(LibrarySwitch)sqlite3 
+LibPath :=$(LibraryPathSwitch). $(LibraryPathSwitch)../lib $(LibraryPathSwitch)$(HOME)/local/lib 
 endif
 
 Objects=$(IntermediateDirectory)/Account$(ObjectSuffix) $(IntermediateDirectory)/Area$(ObjectSuffix) $(IntermediateDirectory)/Character$(ObjectSuffix) $(IntermediateDirectory)/Colour$(ObjectSuffix) $(IntermediateDirectory)/main$(ObjectSuffix) $(IntermediateDirectory)/MCharacter$(ObjectSuffix) $(IntermediateDirectory)/PCharacter$(ObjectSuffix) $(IntermediateDirectory)/Race$(ObjectSuffix) $(IntermediateDirectory)/Room$(ObjectSuffix) $(IntermediateDirectory)/Sector$(ObjectSuffix) \

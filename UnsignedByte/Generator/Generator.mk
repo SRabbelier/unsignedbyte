@@ -1,37 +1,35 @@
 ##
 ## Auto Generated makefile, please do not edit
 ##
-ProjectName=Generator
+ProjectName:=Generator
 
 ## Debug
 ifeq ($(type),Debug)
-ConfigurationName=Debug
-IntermediateDirectory=./Debug
-OutDir=$(IntermediateDirectory)
-LinkerName=g++
-ArchiveTool=ar rcu
-SharedObjectLinkerName=g++ -shared -fPIC
-ObjectSuffix=.o
-DebugSwitch=-gstab
-IncludeSwitch=-I
-LibrarySwitch=-l
-OutputSwitch=-o 
-LibraryPathSwitch=-L
-PreprocessorSwitch=-D
-SourceSwitch=-c 
-CompilerName=g++
-RcCompilerName=windres
-OutputFile=../bin/Generator
-Preprocessors=
-ObjectSwitch=-o 
-ArchiveOutputSwitch= 
-CmpOptions=-g -Wall $(Preprocessors)
-RcCmpOptions=
-LinkOptions=-O0
-IncludePath=$(IncludeSwitch). $(IncludeSwitch)../include $(IncludeSwitch)$(HOME)/local/include 
-RcIncludePath=
-Libs=$(LibrarySwitch)ubresource $(LibrarySwitch)pthread $(LibrarySwitch)dl $(LibrarySwitch)sqlite3 
-LibPath=$(LibraryPathSwitch). $(LibraryPathSwitch)../lib $(LibraryPathSwitch)$(HOME)/local/lib 
+ConfigurationName :=Debug
+IntermediateDirectory :=./Debug
+OutDir := $(IntermediateDirectory)
+LinkerName:=g++
+ArchiveTool :=ar rcu
+SharedObjectLinkerName :=g++ -shared -fPIC
+ObjectSuffix :=.o
+DebugSwitch :=-gstab
+IncludeSwitch :=-I
+LibrarySwitch :=-l
+OutputSwitch :=-o 
+LibraryPathSwitch :=-L
+PreprocessorSwitch :=-D
+SourceSwitch :=-c 
+CompilerName :=g++
+OutputFile :=../bin/Generator
+Preprocessors :=
+ObjectSwitch :=-o 
+ArchiveOutputSwitch := 
+CmpOptions :=-g -Wall $(Preprocessors)
+LinkOptions := -O0
+IncludePath := $(IncludeSwitch). $(IncludeSwitch)../include $(IncludeSwitch)$(HOME)/local/include 
+RcIncludePath :=
+Libs :=$(LibrarySwitch)ubresource $(LibrarySwitch)pthread $(LibrarySwitch)dl $(LibrarySwitch)sqlite3 
+LibPath :=$(LibraryPathSwitch). $(LibraryPathSwitch)../lib $(LibraryPathSwitch)$(HOME)/local/lib 
 endif
 
 Objects=$(IntermediateDirectory)/main$(ObjectSuffix) $(IntermediateDirectory)/ClassHeaderGenerator$(ObjectSuffix) $(IntermediateDirectory)/ClassSourceGenerator$(ObjectSuffix) $(IntermediateDirectory)/Generator$(ObjectSuffix) 
@@ -41,14 +39,11 @@ Objects=$(IntermediateDirectory)/main$(ObjectSuffix) $(IntermediateDirectory)/Cl
 ##
 all: $(OutputFile)
 
-$(OutputFile): makeDirStep PrePreBuild $(Objects)
+$(OutputFile): makeDirStep  $(Objects)
 	$(LinkerName) $(OutputSwitch)$(OutputFile) $(Objects) $(LibPath) $(Libs) $(LinkOptions)
 
 makeDirStep:
 	@test -d ./Debug || mkdir ./Debug
-
-PrePreBuild: 
-
 
 
 PreBuild:

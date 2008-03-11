@@ -1,37 +1,35 @@
 ##
 ## Auto Generated makefile, please do not edit
 ##
-ProjectName=Resource
+ProjectName:=Resource
 
 ## Debug
 ifeq ($(type),Debug)
-ConfigurationName=Debug
-IntermediateDirectory=./Debug
-OutDir=$(IntermediateDirectory)
-LinkerName=g++
-ArchiveTool=ar rcu
-SharedObjectLinkerName=g++ -shared -fPIC
-ObjectSuffix=.o
-DebugSwitch=-gstab
-IncludeSwitch=-I
-LibrarySwitch=-l
-OutputSwitch=-o 
-LibraryPathSwitch=-L
-PreprocessorSwitch=-D
-SourceSwitch=-c 
-CompilerName=g++
-RcCompilerName=windres
-OutputFile=../lib/libubresource.a
-Preprocessors=
-ObjectSwitch=-o 
-ArchiveOutputSwitch= 
-CmpOptions=-g -Wall $(Preprocessors)
-RcCmpOptions=
-LinkOptions=-O0
-IncludePath=$(IncludeSwitch). $(IncludeSwitch)../include $(IncludeSwitch)$(HOME)/local/include 
-RcIncludePath=
-Libs=
-LibPath=$(LibraryPathSwitch). 
+ConfigurationName :=Debug
+IntermediateDirectory :=./Debug
+OutDir := $(IntermediateDirectory)
+LinkerName:=g++
+ArchiveTool :=ar rcu
+SharedObjectLinkerName :=g++ -shared -fPIC
+ObjectSuffix :=.o
+DebugSwitch :=-gstab
+IncludeSwitch :=-I
+LibrarySwitch :=-l
+OutputSwitch :=-o 
+LibraryPathSwitch :=-L
+PreprocessorSwitch :=-D
+SourceSwitch :=-c 
+CompilerName :=g++
+OutputFile :=../lib/libubresource.a
+Preprocessors :=
+ObjectSwitch :=-o 
+ArchiveOutputSwitch := 
+CmpOptions :=-g -Wall $(Preprocessors)
+LinkOptions := -O0
+IncludePath := $(IncludeSwitch). $(IncludeSwitch)../include $(IncludeSwitch)$(HOME)/local/include 
+RcIncludePath :=
+Libs :=
+LibPath :=$(LibraryPathSwitch). 
 endif
 
 Objects=$(IntermediateDirectory)/Coordinate$(ObjectSuffix) $(IntermediateDirectory)/Path$(ObjectSuffix) $(IntermediateDirectory)/Global$(ObjectSuffix) $(IntermediateDirectory)/sha2$(ObjectSuffix) $(IntermediateDirectory)/StringUtilities$(ObjectSuffix) $(IntermediateDirectory)/Tables$(ObjectSuffix) $(IntermediateDirectory)/Table$(ObjectSuffix) $(IntermediateDirectory)/Field$(ObjectSuffix) $(IntermediateDirectory)/DatabaseMgr$(ObjectSuffix) $(IntermediateDirectory)/SqliteMgr$(ObjectSuffix) \
