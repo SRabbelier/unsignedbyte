@@ -66,6 +66,10 @@ TableImpls* TableImpls::Get()
 		db::SectorsFields::Get();
 		db::SkillsFields::Get();
 		db::StatsFields::Get();
+		db::TracesFields::Get();
+		db::TraceChunkFields::Get();
+		db::TraceDetailFields::Get();
+		db::TraceRoomFields::Get();
 		db::TreesFields::Get();
 		db::VersionFields::Get();
 	}
@@ -107,6 +111,10 @@ ROOMS(new TableImpl(Tables::Get()->ROOMS)),
 SECTORS(new TableImpl(Tables::Get()->SECTORS)),
 SKILLS(new TableImpl(Tables::Get()->SKILLS)),
 STATS(new TableImpl(Tables::Get()->STATS)),
+TRACES(new TableImpl(Tables::Get()->TRACES)),
+TRACECHUNK(new TableImpl(Tables::Get()->TRACECHUNK)),
+TRACEDETAIL(new TableImpl(Tables::Get()->TRACEDETAIL)),
+TRACEROOM(new TableImpl(Tables::Get()->TRACEROOM)),
 TREES(new TableImpl(Tables::Get()->TREES)),
 VERSION(new TableImpl(Tables::Get()->VERSION))
 {
@@ -138,6 +146,10 @@ VERSION(new TableImpl(Tables::Get()->VERSION))
 	m_tables.push_back(SECTORS);
 	m_tables.push_back(SKILLS);
 	m_tables.push_back(STATS);
+	m_tables.push_back(TRACES);
+	m_tables.push_back(TRACECHUNK);
+	m_tables.push_back(TRACEDETAIL);
+	m_tables.push_back(TRACEROOM);
 	m_tables.push_back(TREES);
 	m_tables.push_back(VERSION);
 }

@@ -60,6 +60,10 @@ namespace db
 		TableImplPtr SECTORS;
 		TableImplPtr SKILLS;
 		TableImplPtr STATS;
+		TableImplPtr TRACES;
+		TableImplPtr TRACECHUNK;
+		TableImplPtr TRACEDETAIL;
+		TableImplPtr TRACEROOM;
 		TableImplPtr TREES;
 		TableImplPtr VERSION;
 

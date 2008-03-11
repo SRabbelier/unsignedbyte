@@ -495,6 +495,69 @@ namespace db
 		friend class Singleton<StatsFields>;
 	};
 
+	class TracesFields : public Singleton<TracesFields>
+	{
+	public:
+		KeyDefPtr TRACEID;
+		FieldImplPtr FKACCOUNTS;
+		FieldImplPtr TIME;
+		FieldImplPtr DESCRIPTION;
+		FieldImplPtr DIFF;
+
+	private:
+		// Hide constructor and assignment operator
+		TracesFields();
+		~TracesFields() { }
+		TracesFields(const TracesFields& rhs);
+		TracesFields operator=(const TracesFields& rhs);
+		friend class Singleton<TracesFields>;
+	};
+
+	class TraceChunkFields : public Singleton<TraceChunkFields>
+	{
+	public:
+		KeyDefPtr FKCHUNKS;
+		KeyDefPtr FKTRACES;
+
+	private:
+		// Hide constructor and assignment operator
+		TraceChunkFields();
+		~TraceChunkFields() { }
+		TraceChunkFields(const TraceChunkFields& rhs);
+		TraceChunkFields operator=(const TraceChunkFields& rhs);
+		friend class Singleton<TraceChunkFields>;
+	};
+
+	class TraceDetailFields : public Singleton<TraceDetailFields>
+	{
+	public:
+		KeyDefPtr FKDETAILS;
+		KeyDefPtr FKTRACES;
+
+	private:
+		// Hide constructor and assignment operator
+		TraceDetailFields();
+		~TraceDetailFields() { }
+		TraceDetailFields(const TraceDetailFields& rhs);
+		TraceDetailFields operator=(const TraceDetailFields& rhs);
+		friend class Singleton<TraceDetailFields>;
+	};
+
+	class TraceRoomFields : public Singleton<TraceRoomFields>
+	{
+	public:
+		KeyDefPtr FKROOMS;
+		KeyDefPtr FKTRACES;
+
+	private:
+		// Hide constructor and assignment operator
+		TraceRoomFields();
+		~TraceRoomFields() { }
+		TraceRoomFields(const TraceRoomFields& rhs);
+		TraceRoomFields operator=(const TraceRoomFields& rhs);
+		friend class Singleton<TraceRoomFields>;
+	};
+
 	class TreesFields : public Singleton<TreesFields>
 	{
 	public:

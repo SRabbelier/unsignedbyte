@@ -348,6 +348,44 @@ SHORTNAME(new FieldImpl(TableImpls::Get()->STATS, "shortname", true))
 	TableImpls::Get()->STATS->addField(SHORTNAME);
 }
 
+TracesFields::TracesFields() :
+TRACEID(new KeyDef(TableImpls::Get()->TRACES, "traceid")),
+FKACCOUNTS(new FieldImpl(TableImpls::Get()->TRACES, "fkAccounts")),
+TIME(new FieldImpl(TableImpls::Get()->TRACES, "time", true)),
+DESCRIPTION(new FieldImpl(TableImpls::Get()->TRACES, "description", true)),
+DIFF(new FieldImpl(TableImpls::Get()->TRACES, "diff", true))
+{
+	TableImpls::Get()->TRACES->addKey(TRACEID);
+	TableImpls::Get()->TRACES->addField(FKACCOUNTS);
+	TableImpls::Get()->TRACES->addField(TIME);
+	TableImpls::Get()->TRACES->addField(DESCRIPTION);
+	TableImpls::Get()->TRACES->addField(DIFF);
+}
+
+TraceChunkFields::TraceChunkFields() :
+FKCHUNKS(new KeyDef(TableImpls::Get()->TRACECHUNK, "fkChunks")),
+FKTRACES(new KeyDef(TableImpls::Get()->TRACECHUNK, "fkTraces"))
+{
+	TableImpls::Get()->TRACECHUNK->addKey(FKCHUNKS);
+	TableImpls::Get()->TRACECHUNK->addKey(FKTRACES);
+}
+
+TraceDetailFields::TraceDetailFields() :
+FKDETAILS(new KeyDef(TableImpls::Get()->TRACEDETAIL, "fkDetails")),
+FKTRACES(new KeyDef(TableImpls::Get()->TRACEDETAIL, "fkTraces"))
+{
+	TableImpls::Get()->TRACEDETAIL->addKey(FKDETAILS);
+	TableImpls::Get()->TRACEDETAIL->addKey(FKTRACES);
+}
+
+TraceRoomFields::TraceRoomFields() :
+FKROOMS(new KeyDef(TableImpls::Get()->TRACEROOM, "fkRooms")),
+FKTRACES(new KeyDef(TableImpls::Get()->TRACEROOM, "fkTraces"))
+{
+	TableImpls::Get()->TRACEROOM->addKey(FKROOMS);
+	TableImpls::Get()->TRACEROOM->addKey(FKTRACES);
+}
+
 TreesFields::TreesFields() :
 TREEID(new KeyDef(TableImpls::Get()->TREES, "treeid")),
 NAME(new FieldImpl(TableImpls::Get()->TREES, "name", true)),
