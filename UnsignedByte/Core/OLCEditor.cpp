@@ -222,7 +222,7 @@ void OLCEditor::doneEditing(const std::string& argument)
 	if(editing)
 		editing->Save();
 
-	TableImplPtr table = editing->getTable();
+	TableImplPtr table = getTable();
 
 	KeysPtr keys(new Keys(table));
 	setEditing(keys);
