@@ -378,6 +378,14 @@ FKTRACES(new KeyDef(TableImpls::Get()->TRACEDETAIL, "fkTraces"))
 	TableImpls::Get()->TRACEDETAIL->addKey(FKTRACES);
 }
 
+TraceEntityFields::TraceEntityFields() :
+FKENTITIES(new KeyDef(TableImpls::Get()->TRACEENTITY, "fkEntities")),
+FKTRACES(new KeyDef(TableImpls::Get()->TRACEENTITY, "fkTraces"))
+{
+	TableImpls::Get()->TRACEENTITY->addKey(FKENTITIES);
+	TableImpls::Get()->TRACEENTITY->addKey(FKTRACES);
+}
+
 TraceRoomFields::TraceRoomFields() :
 FKROOMS(new KeyDef(TableImpls::Get()->TRACEROOM, "fkRooms")),
 FKTRACES(new KeyDef(TableImpls::Get()->TRACEROOM, "fkTraces"))

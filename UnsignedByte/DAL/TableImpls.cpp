@@ -69,6 +69,7 @@ TableImpls* TableImpls::Get()
 		db::TracesFields::Get();
 		db::TraceChunkFields::Get();
 		db::TraceDetailFields::Get();
+		db::TraceEntityFields::Get();
 		db::TraceRoomFields::Get();
 		db::TreesFields::Get();
 		db::VersionFields::Get();
@@ -114,6 +115,7 @@ STATS(new TableImpl(Tables::Get()->STATS)),
 TRACES(new TableImpl(Tables::Get()->TRACES)),
 TRACECHUNK(new TableImpl(Tables::Get()->TRACECHUNK)),
 TRACEDETAIL(new TableImpl(Tables::Get()->TRACEDETAIL)),
+TRACEENTITY(new TableImpl(Tables::Get()->TRACEENTITY)),
 TRACEROOM(new TableImpl(Tables::Get()->TRACEROOM)),
 TREES(new TableImpl(Tables::Get()->TREES)),
 VERSION(new TableImpl(Tables::Get()->VERSION))
@@ -149,6 +151,7 @@ VERSION(new TableImpl(Tables::Get()->VERSION))
 	m_tables.push_back(TRACES);
 	m_tables.push_back(TRACECHUNK);
 	m_tables.push_back(TRACEDETAIL);
+	m_tables.push_back(TRACEENTITY);
 	m_tables.push_back(TRACEROOM);
 	m_tables.push_back(TREES);
 	m_tables.push_back(VERSION);

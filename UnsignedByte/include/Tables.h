@@ -55,6 +55,7 @@ public:
 	TableDefPtr TRACES;
 	TableDefPtr TRACECHUNK;
 	TableDefPtr TRACEDETAIL;
+	TableDefPtr TRACEENTITY;
 	TableDefPtr TRACEROOM;
 	TableDefPtr TREES;
 	TableDefPtr VERSION;

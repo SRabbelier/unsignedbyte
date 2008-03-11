@@ -543,6 +543,21 @@ namespace db
 		friend class Singleton<TraceDetailFields>;
 	};
 
+	class TraceEntityFields : public Singleton<TraceEntityFields>
+	{
+	public:
+		KeyDefPtr FKENTITIES;
+		KeyDefPtr FKTRACES;
+
+	private:
+		// Hide constructor and assignment operator
+		TraceEntityFields();
+		~TraceEntityFields() { }
+		TraceEntityFields(const TraceEntityFields& rhs);
+		TraceEntityFields operator=(const TraceEntityFields& rhs);
+		friend class Singleton<TraceEntityFields>;
+	};
+
 	class TraceRoomFields : public Singleton<TraceRoomFields>
 	{
 	public:

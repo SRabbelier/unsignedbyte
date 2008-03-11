@@ -63,6 +63,7 @@ namespace db
 		TableImplPtr TRACES;
 		TableImplPtr TRACECHUNK;
 		TableImplPtr TRACEDETAIL;
+		TableImplPtr TRACEENTITY;
 		TableImplPtr TRACEROOM;
 		TableImplPtr TREES;
 		TableImplPtr VERSION;

@@ -53,6 +53,7 @@ Tables::Tables() :
 	TRACES( new TableDef("Traces") ),
 	TRACECHUNK( new TableDef("TraceChunk") ),
 	TRACEDETAIL( new TableDef("TraceDetail") ),
+	TRACEENTITY( new TableDef("TraceEntity") ),
 	TRACEROOM( new TableDef("TraceRoom") ),
 	TREES( new TableDef("Trees") ),
 	VERSION( new TableDef("Version") )
@@ -196,6 +197,9 @@ Tables::Tables() :
 	TRACEDETAIL->addFPK(TRACES);
 	TRACEDETAIL->addFPK(DETAILS);
 	
+	TRACEENTITY->addFPK(TRACES);
+	TRACEENTITY->addFPK(ENTITIES);
+	
 	TRACEROOM->addFPK(TRACES);
 	TRACEROOM->addFPK(ROOMS);
 	
@@ -242,6 +246,7 @@ Tables::Tables() :
 	m_tables.push_back(TRACES);
 	m_tables.push_back(TRACECHUNK);
 	m_tables.push_back(TRACEDETAIL);
+	m_tables.push_back(TRACEENTITY);
 	m_tables.push_back(TRACEROOM);
 	m_tables.push_back(TREES);
 	m_tables.push_back(VERSION);
