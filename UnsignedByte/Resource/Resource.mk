@@ -46,14 +46,11 @@ Objects=$(IntermediateDirectory)/Coordinate$(ObjectSuffix) $(IntermediateDirecto
 ##
 all: $(IntermediateDirectory) $(OutputFile)
 
-$(OutputFile): PrePreBuild $(Objects)
+$(OutputFile):  $(Objects)
 	$(ArchiveTool) $(ArchiveOutputSwitch)$(OutputFile) $(Objects)
 
 ./Debug:
 	@test -d ./Debug || mkdir ./Debug
-
-PrePreBuild: 
-
 
 
 PreBuild:

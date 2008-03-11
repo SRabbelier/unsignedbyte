@@ -20,6 +20,7 @@
 #pragma once
 
 #include "Types.h"
+#include "StringUtilities.h"
 
 template <class T>
 class Interpreter
@@ -56,8 +57,9 @@ Interpreter<T>::~Interpreter()
 }
 
 template <class T> 
-void Interpreter<T>::addWord(const std::string& name, T* word)
+void Interpreter<T>::addWord(const std::string& rawname, T* word)
 {
+	std::string name = String::Get()->tolower(rawname);
 	m_fullwords[name] = word;
 
 	if(word->fullName())

@@ -30,6 +30,7 @@
 #include "Account.h"
 #include "Exceptions.h"
 #include "Global.h"
+#include "StringUtilities.h"
 
 using mud::Permission;
 using mud::Command;
@@ -82,7 +83,8 @@ void Editor::OnLine(const std::string& line)
 	}
 
 	Parse p(line);
-	std::string action = p.getword();
+	std::string rawaction = p.getword();
+	std::string action = String::Get()->tolower(rawaction);
 	std::string argument = p.getrest();
 
 	std::string actionname = lookup(action);
