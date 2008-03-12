@@ -351,7 +351,7 @@ SHORTNAME(new FieldImpl(TableImpls::Get()->STATS, "shortname", true))
 TracesFields::TracesFields() :
 TRACEID(new KeyDef(TableImpls::Get()->TRACES, "traceid")),
 FKACCOUNTS(new FieldImpl(TableImpls::Get()->TRACES, "fkAccounts")),
-TIME(new FieldImpl(TableImpls::Get()->TRACES, "time", true)),
+TIME(new FieldImpl(TableImpls::Get()->TRACES, "time")),
 DESCRIPTION(new FieldImpl(TableImpls::Get()->TRACES, "description", true)),
 DIFF(new FieldImpl(TableImpls::Get()->TRACES, "diff", true))
 {

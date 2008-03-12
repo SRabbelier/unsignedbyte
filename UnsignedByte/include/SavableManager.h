@@ -56,6 +56,8 @@ class SavableManager
 		ValuePtr getfield(FieldImplPtr field) const;
 		KeyPtr getkey(KeyDefPtr keydef) const;
 		
+		std::string getDiff() const;
+		
 		// Setters
 		void setkeys(KeysPtr keys);
 		void setvalue(ValuePtr value);

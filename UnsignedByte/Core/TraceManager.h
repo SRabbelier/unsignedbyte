@@ -19,26 +19,34 @@
  ***************************************************************************/
 #pragma once
 
-#include "Types.h"
+#include "SavableHeaders.h"
 
-class Savable
+namespace mud 
+{ 
+	class Trace; 
+	typedef SmartPtr<mud::Trace> TracePtr;
+}
+
+namespace mud
 {
-public:
-	Savable(void) { };
-	virtual ~Savable(void) { };
+	class TraceManager : public Singleton<mud::TraceManager>
+	{
+	public:
+		TableImplPtr GetTable();
+		std::vector<std::string> List();
+		void Close(TracePtr trace);
+		
+		KeysPtr Add();
+		mud::TracePtr GetByKey(value_type id);
+		
+		value_type lookupByName(cstring value);
 
-	virtual void Delete() = 0;
-	virtual void Save() = 0;
-	virtual void Delete(value_type accountid, const std::string& description) { this->Delete(); }
-	virtual void Save(value_type accountid, const std::string& description) { this->Save(); }
-	virtual bool Exists() = 0;
-	
-	virtual std::vector<std::string> Show() = 0;
-	virtual std::string ShowShort() = 0;
-	
-	virtual TableImplPtr getTable() const = 0;
-private:
-	Savable(const Savable& rhs) {};
-};
-
-typedef SmartPtr<Savable> SavablePtr;
+	private:
+		TraceManager(void) {};
+		TraceManager(const TraceManager& rhs);
+		TraceManager operator=(const TraceManager& rhs);
+		~TraceManager(void) {};
+		
+		friend class Singleton<mud::TraceManager>;
+	};
+}

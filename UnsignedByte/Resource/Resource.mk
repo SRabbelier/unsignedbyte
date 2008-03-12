@@ -34,10 +34,10 @@ endif
 
 Objects=$(IntermediateDirectory)/Coordinate$(ObjectSuffix) $(IntermediateDirectory)/Path$(ObjectSuffix) $(IntermediateDirectory)/Global$(ObjectSuffix) $(IntermediateDirectory)/sha2$(ObjectSuffix) $(IntermediateDirectory)/StringUtilities$(ObjectSuffix) $(IntermediateDirectory)/Tables$(ObjectSuffix) $(IntermediateDirectory)/Table$(ObjectSuffix) $(IntermediateDirectory)/Field$(ObjectSuffix) $(IntermediateDirectory)/DatabaseMgr$(ObjectSuffix) $(IntermediateDirectory)/SqliteMgr$(ObjectSuffix) \
 	$(IntermediateDirectory)/Statements$(ObjectSuffix) $(IntermediateDirectory)/ListActor$(ObjectSuffix) $(IntermediateDirectory)/CountActor$(ObjectSuffix) $(IntermediateDirectory)/SPKCriteria$(ObjectSuffix) $(IntermediateDirectory)/SavableManager$(ObjectSuffix) $(IntermediateDirectory)/FieldDef$(ObjectSuffix) $(IntermediateDirectory)/FieldImpl$(ObjectSuffix) $(IntermediateDirectory)/TableDef$(ObjectSuffix) $(IntermediateDirectory)/TableImpl$(ObjectSuffix) $(IntermediateDirectory)/Keys$(ObjectSuffix) \
-	$(IntermediateDirectory)/MPKCriteria$(ObjectSuffix) $(IntermediateDirectory)/SqliteError$(ObjectSuffix) $(IntermediateDirectory)/Assert$(ObjectSuffix) $(IntermediateDirectory)/Value$(ObjectSuffix) $(IntermediateDirectory)/Criteria$(ObjectSuffix) $(IntermediateDirectory)/Key$(ObjectSuffix) $(IntermediateDirectory)/Base64$(ObjectSuffix) $(IntermediateDirectory)/Event$(ObjectSuffix) $(IntermediateDirectory)/EventHandler$(ObjectSuffix) $(IntermediateDirectory)/Database$(ObjectSuffix) \
-	$(IntermediateDirectory)/Debug$(ObjectSuffix) $(IntermediateDirectory)/EventTime$(ObjectSuffix) $(IntermediateDirectory)/File$(ObjectSuffix) $(IntermediateDirectory)/IEventOwner$(ObjectSuffix) $(IntermediateDirectory)/Ipv4Address$(ObjectSuffix) $(IntermediateDirectory)/Ipv6Address$(ObjectSuffix) $(IntermediateDirectory)/Mutex$(ObjectSuffix) $(IntermediateDirectory)/MemFile$(ObjectSuffix) $(IntermediateDirectory)/Lock$(ObjectSuffix) $(IntermediateDirectory)/Parse$(ObjectSuffix) \
-	$(IntermediateDirectory)/ResolvServer$(ObjectSuffix) $(IntermediateDirectory)/SmtpdSocket$(ObjectSuffix) $(IntermediateDirectory)/ResolvSocket$(ObjectSuffix) $(IntermediateDirectory)/Query$(ObjectSuffix) $(IntermediateDirectory)/RandomNumber$(ObjectSuffix) $(IntermediateDirectory)/SSLInitializer$(ObjectSuffix) $(IntermediateDirectory)/SocketHandler$(ObjectSuffix) $(IntermediateDirectory)/StderrLog$(ObjectSuffix) $(IntermediateDirectory)/socket_include$(ObjectSuffix) $(IntermediateDirectory)/StreamSocket$(ObjectSuffix) \
-	$(IntermediateDirectory)/StdoutLog$(ObjectSuffix) $(IntermediateDirectory)/Socket$(ObjectSuffix) $(IntermediateDirectory)/TcpSocket$(ObjectSuffix) $(IntermediateDirectory)/Thread$(ObjectSuffix) $(IntermediateDirectory)/Utility$(ObjectSuffix) $(IntermediateDirectory)/UdpSocket$(ObjectSuffix) 
+	$(IntermediateDirectory)/MPKCriteria$(ObjectSuffix) $(IntermediateDirectory)/SqliteError$(ObjectSuffix) $(IntermediateDirectory)/Assert$(ObjectSuffix) $(IntermediateDirectory)/Value$(ObjectSuffix) $(IntermediateDirectory)/Criteria$(ObjectSuffix) $(IntermediateDirectory)/Key$(ObjectSuffix) $(IntermediateDirectory)/Relation$(ObjectSuffix) $(IntermediateDirectory)/Base64$(ObjectSuffix) $(IntermediateDirectory)/Event$(ObjectSuffix) $(IntermediateDirectory)/EventHandler$(ObjectSuffix) \
+	$(IntermediateDirectory)/Database$(ObjectSuffix) $(IntermediateDirectory)/Debug$(ObjectSuffix) $(IntermediateDirectory)/EventTime$(ObjectSuffix) $(IntermediateDirectory)/File$(ObjectSuffix) $(IntermediateDirectory)/IEventOwner$(ObjectSuffix) $(IntermediateDirectory)/Ipv4Address$(ObjectSuffix) $(IntermediateDirectory)/Ipv6Address$(ObjectSuffix) $(IntermediateDirectory)/Mutex$(ObjectSuffix) $(IntermediateDirectory)/MemFile$(ObjectSuffix) $(IntermediateDirectory)/Lock$(ObjectSuffix) \
+	$(IntermediateDirectory)/Parse$(ObjectSuffix) $(IntermediateDirectory)/ResolvServer$(ObjectSuffix) $(IntermediateDirectory)/SmtpdSocket$(ObjectSuffix) $(IntermediateDirectory)/ResolvSocket$(ObjectSuffix) $(IntermediateDirectory)/Query$(ObjectSuffix) $(IntermediateDirectory)/RandomNumber$(ObjectSuffix) $(IntermediateDirectory)/SSLInitializer$(ObjectSuffix) $(IntermediateDirectory)/SocketHandler$(ObjectSuffix) $(IntermediateDirectory)/StderrLog$(ObjectSuffix) $(IntermediateDirectory)/socket_include$(ObjectSuffix) \
+	$(IntermediateDirectory)/StreamSocket$(ObjectSuffix) $(IntermediateDirectory)/StdoutLog$(ObjectSuffix) $(IntermediateDirectory)/Socket$(ObjectSuffix) $(IntermediateDirectory)/TcpSocket$(ObjectSuffix) $(IntermediateDirectory)/Thread$(ObjectSuffix) $(IntermediateDirectory)/Utility$(ObjectSuffix) $(IntermediateDirectory)/UdpSocket$(ObjectSuffix) 
 
 ##
 ## Main Build Tragets 
@@ -186,6 +186,11 @@ $(IntermediateDirectory)/Key$(ObjectSuffix): Key.cpp $(IntermediateDirectory)/Ke
 	$(CompilerName) $(SourceSwitch)Key.cpp $(CmpOptions)   $(ObjectSwitch)$(IntermediateDirectory)/Key$(ObjectSuffix) $(IncludePath)
 $(IntermediateDirectory)/Key$(ObjectSuffix).d:
 	@$(CompilerName) $(CmpOptions) $(IncludePath) -MT$(IntermediateDirectory)/Key$(ObjectSuffix) -MF$(IntermediateDirectory)/Key$(ObjectSuffix).d -MM Key.cpp
+
+$(IntermediateDirectory)/Relation$(ObjectSuffix): Relation.cpp $(IntermediateDirectory)/Relation$(ObjectSuffix).d
+	$(CompilerName) $(SourceSwitch)Relation.cpp $(CmpOptions)   $(ObjectSwitch)$(IntermediateDirectory)/Relation$(ObjectSuffix) $(IncludePath)
+$(IntermediateDirectory)/Relation$(ObjectSuffix).d:
+	@$(CompilerName) $(CmpOptions) $(IncludePath) -MT$(IntermediateDirectory)/Relation$(ObjectSuffix) -MF$(IntermediateDirectory)/Relation$(ObjectSuffix).d -MM Relation.cpp
 
 $(IntermediateDirectory)/Base64$(ObjectSuffix): Base64.cpp $(IntermediateDirectory)/Base64$(ObjectSuffix).d
 	$(CompilerName) $(SourceSwitch)Base64.cpp $(CmpOptions)   $(ObjectSwitch)$(IntermediateDirectory)/Base64$(ObjectSuffix) $(IncludePath)
@@ -393,6 +398,8 @@ clean:
 	$(RM) $(IntermediateDirectory)/Criteria$(ObjectSuffix).d
 	$(RM) $(IntermediateDirectory)/Key$(ObjectSuffix)
 	$(RM) $(IntermediateDirectory)/Key$(ObjectSuffix).d
+	$(RM) $(IntermediateDirectory)/Relation$(ObjectSuffix)
+	$(RM) $(IntermediateDirectory)/Relation$(ObjectSuffix).d
 	$(RM) $(IntermediateDirectory)/Base64$(ObjectSuffix)
 	$(RM) $(IntermediateDirectory)/Base64$(ObjectSuffix).d
 	$(RM) $(IntermediateDirectory)/Event$(ObjectSuffix)

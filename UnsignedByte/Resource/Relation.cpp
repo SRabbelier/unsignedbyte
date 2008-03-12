@@ -17,28 +17,40 @@
  *   Free Software Foundation, Inc.,                                       *
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
-#pragma once
 
-#include "Types.h"
+#include "Relation.h"
+#include "KeyDef.h"
+#include "Key.h"
+#include "Keys.h"
+#include "SavableManager.h"
+#include "TableImpl.h"
+#include "FieldImpl.h"
 
-class Savable
+Relation::Relation(TableImplPtr table) :
+m_table(table),
+m_keys(new Keys(table))
 {
-public:
-	Savable(void) { };
-	virtual ~Savable(void) { };
+	m_manager = SavableManager::getnew(table);
+	Assert(table);
+}
 
-	virtual void Delete() = 0;
-	virtual void Save() = 0;
-	virtual void Delete(value_type accountid, const std::string& description) { this->Delete(); }
-	virtual void Save(value_type accountid, const std::string& description) { this->Save(); }
-	virtual bool Exists() = 0;
+Relation::~Relation()
+{
 	
-	virtual std::vector<std::string> Show() = 0;
-	virtual std::string ShowShort() = 0;
-	
-	virtual TableImplPtr getTable() const = 0;
-private:
-	Savable(const Savable& rhs) {};
-};
+}
 
-typedef SmartPtr<Savable> SavablePtr;
+void Relation::addKey(KeyDefPtr keydef, value_type value)
+{
+	Assert(keydef);
+	Assert(value);
+	
+	KeyPtr key;
+	key = KeyPtr(new Key(keydef, value));
+	m_keys->addKey(key);
+}
+
+void Relation::save()
+{
+	m_manager->setkeys(m_keys);
+	m_manager->save();
+}

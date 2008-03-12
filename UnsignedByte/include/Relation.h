@@ -21,24 +21,17 @@
 
 #include "Types.h"
 
-class Savable
+class Relation
 {
 public:
-	Savable(void) { };
-	virtual ~Savable(void) { };
-
-	virtual void Delete() = 0;
-	virtual void Save() = 0;
-	virtual void Delete(value_type accountid, const std::string& description) { this->Delete(); }
-	virtual void Save(value_type accountid, const std::string& description) { this->Save(); }
-	virtual bool Exists() = 0;
+	Relation(TableImplPtr table);
+	~Relation();
 	
-	virtual std::vector<std::string> Show() = 0;
-	virtual std::string ShowShort() = 0;
+	void addKey(KeyDefPtr key, value_type value);
+	void save();
 	
-	virtual TableImplPtr getTable() const = 0;
 private:
-	Savable(const Savable& rhs) {};
+	TableImplPtr m_table;
+	KeysPtr m_keys;
+	SavableManagerPtr m_manager;
 };
-
-typedef SmartPtr<Savable> SavablePtr;
