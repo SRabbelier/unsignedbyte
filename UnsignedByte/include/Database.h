@@ -25,19 +25,10 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #ifndef _DATABASE_H_SQLITE
 #define _DATABASE_H_SQLITE
 
-#ifdef _WIN32
-#include <windows.h>
-#else
-#include <pthread.h>
-#endif
 #include <string>
 #include <list>
-#ifdef WIN32
-typedef unsigned __int64 uint64_t;
-typedef __int64 int64_t;
-#else
+
 #include <stdint.h>
-#endif
 
 #ifdef SQLITEW_NAMESPACE
 namespace SQLITEW_NAMESPACE {
@@ -46,38 +37,11 @@ namespace SQLITEW_NAMESPACE {
 
 class IError;
 class Query;
-class Mutex;
 
 
 /** Connection information and pool. */
 class Database 
 {
-public:
-	/** Mutex container class, used by Lock. 
-		\ingroup threading */
-	class Mutex {
-	public:
-		Mutex();
-		~Mutex();
-		void Lock();
-		void Unlock();
-	private:
-#ifdef _WIN32
-		HANDLE m_mutex;
-#else
-		pthread_mutex_t m_mutex;
-#endif
-	};
-private:
-	/** Mutex helper class. */
-	class Lock {
-	public:
-		Lock(Mutex& mutex,bool use);
-		~Lock();
-	private:
-		Mutex& m_mutex;
-		bool m_b_use;
-	};
 public:
 	/** Connection pool struct. */
 	struct OPENDB {
@@ -90,10 +54,6 @@ public:
 public:
 	/** Use file */
 	Database(const std::string& database,
-		IError * = NULL);
-
-	/** Use file + thread safe */
-	Database(Mutex& ,const std::string& database,
 		IError * = NULL);
 
 	virtual ~Database();
@@ -134,16 +94,14 @@ m_opendbs vector. New Query objects can then reuse old connections.
 	uint64_t a2ubigint(const std::string& );
 
 private:
-	Database(const Database& ) : m_mutex(m_mutex) {}
+	Database(const Database& ) {}
 	Database& operator=(const Database& ) { return *this; }
 	void error(const char *format, ...);
-	//
+
 	std::string database;
 	opendb_v m_opendbs;
 	IError *m_errhandler;
 	bool m_embedded;
-	Mutex& m_mutex;
-	bool m_b_use_mutex;
 };
 
 
