@@ -86,3 +86,6 @@ typedef std::vector<FieldPtr> FieldVector;
 
 class SavableManager;
 typedef SmartPtr<SavableManager> SavableManagerPtr;
+
+class Relation;
+typedef SmartPtr<Relation> RelationPtr;

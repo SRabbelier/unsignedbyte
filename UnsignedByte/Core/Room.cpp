@@ -201,17 +201,10 @@ void mud::Room::Save(value_type accountid, const std::string& description)
 	trace->setTime(time(NULL));
 	trace->Save(); // create the Trace
 	
-	SavableManagerPtr manager = SavableManager::getnew(db::TableImpls::Get()->TRACEROOM);	
-	KeysPtr rkeys(new Keys(db::TableImpls::Get()->TRACEROOM));
-	
-	KeyPtr key;
-	key = KeyPtr(new Key(db::TraceRoomFields::Get()->FKROOMS, getID()));
-	rkeys->addKey(key);
-	key = KeyPtr(new Key(db::TraceRoomFields::Get()->FKTRACES, keys->first()->getValue()));
-	rkeys->addKey(key);
-	
-	manager->setkeys(rkeys);
-	manager->save(); // create the relation
+	RelationPtr relation(new Relation(db::TableImpls::Get()->TRACEROOM));
+	relation->addKey(db::TraceRoomFields::Get()->FKROOMS, getID());
+	relation->addKey(db::TraceRoomFields::Get()->FKTRACES, keys->first()->getValue());
+	relation->save(); // create the relation
 	
 	m_room->save(); // save the room
 }

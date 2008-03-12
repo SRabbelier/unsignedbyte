@@ -63,7 +63,7 @@
     <File Name="../include/SavableHeaders.h"/>
     <File Name="../include/Keys.h"/>
     <File Name="../include/GameVersion.h"/>
-    <File Name="Relation.h"/>
+    <File Name="../include/Relation.h"/>
   </VirtualDirectory>
   <VirtualDirectory Name="Socket Header Files">
     <File Name="../include/UdpSocket.h"/>
