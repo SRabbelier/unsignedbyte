@@ -32,6 +32,7 @@
 #include "CharacterManager.h"
 #include "Trace.h"
 #include "TraceManager.h"
+#include "TableImpls.h"
 
 #include "Global.h"
 #include "Exceptions.h"
@@ -198,9 +199,20 @@ void mud::Room::Save(value_type accountid, const std::string& description)
 	
 	trace->setDiff(m_room->getDiff());
 	trace->setTime(time(NULL));
-	trace->Save();
+	trace->Save(); // create the Trace
 	
-	m_room->save();
+	SavableManagerPtr manager = SavableManager::getnew(db::TableImpls::Get()->TRACEROOM);	
+	KeysPtr rkeys(new Keys(db::TableImpls::Get()->TRACEROOM));
+	
+	KeyPtr key;
+	key = KeyPtr(new Key(db::TraceRoomFields::Get()->FKROOMS, getID()));
+	rkeys->addKey(key);
+	key = KeyPtr(new Key(db::TraceRoomFields::Get()->FKTRACES, keys->first()->getValue()));
+	rkeys->addKey(key);
+	
+	manager->setkeys(rkeys);
+	manager->save(); // create the relation
+	m_room->save(); // save the room
 }
 
 bool Room::Exists()
