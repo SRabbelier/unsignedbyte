@@ -27,6 +27,7 @@
     <File Name="Value.cpp"/>
     <File Name="Criteria.cpp"/>
     <File Name="Key.cpp"/>
+    <File Name="Relation.cpp"/>
   </VirtualDirectory>
   <VirtualDirectory Name="UB Header Files">
     <File Name="../include/Coordinate.h"/>
@@ -62,6 +63,7 @@
     <File Name="../include/SavableHeaders.h"/>
     <File Name="../include/Keys.h"/>
     <File Name="../include/GameVersion.h"/>
+    <File Name="Relation.h"/>
   </VirtualDirectory>
   <VirtualDirectory Name="Socket Header Files">
     <File Name="../include/UdpSocket.h"/>

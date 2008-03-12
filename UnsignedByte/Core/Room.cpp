@@ -212,6 +212,7 @@ void mud::Room::Save(value_type accountid, const std::string& description)
 	
 	manager->setkeys(rkeys);
 	manager->save(); // create the relation
+	
 	m_room->save(); // save the room
 }
 
