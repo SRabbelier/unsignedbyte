@@ -27,13 +27,16 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #endif
 #endif
 
-#include <string>
 #include <map>
+#include <string>
+#include <stdexcept>
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <sqlite3.h>
 
+#include "Assert.h"
 #include "Database.h"
 #include "Query.h"
 
@@ -72,11 +75,8 @@ Query::Query(Database& dbin,const std::string& sql)
 
 Query::~Query()
 {
-	if (res)
-	{
-		GetDatabase().error(*this, "sqlite3_finalize in destructor");
-		sqlite3_finalize(res);
-	}
+	Assert(!res);
+
 	if (odb)
 	{
 		m_db.freedb(odb);
@@ -97,43 +97,31 @@ All prepared statements must be finalized before the database can be closed.
 bool Query::execute(const std::string& sql)
 {		// query, no result
 	m_last_query = sql;
-	if (odb && res)
-	{
-		GetDatabase().error(*this, "execute: query busy");
-	}
+	Assert(!(odb && res));
 	if (odb && !res)
 	{
 		const char *s = NULL;
 		size_t rc = sqlite3_prepare(odb -> db, sql.c_str(), (int)sql.size(), &res, &s);
 		if (rc != SQLITE_OK)
-		{
-			GetDatabase().error(*this, "execute: prepare query failed");
-			return false;
-		}
+			throw std::runtime_error("execute: prepare query failed");
 		if (!res)
-		{
-			GetDatabase().error(*this, "execute: query failed");
-			return false;
-		}
+			throw std::runtime_error("execute: query failed");
 		rc = sqlite3_step(res); // execute
 		sqlite3_finalize(res); // deallocate statement
 		res = NULL;
 		switch (rc)
 		{
 		case SQLITE_BUSY:
-			GetDatabase().error(*this, "execute: database busy");
-			return false;
+			throw std::runtime_error("execute: database busy");
 		case SQLITE_DONE:
 		case SQLITE_ROW:
 			return true;
 		case SQLITE_ERROR:
-			GetDatabase().error(*this, sqlite3_errmsg(odb -> db));
-			return false;
+			throw std::runtime_error(sqlite3_errmsg(odb->db));
 		case SQLITE_MISUSE:
-			GetDatabase().error(*this, "execute: database misuse");
-			return false;
+			throw std::runtime_error("execute: database misuse");
 		}
-		GetDatabase().error(*this, "execute: unknown result code");
+		throw std::runtime_error("execute: unknown result code");
 	}
 	return false;
 }
@@ -144,24 +132,15 @@ bool Query::execute(const std::string& sql)
 
 sqlite3_stmt *Query::get_result(const std::string& sql)
 {	// query, result
-	if (odb && res)
-	{
-		GetDatabase().error(*this, "get_result: query busy");
-	}
+	Assert(!(odb && res));
 	if (odb && !res)
 	{
 		const char *s = NULL;
 		int rc = sqlite3_prepare(odb -> db, sql.c_str(), (int)sql.size(), &res, &s);
 		if (rc != SQLITE_OK)
-		{
-			GetDatabase().error(*this, "get_result: prepare query failed");
-			return NULL;
-		}
+			throw std::runtime_error("get_result: prepare query failed");
 		if (!res)
-		{
-			GetDatabase().error(*this, "get_result: query failed");
-			return NULL;
-		}
+			throw std::runtime_error("get_result: query failed");
 		// get column names from result
 		{
 			int i = 0;
@@ -211,21 +190,20 @@ bool Query::fetch_row()
 		switch (rc)
 		{
 		case SQLITE_BUSY:
-			GetDatabase().error(*this, "execute: database busy");
-			return false;
+			throw std::runtime_error("execute: database busy");
 		case SQLITE_DONE:
 			return false;
 		case SQLITE_ROW:
 			row = true;
 			return true;
 		case SQLITE_ERROR:
-			GetDatabase().error(*this, sqlite3_errmsg(odb -> db));
+			throw std::runtime_error(sqlite3_errmsg(odb->db));
 			return false;
 		case SQLITE_MISUSE:
-			GetDatabase().error(*this, "execute: database misuse");
+			throw std::runtime_error("execute: database misuse");
 			return false;
 		}
-		GetDatabase().error(*this, "execute: unknown result code");
+		throw std::runtime_error("execute: unknown result code");
 	}
 	return false;
 }
@@ -264,10 +242,9 @@ bool Query::is_null(int x)
 const char *Query::getstr(const std::string& x)
 {
 	int index = m_nmap[x] - 1;
-	if (index >= 0)
-		return getstr(index);
-	error("Column name lookup failure: " + x);
-	return "";
+	if(index < 0)
+		throw std::runtime_error("Column name lookup failure: " + x);
+	return getstr(index);
 }
 
 
@@ -291,10 +268,9 @@ const char *Query::getstr()
 double Query::getnum(const std::string& x)
 {
 	int index = m_nmap[x] - 1;
-	if (index >= 0)
-		return getnum(index);
-	error("Column name lookup failure: " + x);
-	return 0;
+	if(index < 0)
+		throw std::runtime_error("Column name lookup failure: " + x);
+	return getnum(index);
 }
 
 
@@ -311,10 +287,9 @@ double Query::getnum(int x)
 long Query::getval(const std::string& x)
 {
 	int index = m_nmap[x] - 1;
-	if (index >= 0)
-		return getval(index);
-	error("Column name lookup failure: " + x);
-	return 0;
+	if(index < 0)
+		throw std::runtime_error("Column name lookup failure: " + x);
+	return getval(index);
 }
 
 
@@ -343,10 +318,9 @@ long Query::getval()
 unsigned long Query::getuval(const std::string& x)
 {
 	int index = m_nmap[x] - 1;
-	if (index >= 0)
-		return getuval(index);
-	error("Column name lookup failure: " + x);
-	return 0;
+	if(index < 0)
+		throw std::runtime_error("Column name lookup failure: " + x);
+	return getuval(index);
 }
 
 
@@ -370,10 +344,9 @@ unsigned long Query::getuval()
 int64_t Query::getbigint(const std::string& x)
 {
 	int index = m_nmap[x] - 1;
-	if (index >= 0)
-		return getbigint(index);
-	error("Column name lookup failure: " + x);
-	return 0;
+	if(index < 0)
+		throw std::runtime_error("Column name lookup");
+	return getbigint(index);
 }
 
 
@@ -396,10 +369,9 @@ int64_t Query::getbigint()
 uint64_t Query::getubigint(const std::string& x)
 {
 	int index = m_nmap[x] - 1;
-	if (index >= 0)
-		return getubigint(index);
-	error("Column name lookup failure: " + x);
-	return 0;
+	if(index < 0)
+		throw std::runtime_error("Column name lookup failure: " + x);
+	return getubigint(index);
 }
 
 
@@ -512,13 +484,6 @@ void Query::ViewRes()
 		printf("\n");
 	}
 }
-
-
-void Query::error(const std::string& msg)
-{
-	GetDatabase().error(*this, msg);
-}
-
 
 #ifdef SQLITEW_NAMESPACE
 } // namespace SQLITEW_NAMESPACE {

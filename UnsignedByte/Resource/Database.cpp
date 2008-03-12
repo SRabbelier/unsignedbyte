@@ -28,15 +28,17 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #endif
 #endif
 
-#include <string>
 #include <map>
+#include <stdexcept>
+#include <string>
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <sqlite3.h>
 #include <stdarg.h>
 
-#include "IError.h"
+#include "Assert.h"
 #include "Database.h"
 
 
@@ -45,9 +47,8 @@ namespace SQLITEW_NAMESPACE {
 #endif
 
 
-Database::Database(const std::string& d,IError *e)
+Database::Database(const std::string& d)
 :database(d)
-,m_errhandler(e)
 ,m_embedded(true)
 {
 }
@@ -63,23 +64,13 @@ Database::~Database()
 	{
 		opendb_v::iterator it = m_opendbs.begin();
 		OPENDB *p = *it;
-		if (p -> busy)
-		{
-			error("destroying Database object before Query object");
-		}
+		/* If we're busy, it's YOUR fault you didn't delete the
+		 * query object. Therefore, you take the consequences too. */
+		Assert(!p->busy);
 		delete p;
 		m_opendbs.erase(it);
 	}
-
-	delete m_errhandler;
 }
-
-
-void Database::RegErrHandler(IError *p)
-{
-	m_errhandler = p;
-}
-
 
 Database::OPENDB *Database::grabdb()
 {
@@ -101,17 +92,15 @@ Database::OPENDB *Database::grabdb()
 	{
 		odb = new OPENDB;
 		if (!odb)
-		{
-			error("grabdb: OPENDB struct couldn't be created");
-			return NULL;
-		}
+			throw std::runtime_error("grabdb: OPENDB struct "
+				"couldn't be created");
+
 		int rc = sqlite3_open(database.c_str(), &odb -> db);
-		if (rc)
-		{
-			error("Can't open database: %s\n", sqlite3_errmsg(odb -> db));
+		if (rc) {
+			std::string msg(sqlite3_errmsg(odb->db));
 			sqlite3_close(odb -> db);
 			delete odb;
-			return NULL;
+			throw std::runtime_error("Can't open database: " + msg);
 		}
 		odb -> busy = true;
 		m_opendbs.push_back(odb);
@@ -131,52 +120,6 @@ void Database::freedb(Database::OPENDB *odb)
 		odb -> busy = false;
 	}
 }
-
-
-void Database::error(const char *format, ...)
-{
-	if (m_errhandler)
-	{
-		va_list ap;
-		char errstr[5000];
-		va_start(ap, format);
-#ifdef WIN32
-		vsprintf(errstr, format, ap);
-#else
-		vsnprintf(errstr, 5000, format, ap);
-#endif
-		va_end(ap);
-		m_errhandler -> error(*this, errstr);
-	}
-}
-
-
-void Database::error(Query& q,const char *format, ...)
-{
-	if (m_errhandler)
-	{
-		va_list ap;
-		char errstr[5000];
-		va_start(ap, format);
-#ifdef WIN32
-		vsprintf(errstr, format, ap);
-#else
-		vsnprintf(errstr, 5000, format, ap);
-#endif
-		va_end(ap);
-		m_errhandler -> error(*this, q, errstr);
-	}
-}
-
-
-void Database::error(Query& q,const std::string& msg)
-{
-	if (m_errhandler)
-	{
-		m_errhandler -> error(*this, q, msg);
-	}
-}
-
 
 bool Database::Connected()
 {

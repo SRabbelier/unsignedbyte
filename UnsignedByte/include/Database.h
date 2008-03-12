@@ -35,7 +35,6 @@ namespace SQLITEW_NAMESPACE {
 #endif
 
 
-class IError;
 class Query;
 
 
@@ -53,17 +52,12 @@ public:
 
 public:
 	/** Use file */
-	Database(const std::string& database,
-		IError * = NULL);
+	Database(const std::string& database);
 
 	virtual ~Database();
 
 	/** try to establish connection with given host */
 	bool Connected();
-
-	void RegErrHandler(IError *);
-	void error(Query&,const char *format, ...);
-	void error(Query&,const std::string& );
 
 	/** Request a database connection.
 The "grabdb" method is used by the Query class, so that each object instance of Query gets a unique
@@ -100,7 +94,6 @@ private:
 
 	std::string database;
 	opendb_v m_opendbs;
-	IError *m_errhandler;
 	bool m_embedded;
 };
 

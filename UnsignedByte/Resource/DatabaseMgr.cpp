@@ -47,7 +47,7 @@ void DatabaseMgr::Initialize(const std::string& path)
 
 DatabaseMgr::DatabaseMgr() :
 m_path(m_staticpath),
-m_db(new Database(m_path, new StderrLog()))
+m_db(new Database(m_path))
 {
 	Assert(m_staticpath != Global::Get()->EmptyString);
 }
