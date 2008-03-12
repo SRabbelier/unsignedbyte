@@ -310,3 +310,12 @@ void SavableManager::setvalue(ValuePtr value)
 	m_fields[value->getField().get()] = value;
 	m_dirty = true;
 }
+
+std::string SavableManager::getDiff() const
+{
+	std::string result;
+	
+	result = "Not yet implemented - Alturin 12-03-2008";
+	
+	return result;
+}

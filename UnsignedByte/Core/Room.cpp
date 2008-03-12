@@ -30,6 +30,8 @@
 #include "SectorManager.h"
 #include "Character.h"
 #include "CharacterManager.h"
+#include "Trace.h"
+#include "TraceManager.h"
 
 #include "Global.h"
 #include "Exceptions.h"
@@ -173,6 +175,31 @@ void Room::Delete()
 
 void Room::Save()
 {
+	m_room->save();
+}
+
+void mud::Room::Delete(value_type accountid, const std::string& description)
+{
+	
+}
+
+void mud::Room::Save(value_type accountid, const std::string& description)
+{	
+	KeysPtr keys = mud::TraceManager::Get()->Add();
+	mud::TracePtr trace = mud::TraceManager::Get()->GetByKey(keys->first()->getValue());
+	
+	if(accountid)
+	{
+		trace->setAccount(accountid);
+		
+		if(description != Global::Get()->EmptyString)
+			trace->setDescription(description);
+	}
+	
+	trace->setDiff(m_room->getDiff());
+	trace->setTime(time(NULL));
+	trace->Save();
+	
 	m_room->save();
 }
 
