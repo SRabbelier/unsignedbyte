@@ -262,7 +262,10 @@ void EditorRoom::editSector(const std::string& argument)
 void EditorRoom::saveRoom(const std::string& argument)
 {
 	m_sock->Sendf("Saving room '%s'.\n", m_room->getName().c_str());
-	m_room->Save();
+	if(argument.size())
+		m_room->Save(m_sock->GetAccount()->getID(), argument);
+	else
+		m_room->Save(m_sock->GetAccount()->getID(), Global::Get()->EmptyString);
 	m_sock->Send("Saved.\n");
 	return;
 }
