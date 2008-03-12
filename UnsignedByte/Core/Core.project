@@ -113,6 +113,7 @@
     <File Name="ChunkManager.cpp"/>
     <File Name="DetailManager.cpp"/>
     <File Name="ExitManager.cpp"/>
+    <File Name="TraceManager.cpp"/>
   </VirtualDirectory>
   <VirtualDirectory Name="Manager Header Files">
     <File Name="AccountManager.h"/>
@@ -130,6 +131,7 @@
     <File Name="ChunkManager.h"/>
     <File Name="DetailManager.h"/>
     <File Name="ExitManager.h"/>
+    <File Name="TraceManager.h"/>
   </VirtualDirectory>
   <Settings Type="Executable">
     <Configuration Name="Debug" CompilerType="gnu g++" DebuggerType="GNU gdb debugger">

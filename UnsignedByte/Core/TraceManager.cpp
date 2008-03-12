@@ -17,28 +17,39 @@
  *   Free Software Foundation, Inc.,                                       *
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
-#pragma once
 
-#include "Types.h"
+#include "TraceManager.h"
+#include "Trace.h"
+#include "TableImpls.h"
+#include "db.h"
 
-class Savable
+using mud::TraceManager;
+using mud::Trace;
+using mud::TracePtr;
+
+std::vector<std::string> TraceManager::List()
 {
-public:
-	Savable(void) { };
-	virtual ~Savable(void) { };
+	return GetTable()->tableList();
+}
 
-	virtual void Delete() = 0;
-	virtual void Save() = 0;
-	virtual void Delete(value_type accountid, const std::string& description) { this->Delete(); }
-	virtual void Save(value_type accountid, const std::string& description) { this->Save(); }
-	virtual bool Exists() = 0;
-	
-	virtual std::vector<std::string> Show() = 0;
-	virtual std::string ShowShort() = 0;
-	
-	virtual TableImplPtr getTable() const = 0;
-private:
-	Savable(const Savable& rhs) {};
-};
+TableImplPtr TraceManager::GetTable()
+{
+	return db::TableImpls::Get()->TRACES;
+}
 
-typedef SmartPtr<Savable> SavablePtr;
+KeysPtr TraceManager::Add()
+{
+	SavableManagerPtr manager = SavableManager::getnew(db::TableImpls::Get()->TRACES);
+	manager->save();
+	return manager->getkeys();
+}
+
+mud::TracePtr TraceManager::GetByKey(value_type id)
+{
+	KeysPtr keys(new Keys(db::TableImpls::Get()->TRACES));
+	KeyPtr key(new Key(db::TracesFields::Get()->TRACEID, id));
+	keys->addKey(key);
+	SavableManagerPtr manager = SavableManager::bykeys(keys);
+	TracePtr p(new Trace(manager));
+	return p;
+}
