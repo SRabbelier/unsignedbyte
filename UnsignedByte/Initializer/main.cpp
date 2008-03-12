@@ -25,8 +25,6 @@
 
 #include "Database.h"
 #include "Query.h"
-#include "IError.h"
-#include "StderrLog.h"
 #include "Global.h"
 #include "DatabaseMgr.h"
 #include "SqliteMgr.h"

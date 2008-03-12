@@ -20,8 +20,6 @@
 
 #include "DatabaseMgr.h"
 #include "Database.h"
-#include "IError.h"
-#include "StderrLog.h"
 #include "Global.h"
 
 #include "SPKCriteria.h"

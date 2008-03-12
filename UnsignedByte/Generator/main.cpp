@@ -26,8 +26,6 @@
 #include "sqlite3.h"
 #include "Database.h"
 #include "Query.h"
-#include "IError.h"
-#include "StderrLog.h"
 #include "Global.h"
 #include "Tables.h"
 
