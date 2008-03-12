@@ -187,7 +187,7 @@ Tables::Tables() :
 	
 	TRACES->addPK("traceid");
 	TRACES->addFK(ACCOUNTS);
-	TRACES->addTextField("time");
+	TRACES->addValue("time");
 	TRACES->addTextField("description");
 	TRACES->addTextField("diff");
 	
