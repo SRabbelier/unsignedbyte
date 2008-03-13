@@ -32,6 +32,7 @@ public:
 	void addKey(KeyPtr key);
 	
 	std::string toString() const;
+	Strings getDiff(KeysPtr orig) const;
 	
 	size_t size() const;
 	KeyPtr first() const;

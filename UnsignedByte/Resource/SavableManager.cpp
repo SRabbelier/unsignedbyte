@@ -295,18 +295,16 @@ std::string SavableManager::getDiff() const
 {
 	std::vector<std::string> result;
 	
-	for(KeyMap::const_iterator it = m_keys->begin(); it != m_keys->end(); it++)
+	SavableManagerPtr original = getnew(getTable());
+	original->setkeys(getkeys());
+	SqliteMgr::Get()->doSelect(original);
+	original->cleanup();
+	
+	std::vector<std::string> keydiff = m_keys->getDiff(original->getkeys());
+		
+	for(Strings::iterator it = keydiff.begin(); it != keydiff.end(); it++)
 	{
-		KeyPtr key = it->second;
-		if(!key->isDirty())
-			continue;
-			
-		std::string line = "Changed key '";
-		line.append(key->getKeyDef()->getName());
-		line.append("' to '");
-		line.append(String::Get()->fromInt(key->getValue()));
-		line.append("'.");
-			
+		std::string line = *it;			
 		result.push_back(line);
 	}
 	
@@ -315,14 +313,29 @@ std::string SavableManager::getDiff() const
 		ValuePtr value = it->second;
 		if(!value->isDirty())
 			continue;
+		
+		FieldImplPtr field = value->getField();
+		Assert(field);
+		
+		ValuePtr origValue = original->getfield(field);
+		Assert(origValue);
 			
 		std::string line = "Changed field '";
 		line.append(value->getField()->getName());
+		line.append("' from '");
+		
+		if(field->isText())
+			line.append(origValue->getStringValue());
+		else
+			line.append(String::Get()->fromInt(origValue->getIntegerValue()));
+			
 		line.append("' to '");
-		if(value->getField()->isText())
+		
+		if(field->isText())
 			line.append(value->getStringValue());
 		else
 			line.append(String::Get()->fromInt(value->getIntegerValue()));
+			
 		line.append("'.");
 			
 		result.push_back(line);

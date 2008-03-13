@@ -24,6 +24,7 @@
 #include "TableImpl.h"
 #include "FieldImpl.h"
 #include "Parse.h"
+#include "StringUtilities.h"
 
 Keys::Keys(TableImplPtr table) : 
 m_table(table) 
@@ -126,4 +127,35 @@ void Keys::setDirty(KeysPtr oldKeys)
 		if(key->getValue() != otherKey->getValue())
 			key->setDirty(true);
 	}
+}
+
+Strings Keys::getDiff(KeysPtr orig) const
+{
+	Strings result;
+	
+	for(KeyMap::const_iterator it = m_keys.begin(); it != m_keys.end(); it++)
+	{
+		KeyPtr key = it->second;
+		Assert(key);
+		if(!key->isDirty())
+			continue;
+			
+		KeyDefPtr keydef = key->getKeyDef();
+		Assert(keydef);
+		
+		KeyPtr origKey = orig->getKey(keydef);
+		Assert(origKey);
+			
+		std::string line = "Changed key '";
+		line.append(keydef->getName());
+		line.append("' from '");
+		line.append(String::Get()->fromInt(origKey->getValue()));
+		line.append("' to '");
+		line.append(String::Get()->fromInt(key->getValue()));
+		line.append("'.");
+		
+		result.push_back(line);
+	}
+	
+	return result;
 }

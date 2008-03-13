@@ -249,7 +249,7 @@ void EditorRoom::editSector(const std::string& argument)
 	{
 		long id = mud::SectorManager::Get()->lookupByName(argument);
 		mud::SectorPtr sector = mud::SectorManager::Get()->GetByKey(id);
-		m_sock->Sendf("Sector type changed from '%s' to '%s'.\n", sector->getName().c_str(), argument.c_str());
+		m_sock->Sendf("Sector type changed from to '%s'.\n", argument.c_str());
 		m_room->setSector(id);
 	}
 	catch(RowNotFoundException& e)
