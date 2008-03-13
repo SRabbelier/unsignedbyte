@@ -244,6 +244,24 @@ void Initializer::InitDatabase()
 		
 		manager->save();
 	}
+	
+	try
+	{
+		KeyPtr key(new Key(db::ChannelsFields::Get()->CHANNELID, 1));
+		SavableManagerPtr manager = SavableManager::bykeys(key);
+	}
+	catch(RowNotFoundException& e)
+	{
+		SavableManagerPtr manager = SavableManager::getnew(db::TableImpls::Get()->CHANNELS);
+		
+		ValuePtr value = ValuePtr(new Value(db::ChannelsFields::Get()->NAME, "ooc"));
+		manager->setvalue(value);
+		
+		value = ValuePtr(new Value(db::ChannelsFields::Get()->DESCRIPTION, "The Out of Character channel."));
+		manager->setvalue(value);
+		
+		manager->save();
+	}
 }
 
 void Initializer::InitColours()

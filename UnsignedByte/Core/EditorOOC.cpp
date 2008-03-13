@@ -106,7 +106,7 @@ void EditorOOC::listCommands(const std::string& argument)
 void EditorOOC::sendOOCMessage(const std::string& argument)
 {
 	try {
-		mud::ChannelPtr channel = mud::ChannelManager::Get()->GetByName("OOC");
+		mud::ChannelPtr channel = mud::ChannelManager::Get()->GetByName("ooc");
 		std::map<SOCKET,Socket *> ref = UBHandler::Get()->Sockets();
 		for (std::map<SOCKET,Socket *>::iterator it = ref.begin(); it != ref.end(); it++)
 		{
