@@ -37,9 +37,6 @@ namespace mud
 		
 		KeysPtr Add();
 		mud::AreaPtr GetByKey(value_type id);
-		mud::AreaPtr GetByName(cstring name);
-		
-		value_type lookupByName(cstring value);
 
 	private:
 		AreaManager(void) {};
