@@ -21,6 +21,9 @@
 #include "Detail.h"
 #include "Global.h"
 #include "db.h"
+#include "Trace.h"
+#include "TraceManager.h"
+#include "TableImpls.h"
 
 using mud::Detail;
 
@@ -70,6 +73,39 @@ void Detail::Delete()
 void Detail::Save()
 {
 	m_detail->save();
+}
+
+void mud::Detail::Delete(value_type accountid, const std::string& description)
+{
+	
+}
+
+void mud::Detail::Save(value_type accountid, const std::string& description)
+{	
+	if(!m_detail->isDirty())
+		return;
+	
+	KeysPtr keys = mud::TraceManager::Get()->Add();
+	mud::TracePtr trace = mud::TraceManager::Get()->GetByKey(keys->first()->getValue());
+	
+	if(accountid)
+	{
+		trace->setAccount(accountid);
+		
+		if(description != Global::Get()->EmptyString)
+			trace->setDescription(description);
+	}
+	
+	trace->setDiff(m_detail->getDiff());
+	trace->setTime(time(NULL));
+	trace->Save(); // create the Trace
+	
+	RelationPtr relation(new Relation(db::TableImpls::Get()->TRACEDETAIL));
+	relation->addKey(db::TraceDetailFields::Get()->FKDETAILS, getID());
+	relation->addKey(db::TraceDetailFields::Get()->FKTRACES, keys->first()->getValue());
+	relation->save(); // create the relation
+	
+	m_detail->save(); // save the room
 }
 
 bool Detail::Exists()

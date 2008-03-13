@@ -186,6 +186,9 @@ void mud::Room::Delete(value_type accountid, const std::string& description)
 
 void mud::Room::Save(value_type accountid, const std::string& description)
 {	
+	if(!m_room->isDirty())
+		return;
+	
 	KeysPtr keys = mud::TraceManager::Get()->Add();
 	mud::TracePtr trace = mud::TraceManager::Get()->GetByKey(keys->first()->getValue());
 	
