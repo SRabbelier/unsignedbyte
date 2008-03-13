@@ -31,6 +31,7 @@
 #include "Exceptions.h"
 #include "Global.h"
 #include "StringUtilities.h"
+#include "Channel.h"
 
 using mud::Permission;
 using mud::Command;
@@ -185,4 +186,9 @@ void Editor::OnLine(const std::string& line)
 	
 	m_sock->SendPrompt();
 	return;
+}
+
+bool Editor::canReceiveChannel(mud::ChannelPtr channel) const
+{
+	 return true;
 }

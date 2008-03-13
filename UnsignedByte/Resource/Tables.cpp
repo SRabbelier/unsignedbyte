@@ -25,6 +25,7 @@ Tables::Tables() :
 	ACCOUNTS( new TableDef("Accounts") ),
 	AREAS( new TableDef("Areas") ),
 	BRANCHES( new TableDef("Branches") ),
+	CHANNELS( new TableDef("Channels") ),
 	CHARACTERACCOUNT( new TableDef("CharacterAccount") ),
 	CHARACTERBRANCH( new TableDef("CharacterBranch") ),
 	CHARACTERCLUSTER( new TableDef("CharacterCluster") ),
@@ -74,6 +75,10 @@ Tables::Tables() :
 	BRANCHES->addFK(TREES);
 	BRANCHES->addFK(STATS, "Primary");
 	BRANCHES->addFK(STATS, "Secondary");
+	
+	CHANNELS->addPK("channelid");
+	CHANNELS->addLookupTextField("name");
+	CHANNELS->addTextField("description");
 	
 	CHARACTERACCOUNT->addFPK(ENTITIES);
 	CHARACTERACCOUNT->addFPK(ACCOUNTS);
@@ -224,6 +229,7 @@ Tables::Tables() :
 	m_tables.push_back(ACCOUNTS);
 	m_tables.push_back(AREAS);
 	m_tables.push_back(BRANCHES);
+	m_tables.push_back(CHANNELS);
 	m_tables.push_back(CHARACTERACCOUNT);
 	m_tables.push_back(CHARACTERBRANCH);
 	m_tables.push_back(CHARACTERCLUSTER);

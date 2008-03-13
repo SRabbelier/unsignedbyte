@@ -18,87 +18,47 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#include "Account.h"
-#include "db.h"
+#include "ChannelManager.h"
 #include "Channel.h"
+#include "Exceptions.h"
+#include "TableImpls.h"
+#include "db.h"
 
-using mud::Account;
+using mud::ChannelManager;
+using mud::Channel;
+using mud::ChannelPtr;
 
-Account::Account(SavableManagerPtr dbaccount) :
-m_account(dbaccount)
+std::vector<std::string> ChannelManager::List()
 {
-	Assert(dbaccount);
+	return GetTable()->tableList();
 }
 
-Account::~Account(void)
+TableImplPtr ChannelManager::GetTable()
 {
-
+	return db::TableImpls::Get()->CHANNELS;
 }
 
-value_type Account::getID() const
+KeysPtr ChannelManager::Add()
 {
-	return m_account->getkey(db::AccountsFields::Get()->ACCOUNTID)->getValue();
+	SavableManagerPtr manager = SavableManager::getnew(db::TableImpls::Get()->CHANNELS);
+	manager->save();
+	return manager->getkeys();
 }
 
-const std::string& Account::getName() const
+mud::ChannelPtr ChannelManager::GetByKey(value_type id)
 {
-	return m_account->getfield(db::AccountsFields::Get()->NAME)->getStringValue();
+	KeysPtr keys(new Keys(db::TableImpls::Get()->CHANNELS));
+	KeyPtr key(new Key(db::ChannelsFields::Get()->CHANNELID, id));
+	keys->addKey(key);
+	SavableManagerPtr manager = SavableManager::bykeys(keys);
+	ChannelPtr p(new Channel(manager));
+	return p;
 }
 
-const std::string& Account::getPassword() const
+mud::ChannelPtr mud::ChannelManager::GetByName(cstring name)
 {
-	return m_account->getfield(db::AccountsFields::Get()->PASSWORD)->getStringValue();
-}
-
-void Account::setName(const std::string& name)
-{
-	ValuePtr value(new Value(db::AccountsFields::Get()->NAME, name));
-	m_account->setvalue(value);
-}
-
-void Account::setPassword(const std::string& password)
-{
-	ValuePtr value(new Value(db::AccountsFields::Get()->PASSWORD, password));
-	m_account->setvalue(value);
-}
-
-void Account::Delete()
-{
-	m_account->erase();
-}
-
-void Account::Save()
-{
-	m_account->save();
-}
-
-bool Account::Exists()
-{
-	return m_account->exists();
-}
-
-
-std::vector<std::string> Account::Show()
-{
-	std::vector<std::string> result;
-	
-	return result;
-}
-
-std::string Account::ShowShort()
-{
-	std::string result;
-	
-	return result;
-}
-
-TableImplPtr Account::getTable() const
-{
-	return m_account->getTable();
-}
-
-bool mud::Account::wantReceiveChannel(ChannelPtr channel) const
-{
-	// TODO check players preference
-	return true;
+	ValuePtr val(new Value(db::ChannelsFields::Get()->NAME, name));
+	SavableManagerPtr manager = SavableManager::byvalue(val);
+	ChannelPtr p(new Channel(manager));
+	return p;
 }

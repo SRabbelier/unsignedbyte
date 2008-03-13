@@ -25,6 +25,9 @@
 #include "UBHandler.h"
 #include "StringUtilities.h"
 #include "Account.h"
+#include "Channel.h"
+#include "ChannelManager.h"
+#include "Exceptions.h"
 
 EditorOOC::OOCCommand EditorOOC::m_listCommands("Commands", &EditorOOC::listCommands);
 EditorOOC::OOCCommand EditorOOC::m_sendOOCMessage("OOC", &EditorOOC::sendOOCMessage);
@@ -102,14 +105,21 @@ void EditorOOC::listCommands(const std::string& argument)
 
 void EditorOOC::sendOOCMessage(const std::string& argument)
 {
-	std::map<SOCKET,Socket *> ref = UBHandler::Get()->Sockets();
-	for (std::map<SOCKET,Socket *>::iterator it = ref.begin(); it != ref.end(); it++)
-	{
-		UBSocket* sock = UBSocket::Cast(it->second, false);
-		if(sock)
-			sock->Sendf("%s ooc> '%s'.\n", m_sock->GetAccount()->getName().c_str(), argument.c_str());
+	try {
+		mud::ChannelPtr channel = mud::ChannelManager::Get()->GetByName("OOC");
+		std::map<SOCKET,Socket *> ref = UBHandler::Get()->Sockets();
+		for (std::map<SOCKET,Socket *>::iterator it = ref.begin(); it != ref.end(); it++)
+		{
+			UBSocket* sock = UBSocket::Cast(it->second, false);
+			if(sock && sock->canReceiveChannel(channel)) {
+					sock->Sendf("%s ooc> '%s'.\n", m_sock->GetAccount()->getName().c_str(), argument.c_str());			
+			}
+		}
+	} catch(RowNotFoundException& e) {
+		Global::Get()->bug("Could not retreive the OOC chan!");
 	}
-	return;
+	
+	return;	
 }
 
 void EditorOOC::listOnlineCharacters(const std::string& argument)

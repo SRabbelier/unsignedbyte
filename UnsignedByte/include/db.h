@@ -84,6 +84,22 @@ namespace db
 		friend class Singleton<BranchesFields>;
 	};
 
+	class ChannelsFields : public Singleton<ChannelsFields>
+	{
+	public:
+		KeyDefPtr CHANNELID;
+		FieldImplPtr NAME;
+		FieldImplPtr DESCRIPTION;
+
+	private:
+		// Hide constructor and assignment operator
+		ChannelsFields();
+		~ChannelsFields() { }
+		ChannelsFields(const ChannelsFields& rhs);
+		ChannelsFields operator=(const ChannelsFields& rhs);
+		friend class Singleton<ChannelsFields>;
+	};
+
 	class CharacterAccountFields : public Singleton<CharacterAccountFields>
 	{
 	public:

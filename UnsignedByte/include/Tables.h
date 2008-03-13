@@ -27,6 +27,7 @@ public:
 	TableDefPtr ACCOUNTS;
 	TableDefPtr AREAS;
 	TableDefPtr BRANCHES;
+	TableDefPtr CHANNELS;
 	TableDefPtr CHARACTERACCOUNT;
 	TableDefPtr CHARACTERBRANCH;
 	TableDefPtr CHARACTERCLUSTER;

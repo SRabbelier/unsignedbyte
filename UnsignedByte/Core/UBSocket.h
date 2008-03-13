@@ -29,6 +29,9 @@
 namespace mud { 
 	class Account; 
 	typedef SmartPtr<mud::Account> AccountPtr;
+	
+	class Channel;
+	typedef SmartPtr<mud::Channel> ChannelPtr;
 };
 
 class Editor;
@@ -66,14 +69,16 @@ public:
 	mud::Account* GetAccount() const;
 	UBSocket* GetForcer() const;
 	bool hasAccount() const;
-	bool isHighForced() const { return m_highforced; };
-	bool isForced() const { return m_forced; };
-	bool isLowForced() const { return m_lowforced; };
+	bool isHighForced() const { return m_highforced; }
+	bool isForced() const { return m_forced; }
+	bool isLowForced() const { return m_lowforced; }
+	
+	bool canReceiveChannel(mud::ChannelPtr channel);
 	
 	/**
 	 * \brief Setters
 	 */ 
-	void SetAccount(mud::AccountPtr account) { m_account = account; };
+	void SetAccount(mud::AccountPtr account) { m_account = account; }
 	void SetEditor(Editor* cmd, bool popLast = false);
 	void PopEditor();
 	void SetForcer(UBSocket* forcer, bool weakForce = true, bool forced = false, bool highforced = false);

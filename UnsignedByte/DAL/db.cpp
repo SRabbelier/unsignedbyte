@@ -76,6 +76,16 @@ FKSTATSSECONDARY(new FieldImpl(TableImpls::Get()->BRANCHES, "fkStatsSecondary"))
 	TableImpls::Get()->BRANCHES->addField(FKSTATSSECONDARY);
 }
 
+ChannelsFields::ChannelsFields() :
+CHANNELID(new KeyDef(TableImpls::Get()->CHANNELS, "channelid")),
+NAME(new FieldImpl(TableImpls::Get()->CHANNELS, "name", true)),
+DESCRIPTION(new FieldImpl(TableImpls::Get()->CHANNELS, "description", true))
+{
+	TableImpls::Get()->CHANNELS->addKey(CHANNELID);
+	TableImpls::Get()->CHANNELS->addField(NAME);
+	TableImpls::Get()->CHANNELS->addField(DESCRIPTION);
+}
+
 CharacterAccountFields::CharacterAccountFields() :
 FKACCOUNTS(new KeyDef(TableImpls::Get()->CHARACTERACCOUNT, "fkAccounts")),
 FKENTITIES(new KeyDef(TableImpls::Get()->CHARACTERACCOUNT, "fkEntities"))

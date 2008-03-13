@@ -36,6 +36,7 @@
 #include "ColourManager.h"
 #include "GameVersion.h"
 #include "Exceptions.h"
+#include "Channel.h"
 
 UBSocket::UBSocket(ISocketHandler& h) :
 TcpSocket(h),
@@ -277,4 +278,17 @@ UBSocket* UBSocket::Cast(Socket *sock, bool Error)
 		return NULL;
 	}
 	return sock2;
+}
+
+bool UBSocket::canReceiveChannel(mud::ChannelPtr channel)
+{
+	Editor* editor = m_editors.top();
+	
+	if(!editor->canReceiveChannel(channel))
+		return false;
+		
+	if(!m_account->wantReceiveChannel(channel))
+		return false;
+	
+	return true;
 }

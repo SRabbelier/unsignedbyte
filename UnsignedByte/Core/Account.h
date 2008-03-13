@@ -25,6 +25,10 @@ namespace mud
 {
 	class Account;
 	typedef SmartPtr<Account> AccountPtr;
+	
+	class Channel;
+	typedef SmartPtr<Channel> ChannelPtr;
+	
 	class Account : public Savable
 	{
 	public:
@@ -34,6 +38,7 @@ namespace mud
 		value_type getID() const;
 		const std::string& getName() const;
 		const std::string& getPassword() const;
+		bool wantReceiveChannel(ChannelPtr channel) const;
 
 		/**
 		 * \brief Setters

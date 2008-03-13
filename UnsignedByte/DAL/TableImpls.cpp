@@ -41,6 +41,7 @@ TableImpls* TableImpls::Get()
 		db::AccountsFields::Get();
 		db::AreasFields::Get();
 		db::BranchesFields::Get();
+		db::ChannelsFields::Get();
 		db::CharacterAccountFields::Get();
 		db::CharacterBranchFields::Get();
 		db::CharacterClusterFields::Get();
@@ -88,6 +89,7 @@ TableImpls::TableImpls() :
 ACCOUNTS(new TableImpl(Tables::Get()->ACCOUNTS)),
 AREAS(new TableImpl(Tables::Get()->AREAS)),
 BRANCHES(new TableImpl(Tables::Get()->BRANCHES)),
+CHANNELS(new TableImpl(Tables::Get()->CHANNELS)),
 CHARACTERACCOUNT(new TableImpl(Tables::Get()->CHARACTERACCOUNT)),
 CHARACTERBRANCH(new TableImpl(Tables::Get()->CHARACTERBRANCH)),
 CHARACTERCLUSTER(new TableImpl(Tables::Get()->CHARACTERCLUSTER)),
@@ -125,6 +127,7 @@ VERSION(new TableImpl(Tables::Get()->VERSION))
 	m_tables.push_back(ACCOUNTS);
 	m_tables.push_back(AREAS);
 	m_tables.push_back(BRANCHES);
+	m_tables.push_back(CHANNELS);
 	m_tables.push_back(CHARACTERACCOUNT);
 	m_tables.push_back(CHARACTERBRANCH);
 	m_tables.push_back(CHARACTERCLUSTER);

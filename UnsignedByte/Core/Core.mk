@@ -34,11 +34,11 @@ endif
 
 Objects=$(IntermediateDirectory)/Account$(ObjectSuffix) $(IntermediateDirectory)/Area$(ObjectSuffix) $(IntermediateDirectory)/Character$(ObjectSuffix) $(IntermediateDirectory)/Colour$(ObjectSuffix) $(IntermediateDirectory)/main$(ObjectSuffix) $(IntermediateDirectory)/MCharacter$(ObjectSuffix) $(IntermediateDirectory)/PCharacter$(ObjectSuffix) $(IntermediateDirectory)/Race$(ObjectSuffix) $(IntermediateDirectory)/Room$(ObjectSuffix) $(IntermediateDirectory)/Sector$(ObjectSuffix) \
 	$(IntermediateDirectory)/UBHandler$(ObjectSuffix) $(IntermediateDirectory)/UBSocket$(ObjectSuffix) $(IntermediateDirectory)/SQLSocket$(ObjectSuffix) $(IntermediateDirectory)/Command$(ObjectSuffix) $(IntermediateDirectory)/GrantGroup$(ObjectSuffix) $(IntermediateDirectory)/Permission$(ObjectSuffix) $(IntermediateDirectory)/Chunk$(ObjectSuffix) $(IntermediateDirectory)/chunkimporter$(ObjectSuffix) $(IntermediateDirectory)/Detail$(ObjectSuffix) $(IntermediateDirectory)/Exit$(ObjectSuffix) \
-	$(IntermediateDirectory)/Trace$(ObjectSuffix) $(IntermediateDirectory)/Echo$(ObjectSuffix) $(IntermediateDirectory)/EditorOLC$(ObjectSuffix) $(IntermediateDirectory)/Editor$(ObjectSuffix) $(IntermediateDirectory)/EditorPermission$(ObjectSuffix) $(IntermediateDirectory)/EditorGrantGroup$(ObjectSuffix) $(IntermediateDirectory)/EditorString$(ObjectSuffix) $(IntermediateDirectory)/EditorCommand$(ObjectSuffix) $(IntermediateDirectory)/EditorScript$(ObjectSuffix) $(IntermediateDirectory)/EditorSector$(ObjectSuffix) \
-	$(IntermediateDirectory)/EditorRoom$(ObjectSuffix) $(IntermediateDirectory)/EditorPlaying$(ObjectSuffix) $(IntermediateDirectory)/EditorNewCharacter$(ObjectSuffix) $(IntermediateDirectory)/EditorNewAccount$(ObjectSuffix) $(IntermediateDirectory)/EditorAccount$(ObjectSuffix) $(IntermediateDirectory)/EditorMobile$(ObjectSuffix) $(IntermediateDirectory)/EditorArea$(ObjectSuffix) $(IntermediateDirectory)/EditorColour$(ObjectSuffix) $(IntermediateDirectory)/OLCEditor$(ObjectSuffix) $(IntermediateDirectory)/EditorAccountLogin$(ObjectSuffix) \
-	$(IntermediateDirectory)/EditorOOC$(ObjectSuffix) $(IntermediateDirectory)/EditorChunk$(ObjectSuffix) $(IntermediateDirectory)/EditorBool$(ObjectSuffix) $(IntermediateDirectory)/EditorDetail$(ObjectSuffix) $(IntermediateDirectory)/EditorRace$(ObjectSuffix) $(IntermediateDirectory)/AccountManager$(ObjectSuffix) $(IntermediateDirectory)/AreaManager$(ObjectSuffix) $(IntermediateDirectory)/CharacterManager$(ObjectSuffix) $(IntermediateDirectory)/ColourManager$(ObjectSuffix) $(IntermediateDirectory)/CommandManager$(ObjectSuffix) \
-	$(IntermediateDirectory)/GrantGroupManager$(ObjectSuffix) $(IntermediateDirectory)/MCharacterManager$(ObjectSuffix) $(IntermediateDirectory)/PCharacterManager$(ObjectSuffix) $(IntermediateDirectory)/PermissionManager$(ObjectSuffix) $(IntermediateDirectory)/RaceManager$(ObjectSuffix) $(IntermediateDirectory)/RoomManager$(ObjectSuffix) $(IntermediateDirectory)/SectorManager$(ObjectSuffix) $(IntermediateDirectory)/ChunkManager$(ObjectSuffix) $(IntermediateDirectory)/DetailManager$(ObjectSuffix) $(IntermediateDirectory)/ExitManager$(ObjectSuffix) \
-	$(IntermediateDirectory)/TraceManager$(ObjectSuffix) $(IntermediateDirectory)/EchoManager$(ObjectSuffix) 
+	$(IntermediateDirectory)/Trace$(ObjectSuffix) $(IntermediateDirectory)/Echo$(ObjectSuffix) $(IntermediateDirectory)/Channel$(ObjectSuffix) $(IntermediateDirectory)/EditorOLC$(ObjectSuffix) $(IntermediateDirectory)/Editor$(ObjectSuffix) $(IntermediateDirectory)/EditorPermission$(ObjectSuffix) $(IntermediateDirectory)/EditorGrantGroup$(ObjectSuffix) $(IntermediateDirectory)/EditorString$(ObjectSuffix) $(IntermediateDirectory)/EditorCommand$(ObjectSuffix) $(IntermediateDirectory)/EditorScript$(ObjectSuffix) \
+	$(IntermediateDirectory)/EditorSector$(ObjectSuffix) $(IntermediateDirectory)/EditorRoom$(ObjectSuffix) $(IntermediateDirectory)/EditorPlaying$(ObjectSuffix) $(IntermediateDirectory)/EditorNewCharacter$(ObjectSuffix) $(IntermediateDirectory)/EditorNewAccount$(ObjectSuffix) $(IntermediateDirectory)/EditorAccount$(ObjectSuffix) $(IntermediateDirectory)/EditorMobile$(ObjectSuffix) $(IntermediateDirectory)/EditorArea$(ObjectSuffix) $(IntermediateDirectory)/EditorColour$(ObjectSuffix) $(IntermediateDirectory)/OLCEditor$(ObjectSuffix) \
+	$(IntermediateDirectory)/EditorAccountLogin$(ObjectSuffix) $(IntermediateDirectory)/EditorOOC$(ObjectSuffix) $(IntermediateDirectory)/EditorChunk$(ObjectSuffix) $(IntermediateDirectory)/EditorBool$(ObjectSuffix) $(IntermediateDirectory)/EditorDetail$(ObjectSuffix) $(IntermediateDirectory)/EditorRace$(ObjectSuffix) $(IntermediateDirectory)/AccountManager$(ObjectSuffix) $(IntermediateDirectory)/AreaManager$(ObjectSuffix) $(IntermediateDirectory)/CharacterManager$(ObjectSuffix) $(IntermediateDirectory)/ColourManager$(ObjectSuffix) \
+	$(IntermediateDirectory)/CommandManager$(ObjectSuffix) $(IntermediateDirectory)/GrantGroupManager$(ObjectSuffix) $(IntermediateDirectory)/MCharacterManager$(ObjectSuffix) $(IntermediateDirectory)/PCharacterManager$(ObjectSuffix) $(IntermediateDirectory)/PermissionManager$(ObjectSuffix) $(IntermediateDirectory)/RaceManager$(ObjectSuffix) $(IntermediateDirectory)/RoomManager$(ObjectSuffix) $(IntermediateDirectory)/SectorManager$(ObjectSuffix) $(IntermediateDirectory)/ChunkManager$(ObjectSuffix) $(IntermediateDirectory)/DetailManager$(ObjectSuffix) \
+	$(IntermediateDirectory)/ExitManager$(ObjectSuffix) $(IntermediateDirectory)/TraceManager$(ObjectSuffix) $(IntermediateDirectory)/EchoManager$(ObjectSuffix) $(IntermediateDirectory)/ChannelManager$(ObjectSuffix) 
 
 ##
 ## Main Build Tragets 
@@ -167,6 +167,11 @@ $(IntermediateDirectory)/Echo$(ObjectSuffix): Echo.cpp $(IntermediateDirectory)/
 	$(CompilerName) $(SourceSwitch)Echo.cpp $(CmpOptions)   $(ObjectSwitch)$(IntermediateDirectory)/Echo$(ObjectSuffix) $(IncludePath)
 $(IntermediateDirectory)/Echo$(ObjectSuffix).d:
 	@$(CompilerName) $(CmpOptions) $(IncludePath) -MT$(IntermediateDirectory)/Echo$(ObjectSuffix) -MF$(IntermediateDirectory)/Echo$(ObjectSuffix).d -MM Echo.cpp
+
+$(IntermediateDirectory)/Channel$(ObjectSuffix): Channel.cpp $(IntermediateDirectory)/Channel$(ObjectSuffix).d
+	$(CompilerName) $(SourceSwitch)Channel.cpp $(CmpOptions)   $(ObjectSwitch)$(IntermediateDirectory)/Channel$(ObjectSuffix) $(IncludePath)
+$(IntermediateDirectory)/Channel$(ObjectSuffix).d:
+	@$(CompilerName) $(CmpOptions) $(IncludePath) -MT$(IntermediateDirectory)/Channel$(ObjectSuffix) -MF$(IntermediateDirectory)/Channel$(ObjectSuffix).d -MM Channel.cpp
 
 $(IntermediateDirectory)/EditorOLC$(ObjectSuffix): EditorOLC.cpp $(IntermediateDirectory)/EditorOLC$(ObjectSuffix).d
 	$(CompilerName) $(SourceSwitch)EditorOLC.cpp $(CmpOptions)   $(ObjectSwitch)$(IntermediateDirectory)/EditorOLC$(ObjectSuffix) $(IncludePath)
@@ -368,6 +373,11 @@ $(IntermediateDirectory)/EchoManager$(ObjectSuffix): EchoManager.cpp $(Intermedi
 $(IntermediateDirectory)/EchoManager$(ObjectSuffix).d:
 	@$(CompilerName) $(CmpOptions) $(IncludePath) -MT$(IntermediateDirectory)/EchoManager$(ObjectSuffix) -MF$(IntermediateDirectory)/EchoManager$(ObjectSuffix).d -MM EchoManager.cpp
 
+$(IntermediateDirectory)/ChannelManager$(ObjectSuffix): ChannelManager.cpp $(IntermediateDirectory)/ChannelManager$(ObjectSuffix).d
+	$(CompilerName) $(SourceSwitch)ChannelManager.cpp $(CmpOptions)   $(ObjectSwitch)$(IntermediateDirectory)/ChannelManager$(ObjectSuffix) $(IncludePath)
+$(IntermediateDirectory)/ChannelManager$(ObjectSuffix).d:
+	@$(CompilerName) $(CmpOptions) $(IncludePath) -MT$(IntermediateDirectory)/ChannelManager$(ObjectSuffix) -MF$(IntermediateDirectory)/ChannelManager$(ObjectSuffix).d -MM ChannelManager.cpp
+
 ##
 ## Clean
 ##
@@ -416,6 +426,8 @@ clean:
 	$(RM) $(IntermediateDirectory)/Trace$(ObjectSuffix).d
 	$(RM) $(IntermediateDirectory)/Echo$(ObjectSuffix)
 	$(RM) $(IntermediateDirectory)/Echo$(ObjectSuffix).d
+	$(RM) $(IntermediateDirectory)/Channel$(ObjectSuffix)
+	$(RM) $(IntermediateDirectory)/Channel$(ObjectSuffix).d
 	$(RM) $(IntermediateDirectory)/EditorOLC$(ObjectSuffix)
 	$(RM) $(IntermediateDirectory)/EditorOLC$(ObjectSuffix).d
 	$(RM) $(IntermediateDirectory)/Editor$(ObjectSuffix)
@@ -496,6 +508,8 @@ clean:
 	$(RM) $(IntermediateDirectory)/TraceManager$(ObjectSuffix).d
 	$(RM) $(IntermediateDirectory)/EchoManager$(ObjectSuffix)
 	$(RM) $(IntermediateDirectory)/EchoManager$(ObjectSuffix).d
+	$(RM) $(IntermediateDirectory)/ChannelManager$(ObjectSuffix)
+	$(RM) $(IntermediateDirectory)/ChannelManager$(ObjectSuffix).d
 	$(RM) $(OutputFile)
 
 -include $(IntermediateDirectory)/*.d

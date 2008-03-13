@@ -21,6 +21,11 @@
 
 #include "Types.h"
 
+namespace mud {
+	class Channel;
+	typedef SmartPtr<Channel> ChannelPtr;
+}
+
 class Editor
 {
 public:
@@ -35,6 +40,8 @@ public:
 	
 	virtual std::string lookup(const std::string& action); // { return Global::Get()->EmptyString; };
 	virtual void dispatch(const std::string& action, const std::string& argument) { return; };
+	
+	virtual bool canReceiveChannel(mud::ChannelPtr channel) const;
 	
 	void Send(const std::string& msg);
 	void Sendf(const char* format, ...);

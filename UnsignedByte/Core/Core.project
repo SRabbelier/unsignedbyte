@@ -23,6 +23,7 @@
     <File Name="Exit.cpp"/>
     <File Name="Trace.cpp"/>
     <File Name="Echo.cpp"/>
+    <File Name="Channel.cpp"/>
   </VirtualDirectory>
   <VirtualDirectory Name="Core Header Files">
     <File Name="Account.h"/>
@@ -49,6 +50,7 @@
     <File Name="Trace.h"/>
     <File Name="CommandTable.h"/>
     <File Name="Echo.h"/>
+    <File Name="Channel.h"/>
   </VirtualDirectory>
   <VirtualDirectory Name="Editor Source Files">
     <File Name="EditorOLC.cpp"/>
@@ -118,6 +120,7 @@
     <File Name="ExitManager.cpp"/>
     <File Name="TraceManager.cpp"/>
     <File Name="EchoManager.cpp"/>
+    <File Name="ChannelManager.cpp"/>
   </VirtualDirectory>
   <VirtualDirectory Name="Manager Header Files">
     <File Name="AccountManager.h"/>
@@ -137,6 +140,7 @@
     <File Name="ExitManager.h"/>
     <File Name="TraceManager.h"/>
     <File Name="EchoManager.h"/>
+    <File Name="ChannelManager.h"/>
   </VirtualDirectory>
   <Settings Type="Executable">
     <Configuration Name="Debug" CompilerType="gnu g++" DebuggerType="GNU gdb debugger">

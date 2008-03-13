@@ -18,87 +18,78 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#include "Account.h"
-#include "db.h"
 #include "Channel.h"
+#include "Global.h"
+#include "db.h"
 
-using mud::Account;
+using mud::Channel;
 
-Account::Account(SavableManagerPtr dbaccount) :
-m_account(dbaccount)
+Channel::Channel(SavableManagerPtr channel) :
+m_channel(channel)
 {
-	Assert(dbaccount);
+	Assert(channel);
 }
 
-Account::~Account(void)
+Channel::~Channel(void)
 {
 
 }
 
-value_type Account::getID() const
+const std::string& Channel::getName() const
 {
-	return m_account->getkey(db::AccountsFields::Get()->ACCOUNTID)->getValue();
+	return m_channel->getfield(db::ChannelsFields::Get()->NAME)->getStringValue();
 }
 
-const std::string& Account::getName() const
+const std::string& Channel::getDescription() const
 {
-	return m_account->getfield(db::AccountsFields::Get()->NAME)->getStringValue();
+	return m_channel->getfield(db::ChannelsFields::Get()->DESCRIPTION)->getStringValue();
 }
 
-const std::string& Account::getPassword() const
+void Channel::setName(const std::string& name)
 {
-	return m_account->getfield(db::AccountsFields::Get()->PASSWORD)->getStringValue();
+	ValuePtr value(new Value(db::ChannelsFields::Get()->NAME, name));
+	m_channel->setvalue(value);
 }
 
-void Account::setName(const std::string& name)
+void Channel::setDescription(const std::string& description)
 {
-	ValuePtr value(new Value(db::AccountsFields::Get()->NAME, name));
-	m_account->setvalue(value);
+	ValuePtr value(new Value(db::ChannelsFields::Get()->DESCRIPTION, description));
+	m_channel->setvalue(value);
 }
 
-void Account::setPassword(const std::string& password)
+void Channel::Delete()
 {
-	ValuePtr value(new Value(db::AccountsFields::Get()->PASSWORD, password));
-	m_account->setvalue(value);
+	m_channel->erase();
 }
 
-void Account::Delete()
+void Channel::Save()
 {
-	m_account->erase();
+	m_channel->save();
 }
 
-void Account::Save()
+bool Channel::Exists()
 {
-	m_account->save();
+	return m_channel->exists();
 }
 
-bool Account::Exists()
-{
-	return m_account->exists();
-}
-
-
-std::vector<std::string> Account::Show()
+std::vector<std::string> Channel::Show()
 {
 	std::vector<std::string> result;
 	
+	result.push_back(Global::Get()->sprintf("Name: '%s'.", getName().c_str()));
+	result.push_back(Global::Get()->sprintf("Description: '%s'.", getDescription().c_str()));
+
 	return result;
 }
 
-std::string Account::ShowShort()
+std::string Channel::ShowShort()
 {
-	std::string result;
-	
-	return result;
+	return Global::Get()->sprintf("%s: %s\n", 
+			getName().c_str(),
+			getDescription().c_str());
 }
 
-TableImplPtr Account::getTable() const
+TableImplPtr Channel::getTable() const
 {
-	return m_account->getTable();
-}
-
-bool mud::Account::wantReceiveChannel(ChannelPtr channel) const
-{
-	// TODO check players preference
-	return true;
+	return m_channel->getTable();
 }

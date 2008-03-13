@@ -35,6 +35,7 @@ namespace db
 		TableImplPtr ACCOUNTS;
 		TableImplPtr AREAS;
 		TableImplPtr BRANCHES;
+		TableImplPtr CHANNELS;
 		TableImplPtr CHARACTERACCOUNT;
 		TableImplPtr CHARACTERBRANCH;
 		TableImplPtr CHARACTERCLUSTER;

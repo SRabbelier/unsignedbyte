@@ -17,88 +17,62 @@
  *   Free Software Foundation, Inc.,                                       *
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
+#pragma once
 
-#include "Account.h"
-#include "db.h"
-#include "Channel.h"
+#include "SavableHeaders.h"
 
-using mud::Account;
-
-Account::Account(SavableManagerPtr dbaccount) :
-m_account(dbaccount)
+namespace mud
 {
-	Assert(dbaccount);
-}
-
-Account::~Account(void)
-{
-
-}
-
-value_type Account::getID() const
-{
-	return m_account->getkey(db::AccountsFields::Get()->ACCOUNTID)->getValue();
-}
-
-const std::string& Account::getName() const
-{
-	return m_account->getfield(db::AccountsFields::Get()->NAME)->getStringValue();
-}
-
-const std::string& Account::getPassword() const
-{
-	return m_account->getfield(db::AccountsFields::Get()->PASSWORD)->getStringValue();
-}
-
-void Account::setName(const std::string& name)
-{
-	ValuePtr value(new Value(db::AccountsFields::Get()->NAME, name));
-	m_account->setvalue(value);
-}
-
-void Account::setPassword(const std::string& password)
-{
-	ValuePtr value(new Value(db::AccountsFields::Get()->PASSWORD, password));
-	m_account->setvalue(value);
-}
-
-void Account::Delete()
-{
-	m_account->erase();
-}
-
-void Account::Save()
-{
-	m_account->save();
-}
-
-bool Account::Exists()
-{
-	return m_account->exists();
-}
-
-
-std::vector<std::string> Account::Show()
-{
-	std::vector<std::string> result;
+	class ChannelManager;
 	
-	return result;
-}
+	class Channel : public Savable
+	{
+	public:
+		/**
+		 * \brief Getters
+		 */
+		const std::string& getName() const;
+		const std::string& getDescription() const;
 
-std::string Account::ShowShort()
-{
-	std::string result;
-	
-	return result;
-}
+		/**
+		 * \brief Setters
+		 */
+		void setName(const std::string& name);
+		void setDescription(const std::string& description);
 
-TableImplPtr Account::getTable() const
-{
-	return m_account->getTable();
-}
+		/**
+		 * \brief Utilities
+		 */
+		std::vector<std::string> Show();
+		std::string ShowShort();
+		TableImplPtr getTable() const;
+		
+		/**
+		 * \brief Database operations
+		 */
+		void Delete();
+		void Save();
+		bool Exists();
 
-bool mud::Account::wantReceiveChannel(ChannelPtr channel) const
-{
-	// TODO check players preference
-	return true;
+	private:
+		friend class mud::ChannelManager; // For constructor
+		friend SmartPtrDelete(mud::Channel);
+		
+		SavableManagerPtr m_channel;
+
+		/**
+		 * \brief Constructor
+		 * \param channel The DB object
+		 * \return 
+		 */
+		Channel(SavableManagerPtr channel);
+		
+		Channel(const Channel& rhs);
+		Channel operator=(const Channel& rhs);
+			
+		/**
+		 * \brief Default destructor
+		 */
+		~Channel(void);
+	};
 }

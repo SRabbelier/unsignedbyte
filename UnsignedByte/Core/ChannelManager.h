@@ -17,88 +17,34 @@
  *   Free Software Foundation, Inc.,                                       *
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
+#pragma once
 
-#include "Account.h"
-#include "db.h"
-#include "Channel.h"
+#include "SavableHeaders.h"
 
-using mud::Account;
-
-Account::Account(SavableManagerPtr dbaccount) :
-m_account(dbaccount)
-{
-	Assert(dbaccount);
+namespace mud 
+{ 
+	class Channel; 
+	typedef SmartPtr<mud::Channel> ChannelPtr;
 }
 
-Account::~Account(void)
+namespace mud
 {
+	class ChannelManager : public Singleton<mud::ChannelManager>
+	{
+	public:
+		TableImplPtr GetTable();
+		std::vector<std::string> List();
+		
+		KeysPtr Add();
+		mud::ChannelPtr GetByKey(value_type id);
+		mud::ChannelPtr GetByName(cstring name);
 
-}
-
-value_type Account::getID() const
-{
-	return m_account->getkey(db::AccountsFields::Get()->ACCOUNTID)->getValue();
-}
-
-const std::string& Account::getName() const
-{
-	return m_account->getfield(db::AccountsFields::Get()->NAME)->getStringValue();
-}
-
-const std::string& Account::getPassword() const
-{
-	return m_account->getfield(db::AccountsFields::Get()->PASSWORD)->getStringValue();
-}
-
-void Account::setName(const std::string& name)
-{
-	ValuePtr value(new Value(db::AccountsFields::Get()->NAME, name));
-	m_account->setvalue(value);
-}
-
-void Account::setPassword(const std::string& password)
-{
-	ValuePtr value(new Value(db::AccountsFields::Get()->PASSWORD, password));
-	m_account->setvalue(value);
-}
-
-void Account::Delete()
-{
-	m_account->erase();
-}
-
-void Account::Save()
-{
-	m_account->save();
-}
-
-bool Account::Exists()
-{
-	return m_account->exists();
-}
-
-
-std::vector<std::string> Account::Show()
-{
-	std::vector<std::string> result;
-	
-	return result;
-}
-
-std::string Account::ShowShort()
-{
-	std::string result;
-	
-	return result;
-}
-
-TableImplPtr Account::getTable() const
-{
-	return m_account->getTable();
-}
-
-bool mud::Account::wantReceiveChannel(ChannelPtr channel) const
-{
-	// TODO check players preference
-	return true;
+	private:
+		ChannelManager(void) {};
+		ChannelManager(const ChannelManager& rhs);
+		ChannelManager operator=(const ChannelManager& rhs);
+		~ChannelManager(void) {};
+		
+		friend class Singleton<mud::ChannelManager>;
+	};
 }
