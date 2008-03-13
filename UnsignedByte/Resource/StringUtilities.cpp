@@ -18,6 +18,7 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include <sstream>
 #include <algorithm>
 #include <cctype>
 
@@ -155,4 +156,13 @@ std::string String::tolower(const std::string& input)
 	std::string convertToUpper = input;
 	std::transform(convertToUpper.begin(), convertToUpper.end(), convertToUpper.begin(), (int(*)(int)) std::tolower);
 	return convertToUpper ;
+}
+
+std::string String::fromInt(value_type value)
+{
+	 std::ostringstream o;
+     if(!(o << value)) 
+		return "String::fromInt(), ERROR!";
+        
+	return o.str();
 }

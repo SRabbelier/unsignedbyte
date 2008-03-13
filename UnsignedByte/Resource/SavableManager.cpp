@@ -27,6 +27,7 @@
 #include "TableImpl.h"
 #include "SqliteMgr.h"
 #include "Exceptions.h"
+#include "StringUtilities.h"
 
 ByKeyCache SavableManager::ms_byKeyCache;
 ByValueCache SavableManager::ms_byValueCache;
@@ -85,6 +86,7 @@ SavableManagerPtr SavableManager::bykeys(KeysPtr keys)
 		result->setkeys(keys);
 		SqliteMgr::Get()->doSelect(result);
 		ms_byKeyCache[keys.get()] = result;
+		result->cleanup();
 	}
 	
 	return ms_byKeyCache[keys.get()];
@@ -100,6 +102,7 @@ SavableManagerPtr SavableManager::byvalue(ValuePtr value)
 		result->m_lookupvalue = value;
 		SqliteMgr::Get()->doLookup(result, value->getField());
 		ms_byValueCache[value.get()] = result;
+		result->cleanup();
 	}
 	
 	return ms_byValueCache[value.get()];
@@ -132,7 +135,7 @@ void SavableManager::save()
 	{
 		if(m_fields.size())
 			SqliteMgr::Get()->doUpdate(this);
-		m_dirty = false;
+		
 		cleanup();
 	}
 }
@@ -290,11 +293,42 @@ ValuePtr SavableManager::getfield(FieldImplPtr field) const
 
 std::string SavableManager::getDiff() const
 {
-	std::string result;
+	std::vector<std::string> result;
 	
-	result = "Not yet implemented - Alturin 12-03-2008";
+	for(KeyMap::const_iterator it = m_keys->begin(); it != m_keys->end(); it++)
+	{
+		KeyPtr key = it->second;
+		if(!key->isDirty())
+			continue;
+			
+		std::string line = "Changed key '";
+		line.append(key->getKeyDef()->getName());
+		line.append("' to '");
+		line.append(String::Get()->fromInt(key->getValue()));
+		line.append("'.");
+			
+		result.push_back(line);
+	}
 	
-	return result;
+	for(Fields::const_iterator it = m_fields.begin(); it != m_fields.end(); it++)
+	{
+		ValuePtr value = it->second;
+		if(!value->isDirty())
+			continue;
+			
+		std::string line = "Changed field '";
+		line.append(value->getField()->getName());
+		line.append("' to '");
+		if(value->getField()->isText())
+			line.append(value->getStringValue());
+		else
+			line.append(String::Get()->fromInt(value->getIntegerValue()));
+		line.append("'.");
+			
+		result.push_back(line);
+	}
+	
+	return String::Get()->unlines(result, "\n", 0);
 }
 
 bool SavableManager::isDirty() const
@@ -329,9 +363,17 @@ void SavableManager::setvalue(ValuePtr value)
 
 void SavableManager::cleanup()
 {
-	for(KeyMap::const_iterator it = keys->begin(); it != keys->end(); it++)
+	for(KeyMap::const_iterator it = m_keys->begin(); it != m_keys->end(); it++)
 	{
 		KeyPtr key = it->second;
-		
+		key->setDirty(false);
 	}
+	
+	for(Fields::const_iterator it = m_fields.begin(); it != m_fields.end(); it++)
+	{
+		ValuePtr value = it->second;
+		value->setDirty(false);
+	}
+	
+	m_dirty = false;
 }

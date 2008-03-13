@@ -38,6 +38,8 @@ public:
 	size_t maxlength(const Strings& content);
 	std::string box(const Strings& content, const std::string& header = Global::Get()->EmptyString);
 	
+	std::string fromInt(value_type value);
+	
 	std::string toupper(const std::string& convertToUpper);
 	std::string tolower(const std::string& convertToLower);
 };
