@@ -306,11 +306,11 @@ void SavableManager::setkeys(KeysPtr keys)
 	Assert(keys);
 	Assert(keys->size() == m_table->keysize());
 		
-	for(KeyMap::const_iterator it = keys->begin(); it != keys->end(); it++)
-	{
+	for(KeyMap::const_iterator it = keys->begin(); it != keys->end(); it++) {
 		Assert(it->first->getTable() == m_table);
 	}
 		
+	keys->setDirty(m_keys);
 	m_keys = keys;
 	m_dirty = true;
 }
@@ -320,6 +320,7 @@ void SavableManager::setvalue(ValuePtr value)
 	Assert(value);
 	Assert(m_table->hasfield(value->getField()));	
 	Assert(m_fields.find(value->getField().get()) != m_fields.end());
+	value->setDirty(true);
 	
 	m_fields[value->getField().get()] = value;
 	m_dirty = true;

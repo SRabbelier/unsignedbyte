@@ -115,3 +115,15 @@ KeyMap::const_iterator Keys::find(KeyDefPtr key) const
 	
 	return m_keys.find(key.get()); 
 }
+
+void Keys::setDirty(KeysPtr oldKeys)
+{
+	for(KeyMap::iterator it = m_keys.begin(); it != m_keys.end(); it++)
+	{
+		KeyPtr key = it->second;
+		KeyMap::const_iterator other = oldKeys->find(key->getKeyDef());
+		KeyPtr otherKey = other->second;
+		if(key->getValue() != otherKey->getValue())
+			key->setDirty(true);
+	}
+}

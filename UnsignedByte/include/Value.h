@@ -35,13 +35,16 @@ public:
 	const std::string& getStringValue() const { return m_textvalue; }
 	value_type getIntegerValue() const { return m_integervalue; }
 	bool getBoolValue() const { return m_integervalue == 1 ? true : false; }
+	bool isDirty() const { return m_dirty; }
 	
 	void setTextValue(const std::string& value) { m_textvalue = value; }
 	void setIntegerValue(value_type value) { m_integervalue = value; }
 	void setBoolValue(bool value) { m_integervalue = (value ? 1 : 0); }
+	void setDirty(bool dirty) { m_dirty = dirty; }
 	
 private:
 	FieldImplPtr m_field;
 	std::string m_textvalue;
 	value_type m_integervalue;
+	bool m_dirty;
 };

@@ -26,7 +26,8 @@
 Value::Value(FieldImplPtr field) : 
 m_field(field), 
 m_textvalue(""), 
-m_integervalue(0) 
+m_integervalue(0) ,
+m_dirty(false)
 {
 	Assert(field);
 }
