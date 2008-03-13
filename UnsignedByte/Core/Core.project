@@ -117,6 +117,7 @@
     <File Name="DetailManager.cpp"/>
     <File Name="ExitManager.cpp"/>
     <File Name="TraceManager.cpp"/>
+    <File Name="EchoManager.cpp"/>
   </VirtualDirectory>
   <VirtualDirectory Name="Manager Header Files">
     <File Name="AccountManager.h"/>
@@ -135,6 +136,7 @@
     <File Name="DetailManager.h"/>
     <File Name="ExitManager.h"/>
     <File Name="TraceManager.h"/>
+    <File Name="EchoManager.h"/>
   </VirtualDirectory>
   <Settings Type="Executable">
     <Configuration Name="Debug" CompilerType="gnu g++" DebuggerType="GNU gdb debugger">

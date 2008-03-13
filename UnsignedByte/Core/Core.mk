@@ -38,7 +38,7 @@ Objects=$(IntermediateDirectory)/Account$(ObjectSuffix) $(IntermediateDirectory)
 	$(IntermediateDirectory)/EditorRoom$(ObjectSuffix) $(IntermediateDirectory)/EditorPlaying$(ObjectSuffix) $(IntermediateDirectory)/EditorNewCharacter$(ObjectSuffix) $(IntermediateDirectory)/EditorNewAccount$(ObjectSuffix) $(IntermediateDirectory)/EditorAccount$(ObjectSuffix) $(IntermediateDirectory)/EditorMobile$(ObjectSuffix) $(IntermediateDirectory)/EditorArea$(ObjectSuffix) $(IntermediateDirectory)/EditorColour$(ObjectSuffix) $(IntermediateDirectory)/OLCEditor$(ObjectSuffix) $(IntermediateDirectory)/EditorAccountLogin$(ObjectSuffix) \
 	$(IntermediateDirectory)/EditorOOC$(ObjectSuffix) $(IntermediateDirectory)/EditorChunk$(ObjectSuffix) $(IntermediateDirectory)/EditorBool$(ObjectSuffix) $(IntermediateDirectory)/EditorDetail$(ObjectSuffix) $(IntermediateDirectory)/EditorRace$(ObjectSuffix) $(IntermediateDirectory)/AccountManager$(ObjectSuffix) $(IntermediateDirectory)/AreaManager$(ObjectSuffix) $(IntermediateDirectory)/CharacterManager$(ObjectSuffix) $(IntermediateDirectory)/ColourManager$(ObjectSuffix) $(IntermediateDirectory)/CommandManager$(ObjectSuffix) \
 	$(IntermediateDirectory)/GrantGroupManager$(ObjectSuffix) $(IntermediateDirectory)/MCharacterManager$(ObjectSuffix) $(IntermediateDirectory)/PCharacterManager$(ObjectSuffix) $(IntermediateDirectory)/PermissionManager$(ObjectSuffix) $(IntermediateDirectory)/RaceManager$(ObjectSuffix) $(IntermediateDirectory)/RoomManager$(ObjectSuffix) $(IntermediateDirectory)/SectorManager$(ObjectSuffix) $(IntermediateDirectory)/ChunkManager$(ObjectSuffix) $(IntermediateDirectory)/DetailManager$(ObjectSuffix) $(IntermediateDirectory)/ExitManager$(ObjectSuffix) \
-	$(IntermediateDirectory)/TraceManager$(ObjectSuffix) 
+	$(IntermediateDirectory)/TraceManager$(ObjectSuffix) $(IntermediateDirectory)/EchoManager$(ObjectSuffix) 
 
 ##
 ## Main Build Tragets 
@@ -363,6 +363,11 @@ $(IntermediateDirectory)/TraceManager$(ObjectSuffix): TraceManager.cpp $(Interme
 $(IntermediateDirectory)/TraceManager$(ObjectSuffix).d:
 	@$(CompilerName) $(CmpOptions) $(IncludePath) -MT$(IntermediateDirectory)/TraceManager$(ObjectSuffix) -MF$(IntermediateDirectory)/TraceManager$(ObjectSuffix).d -MM TraceManager.cpp
 
+$(IntermediateDirectory)/EchoManager$(ObjectSuffix): EchoManager.cpp $(IntermediateDirectory)/EchoManager$(ObjectSuffix).d
+	$(CompilerName) $(SourceSwitch)EchoManager.cpp $(CmpOptions)   $(ObjectSwitch)$(IntermediateDirectory)/EchoManager$(ObjectSuffix) $(IncludePath)
+$(IntermediateDirectory)/EchoManager$(ObjectSuffix).d:
+	@$(CompilerName) $(CmpOptions) $(IncludePath) -MT$(IntermediateDirectory)/EchoManager$(ObjectSuffix) -MF$(IntermediateDirectory)/EchoManager$(ObjectSuffix).d -MM EchoManager.cpp
+
 ##
 ## Clean
 ##
@@ -489,6 +494,8 @@ clean:
 	$(RM) $(IntermediateDirectory)/ExitManager$(ObjectSuffix).d
 	$(RM) $(IntermediateDirectory)/TraceManager$(ObjectSuffix)
 	$(RM) $(IntermediateDirectory)/TraceManager$(ObjectSuffix).d
+	$(RM) $(IntermediateDirectory)/EchoManager$(ObjectSuffix)
+	$(RM) $(IntermediateDirectory)/EchoManager$(ObjectSuffix).d
 	$(RM) $(OutputFile)
 
 -include $(IntermediateDirectory)/*.d
