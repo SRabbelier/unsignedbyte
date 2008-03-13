@@ -45,6 +45,11 @@ const std::string& Channel::getDescription() const
 	return m_channel->getfield(db::ChannelsFields::Get()->DESCRIPTION)->getStringValue();
 }
 
+bool mud::Channel::needLogin() const
+{
+	return m_channel->getfield(db::ChannelsFields::Get()->NEEDLOGIN)->getBoolValue();
+}
+
 void Channel::setName(const std::string& name)
 {
 	ValuePtr value(new Value(db::ChannelsFields::Get()->NAME, name));
@@ -54,6 +59,12 @@ void Channel::setName(const std::string& name)
 void Channel::setDescription(const std::string& description)
 {
 	ValuePtr value(new Value(db::ChannelsFields::Get()->DESCRIPTION, description));
+	m_channel->setvalue(value);
+}
+
+void mud::Channel::setNeedLogin(bool needLogin)
+{
+	ValuePtr value(new Value(db::ChannelsFields::Get()->NEEDLOGIN, needLogin));
 	m_channel->setvalue(value);
 }
 

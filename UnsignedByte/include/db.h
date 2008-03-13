@@ -90,6 +90,7 @@ namespace db
 		KeyDefPtr CHANNELID;
 		FieldImplPtr NAME;
 		FieldImplPtr DESCRIPTION;
+		FieldImplPtr NEEDLOGIN;
 
 	private:
 		// Hide constructor and assignment operator

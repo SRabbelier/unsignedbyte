@@ -26,6 +26,9 @@ namespace mud
 {
 	class Account;
 	typedef SmartPtr<mud::Account> AccountPtr;
+	
+	class Channel;
+	typedef SmartPtr<mud::Channel> ChannelPtr;
 }
 
 class EditorAccountLogin : public Editor
@@ -36,6 +39,7 @@ public:
 
 	void OnLine(const std::string& line);
 	std::string name() { return "AccountLogin"; };
+	bool canReceiveChannel(mud::ChannelPtr channel) const;
 	
 private:
 	EditorAccountLogin(const EditorAccountLogin& rhs);

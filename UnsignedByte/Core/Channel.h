@@ -33,12 +33,14 @@ namespace mud
 		 */
 		const std::string& getName() const;
 		const std::string& getDescription() const;
+		bool needLogin() const;
 
 		/**
 		 * \brief Setters
 		 */
 		void setName(const std::string& name);
 		void setDescription(const std::string& description);
+		void setNeedLogin(bool needLogin);
 
 		/**
 		 * \brief Utilities

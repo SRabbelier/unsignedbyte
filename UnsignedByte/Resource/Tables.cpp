@@ -79,6 +79,7 @@ Tables::Tables() :
 	CHANNELS->addPK("channelid");
 	CHANNELS->addLookupTextField("name");
 	CHANNELS->addTextField("description");
+	CHANNELS->addValue("needLogin", 1);
 	
 	CHARACTERACCOUNT->addFPK(ENTITIES);
 	CHARACTERACCOUNT->addFPK(ACCOUNTS);

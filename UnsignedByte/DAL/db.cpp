@@ -79,11 +79,13 @@ FKSTATSSECONDARY(new FieldImpl(TableImpls::Get()->BRANCHES, "fkStatsSecondary"))
 ChannelsFields::ChannelsFields() :
 CHANNELID(new KeyDef(TableImpls::Get()->CHANNELS, "channelid")),
 NAME(new FieldImpl(TableImpls::Get()->CHANNELS, "name", true)),
-DESCRIPTION(new FieldImpl(TableImpls::Get()->CHANNELS, "description", true))
+DESCRIPTION(new FieldImpl(TableImpls::Get()->CHANNELS, "description", true)),
+NEEDLOGIN(new FieldImpl(TableImpls::Get()->CHANNELS, "needLogin"))
 {
 	TableImpls::Get()->CHANNELS->addKey(CHANNELID);
 	TableImpls::Get()->CHANNELS->addField(NAME);
 	TableImpls::Get()->CHANNELS->addField(DESCRIPTION);
+	TableImpls::Get()->CHANNELS->addField(NEEDLOGIN);
 }
 
 CharacterAccountFields::CharacterAccountFields() :

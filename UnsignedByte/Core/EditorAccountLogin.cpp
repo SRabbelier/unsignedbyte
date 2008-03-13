@@ -23,6 +23,7 @@
 #include "EditorAccount.h"
 
 #include "UBSocket.h"
+#include "Channel.h"
 
 #include "Account.h"
 #include "AccountManager.h"
@@ -124,4 +125,12 @@ void EditorAccountLogin::OnLine(const std::string &line)
 	
 	} /* switch(state) */
 	
+}
+
+bool EditorAccountLogin::canReceiveChannel(mud::ChannelPtr channel) const
+{	
+	if(!channel->needLogin())
+		return true;
+
+	return false;
 }

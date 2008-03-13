@@ -260,6 +260,9 @@ void Initializer::InitDatabase()
 		value = ValuePtr(new Value(db::ChannelsFields::Get()->DESCRIPTION, "The Out of Character channel."));
 		manager->setvalue(value);
 		
+		value = ValuePtr(new Value(db::ChannelsFields::Get()->NEEDLOGIN, 1));
+		manager->setvalue(value);
+		
 		manager->save();
 	}
 }

@@ -190,5 +190,5 @@ void Editor::OnLine(const std::string& line)
 
 bool Editor::canReceiveChannel(mud::ChannelPtr channel) const
 {
-	 return true;
+	return true;
 }
