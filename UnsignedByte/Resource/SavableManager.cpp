@@ -133,6 +133,7 @@ void SavableManager::save()
 		if(m_fields.size())
 			SqliteMgr::Get()->doUpdate(this);
 		m_dirty = false;
+		cleanup();
 	}
 }
 
@@ -306,8 +307,7 @@ void SavableManager::setkeys(KeysPtr keys)
 	Assert(keys);
 	Assert(keys->size() == m_table->keysize());
 		
-	for(KeyMap::const_iterator it = keys->begin(); it != keys->end(); it++)
-	{
+	for(KeyMap::const_iterator it = keys->begin(); it != keys->end(); it++) {
 		Assert(it->first->getTable() == m_table);
 	}
 		
@@ -323,4 +323,13 @@ void SavableManager::setvalue(ValuePtr value)
 	
 	m_fields[value->getField().get()] = value;
 	m_dirty = true;
+}
+
+void SavableManager::cleanup()
+{
+	for(KeyMap::const_iterator it = keys->begin(); it != keys->end(); it++)
+	{
+		KeyPtr key = it->second;
+		
+	}
 }

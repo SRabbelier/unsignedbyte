@@ -68,6 +68,8 @@ class SavableManager
 		SavableManager(TableImplPtr table);
 		~SavableManager();
 		
+		void cleanup();
+		
 		friend SmartPtrDelete(SavableManager);
 		
 		static ByKeyCache ms_byKeyCache;
