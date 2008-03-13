@@ -53,6 +53,8 @@ namespace mud
 		 */
 		void Delete();
 		void Save();
+		void Delete(value_type accountid, const std::string& description);
+		void Save(value_type accountid, const std::string& description);
 		bool Exists();
 
 	private:

@@ -287,6 +287,20 @@ ValuePtr SavableManager::getfield(FieldImplPtr field) const
 	return it->second;
 }
 
+std::string SavableManager::getDiff() const
+{
+	std::string result;
+	
+	result = "Not yet implemented - Alturin 12-03-2008";
+	
+	return result;
+}
+
+bool SavableManager::isDirty() const
+{
+	return m_dirty;
+}
+
 void SavableManager::setkeys(KeysPtr keys)
 {
 	Assert(keys);
@@ -309,13 +323,4 @@ void SavableManager::setvalue(ValuePtr value)
 	
 	m_fields[value->getField().get()] = value;
 	m_dirty = true;
-}
-
-std::string SavableManager::getDiff() const
-{
-	std::string result;
-	
-	result = "Not yet implemented - Alturin 12-03-2008";
-	
-	return result;
 }
