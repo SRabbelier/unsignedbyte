@@ -30,8 +30,11 @@ public:
 	KeyDefPtr getKeyDef() const;
 	value_type getValue() const;
 	TableImplPtr getTable() const;
+	bool isDirty() const;
+	void setDirty(bool dirty);
 
 private:
 	KeyDefPtr m_key;
 	value_type m_value;
+	bool m_dirty;
 };

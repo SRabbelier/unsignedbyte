@@ -25,7 +25,8 @@
 
 Key::Key(KeyDefPtr key, value_type value) : 
 m_key(key), 
-m_value(value) 
+m_value(value),
+m_dirty(false)
 { 
 	Assert(key); 
 }
@@ -48,4 +49,14 @@ value_type Key::getValue() const
 TableImplPtr Key::getTable() const
 {
 	return m_key->getTable();
+}
+
+bool Key::isDirty() const
+{
+	return m_dirty;
+}
+
+void Key::setDirty(bool dirty)
+{
+	m_dirty = dirty;
 }

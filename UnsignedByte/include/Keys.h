@@ -39,6 +39,8 @@ public:
 	KeyMap::const_iterator end() const;
 	KeyMap::const_iterator find(KeyDefPtr key) const;
 	KeyPtr getKey(KeyDefPtr key) const;
+	
+	void setDirty(KeysPtr oldKeys);
 
 private:
 	TableImplPtr m_table;
