@@ -46,6 +46,7 @@
     <File Name="Detail.h"/>
     <File Name="Exit.h"/>
     <File Name="Trace.h"/>
+    <File Name="CommandTable.h"/>
   </VirtualDirectory>
   <VirtualDirectory Name="Editor Source Files">
     <File Name="EditorOLC.cpp"/>
