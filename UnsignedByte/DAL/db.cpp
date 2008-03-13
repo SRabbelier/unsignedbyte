@@ -231,12 +231,12 @@ FKDETAILSSECONDARY(new KeyDef(TableImpls::Get()->DETAILDETAIL, "fkDetailsSeconda
 EchosFields::EchosFields() :
 ECHOID(new KeyDef(TableImpls::Get()->ECHOS, "echoid")),
 MESSAGE(new FieldImpl(TableImpls::Get()->ECHOS, "message", true)),
-VISUALITY(new FieldImpl(TableImpls::Get()->ECHOS, "visuality")),
+VISIBILITY(new FieldImpl(TableImpls::Get()->ECHOS, "visibility")),
 AUDIBILITY(new FieldImpl(TableImpls::Get()->ECHOS, "audibility"))
 {
 	TableImpls::Get()->ECHOS->addKey(ECHOID);
 	TableImpls::Get()->ECHOS->addField(MESSAGE);
-	TableImpls::Get()->ECHOS->addField(VISUALITY);
+	TableImpls::Get()->ECHOS->addField(VISIBILITY);
 	TableImpls::Get()->ECHOS->addField(AUDIBILITY);
 }
 

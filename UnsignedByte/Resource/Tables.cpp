@@ -138,7 +138,7 @@ Tables::Tables() :
 	
 	ECHOS->addPK("echoid");
 	ECHOS->addTextField("message");
-	ECHOS->addValue("visuality");
+	ECHOS->addValue("visibility");
 	ECHOS->addValue("audibility");
 	
 	ENTITIES->addPK("entityid");

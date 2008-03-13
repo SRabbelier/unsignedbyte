@@ -330,7 +330,7 @@ namespace db
 	public:
 		KeyDefPtr ECHOID;
 		FieldImplPtr MESSAGE;
-		FieldImplPtr VISUALITY;
+		FieldImplPtr VISIBILITY;
 		FieldImplPtr AUDIBILITY;
 
 	private:
