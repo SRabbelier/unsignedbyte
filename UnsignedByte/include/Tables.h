@@ -42,6 +42,7 @@ public:
 	TableDefPtr DETAILCHUNK;
 	TableDefPtr DETAILCHARACTER;
 	TableDefPtr DETAILDETAIL;
+	TableDefPtr ECHOS;
 	TableDefPtr ENTITIES;
 	TableDefPtr EXITROOM;
 	TableDefPtr EXITS;

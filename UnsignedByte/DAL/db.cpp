@@ -228,6 +228,18 @@ FKDETAILSSECONDARY(new KeyDef(TableImpls::Get()->DETAILDETAIL, "fkDetailsSeconda
 	TableImpls::Get()->DETAILDETAIL->addKey(FKDETAILSSECONDARY);
 }
 
+EchosFields::EchosFields() :
+ECHOID(new KeyDef(TableImpls::Get()->ECHOS, "echoid")),
+MESSAGE(new FieldImpl(TableImpls::Get()->ECHOS, "message", true)),
+VISUALITY(new FieldImpl(TableImpls::Get()->ECHOS, "visuality")),
+AUDIBILITY(new FieldImpl(TableImpls::Get()->ECHOS, "audibility"))
+{
+	TableImpls::Get()->ECHOS->addKey(ECHOID);
+	TableImpls::Get()->ECHOS->addField(MESSAGE);
+	TableImpls::Get()->ECHOS->addField(VISUALITY);
+	TableImpls::Get()->ECHOS->addField(AUDIBILITY);
+}
+
 EntitiesFields::EntitiesFields() :
 ENTITYID(new KeyDef(TableImpls::Get()->ENTITIES, "entityid")),
 FKRACES(new FieldImpl(TableImpls::Get()->ENTITIES, "fkRaces")),

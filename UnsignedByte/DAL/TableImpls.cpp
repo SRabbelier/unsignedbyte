@@ -56,6 +56,7 @@ TableImpls* TableImpls::Get()
 		db::DetailChunkFields::Get();
 		db::DetailCharacterFields::Get();
 		db::DetailDetailFields::Get();
+		db::EchosFields::Get();
 		db::EntitiesFields::Get();
 		db::ExitRoomFields::Get();
 		db::ExitsFields::Get();
@@ -102,6 +103,7 @@ DETAILROOM(new TableImpl(Tables::Get()->DETAILROOM)),
 DETAILCHUNK(new TableImpl(Tables::Get()->DETAILCHUNK)),
 DETAILCHARACTER(new TableImpl(Tables::Get()->DETAILCHARACTER)),
 DETAILDETAIL(new TableImpl(Tables::Get()->DETAILDETAIL)),
+ECHOS(new TableImpl(Tables::Get()->ECHOS)),
 ENTITIES(new TableImpl(Tables::Get()->ENTITIES)),
 EXITROOM(new TableImpl(Tables::Get()->EXITROOM)),
 EXITS(new TableImpl(Tables::Get()->EXITS)),
@@ -138,6 +140,7 @@ VERSION(new TableImpl(Tables::Get()->VERSION))
 	m_tables.push_back(DETAILCHUNK);
 	m_tables.push_back(DETAILCHARACTER);
 	m_tables.push_back(DETAILDETAIL);
+	m_tables.push_back(ECHOS);
 	m_tables.push_back(ENTITIES);
 	m_tables.push_back(EXITROOM);
 	m_tables.push_back(EXITS);

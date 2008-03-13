@@ -325,6 +325,23 @@ namespace db
 		friend class Singleton<DetailDetailFields>;
 	};
 
+	class EchosFields : public Singleton<EchosFields>
+	{
+	public:
+		KeyDefPtr ECHOID;
+		FieldImplPtr MESSAGE;
+		FieldImplPtr VISUALITY;
+		FieldImplPtr AUDIBILITY;
+
+	private:
+		// Hide constructor and assignment operator
+		EchosFields();
+		~EchosFields() { }
+		EchosFields(const EchosFields& rhs);
+		EchosFields operator=(const EchosFields& rhs);
+		friend class Singleton<EchosFields>;
+	};
+
 	class EntitiesFields : public Singleton<EntitiesFields>
 	{
 	public:

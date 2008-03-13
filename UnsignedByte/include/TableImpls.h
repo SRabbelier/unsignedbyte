@@ -50,6 +50,7 @@ namespace db
 		TableImplPtr DETAILCHUNK;
 		TableImplPtr DETAILCHARACTER;
 		TableImplPtr DETAILDETAIL;
+		TableImplPtr ECHOS;
 		TableImplPtr ENTITIES;
 		TableImplPtr EXITROOM;
 		TableImplPtr EXITS;

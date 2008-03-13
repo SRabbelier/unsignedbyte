@@ -40,6 +40,7 @@ Tables::Tables() :
 	DETAILCHUNK( new TableDef("DetailChunk") ),
 	DETAILCHARACTER( new TableDef("DetailCharacter") ),
 	DETAILDETAIL( new TableDef("DetailDetail") ),
+	ECHOS( new TableDef("Echos") ),
 	ENTITIES( new TableDef("Entities") ),
 	EXITROOM( new TableDef("ExitRoom") ),
 	EXITS( new TableDef("Exits") ),
@@ -134,6 +135,11 @@ Tables::Tables() :
 	
 	DETAILDETAIL->addFPK(DETAILS, "Primary");
 	DETAILDETAIL->addFPK(DETAILS, "Secondary");
+	
+	ECHOS->addPK("echoid");
+	ECHOS->addTextField("message");
+	ECHOS->addValue("visuality");
+	ECHOS->addValue("audibility");
 	
 	ENTITIES->addPK("entityid");
 	ENTITIES->addFK(RACES);
@@ -233,6 +239,7 @@ Tables::Tables() :
 	m_tables.push_back(DETAILCHUNK);
 	m_tables.push_back(DETAILCHARACTER);
 	m_tables.push_back(DETAILDETAIL);
+	m_tables.push_back(ECHOS);
 	m_tables.push_back(ENTITIES);
 	m_tables.push_back(EXITROOM);
 	m_tables.push_back(EXITS);
