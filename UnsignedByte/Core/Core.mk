@@ -34,11 +34,11 @@ endif
 
 Objects=$(IntermediateDirectory)/Account$(ObjectSuffix) $(IntermediateDirectory)/Area$(ObjectSuffix) $(IntermediateDirectory)/Character$(ObjectSuffix) $(IntermediateDirectory)/Colour$(ObjectSuffix) $(IntermediateDirectory)/main$(ObjectSuffix) $(IntermediateDirectory)/MCharacter$(ObjectSuffix) $(IntermediateDirectory)/PCharacter$(ObjectSuffix) $(IntermediateDirectory)/Race$(ObjectSuffix) $(IntermediateDirectory)/Room$(ObjectSuffix) $(IntermediateDirectory)/Sector$(ObjectSuffix) \
 	$(IntermediateDirectory)/UBHandler$(ObjectSuffix) $(IntermediateDirectory)/UBSocket$(ObjectSuffix) $(IntermediateDirectory)/SQLSocket$(ObjectSuffix) $(IntermediateDirectory)/Command$(ObjectSuffix) $(IntermediateDirectory)/GrantGroup$(ObjectSuffix) $(IntermediateDirectory)/Permission$(ObjectSuffix) $(IntermediateDirectory)/Chunk$(ObjectSuffix) $(IntermediateDirectory)/chunkimporter$(ObjectSuffix) $(IntermediateDirectory)/Detail$(ObjectSuffix) $(IntermediateDirectory)/Exit$(ObjectSuffix) \
-	$(IntermediateDirectory)/Trace$(ObjectSuffix) $(IntermediateDirectory)/EditorOLC$(ObjectSuffix) $(IntermediateDirectory)/Editor$(ObjectSuffix) $(IntermediateDirectory)/EditorPermission$(ObjectSuffix) $(IntermediateDirectory)/EditorGrantGroup$(ObjectSuffix) $(IntermediateDirectory)/EditorString$(ObjectSuffix) $(IntermediateDirectory)/EditorCommand$(ObjectSuffix) $(IntermediateDirectory)/EditorScript$(ObjectSuffix) $(IntermediateDirectory)/EditorSector$(ObjectSuffix) $(IntermediateDirectory)/EditorRoom$(ObjectSuffix) \
-	$(IntermediateDirectory)/EditorPlaying$(ObjectSuffix) $(IntermediateDirectory)/EditorNewCharacter$(ObjectSuffix) $(IntermediateDirectory)/EditorNewAccount$(ObjectSuffix) $(IntermediateDirectory)/EditorAccount$(ObjectSuffix) $(IntermediateDirectory)/EditorMobile$(ObjectSuffix) $(IntermediateDirectory)/EditorArea$(ObjectSuffix) $(IntermediateDirectory)/EditorColour$(ObjectSuffix) $(IntermediateDirectory)/OLCEditor$(ObjectSuffix) $(IntermediateDirectory)/EditorAccountLogin$(ObjectSuffix) $(IntermediateDirectory)/EditorOOC$(ObjectSuffix) \
-	$(IntermediateDirectory)/EditorChunk$(ObjectSuffix) $(IntermediateDirectory)/EditorBool$(ObjectSuffix) $(IntermediateDirectory)/EditorDetail$(ObjectSuffix) $(IntermediateDirectory)/EditorRace$(ObjectSuffix) $(IntermediateDirectory)/AccountManager$(ObjectSuffix) $(IntermediateDirectory)/AreaManager$(ObjectSuffix) $(IntermediateDirectory)/CharacterManager$(ObjectSuffix) $(IntermediateDirectory)/ColourManager$(ObjectSuffix) $(IntermediateDirectory)/CommandManager$(ObjectSuffix) $(IntermediateDirectory)/GrantGroupManager$(ObjectSuffix) \
-	$(IntermediateDirectory)/MCharacterManager$(ObjectSuffix) $(IntermediateDirectory)/PCharacterManager$(ObjectSuffix) $(IntermediateDirectory)/PermissionManager$(ObjectSuffix) $(IntermediateDirectory)/RaceManager$(ObjectSuffix) $(IntermediateDirectory)/RoomManager$(ObjectSuffix) $(IntermediateDirectory)/SectorManager$(ObjectSuffix) $(IntermediateDirectory)/ChunkManager$(ObjectSuffix) $(IntermediateDirectory)/DetailManager$(ObjectSuffix) $(IntermediateDirectory)/ExitManager$(ObjectSuffix) $(IntermediateDirectory)/TraceManager$(ObjectSuffix) \
-	
+	$(IntermediateDirectory)/Trace$(ObjectSuffix) $(IntermediateDirectory)/Echo$(ObjectSuffix) $(IntermediateDirectory)/EditorOLC$(ObjectSuffix) $(IntermediateDirectory)/Editor$(ObjectSuffix) $(IntermediateDirectory)/EditorPermission$(ObjectSuffix) $(IntermediateDirectory)/EditorGrantGroup$(ObjectSuffix) $(IntermediateDirectory)/EditorString$(ObjectSuffix) $(IntermediateDirectory)/EditorCommand$(ObjectSuffix) $(IntermediateDirectory)/EditorScript$(ObjectSuffix) $(IntermediateDirectory)/EditorSector$(ObjectSuffix) \
+	$(IntermediateDirectory)/EditorRoom$(ObjectSuffix) $(IntermediateDirectory)/EditorPlaying$(ObjectSuffix) $(IntermediateDirectory)/EditorNewCharacter$(ObjectSuffix) $(IntermediateDirectory)/EditorNewAccount$(ObjectSuffix) $(IntermediateDirectory)/EditorAccount$(ObjectSuffix) $(IntermediateDirectory)/EditorMobile$(ObjectSuffix) $(IntermediateDirectory)/EditorArea$(ObjectSuffix) $(IntermediateDirectory)/EditorColour$(ObjectSuffix) $(IntermediateDirectory)/OLCEditor$(ObjectSuffix) $(IntermediateDirectory)/EditorAccountLogin$(ObjectSuffix) \
+	$(IntermediateDirectory)/EditorOOC$(ObjectSuffix) $(IntermediateDirectory)/EditorChunk$(ObjectSuffix) $(IntermediateDirectory)/EditorBool$(ObjectSuffix) $(IntermediateDirectory)/EditorDetail$(ObjectSuffix) $(IntermediateDirectory)/EditorRace$(ObjectSuffix) $(IntermediateDirectory)/AccountManager$(ObjectSuffix) $(IntermediateDirectory)/AreaManager$(ObjectSuffix) $(IntermediateDirectory)/CharacterManager$(ObjectSuffix) $(IntermediateDirectory)/ColourManager$(ObjectSuffix) $(IntermediateDirectory)/CommandManager$(ObjectSuffix) \
+	$(IntermediateDirectory)/GrantGroupManager$(ObjectSuffix) $(IntermediateDirectory)/MCharacterManager$(ObjectSuffix) $(IntermediateDirectory)/PCharacterManager$(ObjectSuffix) $(IntermediateDirectory)/PermissionManager$(ObjectSuffix) $(IntermediateDirectory)/RaceManager$(ObjectSuffix) $(IntermediateDirectory)/RoomManager$(ObjectSuffix) $(IntermediateDirectory)/SectorManager$(ObjectSuffix) $(IntermediateDirectory)/ChunkManager$(ObjectSuffix) $(IntermediateDirectory)/DetailManager$(ObjectSuffix) $(IntermediateDirectory)/ExitManager$(ObjectSuffix) \
+	$(IntermediateDirectory)/TraceManager$(ObjectSuffix) 
 
 ##
 ## Main Build Tragets 
@@ -162,6 +162,11 @@ $(IntermediateDirectory)/Trace$(ObjectSuffix): Trace.cpp $(IntermediateDirectory
 	$(CompilerName) $(SourceSwitch)Trace.cpp $(CmpOptions)   $(ObjectSwitch)$(IntermediateDirectory)/Trace$(ObjectSuffix) $(IncludePath)
 $(IntermediateDirectory)/Trace$(ObjectSuffix).d:
 	@$(CompilerName) $(CmpOptions) $(IncludePath) -MT$(IntermediateDirectory)/Trace$(ObjectSuffix) -MF$(IntermediateDirectory)/Trace$(ObjectSuffix).d -MM Trace.cpp
+
+$(IntermediateDirectory)/Echo$(ObjectSuffix): Echo.cpp $(IntermediateDirectory)/Echo$(ObjectSuffix).d
+	$(CompilerName) $(SourceSwitch)Echo.cpp $(CmpOptions)   $(ObjectSwitch)$(IntermediateDirectory)/Echo$(ObjectSuffix) $(IncludePath)
+$(IntermediateDirectory)/Echo$(ObjectSuffix).d:
+	@$(CompilerName) $(CmpOptions) $(IncludePath) -MT$(IntermediateDirectory)/Echo$(ObjectSuffix) -MF$(IntermediateDirectory)/Echo$(ObjectSuffix).d -MM Echo.cpp
 
 $(IntermediateDirectory)/EditorOLC$(ObjectSuffix): EditorOLC.cpp $(IntermediateDirectory)/EditorOLC$(ObjectSuffix).d
 	$(CompilerName) $(SourceSwitch)EditorOLC.cpp $(CmpOptions)   $(ObjectSwitch)$(IntermediateDirectory)/EditorOLC$(ObjectSuffix) $(IncludePath)
@@ -404,6 +409,8 @@ clean:
 	$(RM) $(IntermediateDirectory)/Exit$(ObjectSuffix).d
 	$(RM) $(IntermediateDirectory)/Trace$(ObjectSuffix)
 	$(RM) $(IntermediateDirectory)/Trace$(ObjectSuffix).d
+	$(RM) $(IntermediateDirectory)/Echo$(ObjectSuffix)
+	$(RM) $(IntermediateDirectory)/Echo$(ObjectSuffix).d
 	$(RM) $(IntermediateDirectory)/EditorOLC$(ObjectSuffix)
 	$(RM) $(IntermediateDirectory)/EditorOLC$(ObjectSuffix).d
 	$(RM) $(IntermediateDirectory)/Editor$(ObjectSuffix)

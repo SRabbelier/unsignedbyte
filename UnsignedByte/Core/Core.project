@@ -22,6 +22,7 @@
     <File Name="Detail.cpp"/>
     <File Name="Exit.cpp"/>
     <File Name="Trace.cpp"/>
+    <File Name="Echo.cpp"/>
   </VirtualDirectory>
   <VirtualDirectory Name="Core Header Files">
     <File Name="Account.h"/>
@@ -47,6 +48,7 @@
     <File Name="Exit.h"/>
     <File Name="Trace.h"/>
     <File Name="CommandTable.h"/>
+    <File Name="Echo.h"/>
   </VirtualDirectory>
   <VirtualDirectory Name="Editor Source Files">
     <File Name="EditorOLC.cpp"/>
